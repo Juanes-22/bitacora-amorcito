@@ -73,6 +73,11 @@ export class ExplorationScene extends Phaser.Scene {
     const spawnId = this.data0.spawnId ?? zone.initialSpawnId;
     const start = this.data0.position ?? zone.spawns[spawnId] ?? zone.spawns[zone.initialSpawnId];
     this.token = bridge.beginScene();
+    // Un archivo que «carga» pero no se puede decodificar (p. ej. un servidor que devuelve la página de inicio en lugar de
+    // un 404) no dispara FILE_LOAD_ERROR: se detecta por la textura que falta, con su ID y su ruta (SPEC 12.3, AC-20).
+    for (const id of zoneAssetIds(config, this.zoneId)) {
+      if (!this.textures.exists(id) && !this.failures.some((f) => f.assetId === id)) this.failures.push({ assetId: id, url: assets.url(id) });
+    }
 
     this.world = buildWorld(this, config, assets, this.zoneId, reducedMotion);
     this.ambient = buildAmbient(this, config, assets, this.zoneId, reducedMotion);

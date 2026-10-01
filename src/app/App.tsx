@@ -4,7 +4,9 @@ import { Cover } from "../components/ui/Cover";
 import { LearningDialog } from "../components/reading/LearningDialog";
 import { BadgeCollection } from "../components/ui/BadgeCollection";
 import { ConfirmDialog } from "../components/ui/ConfirmDialog";
+import { LearningList } from "../components/ui/LearningList";
 import { MusicToggle } from "../components/ui/MusicToggle";
+import { TouchControls } from "../components/ui/TouchControls";
 import { ProgressHUD } from "../components/ui/ProgressHUD";
 import { NearbyPrompt } from "../components/ui/NearbyPrompt";
 import type { AssetRegistry } from "../config/assetRegistry";
@@ -92,17 +94,30 @@ function Loaded({ config, assets }: { config: BitacoraConfig; assets: AssetRegis
     readingWasOpen.current = open;
   }, [started, reading, overlay]);
 
+  // Herramientas junto a la cabecera: la lista accesible (SPEC 14) y, si hay música, su botón de apagar/encender.
+  const modalOpen = !!reading || !!overlay;
+  const tools = (
+    <>
+      <button type="button" className="hud__list" onClick={overlayActions.openList} disabled={modalOpen}>
+        {config.ui.labels.index}
+      </button>
+      {music ? <MusicToggle player={music} onPointerUse={() => { if (!modalOpen) hostRef.current?.focus(); }} /> : null}
+    </>
+  );
+
   return (
     <BitacoraProvider config={config} assets={assets}>
       <ProgressProvider store={store}>
         <div className="app">
           <PhaserGame config={config} assets={assets} bridge={bridge} initial={initial} inert={!started || !!reading || !!overlay} hostRef={hostRef} />
-          {started ? <ProgressHUD onOpenBadges={reading || overlay ? undefined : overlayActions.openCollection} music={music ? <MusicToggle player={music} onPointerUse={() => { if (!reading && !overlay) hostRef.current?.focus(); }} /> : undefined} /> : null}
+          {started ? <ProgressHUD onOpenBadges={reading || overlay ? undefined : overlayActions.openCollection} tools={tools} /> : null}
           {started ? <NearbyPrompt target={reading ? null : nearby} /> : null}
+          {started && !modalOpen ? <TouchControls bridge={bridge} /> : null}
           {reading ? <LearningDialog reading={reading} actions={actions} /> : null}
           {overlay?.kind === "collection" ? (
             <BadgeCollection completion={overlay.completion} onClose={overlayActions.closeOverlay} onReset={overlayActions.askReset} />
           ) : null}
+          {overlay?.kind === "list" ? <LearningList onOpen={overlayActions.openFromList} onClose={overlayActions.closeOverlay} /> : null}
           {overlay?.kind === "confirm-reset" ? <ConfirmDialog onConfirm={overlayActions.confirmReset} onCancel={overlayActions.cancelReset} /> : null}
           {!started ? <Cover hasProgress={hasProgress(store)} onStart={() => { music?.start(); setStarted(true); }} startRef={startRef} /> : null}
           {assetFailures.length ? (

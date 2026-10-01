@@ -336,18 +336,6 @@
   outline: 0.1875rem solid var(--focus);
   outline-offset: 0.125rem;
 }
-@media (max-width: 480px) {
-  /* Estrecho: no cabe en la fila de la cabecera; cuelga justo debajo, en su esquina derecha. */
-  .hud__music {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    margin-top: 0.375rem;
-    width: 2.75rem;
-    min-height: 2.75rem;
-  }
-}
-
 /* ---- Cabecera en pantallas estrechas: va después de las reglas base de los botones para poder sobrescribirlas ---- */
 @media (max-width: 480px) {
   .hud__badges {
@@ -371,5 +359,219 @@
   .hud__badges {
     padding: 0 0.5rem;
     font-size: 0.8rem;
+  }
+}
+
+/* ---- Herramientas junto a la cabecera: lista accesible y música ---- */
+.hud__tools {
+  position: absolute;
+  top: 0;
+  left: calc(100% + 0.625rem);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+.hud__list {
+  flex: none;
+  max-width: 9.5rem;
+  min-height: 3.25rem;
+  padding: 0.25rem 0.75rem;
+  border: 0.125rem solid var(--brown);
+  border-radius: 0.5rem;
+  background: var(--cream-warm);
+  color: var(--ink);
+  font: 700 0.95rem/1.15 var(--font-ui);
+  cursor: pointer;
+  pointer-events: auto;
+}
+.hud__list:hover:not(:disabled) {
+  background: #f3dcae;
+}
+.hud__list:focus-visible {
+  outline: 0.1875rem solid var(--focus);
+  outline-offset: 0.125rem;
+}
+.hud__list:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+@media (max-width: 960px) {
+  /* Sin sitio a la derecha: las herramientas cuelgan justo debajo de la cabecera, en su esquina derecha. */
+  .hud__tools {
+    top: 100%;
+    left: auto;
+    right: 0;
+    margin-top: 0.375rem;
+  }
+  .hud__list,
+  .hud__music {
+    min-height: 2.75rem;
+  }
+  .hud__list {
+    font-size: 0.85rem;
+  }
+  .hud__music {
+    width: 2.75rem;
+  }
+}
+
+/* ---- Lista accesible de aprendizajes ---- */
+.learning-list {
+  display: grid;
+  gap: 0.625rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.learning-list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  border: 0.125rem solid var(--brown);
+  border-radius: 0.5rem;
+  background: var(--cream-warm);
+}
+.learning-list__item--completed {
+  background: #e4f0cf;
+}
+.learning-list__item--locked {
+  background: #ece3d4;
+}
+.learning-list__text {
+  min-width: 0;
+}
+.learning-list__title {
+  margin: 0;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.learning-list__meta {
+  margin: 0.125rem 0 0;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+.learning-list__state {
+  font-weight: 700;
+}
+.learning-list__open {
+  flex: none;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 0.125rem solid var(--brown);
+  border-radius: 0.5rem;
+  background: var(--cream);
+  color: var(--ink);
+  font: 700 1rem var(--font-ui);
+  cursor: pointer;
+}
+.learning-list__open:hover {
+  background: #f3dcae;
+}
+.learning-list__open:focus-visible {
+  outline: 0.1875rem solid var(--focus);
+  outline-offset: 0.125rem;
+}
+
+/* ---- Controles táctiles: cruceta y «Explorar» (solo con puntero táctil o pantallas estrechas) ---- */
+.touch {
+  display: none;
+}
+@media (pointer: coarse), (max-width: 640px) {
+  .touch {
+    position: absolute;
+    left: var(--gutter);
+    right: var(--gutter);
+    bottom: var(--gutter);
+    z-index: 5;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    pointer-events: none; /* el contenedor deja pasar los toques al mapa; solo los botones los reciben */
+  }
+  .nearby-region {
+    bottom: calc(var(--gutter) + 9.5rem);
+  }
+}
+.touch__pad {
+  display: grid;
+  grid-template-columns: repeat(3, 3.5rem);
+  grid-template-rows: repeat(3, 3.5rem);
+  gap: 0.25rem;
+}
+.touch__arrow {
+  appearance: none;
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0;
+  border: 0.1875rem solid var(--brown);
+  border-radius: 0.75rem;
+  background: rgb(255 247 233 / 0.9);
+  color: var(--ink);
+  font: 700 1.4rem var(--font-ui);
+  pointer-events: auto;
+  touch-action: none; /* solo los controles: los párrafos conservan el desplazamiento táctil */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+.touch__arrow:active {
+  background: #f3dcae;
+}
+.touch__arrow:focus-visible {
+  outline: 0.1875rem solid var(--focus);
+  outline-offset: 0.125rem;
+}
+.touch__arrow--up { grid-column: 2; grid-row: 1; }
+.touch__arrow--left { grid-column: 1; grid-row: 2; }
+.touch__arrow--right { grid-column: 3; grid-row: 2; }
+.touch__arrow--down { grid-column: 2; grid-row: 3; }
+.touch__explore {
+  min-width: 8rem;
+  height: 4rem;
+  padding: 0 1.25rem;
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+@media (max-width: 360px) {
+  /* Muy estrecho: cruceta y «Explorar» más compactas para que quepan en una fila sin tocarse. */
+  .touch__pad {
+    grid-template-columns: repeat(3, 3rem);
+    grid-template-rows: repeat(3, 3rem);
+  }
+  .touch__arrow {
+    width: 3rem;
+    height: 3rem;
+  }
+  .touch__explore {
+    min-width: 6rem;
+    padding: 0 0.75rem;
+  }
+}
+@media (max-height: 460px) {
+  /* Apaisado bajo: cruceta más pequeña para no tapar el mapa. */
+  .touch__pad {
+    grid-template-columns: repeat(3, 2.75rem);
+    grid-template-rows: repeat(3, 2.75rem);
+  }
+  .touch__arrow {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+  .touch__explore {
+    height: 3.25rem;
+  }
+  .nearby-region {
+    bottom: var(--gutter);
   }
 }

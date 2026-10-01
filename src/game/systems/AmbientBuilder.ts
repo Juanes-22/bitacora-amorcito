@@ -47,7 +47,7 @@ export function buildAmbient(scene: Phaser.Scene, config: BitacoraConfig, assets
       const sprite = place(scene.add.sprite(fx.position.x, fx.position.y, fx.assetId, names[0]), entry, fx);
       sprite.setFlipX(fx.flipX ?? false);
       // Cada pieza arranca en un fotograma distinto para que varias a la vez no parezcan un solo reloj.
-      if (!reducedMotion) sprite.anims.play({ key, startFrame: Phaser.Math.Between(0, names.length - 1) });
+      if (!reducedMotion) sprite.anims.play({ key, startFrame: Phaser.Math.Between(0, names.length - 1), timeScale: fx.speedFactor ?? 1 });
     } else if (fx.type === "sway" && entry.motion?.type === "sway") {
       const image = place(scene.add.image(fx.position.x, fx.position.y, fx.assetId), entry, fx);
       const m = entry.motion;

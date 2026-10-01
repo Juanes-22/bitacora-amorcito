@@ -259,6 +259,105 @@ describe("useProgressController", () => {
     expect(result.current.nearby).toEqual({ kind: "learning", id: "apr-a" });
   });
 
+  describe("lista accesible (SPEC 14, AC-11)", () => {
+    const openList = (r: ReturnType<typeof setup>) => act(() => r.result.current.overlayActions.openList());
+    const fromList = (r: ReturnType<typeof setup>, id: string) => act(() => r.result.current.overlayActions.openFromList(id));
+
+    it("abre la lista, detiene el mapa y se cierra devolviendo el control", () => {
+      const r = setup();
+      openList(r);
+      expect(r.result.current.overlay).toEqual({ kind: "list" });
+      expect(log.controls.at(-1)).toEqual(["overlay"]);
+      act(() => r.result.current.overlayActions.closeOverlay());
+      expect(r.result.current.overlay).toBeNull();
+      expect(log.controls.at(-1)).toEqual([]);
+    });
+
+    it("abrir el aprendizaje disponible muestra su introducción igual que junto a la estación, sin mover al personaje", () => {
+      const r = setup();
+      openList(r);
+      fromList(r, "apr-a");
+      expect(r.result.current.reading).toEqual({ kind: "intro", learningId: "apr-a", event: "open" });
+      expect(r.result.current.overlay).toBeNull();
+      expect(log.controls.at(-1)).toEqual(["reading"]);
+      expect(log.zone).toEqual([]);
+    });
+
+    it("las mismas reglas de secuencia: uno bloqueado solo muestra su mensaje y no se puede marcar ni recoger", () => {
+      const r = setup();
+      openList(r);
+      fromList(r, "apr-c");
+      expect(r.result.current.reading).toEqual({ kind: "message", learningId: "apr-c", event: "locked" });
+      act(() => r.result.current.actions.markRead("lived"));
+      act(() => r.result.current.actions.claimBadge());
+      expect(r.result.current.reading?.kind).toBe("message");
+      expect(r.store.getState().entries["apr-c"]).toMatchObject({ readSectionIds: [] });
+      expect(r.store.getState().entries["apr-c"].completedAt).toBeUndefined();
+    });
+
+    it("en modo final un contenido sin aprobar se muestra como pendiente, no se abre", () => {
+      config.mode = "final";
+      const r = setup();
+      openList(r);
+      fromList(r, "apr-a");
+      expect(r.result.current.reading).toEqual({ kind: "message", learningId: "apr-a", event: "pending" });
+    });
+
+    it("al cerrar la lectura vuelve a la lista (sin parpadeo de controles) y se puede cerrar con otro cierre", () => {
+      const r = setup();
+      openList(r);
+      fromList(r, "apr-a");
+      const before = log.controls.length;
+      act(() => r.result.current.actions.close());
+      expect(r.result.current.reading).toBeNull();
+      expect(r.result.current.overlay).toEqual({ kind: "list" });
+      expect(log.controls.slice(before).every((c) => c.includes("overlay"))).toBe(true); // nunca quedó libre entre medias
+      expect(log.controls.at(-1)).toEqual(["overlay"]);
+      act(() => r.result.current.overlayActions.closeOverlay());
+      expect(log.controls.at(-1)).toEqual([]);
+    });
+
+    it("ganar la insignia desde la lista cierra la lectura en el mapa y celebra (no vuelve a la lista)", () => {
+      const r = setup();
+      openList(r);
+      fromList(r, "apr-a");
+      act(() => r.result.current.actions.continueReading());
+      ALL.forEach((s) => act(() => r.result.current.actions.markRead(s)));
+      act(() => r.result.current.actions.claimBadge());
+      act(() => r.result.current.actions.close());
+      expect(r.result.current.overlay).toBeNull();
+      expect(log.celebrate).toHaveLength(1);
+      expect(log.controls.at(-1)).toEqual([]);
+      // la lista refleja ahora el estado nuevo
+      expect(r.store.getState().entries["apr-a"].completedAt).toBeDefined();
+    });
+
+    it("no abre con otra ventana abierta, ignora IDs ajenos y no deja bloqueos colgados", () => {
+      const r = setup();
+      toReading(r);
+      openList(r);
+      expect(r.result.current.overlay).toBeNull(); // hay una lectura abierta
+      act(() => r.result.current.actions.close());
+      openList(r);
+      fromList(r, "no-existe");
+      expect(r.result.current.reading).toBeNull();
+      expect(r.result.current.overlay).toEqual({ kind: "list" });
+      expect(log.controls.at(-1)).toEqual(["overlay"]);
+      fromList(r, "apr-a");
+      fromList(r, "apr-a"); // doble clic: la segunda ya no hay lista abierta
+      expect(r.result.current.reading?.kind).toBe("intro");
+    });
+
+    it("no otorga nada por abrir: el estado del progreso no cambia", () => {
+      const r = setup();
+      const before = JSON.stringify(r.store.getState().entries);
+      openList(r);
+      fromList(r, "apr-a");
+      act(() => r.result.current.actions.close());
+      expect(JSON.stringify(r.store.getState().entries)).toBe(before);
+    });
+  });
+
   it("al desmontar retira sus receptores y guarda lo pendiente", () => {
     const base0 = bridge.listenerCount();
     const r = setup();

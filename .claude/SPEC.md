@@ -2,7 +2,7 @@
 
 **Documento:** especificación funcional y técnica; fuente de verdad de los requisitos.  
 **Stack:** React + Vite + TypeScript + Phaser.  
-**Revisión documental:** 9. La revisión 9 añade (a) las piezas adicionales del paisaje (`bitacora-landscape-extras`: luces del árbol, patos, nubes y partículas luminosas; §3.2) y (b) la música de fondo con rotación de pistas y control de encendido/apagado (§6.4, §14), con los criterios AC-47 a AC-54. La revisión 8 (a) añade el kit de animaciones del paisaje (§3.2), el encuadre y la escala visual (§6.3, §14) y los criterios AC-37 a AC-46; y (b) alinea el contrato de §12.4 y el puente de §11.5 con lo ya implementado en las fases 1 a 4. El contrato de assets se adapta al `assets.json` real entregado por el usuario. Ese manifiesto existente es autoritativo: conserva sus IDs, `pathConvention`, `path`, categorías, `kind`, dimensiones, transparencia, procedencia y metadatos específicos; no se reemplaza por un esquema inventado.  
+**Revisión documental:** 10. La revisión 10 añade (c) las flores y arbustos animados fotograma a fotograma (`bitacora-flowers-bushes-animations`; §3.2) y el límite de efectos por zona, con los criterios AC-55 a AC-57. La revisión 9 añade (a) las piezas adicionales del paisaje (`bitacora-landscape-extras`: luces del árbol, patos, nubes y partículas luminosas; §3.2) y (b) la música de fondo con rotación de pistas y control de encendido/apagado (§6.4, §14), con los criterios AC-47 a AC-54. La revisión 8 (a) añade el kit de animaciones del paisaje (§3.2), el encuadre y la escala visual (§6.3, §14) y los criterios AC-37 a AC-46; y (b) alinea el contrato de §12.4 y el puente de §11.5 con lo ya implementado en las fases 1 a 4. El contrato de assets se adapta al `assets.json` real entregado por el usuario. Ese manifiesto existente es autoritativo: conserva sus IDs, `pathConvention`, `path`, categorías, `kind`, dimensiones, transparencia, procedencia y metadatos específicos; no se reemplaza por un esquema inventado.  
 **Estado:** requisitos definidos para implementar; este documento no acredita funcionalidades construidas ni pruebas ejecutadas.
 
 <a id="spec-0"></a>
@@ -191,6 +191,15 @@ El usuario aportó un segundo kit con once piezas: guirnalda dorada y destello d
 - Los patos solo recorren puntos de agua navegable sin cruzar puentes, rocas ni orillas, y su trayectoria no se superpone a celdas transitables. No tienen física, rutas de juego ni colisiones.
 - Con `prefers-reduced-motion`, los patos se quedan quietos en su primer punto y fotograma, las luces con pulso muestran su opacidad base y no hay destellos ni partículas.
 
+#### Flores y arbustos animados (`bitacora-flowers-bushes-animations`)
+
+Tercer kit del paisaje: seis plantas con ocho fotogramas cada una (margaritas, flores rosadas, girasoles, espigas moradas, arbusto redondo y arbusto con flores). A diferencia de las plantas del primer kit (una imagen que se mece por rotación), estas **se animan fotograma a fotograma** con su atlas, que compensa la posición de la raíz en un lienzo lógico común. Se integran con las mismas reglas (copia con sus bytes, entradas **añadidas** a `assets.json` con `kind` `animation-sheet`, atlas validados contra su imagen) y se colocan con el efecto `animation`.
+
+- El anclaje (`origin`) es la raíz de la planta: la posición del efecto es el punto del suelo donde nace.
+- Cada instancia puede variar `startFrame` (aleatorio, ya implícito) y la velocidad con `speedFactor` (multiplicador de la velocidad del manifiesto, > 0) para que no se balanceen todas a la vez.
+- Son piezas independientes, no sustituyen a las pintadas: se colocan en espacios libres sobre suelo no transitable. Superponerlas directamente sobre una planta pintada produce un doble contorno durante el balanceo, por lo que se evita, y la raíz va sobre césped o el borde del sendero sin tapar los puntos interactivos.
+- Presupuesto: cada zona admite como máximo 60 efectos en `ambient` (error de validación); el coste real se comprueba con la mediana de fotogramas por segundo (AC-43).
+
 <a id="spec-4"></a>
 
 ## 4. Mapa, estaciones y modularidad
@@ -293,7 +302,7 @@ Permite volver a las estaciones completadas y revisar sus contenidos en cualquie
 
 ### 6.1. Controles y foco
 
-En escritorio, las flechas mueven a Vanessa y `Enter` interactúa. `Escape` cierra la lectura desde React. En móvil, construye una cruceta HTML de cuatro direcciones y un botón «Explorar» con el estilo de los assets. Sus pulsaciones deben llegar al mismo controlador de entrada de Phaser que usa el teclado, no a un segundo sistema de movimiento.
+En escritorio, las flechas mueven a Vanessa y `Enter` interactúa. `Escape` cierra la lectura desde React. En móvil, construye una cruceta HTML de cuatro direcciones y un botón «Explorar» con el estilo de los assets. La cruceta es una región con etiqueta textual y se muestra con puntero táctil (`pointer: coarse`) o en pantallas estrechas (≤ 640 px de ancho); en escritorio con ratón no se muestra, porque se usa el teclado. Se oculta mientras hay una ventana abierta y no tapa la cabecera, sus herramientas ni el aviso de proximidad. Sus pulsaciones deben llegar al mismo controlador de entrada de Phaser que usa el teclado, no a un segundo sistema de movimiento.
 
 Habilita las flechas del juego solo cuando el área del mapa tiene el foco o hay un control táctil activo, no hay una ventana modal y la aplicación está visible. Desactiva también la captura preventiva de esas teclas fuera de ese contexto: deshabilitar solo la lógica de movimiento no basta si se sigue impidiendo el comportamiento normal del navegador. `Tab` debe permitir entrar y salir del mapa. [T9]
 
@@ -736,6 +745,7 @@ Además de la forma, valida con funciones propias:
 - `visualLayout` no equivale a un frame grid. `rowDirections` y `poseCount` pueden usarse para comprobar una definición de frames creada después, no para inventarla.
 - `nineSlice`, `placement`, `zone`, `layer`, `variant` y otros metadatos especializados deben validarse solo cuando estén presentes y ser consumidos por el código que corresponda.
 - En `maps[zona].ambient`, cada `assetId` existe y su metadata es coherente con el tipo: `animation` exige `atlasPath`, `animation` y `frameCount`; `sway` y `drift` exigen `motion` del mismo tipo; `particles` exige `motion.type = "particle"`. Las posiciones y áreas caen dentro de la zona y las escalas son positivas.
+- `ambient` no tiene más de 60 efectos por zona; `speedFactor`, cuando existe, es mayor que 0.
 - Los tipos `glow` y `swim` también exigen coherencia con la metadata: `glow` pide un asset de `kind` `light-glow` con `motion.type = "pulse"`; `swim` pide una hoja animada con `motion.type = "swim"` y una trayectoria de al menos dos puntos dentro de la zona; `animation` rechaza una hoja con `motion.type = "swim"` (debe usarse `swim`). `blendMode` solo admite `NORMAL` o `ADD` y `opacity` está entre 0 y 1.
 - En `audio.music`, cada ID de `tracks` existe en `assets.json` con `kind` `music`, sin repetirse; `volume` está entre 0 y 1; `crossfadeMs` no es negativo y es menor que la mitad de la pista más corta; `rotation` es `sequential` o `shuffle`. Cada archivo de audio existe; su `sizeBytes` y `sha256` se contrastan y avisan si difieren. Los créditos con licencia sin verificar se informan como bloqueo de entrega final (§10).
 - Cada `atlasPath` existe, su `meta.image` coincide con el archivo del asset y sus regiones están dentro de la imagen, sin solaparse, con contenido y en número igual a `frameCount`. Los efectos ambientales no cambian colisiones ni alcanzabilidad.
@@ -743,7 +753,7 @@ Además de la forma, valida con funciones propias:
 
 Las referencias cruzadas y la accesibilidad real del mapa no se resuelven solo por JSON Schema. Devuelve errores concretos, por ejemplo `placements.apr-c.decorationAssetId: asset ID no encontrado`; no una pantalla negra. No corrijas silenciosamente un ID mal escrito ni elimines una estación inválida de `route`.
 
-En caso de `bitacora.json` inválido, no sobrescribas progreso ni construyas parcialmente el mundo. Si el manifiesto es válido pero un archivo gráfico falla, conserva la lectura accesible y reporta el asset ID y la ruta resuelta. Son fallos diferentes.
+En caso de `bitacora.json` inválido, no sobrescribas progreso ni construyas parcialmente el mundo. Si el manifiesto es válido pero un archivo gráfico falla, conserva la lectura accesible y reporta el asset ID y la ruta resuelta. Esto incluye el archivo que «carga» pero no se puede decodificar (por ejemplo, un servidor que devuelve la página de inicio en lugar de un 404): se detecta porque la textura no existe tras la carga. Son fallos diferentes.
 
 <a id="spec-12-4"></a>
 
@@ -835,7 +845,7 @@ type AmbientDepth = { mode: "fixed"; value: number } | { mode: "y"; offset: numb
  * origen, fotogramas y movimiento salen de la metadata del manifiesto, no se repiten aquí.
  */
 type AmbientEffect =
-  | { type: "animation"; assetId: string; position: Point; scale?: number; flipX?: boolean; alpha?: number; depth: AmbientDepth }
+  | { type: "animation"; assetId: string; position: Point; scale?: number; flipX?: boolean; alpha?: number; speedFactor?: number; depth: AmbientDepth }
   | { type: "sway"; assetId: string; position: Point; scale?: number; depth: AmbientDepth }
   | { type: "drift"; assetId: string; position: Point; scale?: number; depth: AmbientDepth }
   | { type: "particles"; assetId: string; area: Rect; frequencyMs: number; scale?: number; depth: AmbientDepth }
@@ -885,6 +895,8 @@ interface UiConfig {
     resetConfirmTitle: string; resetConfirmText: string; resetConfirm: string; cancel: string;
     preparationTemplate: string;
     musicMute: string; musicUnmute: string;     // etiqueta del botón de música según su estado
+    stateLocked: string; stateAvailable: string; stateCompleted: string;   // estado de cada aprendizaje en la lista accesible
+    controlsLabel: string; moveUp: string; moveDown: string; moveLeft: string; moveRight: string;   // cruceta táctil
   };                                 // las plantillas solo admiten las variables permitidas de cada una (§12.7)
   assets: {
     window: string; button: string; stationSign: string; titleSign: string; portrait: string;
@@ -1169,7 +1181,7 @@ Todos los elementos del mundo deben transformarse con la misma cámara. Los cont
 
 Define como objetivo de diseño botones táctiles de al menos 44 × 44 píxeles CSS. La cruceta no debe tapar estaciones ni el botón de interacción. Al cambiar tamaño u orientación, conserva la posición lógica del personaje y reajusta la cámara.
 
-Incluye una opción «Ver aprendizajes en lista». Permite abrir los aprendizajes disponibles o completados sin precisar el desplazamiento del personaje. Usa exactamente las mismas reglas de secuencia, lectura y recompensa: es una alternativa accesible de navegación, no un atajo para otorgar insignias.
+Incluye una opción «Ver aprendizajes en lista»: un botón siempre visible junto a la cabecera (a su derecha o justo debajo si no cabe) que abre un diálogo con una lista ordenada de los aprendizajes activos, cada uno con su número, título, estado dicho con texto (bloqueado, disponible o completado) y zona. Al cerrar una lectura abierta desde la lista se vuelve a ella. Permite abrir los aprendizajes disponibles o completados sin precisar el desplazamiento del personaje. Usa exactamente las mismas reglas de secuencia, lectura y recompensa: es una alternativa accesible de navegación, no un atajo para otorgar insignias.
 
 Añade foco visible, etiquetas comprensibles y textos alternativos para evidencias. Los adornos deben ignorarse desde tecnologías de asistencia. No dependas únicamente del color para comunicar bloqueos o logros.
 
@@ -1195,7 +1207,7 @@ Comunica `prefers-reduced-motion` también a Phaser para desactivar sacudidas, d
 
 ### 15.1. Resultados exigidos
 
-Estos criterios describen el resultado requerido, no pruebas ya superadas. Los IDs `AC-01` a `AC-54` permiten relacionarlos con las tareas y evidencias de [PLAN.md](PLAN.md). No renumerarlos al actualizar el estado de implementación.
+Estos criterios describen el resultado requerido, no pruebas ya superadas. Los IDs `AC-01` a `AC-57` permiten relacionarlos con las tareas y evidencias de [PLAN.md](PLAN.md). No renumerarlos al actualizar el estado de implementación.
 
 | ID | Prueba | Resultado esperado |
 |---|---|---|
@@ -1253,6 +1265,10 @@ Estos criterios describen el resultado requerido, no pruebas ya superadas. Los I
 | <a id="ac-52"></a>AC-52 | Continuidad y recursos del audio | La música no se corta ni reinicia al cambiar de zona, abrir una lectura o redimensionar; se pausa con la pestaña oculta; al abrir la página no se descargan las tres pistas; un fallo de carga o de reproducción no rompe el juego. |
 | <a id="ac-53"></a>AC-53 | Contrato de audio | Un ID de pista inexistente, repetido o de otro `kind`, un volumen fuera de rango o un fundido imposible producen un error localizado; el archivo de audio debe existir (error) y su tamaño y hash se contrastan (aviso), como el resto de assets. |
 | <a id="ac-54"></a>AC-54 | Créditos de música | La atribución de cada pista vive en el manifiesto y no se muestra en la portada; una atribución sin verificar bloquea la entrega final y nunca se inventa. |
+
+| <a id="ac-55"></a>AC-55 | Flora animada integrada | Las seis plantas del tercer kit se añaden a `assets.json` sin alterar las entradas existentes; archivos, atlas, hashes y regiones son válidos y cada una declara `origin` (raíz) y `recommendedScale`. |
+| <a id="ac-56"></a>AC-56 | Flora viva y bien colocada | Cada zona muestra flores y arbustos que cambian de fotograma con velocidades y fases distintas; su raíz está sobre suelo no transitable y no se superpone a plantas pintadas ni a puntos de interacción; con movimiento reducido quedan en un fotograma fijo. |
+| <a id="ac-57"></a>AC-57 | Presupuesto de efectos | Una zona con más de 60 efectos produce un error localizado, y con todo el ambiente de ambas zonas activo la mediana sigue siendo ≥ 50 fps sin objetos residuales al cambiar de zona. |
 
 <a id="spec-15-2"></a>
 

@@ -19,10 +19,15 @@ const EXTRAS_IDS = [
   "background.sky.cloud-long", "background.sky.cloud-small", "decoration.light.hanging-lantern", "decoration.light.tree-rays",
   "decoration.light.warm-glow", "particle.firefly-mote", "particle.pollen",
 ];
+const FLORA_IDS = [
+  "animation.flora.daisies", "animation.flora.flowering-bush", "animation.flora.pink-flowers",
+  "animation.flora.purple-spikes", "animation.flora.round-bush", "animation.flora.sunflowers",
+];
 const MUSIC_IDS = ["audio.music.beyond-the-clouds", "audio.music.enchanted-festival", "audio.music.little-town-orchestral"];
 const ATLAS_IDS = [
   "animation.water.ripples", "animation.water.waterfall", "animation.water.foam-splash",
   "animation.light.fairy-lights", "animation.light.gold-sparkle", "animation.fauna.duckling-swim", "animation.fauna.white-duck-swim",
+  ...FLORA_IDS,
 ];
 
 const load = (id: string) => {
@@ -38,11 +43,11 @@ const issues = (id: string, mutate?: (atlas: any, entry: AssetEntry) => void) =>
 };
 
 describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)", () => {
-  it("el manifiesto con los dos kits y la música es válido: 69 entradas y recuentos coherentes", () => {
+  it("el manifiesto con los dos kits y la música es válido: 75 entradas y recuentos coherentes", () => {
     const r = validateAssetManifest(manifest);
     expect(r.ok ? "" : JSON.stringify(r.ok ? [] : r.issues)).toBe("");
-    expect(manifest.assetCount).toBe(69);
-    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, decorations: 5, effects: 15 });
+    expect(manifest.assetCount).toBe(75);
+    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, decorations: 11, effects: 15 });
   });
 
   it("las 45 entradas originales siguen en su sitio y con sus campos (el kit solo se añadió)", () => {
@@ -52,7 +57,8 @@ describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)
     expect(manifest.assets["ui.panel.cream.nine-slice"].nineSlice).toEqual({ top: 32, right: 32, bottom: 32, left: 32 });
     expect(ids.slice(45, 55).sort()).toEqual(KIT_IDS);
     expect(ids.slice(55, 66).sort()).toEqual(EXTRAS_IDS);
-    expect(ids.slice(66)).toEqual(MUSIC_IDS);
+    expect(ids.slice(66, 69)).toEqual(MUSIC_IDS);
+    expect(ids.slice(69).sort()).toEqual(FLORA_IDS);
   });
 
   it("el kit conserva su metadata (origen, escala recomendada, animación y movimiento) sin duplicarla en otro sitio", () => {
@@ -69,7 +75,7 @@ describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)
     expect(r.warnings).toEqual([]);
   });
 
-  it("los siete atlas son válidos contra su imagen real", () => {
+  it("los trece atlas son válidos contra su imagen real", () => {
     expect(checkAtlases(manifest, manifestPath)).toEqual([]);
   });
 
@@ -118,6 +124,25 @@ describe("piezas adicionales del paisaje y música (SPEC 3.2 y 6.4; AC-47)", () 
     expect(bad((m) => { delete m.assets[MUSIC_IDS[0]].credit; })).toContain("credit");
     expect(bad((m) => { delete m.assets[MUSIC_IDS[0]].durationSeconds; })).toContain("durationSeconds");
     expect(bad((m) => { (m.assets[MUSIC_IDS[0]].credit as { attribution?: string }).attribution = ""; })).toContain("atribución");
+  });
+});
+
+describe("flores y arbustos animados (SPEC 3.2; AC-55)", () => {
+  it.each(FLORA_IDS)("%s: hoja animada de 8 fotogramas con la raíz como origen y escala recomendada", (id) => {
+    const e = manifest.assets[id];
+    expect(e).toMatchObject({ category: "decorations", kind: "animation-sheet", frameCount: 8, filter: "nearest", blendMode: "NORMAL", opacity: 1 });
+    expect(e.origin!.y).toBeGreaterThan(0.95); // la raíz, en la base del fotograma
+    expect(e.origin!.y).toBeLessThan(1);
+    expect(e.recommendedScale).toBeGreaterThan(0);
+    expect(e.animation).toMatchObject({ repeat: -1 });
+    expect([4, 6]).toContain(e.animation!.frameRate);
+    expect(e.motion).toBeUndefined(); // se animan por fotogramas, no por rotación
+  });
+
+  it("los arbustos van a 4 fps y las flores a 6 fps, como indica el kit", () => {
+    expect(manifest.assets["animation.flora.round-bush"].animation!.frameRate).toBe(4);
+    expect(manifest.assets["animation.flora.flowering-bush"].animation!.frameRate).toBe(4);
+    expect(manifest.assets["animation.flora.daisies"].animation!.frameRate).toBe(6);
   });
 });
 

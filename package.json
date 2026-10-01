@@ -13,7 +13,7 @@
     "validate:release": "tsx scripts/validate-config.ts --release",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.node.json --noEmit",
     "test": "vitest run",
-    "test:e2e": "node scripts/e2e/exploration.mjs && node scripts/e2e/reading.mjs && node scripts/e2e/journey.mjs && node scripts/e2e/scale.mjs && node scripts/e2e/ambient.mjs && node scripts/e2e/music.mjs",
+    "test:e2e": "node scripts/e2e/exploration.mjs && node scripts/e2e/reading.mjs && node scripts/e2e/journey.mjs && node scripts/e2e/scale.mjs && node scripts/e2e/ambient.mjs && node scripts/e2e/music.mjs && node scripts/e2e/mobile.mjs && node scripts/e2e/robustness.mjs",
     "build": "npm run validate:config && npm run typecheck && vite build",
     "preview": "vite preview"
   },

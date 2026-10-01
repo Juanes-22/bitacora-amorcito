@@ -618,6 +618,92 @@
           "frequencyMs": 900,
           "depth": {"mode": "fixed", "value": 1500},
           "scale": 1.2
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.flowering-bush",
+          "position": {"x": 1235, "y": 848},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.2
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.daisies",
+          "position": {"x": 1182, "y": 897},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.35,
+          "speedFactor": 1.15
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.pink-flowers",
+          "position": {"x": 1100, "y": 908},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.35,
+          "speedFactor": 0.9
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.round-bush",
+          "position": {"x": 1328, "y": 868},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.2,
+          "speedFactor": 0.9
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.purple-spikes",
+          "position": {"x": 1285, "y": 856},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.22,
+          "speedFactor": 0.85
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.sunflowers",
+          "position": {"x": 1160, "y": 872},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.22,
+          "speedFactor": 1.2
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.daisies",
+          "position": {"x": 1310, "y": 825},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.35,
+          "speedFactor": 0.95
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.pink-flowers",
+          "position": {"x": 950, "y": 1060},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.35,
+          "speedFactor": 1.1
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.daisies",
+          "position": {"x": 998, "y": 1054},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.35,
+          "speedFactor": 0.85
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.sunflowers",
+          "position": {"x": 1052, "y": 1054},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.22,
+          "speedFactor": 1.25
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.round-bush",
+          "position": {"x": 872, "y": 1072},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.2
         }
       ],
       "portals": {
@@ -1093,6 +1179,76 @@
           "frequencyMs": 900,
           "depth": {"mode": "fixed", "value": 1500},
           "scale": 1.2
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.round-bush",
+          "position": {"x": 650, "y": 960},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.2
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.daisies",
+          "position": {"x": 680, "y": 1050},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.35,
+          "speedFactor": 1.2
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.flowering-bush",
+          "position": {"x": 628, "y": 1040},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.2,
+          "speedFactor": 0.9
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.flowering-bush",
+          "position": {"x": 612, "y": 542},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.2
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.purple-spikes",
+          "position": {"x": 30, "y": 522},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.22,
+          "speedFactor": 0.95
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.round-bush",
+          "position": {"x": 425, "y": 445},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.2,
+          "speedFactor": 0.9
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.daisies",
+          "position": {"x": 470, "y": 432},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.35,
+          "speedFactor": 1.1
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.pink-flowers",
+          "position": {"x": 515, "y": 452},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.35,
+          "speedFactor": 0.85
+        },
+        {
+          "type": "animation",
+          "assetId": "animation.flora.sunflowers",
+          "position": {"x": 440, "y": 548},
+          "depth": {"mode": "y", "offset": 0},
+          "scale": 1.22,
+          "speedFactor": 1.2
         }
       ],
       "portals": {
@@ -1432,7 +1588,15 @@
       "cancel": "Cancelar",
       "preparationTemplate": "Recorrido en preparación: faltan {pending} por aprobar",
       "musicMute": "Silenciar música",
-      "musicUnmute": "Activar música"
+      "musicUnmute": "Activar música",
+      "stateLocked": "Bloqueado",
+      "stateAvailable": "Disponible",
+      "stateCompleted": "Completado",
+      "controlsLabel": "Controles de movimiento",
+      "moveUp": "Mover hacia arriba",
+      "moveDown": "Mover hacia abajo",
+      "moveLeft": "Mover hacia la izquierda",
+      "moveRight": "Mover hacia la derecha"
     },
     "assets": {
       "window": "ui.panel.cream.nine-slice",

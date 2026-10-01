@@ -3,12 +3,12 @@
   "project": "Bitácora Amorcito",
   "basePath": ".",
   "pathConvention": "Paths are relative to the directory containing this assets.json.",
-  "assetCount": 69,
+  "assetCount": 75,
   "categoryCounts": {
     "audio": 3,
     "backgrounds": 17,
     "characters": 7,
-    "decorations": 5,
+    "decorations": 11,
     "effects": 15,
     "references": 2,
     "stations": 7,
@@ -1937,6 +1937,300 @@
         "attribution": "",
         "verified": false
       }
+    },
+    "animation.flora.daisies": {
+      "path": "animations/flora/daisies-sway.png",
+      "type": "image",
+      "format": "png",
+      "category": "decorations",
+      "label": "Margaritas al viento",
+      "kind": "animation-sheet",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 834531,
+      "sha256": "39ca03d9a9e901e4a498a308dd934fecae7b113e2955431a0cf0c83220fdddec",
+      "originalPath": "bitacora-flowers-bushes-animations/assets/flowers/daisies-sway.png",
+      "recommendedContentHeightPx": 42,
+      "filter": "nearest",
+      "origin": {
+        "x": 0.49112426,
+        "y": 0.96710526
+      },
+      "recommendedScale": 0.14788732,
+      "blendMode": "NORMAL",
+      "opacity": 1,
+      "atlasPath": "animations/flora/daisies-sway.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 338,
+        "height": 304
+      },
+      "animation": {
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 6,
+        "repeat": -1
+      }
+    },
+    "animation.flora.pink-flowers": {
+      "path": "animations/flora/pink-flowers-sway.png",
+      "type": "image",
+      "format": "png",
+      "category": "decorations",
+      "label": "Flores rosadas al viento",
+      "kind": "animation-sheet",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 894314,
+      "sha256": "69212622142298b5f567b71215f2c704808ff1ad4c00a568e681aa7e6cc90443",
+      "originalPath": "bitacora-flowers-bushes-animations/assets/flowers/pink-flowers-sway.png",
+      "recommendedContentHeightPx": 38,
+      "filter": "nearest",
+      "origin": {
+        "x": 0.46418338,
+        "y": 0.96763754
+      },
+      "recommendedScale": 0.13148789,
+      "blendMode": "NORMAL",
+      "opacity": 1,
+      "atlasPath": "animations/flora/pink-flowers-sway.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 349,
+        "height": 309
+      },
+      "animation": {
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 6,
+        "repeat": -1
+      }
+    },
+    "animation.flora.sunflowers": {
+      "path": "animations/flora/sunflowers-sway.png",
+      "type": "image",
+      "format": "png",
+      "category": "decorations",
+      "label": "Girasoles al viento",
+      "kind": "animation-sheet",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 945007,
+      "sha256": "c4faf93c2feb6faa8a32d7862742313178562ea2de7485a89ee17dee1c900c2c",
+      "originalPath": "bitacora-flowers-bushes-animations/assets/flowers/sunflowers-sway.png",
+      "recommendedContentHeightPx": 58,
+      "filter": "nearest",
+      "origin": {
+        "x": 0.46816479,
+        "y": 0.96978852
+      },
+      "recommendedScale": 0.18649518,
+      "blendMode": "NORMAL",
+      "opacity": 1,
+      "atlasPath": "animations/flora/sunflowers-sway.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 267,
+        "height": 331
+      },
+      "animation": {
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 6,
+        "repeat": -1
+      }
+    },
+    "animation.flora.purple-spikes": {
+      "path": "animations/flora/purple-spikes-sway.png",
+      "type": "image",
+      "format": "png",
+      "category": "decorations",
+      "label": "Flores moradas al viento",
+      "kind": "animation-sheet",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 802736,
+      "sha256": "a8a7171ee66b2b7c4c059a1572ff6a85d0b63592d6b156280fa7b45c9d7ab292",
+      "originalPath": "bitacora-flowers-bushes-animations/assets/flowers/purple-spikes-sway.png",
+      "recommendedContentHeightPx": 52,
+      "filter": "nearest",
+      "origin": {
+        "x": 0.46245059,
+        "y": 0.9695122
+      },
+      "recommendedScale": 0.16883117,
+      "blendMode": "NORMAL",
+      "opacity": 1,
+      "atlasPath": "animations/flora/purple-spikes-sway.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 253,
+        "height": 328
+      },
+      "animation": {
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 6,
+        "repeat": -1
+      }
+    },
+    "animation.flora.round-bush": {
+      "path": "animations/flora/round-bush-sway.png",
+      "type": "image",
+      "format": "png",
+      "category": "decorations",
+      "label": "Arbusto redondo al viento",
+      "kind": "animation-sheet",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 858473,
+      "sha256": "aabf2b3d4059d277111d5901b06a7bf6b609eca4db78b27e03300e28b5b1d572",
+      "originalPath": "bitacora-flowers-bushes-animations/assets/bushes/round-bush-sway.png",
+      "recommendedContentHeightPx": 58,
+      "filter": "nearest",
+      "origin": {
+        "x": 0.49311295,
+        "y": 0.95884774
+      },
+      "recommendedScale": 0.26008969,
+      "blendMode": "NORMAL",
+      "opacity": 1,
+      "atlasPath": "animations/flora/round-bush-sway.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 363,
+        "height": 243
+      },
+      "animation": {
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 4,
+        "repeat": -1
+      }
+    },
+    "animation.flora.flowering-bush": {
+      "path": "animations/flora/flowering-bush-sway.png",
+      "type": "image",
+      "format": "png",
+      "category": "decorations",
+      "label": "Arbusto con flores al viento",
+      "kind": "animation-sheet",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1007945,
+      "sha256": "4724b052a5f39c97f1179e20c6fdfed185f3b3ed3022bdb768957e2b13885871",
+      "originalPath": "bitacora-flowers-bushes-animations/assets/bushes/flowering-bush-sway.png",
+      "recommendedContentHeightPx": 60,
+      "filter": "nearest",
+      "origin": {
+        "x": 0.49589041,
+        "y": 0.96138996
+      },
+      "recommendedScale": 0.25104603,
+      "blendMode": "NORMAL",
+      "opacity": 1,
+      "atlasPath": "animations/flora/flowering-bush-sway.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 365,
+        "height": 259
+      },
+      "animation": {
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 4,
+        "repeat": -1
+      }
     }
   },
   "sourceDocuments": [
@@ -1999,11 +2293,30 @@
       "originalPath": "bitacora-landscape-extras/generation-prompts.json",
       "sizeBytes": 16671,
       "sha256": "b331dd72df0402d7f7fbbe8faee25ed9cda6f5d5debf3208bf620627c26fb3ca"
+    },
+    {
+      "path": "docs/source/flora/readme-original.md",
+      "originalPath": "bitacora-flowers-bushes-animations/README.md",
+      "sizeBytes": 3985,
+      "sha256": "daa9e225cbe5734a8c3b5851b0074c9d415655677981c3c5884408760c2e2ea1"
+    },
+    {
+      "path": "docs/source/flora/assets-original.json",
+      "originalPath": "bitacora-flowers-bushes-animations/assets.json",
+      "sizeBytes": 38665,
+      "sha256": "6b298dd87c767be0a3c8004b2275b98244c09c67a966450d8b435a3e5c3eb12a"
+    },
+    {
+      "path": "docs/source/flora/generation-prompts.json",
+      "originalPath": "bitacora-flowers-bushes-animations/generation-prompts.json",
+      "sizeBytes": 18605,
+      "sha256": "c030db348ab91cd569d8e3f25c15f270504c1903ae55854ea9d2d8578e3a4014"
     }
   ],
   "notes": [
     "Añadido el kit de animaciones del paisaje (10 imágenes, 3 atlas): ver docs/source/animations/. Las entradas anteriores no se modificaron.",
     "Añadido el kit de piezas adicionales del paisaje (11 imágenes, 4 atlas): ver docs/source/extras/. Las entradas anteriores no se modificaron.",
-    "Añadidas tres pistas de música de fondo (category «audio»): ver `credit` de cada entrada y SPEC 6.4."
+    "Añadidas tres pistas de música de fondo (category «audio»): ver `credit` de cada entrada y SPEC 6.4.",
+    "Añadido el kit de flores y arbustos animados (6 imágenes, 6 atlas): ver docs/source/flora/. Las entradas anteriores no se modificaron."
   ]
 }

@@ -89,7 +89,7 @@ export type AmbientDepth = { mode: "fixed"; value: number } | { mode: "y"; offse
  * fotogramas y el movimiento salen de la metadata del manifiesto, no se repiten aquí.
  */
 export type AmbientEffect =
-  | { type: "animation"; assetId: string; position: Point; scale?: number; flipX?: boolean; alpha?: number; depth: AmbientDepth }
+  | { type: "animation"; assetId: string; position: Point; scale?: number; flipX?: boolean; alpha?: number; speedFactor?: number; depth: AmbientDepth }
   | { type: "sway"; assetId: string; position: Point; scale?: number; depth: AmbientDepth }
   | { type: "drift"; assetId: string; position: Point; scale?: number; depth: AmbientDepth }
   | { type: "particles"; assetId: string; area: Rect; frequencyMs: number; scale?: number; depth: AmbientDepth }
@@ -133,6 +133,8 @@ export interface UiConfig {
     finalReflectionTitle: string; finalReflectionPending: string; resetConfirmTitle: string; resetConfirmText: string;
     resetConfirm: string; cancel: string; preparationTemplate: string;
     musicMute: string; musicUnmute: string;
+    stateLocked: string; stateAvailable: string; stateCompleted: string;
+    controlsLabel: string; moveUp: string; moveDown: string; moveLeft: string; moveRight: string;
   };
   assets: {
     window: string; button: string; buttonHover?: string; stationSign: string;

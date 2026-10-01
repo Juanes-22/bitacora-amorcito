@@ -1,0 +1,175 @@
+{
+  "frames": {
+    "frame-00": {
+      "frame": {
+        "x": 81,
+        "y": 160,
+        "w": 241,
+        "h": 314
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 9,
+        "w": 241,
+        "h": 314
+      },
+      "sourceSize": {
+        "w": 267,
+        "h": 331
+      }
+    },
+    "frame-01": {
+      "frame": {
+        "x": 440,
+        "y": 160,
+        "w": 242,
+        "h": 314
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 16,
+        "y": 9,
+        "w": 242,
+        "h": 314
+      },
+      "sourceSize": {
+        "w": 267,
+        "h": 331
+      }
+    },
+    "frame-02": {
+      "frame": {
+        "x": 792,
+        "y": 161,
+        "w": 240,
+        "h": 313
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 14,
+        "y": 10,
+        "w": 240,
+        "h": 313
+      },
+      "sourceSize": {
+        "w": 267,
+        "h": 331
+      }
+    },
+    "frame-03": {
+      "frame": {
+        "x": 1167,
+        "y": 160,
+        "w": 236,
+        "h": 314
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 20,
+        "y": 9,
+        "w": 236,
+        "h": 314
+      },
+      "sourceSize": {
+        "w": 267,
+        "h": 331
+      }
+    },
+    "frame-04": {
+      "frame": {
+        "x": 76,
+        "y": 631,
+        "w": 238,
+        "h": 315
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 8,
+        "w": 238,
+        "h": 315
+      },
+      "sourceSize": {
+        "w": 267,
+        "h": 331
+      }
+    },
+    "frame-05": {
+      "frame": {
+        "x": 440,
+        "y": 631,
+        "w": 243,
+        "h": 314
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 16,
+        "y": 9,
+        "w": 243,
+        "h": 314
+      },
+      "sourceSize": {
+        "w": 267,
+        "h": 331
+      }
+    },
+    "frame-06": {
+      "frame": {
+        "x": 798,
+        "y": 631,
+        "w": 249,
+        "h": 315
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 9,
+        "y": 8,
+        "w": 249,
+        "h": 315
+      },
+      "sourceSize": {
+        "w": 267,
+        "h": 331
+      }
+    },
+    "frame-07": {
+      "frame": {
+        "x": 1161,
+        "y": 631,
+        "w": 245,
+        "h": 315
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 14,
+        "y": 8,
+        "w": 245,
+        "h": 315
+      },
+      "sourceSize": {
+        "w": 267,
+        "h": 331
+      }
+    }
+  },
+  "meta": {
+    "app": "Bitacora animated flora",
+    "version": "1.0",
+    "image": "sunflowers-sway.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1448,
+      "h": 1086
+    },
+    "scale": "1"
+  }
+}

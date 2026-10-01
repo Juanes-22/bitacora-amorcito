@@ -9,7 +9,7 @@ import { renderTemplate } from "../../domain/templates";
  * Todo se deriva de `route`, `badges` y el progreso; ningún total está escrito en el componente.
  * La barra usa el marco y recorta el relleno según la metadata `placement` del manifiesto.
  */
-export function ProgressHUD({ onOpenBadges, music }: { onOpenBadges?: () => void; music?: ReactNode }) {
+export function ProgressHUD({ onOpenBadges, tools }: { onOpenBadges?: () => void; tools?: ReactNode }) {
   const { config, assets } = useBitacora();
   const { summary, persisting } = useProgress();
   const { labels, assets: ui } = config.ui;
@@ -59,7 +59,7 @@ export function ProgressHUD({ onOpenBadges, music }: { onOpenBadges?: () => void
           {labels.badges}
         </button>
       ) : null}
-      {music}
+      {tools ? <div className="hud__tools">{tools}</div> : null}
       {!persisting ? <p className="hud__warning" role="status">El avance no se está guardando en este navegador.</p> : null}
     </section>
   );

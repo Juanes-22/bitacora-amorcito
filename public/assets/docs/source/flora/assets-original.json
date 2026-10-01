@@ -1,0 +1,1706 @@
+{
+  "schemaVersion": 1,
+  "project": "Bitácora Amorcito",
+  "pack": "flowers-bushes-animations",
+  "assetRoot": "assets",
+  "assets": {
+    "daisies-sway": {
+      "label": "Margaritas al viento",
+      "type": "atlas",
+      "textureKey": "flora-daisies-sway",
+      "path": "assets/flowers/daisies-sway.png",
+      "atlasPath": "assets/flowers/daisies-sway.atlas.json",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "sha256": "39ca03d9a9e901e4a498a308dd934fecae7b113e2955431a0cf0c83220fdddec",
+      "frameCount": 8,
+      "filter": "nearest",
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major",
+        "sourceRowBoundaryPx": 637,
+        "useAtlasForCropping": true
+      },
+      "sourceFrameSize": {
+        "width": 338,
+        "height": 304
+      },
+      "origin": {
+        "x": 0.49112426,
+        "y": 0.96710526
+      },
+      "anchor": "root",
+      "recommendedContentHeightPx": 42,
+      "recommendedScale": 0.14788732,
+      "recommendedOpacity": 1,
+      "recommendedBlendMode": "NORMAL",
+      "animation": {
+        "key": "flora-daisies-sway-loop",
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 6,
+        "repeat": -1
+      },
+      "frames": [
+        {
+          "name": "frame-00",
+          "frame": {
+            "x": 41,
+            "y": 267,
+            "w": 276,
+            "h": 288
+          },
+          "rootInCrop": {
+            "x": 137.58390860909455,
+            "y": 286
+          },
+          "rootInTexture": {
+            "x": 178.58390860909455,
+            "y": 553
+          },
+          "contentBounds": {
+            "x": 43,
+            "y": 269,
+            "width": 272,
+            "height": 284
+          },
+          "cell": {
+            "x": 0,
+            "y": 0,
+            "width": 362,
+            "height": 637
+          }
+        },
+        {
+          "name": "frame-01",
+          "frame": {
+            "x": 433,
+            "y": 267,
+            "w": 275,
+            "h": 288
+          },
+          "rootInCrop": {
+            "x": 112.95523198187567,
+            "y": 286
+          },
+          "rootInTexture": {
+            "x": 545.9552319818756,
+            "y": 553
+          },
+          "contentBounds": {
+            "x": 73,
+            "y": 269,
+            "width": 271,
+            "height": 284
+          },
+          "cell": {
+            "x": 362,
+            "y": 0,
+            "width": 362,
+            "height": 637
+          }
+        },
+        {
+          "name": "frame-02",
+          "frame": {
+            "x": 809,
+            "y": 267,
+            "w": 262,
+            "h": 288
+          },
+          "rootInCrop": {
+            "x": 98.94362419184739,
+            "y": 286
+          },
+          "rootInTexture": {
+            "x": 907.9436241918474,
+            "y": 553
+          },
+          "contentBounds": {
+            "x": 87,
+            "y": 269,
+            "width": 258,
+            "height": 284
+          },
+          "cell": {
+            "x": 724,
+            "y": 0,
+            "width": 362,
+            "height": 637
+          }
+        },
+        {
+          "name": "frame-03",
+          "frame": {
+            "x": 1157,
+            "y": 267,
+            "w": 276,
+            "h": 288
+          },
+          "rootInCrop": {
+            "x": 112.94738175286696,
+            "y": 286
+          },
+          "rootInTexture": {
+            "x": 1269.947381752867,
+            "y": 553
+          },
+          "contentBounds": {
+            "x": 73,
+            "y": 269,
+            "width": 272,
+            "height": 284
+          },
+          "cell": {
+            "x": 1086,
+            "y": 0,
+            "width": 362,
+            "height": 637
+          }
+        },
+        {
+          "name": "frame-04",
+          "frame": {
+            "x": 41,
+            "y": 719,
+            "w": 276,
+            "h": 288
+          },
+          "rootInCrop": {
+            "x": 137.49996417568246,
+            "y": 286
+          },
+          "rootInTexture": {
+            "x": 178.49996417568246,
+            "y": 1005
+          },
+          "contentBounds": {
+            "x": 43,
+            "y": 84,
+            "width": 272,
+            "height": 284
+          },
+          "cell": {
+            "x": 0,
+            "y": 637,
+            "width": 362,
+            "height": 449
+          }
+        },
+        {
+          "name": "frame-05",
+          "frame": {
+            "x": 388,
+            "y": 719,
+            "w": 264,
+            "h": 288
+          },
+          "rootInCrop": {
+            "x": 153.18610274020605,
+            "y": 286
+          },
+          "rootInTexture": {
+            "x": 541.186102740206,
+            "y": 1005
+          },
+          "contentBounds": {
+            "x": 28,
+            "y": 84,
+            "width": 260,
+            "height": 284
+          },
+          "cell": {
+            "x": 362,
+            "y": 637,
+            "width": 362,
+            "height": 449
+          }
+        },
+        {
+          "name": "frame-06",
+          "frame": {
+            "x": 746,
+            "y": 720,
+            "w": 267,
+            "h": 287
+          },
+          "rootInCrop": {
+            "x": 157.4066125077762,
+            "y": 285
+          },
+          "rootInTexture": {
+            "x": 903.4066125077762,
+            "y": 1005
+          },
+          "contentBounds": {
+            "x": 24,
+            "y": 85,
+            "width": 263,
+            "height": 283
+          },
+          "cell": {
+            "x": 724,
+            "y": 637,
+            "width": 362,
+            "height": 449
+          }
+        },
+        {
+          "name": "frame-07",
+          "frame": {
+            "x": 1128,
+            "y": 719,
+            "w": 275,
+            "h": 288
+          },
+          "rootInCrop": {
+            "x": 136.20851704108054,
+            "y": 286
+          },
+          "rootInTexture": {
+            "x": 1264.2085170410805,
+            "y": 1005
+          },
+          "contentBounds": {
+            "x": 44,
+            "y": 84,
+            "width": 271,
+            "height": 284
+          },
+          "cell": {
+            "x": 1086,
+            "y": 637,
+            "width": 362,
+            "height": 449
+          }
+        }
+      ],
+      "maximumRootAlignmentErrorSourcePx": 0.499964
+    },
+    "pink-flowers-sway": {
+      "label": "Flores rosadas al viento",
+      "type": "atlas",
+      "textureKey": "flora-pink-flowers-sway",
+      "path": "assets/flowers/pink-flowers-sway.png",
+      "atlasPath": "assets/flowers/pink-flowers-sway.atlas.json",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "sha256": "69212622142298b5f567b71215f2c704808ff1ad4c00a568e681aa7e6cc90443",
+      "frameCount": 8,
+      "filter": "nearest",
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major",
+        "sourceRowBoundaryPx": 583,
+        "useAtlasForCropping": true
+      },
+      "sourceFrameSize": {
+        "width": 349,
+        "height": 309
+      },
+      "origin": {
+        "x": 0.46418338,
+        "y": 0.96763754
+      },
+      "anchor": "root",
+      "recommendedContentHeightPx": 38,
+      "recommendedScale": 0.13148789,
+      "recommendedOpacity": 1,
+      "recommendedBlendMode": "NORMAL",
+      "animation": {
+        "key": "flora-pink-flowers-sway-loop",
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 6,
+        "repeat": -1
+      },
+      "frames": [
+        {
+          "name": "frame-00",
+          "frame": {
+            "x": 57,
+            "y": 213,
+            "w": 271,
+            "h": 290
+          },
+          "rootInCrop": {
+            "x": 125.86290391703093,
+            "y": 288
+          },
+          "rootInTexture": {
+            "x": 182.86290391703093,
+            "y": 501
+          },
+          "contentBounds": {
+            "x": 59,
+            "y": 215,
+            "width": 267,
+            "height": 286
+          },
+          "cell": {
+            "x": 0,
+            "y": 0,
+            "width": 362,
+            "height": 583
+          }
+        },
+        {
+          "name": "frame-01",
+          "frame": {
+            "x": 435,
+            "y": 210,
+            "w": 277,
+            "h": 293
+          },
+          "rootInCrop": {
+            "x": 110.56782394961212,
+            "y": 291
+          },
+          "rootInTexture": {
+            "x": 545.5678239496121,
+            "y": 501
+          },
+          "contentBounds": {
+            "x": 75,
+            "y": 212,
+            "width": 273,
+            "height": 289
+          },
+          "cell": {
+            "x": 362,
+            "y": 0,
+            "width": 362,
+            "height": 583
+          }
+        },
+        {
+          "name": "frame-02",
+          "frame": {
+            "x": 806,
+            "y": 210,
+            "w": 279,
+            "h": 293
+          },
+          "rootInCrop": {
+            "x": 100.72122621564483,
+            "y": 291
+          },
+          "rootInTexture": {
+            "x": 906.7212262156448,
+            "y": 501
+          },
+          "contentBounds": {
+            "x": 84,
+            "y": 212,
+            "width": 275,
+            "height": 289
+          },
+          "cell": {
+            "x": 724,
+            "y": 0,
+            "width": 362,
+            "height": 583
+          }
+        },
+        {
+          "name": "frame-03",
+          "frame": {
+            "x": 1153,
+            "y": 211,
+            "w": 274,
+            "h": 292
+          },
+          "rootInCrop": {
+            "x": 116.3649752572461,
+            "y": 290
+          },
+          "rootInTexture": {
+            "x": 1269.364975257246,
+            "y": 501
+          },
+          "contentBounds": {
+            "x": 69,
+            "y": 213,
+            "width": 270,
+            "height": 288
+          },
+          "cell": {
+            "x": 1086,
+            "y": 0,
+            "width": 362,
+            "height": 583
+          }
+        },
+        {
+          "name": "frame-04",
+          "frame": {
+            "x": 57,
+            "y": 666,
+            "w": 271,
+            "h": 290
+          },
+          "rootInCrop": {
+            "x": 125.9439408192936,
+            "y": 288
+          },
+          "rootInTexture": {
+            "x": 182.9439408192936,
+            "y": 954
+          },
+          "contentBounds": {
+            "x": 59,
+            "y": 85,
+            "width": 267,
+            "height": 286
+          },
+          "cell": {
+            "x": 0,
+            "y": 583,
+            "width": 362,
+            "height": 503
+          }
+        },
+        {
+          "name": "frame-05",
+          "frame": {
+            "x": 409,
+            "y": 664,
+            "w": 277,
+            "h": 292
+          },
+          "rootInCrop": {
+            "x": 136.54988989293037,
+            "y": 290
+          },
+          "rootInTexture": {
+            "x": 545.5498898929304,
+            "y": 954
+          },
+          "contentBounds": {
+            "x": 49,
+            "y": 83,
+            "width": 273,
+            "height": 288
+          },
+          "cell": {
+            "x": 362,
+            "y": 583,
+            "width": 362,
+            "height": 503
+          }
+        },
+        {
+          "name": "frame-06",
+          "frame": {
+            "x": 753,
+            "y": 673,
+            "w": 277,
+            "h": 283
+          },
+          "rootInCrop": {
+            "x": 153.71251437017574,
+            "y": 281
+          },
+          "rootInTexture": {
+            "x": 906.7125143701758,
+            "y": 954
+          },
+          "contentBounds": {
+            "x": 31,
+            "y": 92,
+            "width": 273,
+            "height": 279
+          },
+          "cell": {
+            "x": 724,
+            "y": 583,
+            "width": 362,
+            "height": 503
+          }
+        },
+        {
+          "name": "frame-07",
+          "frame": {
+            "x": 1137,
+            "y": 666,
+            "w": 278,
+            "h": 290
+          },
+          "rootInCrop": {
+            "x": 132.39482114255205,
+            "y": 288
+          },
+          "rootInTexture": {
+            "x": 1269.394821142552,
+            "y": 954
+          },
+          "contentBounds": {
+            "x": 53,
+            "y": 85,
+            "width": 274,
+            "height": 286
+          },
+          "cell": {
+            "x": 1086,
+            "y": 583,
+            "width": 362,
+            "height": 503
+          }
+        }
+      ],
+      "maximumRootAlignmentErrorSourcePx": 0.45011
+    },
+    "sunflowers-sway": {
+      "label": "Girasoles al viento",
+      "type": "atlas",
+      "textureKey": "flora-sunflowers-sway",
+      "path": "assets/flowers/sunflowers-sway.png",
+      "atlasPath": "assets/flowers/sunflowers-sway.atlas.json",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "sha256": "c4faf93c2feb6faa8a32d7862742313178562ea2de7485a89ee17dee1c900c2c",
+      "frameCount": 8,
+      "filter": "nearest",
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major",
+        "sourceRowBoundaryPx": 552,
+        "useAtlasForCropping": true
+      },
+      "sourceFrameSize": {
+        "width": 267,
+        "height": 331
+      },
+      "origin": {
+        "x": 0.46816479,
+        "y": 0.96978852
+      },
+      "anchor": "root",
+      "recommendedContentHeightPx": 58,
+      "recommendedScale": 0.18649518,
+      "recommendedOpacity": 1,
+      "recommendedBlendMode": "NORMAL",
+      "animation": {
+        "key": "flora-sunflowers-sway-loop",
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 6,
+        "repeat": -1
+      },
+      "frames": [
+        {
+          "name": "frame-00",
+          "frame": {
+            "x": 81,
+            "y": 160,
+            "w": 241,
+            "h": 314
+          },
+          "rootInCrop": {
+            "x": 112.84886194426718,
+            "y": 312
+          },
+          "rootInTexture": {
+            "x": 193.84886194426718,
+            "y": 472
+          },
+          "contentBounds": {
+            "x": 83,
+            "y": 162,
+            "width": 237,
+            "height": 310
+          },
+          "cell": {
+            "x": 0,
+            "y": 0,
+            "width": 362,
+            "height": 552
+          }
+        },
+        {
+          "name": "frame-01",
+          "frame": {
+            "x": 440,
+            "y": 160,
+            "w": 242,
+            "h": 314
+          },
+          "rootInCrop": {
+            "x": 108.73485217015298,
+            "y": 312
+          },
+          "rootInTexture": {
+            "x": 548.734852170153,
+            "y": 472
+          },
+          "contentBounds": {
+            "x": 80,
+            "y": 162,
+            "width": 238,
+            "height": 310
+          },
+          "cell": {
+            "x": 362,
+            "y": 0,
+            "width": 362,
+            "height": 552
+          }
+        },
+        {
+          "name": "frame-02",
+          "frame": {
+            "x": 792,
+            "y": 161,
+            "w": 240,
+            "h": 313
+          },
+          "rootInCrop": {
+            "x": 110.6146106736658,
+            "y": 311
+          },
+          "rootInTexture": {
+            "x": 902.6146106736658,
+            "y": 472
+          },
+          "contentBounds": {
+            "x": 70,
+            "y": 163,
+            "width": 236,
+            "height": 309
+          },
+          "cell": {
+            "x": 724,
+            "y": 0,
+            "width": 362,
+            "height": 552
+          }
+        },
+        {
+          "name": "frame-03",
+          "frame": {
+            "x": 1167,
+            "y": 160,
+            "w": 236,
+            "h": 314
+          },
+          "rootInCrop": {
+            "x": 104.85294761019358,
+            "y": 312
+          },
+          "rootInTexture": {
+            "x": 1271.8529476101935,
+            "y": 472
+          },
+          "contentBounds": {
+            "x": 83,
+            "y": 162,
+            "width": 232,
+            "height": 310
+          },
+          "cell": {
+            "x": 1086,
+            "y": 0,
+            "width": 362,
+            "height": 552
+          }
+        },
+        {
+          "name": "frame-04",
+          "frame": {
+            "x": 76,
+            "y": 631,
+            "w": 238,
+            "h": 315
+          },
+          "rootInCrop": {
+            "x": 113.43227665706053,
+            "y": 313
+          },
+          "rootInTexture": {
+            "x": 189.43227665706053,
+            "y": 944
+          },
+          "contentBounds": {
+            "x": 78,
+            "y": 81,
+            "width": 234,
+            "height": 311
+          },
+          "cell": {
+            "x": 0,
+            "y": 552,
+            "width": 362,
+            "height": 534
+          }
+        },
+        {
+          "name": "frame-05",
+          "frame": {
+            "x": 440,
+            "y": 631,
+            "w": 243,
+            "h": 314
+          },
+          "rootInCrop": {
+            "x": 109.34702706019513,
+            "y": 312
+          },
+          "rootInTexture": {
+            "x": 549.3470270601952,
+            "y": 943
+          },
+          "contentBounds": {
+            "x": 80,
+            "y": 81,
+            "width": 239,
+            "height": 310
+          },
+          "cell": {
+            "x": 362,
+            "y": 552,
+            "width": 362,
+            "height": 534
+          }
+        },
+        {
+          "name": "frame-06",
+          "frame": {
+            "x": 798,
+            "y": 631,
+            "w": 249,
+            "h": 315
+          },
+          "rootInCrop": {
+            "x": 116.19709232613909,
+            "y": 313
+          },
+          "rootInTexture": {
+            "x": 914.1970923261391,
+            "y": 944
+          },
+          "contentBounds": {
+            "x": 76,
+            "y": 81,
+            "width": 245,
+            "height": 311
+          },
+          "cell": {
+            "x": 724,
+            "y": 552,
+            "width": 362,
+            "height": 534
+          }
+        },
+        {
+          "name": "frame-07",
+          "frame": {
+            "x": 1161,
+            "y": 631,
+            "w": 245,
+            "h": 315
+          },
+          "rootInCrop": {
+            "x": 111.35945096865885,
+            "y": 313
+          },
+          "rootInTexture": {
+            "x": 1272.3594509686588,
+            "y": 944
+          },
+          "contentBounds": {
+            "x": 77,
+            "y": 81,
+            "width": 241,
+            "height": 311
+          },
+          "cell": {
+            "x": 1086,
+            "y": 552,
+            "width": 362,
+            "height": 534
+          }
+        }
+      ],
+      "maximumRootAlignmentErrorSourcePx": 0.432277
+    },
+    "purple-spikes-sway": {
+      "label": "Flores moradas al viento",
+      "type": "atlas",
+      "textureKey": "flora-purple-spikes-sway",
+      "path": "assets/flowers/purple-spikes-sway.png",
+      "atlasPath": "assets/flowers/purple-spikes-sway.atlas.json",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "sha256": "a8a7171ee66b2b7c4c059a1572ff6a85d0b63592d6b156280fa7b45c9d7ab292",
+      "frameCount": 8,
+      "filter": "nearest",
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major",
+        "sourceRowBoundaryPx": 591,
+        "useAtlasForCropping": true
+      },
+      "sourceFrameSize": {
+        "width": 253,
+        "height": 328
+      },
+      "origin": {
+        "x": 0.46245059,
+        "y": 0.9695122
+      },
+      "anchor": "root",
+      "recommendedContentHeightPx": 52,
+      "recommendedScale": 0.16883117,
+      "recommendedOpacity": 1,
+      "recommendedBlendMode": "NORMAL",
+      "animation": {
+        "key": "flora-purple-spikes-sway-loop",
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 6,
+        "repeat": -1
+      },
+      "frames": [
+        {
+          "name": "frame-00",
+          "frame": {
+            "x": 83,
+            "y": 194,
+            "w": 197,
+            "h": 311
+          },
+          "rootInCrop": {
+            "x": 100.1271837015895,
+            "y": 309
+          },
+          "rootInTexture": {
+            "x": 183.1271837015895,
+            "y": 503
+          },
+          "contentBounds": {
+            "x": 85,
+            "y": 196,
+            "width": 193,
+            "height": 307
+          },
+          "cell": {
+            "x": 0,
+            "y": 0,
+            "width": 362,
+            "height": 591
+          }
+        },
+        {
+          "name": "frame-01",
+          "frame": {
+            "x": 453,
+            "y": 196,
+            "w": 206,
+            "h": 309
+          },
+          "rootInCrop": {
+            "x": 92.70203020549641,
+            "y": 307
+          },
+          "rootInTexture": {
+            "x": 545.7020302054964,
+            "y": 503
+          },
+          "contentBounds": {
+            "x": 93,
+            "y": 198,
+            "width": 202,
+            "height": 305
+          },
+          "cell": {
+            "x": 362,
+            "y": 0,
+            "width": 362,
+            "height": 591
+          }
+        },
+        {
+          "name": "frame-02",
+          "frame": {
+            "x": 818,
+            "y": 198,
+            "w": 217,
+            "h": 307
+          },
+          "rootInCrop": {
+            "x": 89.8543177158858,
+            "y": 305
+          },
+          "rootInTexture": {
+            "x": 907.8543177158858,
+            "y": 503
+          },
+          "contentBounds": {
+            "x": 96,
+            "y": 200,
+            "width": 213,
+            "height": 303
+          },
+          "cell": {
+            "x": 724,
+            "y": 0,
+            "width": 362,
+            "height": 591
+          }
+        },
+        {
+          "name": "frame-03",
+          "frame": {
+            "x": 1180,
+            "y": 198,
+            "w": 207,
+            "h": 307
+          },
+          "rootInCrop": {
+            "x": 90.98791027883527,
+            "y": 305
+          },
+          "rootInTexture": {
+            "x": 1270.9879102788352,
+            "y": 503
+          },
+          "contentBounds": {
+            "x": 96,
+            "y": 200,
+            "width": 203,
+            "height": 303
+          },
+          "cell": {
+            "x": 1086,
+            "y": 0,
+            "width": 362,
+            "height": 591
+          }
+        },
+        {
+          "name": "frame-04",
+          "frame": {
+            "x": 83,
+            "y": 677,
+            "w": 198,
+            "h": 312
+          },
+          "rootInCrop": {
+            "x": 99.73267123287673,
+            "y": 310
+          },
+          "rootInTexture": {
+            "x": 182.73267123287673,
+            "y": 987
+          },
+          "contentBounds": {
+            "x": 85,
+            "y": 88,
+            "width": 194,
+            "height": 308
+          },
+          "cell": {
+            "x": 0,
+            "y": 591,
+            "width": 362,
+            "height": 495
+          }
+        },
+        {
+          "name": "frame-05",
+          "frame": {
+            "x": 448,
+            "y": 677,
+            "w": 206,
+            "h": 311
+          },
+          "rootInCrop": {
+            "x": 97.8157265297987,
+            "y": 309
+          },
+          "rootInTexture": {
+            "x": 545.8157265297987,
+            "y": 986
+          },
+          "contentBounds": {
+            "x": 88,
+            "y": 88,
+            "width": 202,
+            "height": 307
+          },
+          "cell": {
+            "x": 362,
+            "y": 591,
+            "width": 362,
+            "height": 495
+          }
+        },
+        {
+          "name": "frame-06",
+          "frame": {
+            "x": 799,
+            "y": 677,
+            "w": 216,
+            "h": 311
+          },
+          "rootInCrop": {
+            "x": 108.47111895161291,
+            "y": 309
+          },
+          "rootInTexture": {
+            "x": 907.4711189516129,
+            "y": 986
+          },
+          "contentBounds": {
+            "x": 77,
+            "y": 88,
+            "width": 212,
+            "height": 307
+          },
+          "cell": {
+            "x": 724,
+            "y": 591,
+            "width": 362,
+            "height": 495
+          }
+        },
+        {
+          "name": "frame-07",
+          "frame": {
+            "x": 1176,
+            "y": 677,
+            "w": 209,
+            "h": 311
+          },
+          "rootInCrop": {
+            "x": 95.26134269634943,
+            "y": 309
+          },
+          "rootInTexture": {
+            "x": 1271.2613426963494,
+            "y": 986
+          },
+          "contentBounds": {
+            "x": 92,
+            "y": 88,
+            "width": 205,
+            "height": 307
+          },
+          "cell": {
+            "x": 1086,
+            "y": 591,
+            "width": 362,
+            "height": 495
+          }
+        }
+      ],
+      "maximumRootAlignmentErrorSourcePx": 0.471119
+    },
+    "round-bush-sway": {
+      "label": "Arbusto redondo al viento",
+      "type": "atlas",
+      "textureKey": "flora-round-bush-sway",
+      "path": "assets/bushes/round-bush-sway.png",
+      "atlasPath": "assets/bushes/round-bush-sway.atlas.json",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "sha256": "aabf2b3d4059d277111d5901b06a7bf6b609eca4db78b27e03300e28b5b1d572",
+      "frameCount": 8,
+      "filter": "nearest",
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major",
+        "sourceRowBoundaryPx": 618,
+        "useAtlasForCropping": true
+      },
+      "sourceFrameSize": {
+        "width": 363,
+        "height": 243
+      },
+      "origin": {
+        "x": 0.49311295,
+        "y": 0.95884774
+      },
+      "anchor": "root",
+      "recommendedContentHeightPx": 58,
+      "recommendedScale": 0.26008969,
+      "recommendedOpacity": 1,
+      "recommendedBlendMode": "NORMAL",
+      "animation": {
+        "key": "flora-round-bush-sway-loop",
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 4,
+        "repeat": -1
+      },
+      "frames": [
+        {
+          "name": "frame-00",
+          "frame": {
+            "x": 37,
+            "y": 287,
+            "w": 305,
+            "h": 225
+          },
+          "rootInCrop": {
+            "x": 148.8254424778761,
+            "y": 223
+          },
+          "rootInTexture": {
+            "x": 185.8254424778761,
+            "y": 510
+          },
+          "contentBounds": {
+            "x": 39,
+            "y": 289,
+            "width": 301,
+            "height": 221
+          },
+          "cell": {
+            "x": 0,
+            "y": 0,
+            "width": 362,
+            "height": 618
+          }
+        },
+        {
+          "name": "frame-01",
+          "frame": {
+            "x": 404,
+            "y": 289,
+            "w": 310,
+            "h": 223
+          },
+          "rootInCrop": {
+            "x": 144.61370647862495,
+            "y": 221
+          },
+          "rootInTexture": {
+            "x": 548.613706478625,
+            "y": 510
+          },
+          "contentBounds": {
+            "x": 44,
+            "y": 291,
+            "width": 306,
+            "height": 219
+          },
+          "cell": {
+            "x": 362,
+            "y": 0,
+            "width": 362,
+            "height": 618
+          }
+        },
+        {
+          "name": "frame-02",
+          "frame": {
+            "x": 770,
+            "y": 288,
+            "w": 311,
+            "h": 224
+          },
+          "rootInCrop": {
+            "x": 137.98008362676057,
+            "y": 222
+          },
+          "rootInTexture": {
+            "x": 907.9800836267606,
+            "y": 510
+          },
+          "contentBounds": {
+            "x": 48,
+            "y": 290,
+            "width": 307,
+            "height": 220
+          },
+          "cell": {
+            "x": 724,
+            "y": 0,
+            "width": 362,
+            "height": 618
+          }
+        },
+        {
+          "name": "frame-03",
+          "frame": {
+            "x": 1128,
+            "y": 289,
+            "w": 315,
+            "h": 223
+          },
+          "rootInCrop": {
+            "x": 139.94911645731318,
+            "y": 221
+          },
+          "rootInTexture": {
+            "x": 1267.9491164573133,
+            "y": 510
+          },
+          "contentBounds": {
+            "x": 44,
+            "y": 291,
+            "width": 311,
+            "height": 219
+          },
+          "cell": {
+            "x": 1086,
+            "y": 0,
+            "width": 362,
+            "height": 618
+          }
+        },
+        {
+          "name": "frame-04",
+          "frame": {
+            "x": 36,
+            "y": 767,
+            "w": 307,
+            "h": 227
+          },
+          "rootInCrop": {
+            "x": 149.900223588597,
+            "y": 225
+          },
+          "rootInTexture": {
+            "x": 185.900223588597,
+            "y": 992
+          },
+          "contentBounds": {
+            "x": 38,
+            "y": 151,
+            "width": 303,
+            "height": 223
+          },
+          "cell": {
+            "x": 0,
+            "y": 618,
+            "width": 362,
+            "height": 468
+          }
+        },
+        {
+          "name": "frame-05",
+          "frame": {
+            "x": 387,
+            "y": 768,
+            "w": 313,
+            "h": 226
+          },
+          "rootInCrop": {
+            "x": 163.63610369805565,
+            "y": 224
+          },
+          "rootInTexture": {
+            "x": 550.6361036980556,
+            "y": 992
+          },
+          "contentBounds": {
+            "x": 27,
+            "y": 152,
+            "width": 309,
+            "height": 222
+          },
+          "cell": {
+            "x": 362,
+            "y": 618,
+            "width": 362,
+            "height": 468
+          }
+        },
+        {
+          "name": "frame-06",
+          "frame": {
+            "x": 742,
+            "y": 770,
+            "w": 309,
+            "h": 224
+          },
+          "rootInCrop": {
+            "x": 170.85407836245219,
+            "y": 222
+          },
+          "rootInTexture": {
+            "x": 912.8540783624521,
+            "y": 992
+          },
+          "contentBounds": {
+            "x": 20,
+            "y": 154,
+            "width": 305,
+            "height": 220
+          },
+          "cell": {
+            "x": 724,
+            "y": 618,
+            "width": 362,
+            "height": 468
+          }
+        },
+        {
+          "name": "frame-07",
+          "frame": {
+            "x": 1107,
+            "y": 770,
+            "w": 308,
+            "h": 224
+          },
+          "rootInCrop": {
+            "x": 157.75512731596154,
+            "y": 222
+          },
+          "rootInTexture": {
+            "x": 1264.7551273159615,
+            "y": 992
+          },
+          "contentBounds": {
+            "x": 23,
+            "y": 154,
+            "width": 304,
+            "height": 220
+          },
+          "cell": {
+            "x": 1086,
+            "y": 618,
+            "width": 362,
+            "height": 468
+          }
+        }
+      ],
+      "maximumRootAlignmentErrorSourcePx": 0.386294
+    },
+    "flowering-bush-sway": {
+      "label": "Arbusto con flores al viento",
+      "type": "atlas",
+      "textureKey": "flora-flowering-bush-sway",
+      "path": "assets/bushes/flowering-bush-sway.png",
+      "atlasPath": "assets/bushes/flowering-bush-sway.atlas.json",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "sha256": "4724b052a5f39c97f1179e20c6fdfed185f3b3ed3022bdb768957e2b13885871",
+      "frameCount": 8,
+      "filter": "nearest",
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major",
+        "sourceRowBoundaryPx": 607,
+        "useAtlasForCropping": true
+      },
+      "sourceFrameSize": {
+        "width": 365,
+        "height": 259
+      },
+      "origin": {
+        "x": 0.49589041,
+        "y": 0.96138996
+      },
+      "anchor": "root",
+      "recommendedContentHeightPx": 60,
+      "recommendedScale": 0.25104603,
+      "recommendedOpacity": 1,
+      "recommendedBlendMode": "NORMAL",
+      "animation": {
+        "key": "flora-flowering-bush-sway-loop",
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 4,
+        "repeat": -1
+      },
+      "frames": [
+        {
+          "name": "frame-00",
+          "frame": {
+            "x": 38,
+            "y": 252,
+            "w": 314,
+            "h": 243
+          },
+          "rootInCrop": {
+            "x": 146.76983740035593,
+            "y": 241
+          },
+          "rootInTexture": {
+            "x": 184.76983740035593,
+            "y": 493
+          },
+          "contentBounds": {
+            "x": 40,
+            "y": 254,
+            "width": 310,
+            "height": 239
+          },
+          "cell": {
+            "x": 0,
+            "y": 0,
+            "width": 362,
+            "height": 607
+          }
+        },
+        {
+          "name": "frame-01",
+          "frame": {
+            "x": 402,
+            "y": 252,
+            "w": 322,
+            "h": 243
+          },
+          "rootInCrop": {
+            "x": 146.0863761965854,
+            "y": 241
+          },
+          "rootInTexture": {
+            "x": 548.0863761965854,
+            "y": 493
+          },
+          "contentBounds": {
+            "x": 42,
+            "y": 254,
+            "width": 318,
+            "height": 239
+          },
+          "cell": {
+            "x": 362,
+            "y": 0,
+            "width": 362,
+            "height": 607
+          }
+        },
+        {
+          "name": "frame-02",
+          "frame": {
+            "x": 763,
+            "y": 256,
+            "w": 319,
+            "h": 239
+          },
+          "rootInCrop": {
+            "x": 145.20990928468746,
+            "y": 237
+          },
+          "rootInTexture": {
+            "x": 908.2099092846875,
+            "y": 493
+          },
+          "contentBounds": {
+            "x": 41,
+            "y": 258,
+            "width": 315,
+            "height": 235
+          },
+          "cell": {
+            "x": 724,
+            "y": 0,
+            "width": 362,
+            "height": 607
+          }
+        },
+        {
+          "name": "frame-03",
+          "frame": {
+            "x": 1118,
+            "y": 252,
+            "w": 310,
+            "h": 243
+          },
+          "rootInCrop": {
+            "x": 148.0846536727201,
+            "y": 241
+          },
+          "rootInTexture": {
+            "x": 1266.0846536727202,
+            "y": 493
+          },
+          "contentBounds": {
+            "x": 34,
+            "y": 254,
+            "width": 306,
+            "height": 239
+          },
+          "cell": {
+            "x": 1086,
+            "y": 0,
+            "width": 362,
+            "height": 607
+          }
+        },
+        {
+          "name": "frame-04",
+          "frame": {
+            "x": 38,
+            "y": 720,
+            "w": 313,
+            "h": 243
+          },
+          "rootInCrop": {
+            "x": 146.7710015916996,
+            "y": 241
+          },
+          "rootInTexture": {
+            "x": 184.7710015916996,
+            "y": 961
+          },
+          "contentBounds": {
+            "x": 40,
+            "y": 115,
+            "width": 309,
+            "height": 239
+          },
+          "cell": {
+            "x": 0,
+            "y": 607,
+            "width": 362,
+            "height": 479
+          }
+        },
+        {
+          "name": "frame-05",
+          "frame": {
+            "x": 400,
+            "y": 724,
+            "w": 311,
+            "h": 238
+          },
+          "rootInCrop": {
+            "x": 161.34578271358095,
+            "y": 236
+          },
+          "rootInTexture": {
+            "x": 561.345782713581,
+            "y": 960
+          },
+          "contentBounds": {
+            "x": 40,
+            "y": 119,
+            "width": 307,
+            "height": 234
+          },
+          "cell": {
+            "x": 362,
+            "y": 607,
+            "width": 362,
+            "height": 479
+          }
+        },
+        {
+          "name": "frame-06",
+          "frame": {
+            "x": 739,
+            "y": 724,
+            "w": 319,
+            "h": 239
+          },
+          "rootInCrop": {
+            "x": 172.16639514888226,
+            "y": 237
+          },
+          "rootInTexture": {
+            "x": 911.1663951488822,
+            "y": 961
+          },
+          "contentBounds": {
+            "x": 17,
+            "y": 119,
+            "width": 315,
+            "height": 235
+          },
+          "cell": {
+            "x": 724,
+            "y": 607,
+            "width": 362,
+            "height": 479
+          }
+        },
+        {
+          "name": "frame-07",
+          "frame": {
+            "x": 1103,
+            "y": 720,
+            "w": 314,
+            "h": 243
+          },
+          "rootInCrop": {
+            "x": 152.6490190462552,
+            "y": 241
+          },
+          "rootInTexture": {
+            "x": 1255.6490190462553,
+            "y": 961
+          },
+          "contentBounds": {
+            "x": 19,
+            "y": 115,
+            "width": 310,
+            "height": 239
+          },
+          "cell": {
+            "x": 1086,
+            "y": 607,
+            "width": 362,
+            "height": 479
+          }
+        }
+      ],
+      "maximumRootAlignmentErrorSourcePx": 0.350981
+    }
+  }
+}

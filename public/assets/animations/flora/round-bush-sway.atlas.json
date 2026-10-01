@@ -1,0 +1,175 @@
+{
+  "frames": {
+    "frame-00": {
+      "frame": {
+        "x": 37,
+        "y": 287,
+        "w": 305,
+        "h": 225
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 30,
+        "y": 10,
+        "w": 305,
+        "h": 225
+      },
+      "sourceSize": {
+        "w": 363,
+        "h": 243
+      }
+    },
+    "frame-01": {
+      "frame": {
+        "x": 404,
+        "y": 289,
+        "w": 310,
+        "h": 223
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 34,
+        "y": 12,
+        "w": 310,
+        "h": 223
+      },
+      "sourceSize": {
+        "w": 363,
+        "h": 243
+      }
+    },
+    "frame-02": {
+      "frame": {
+        "x": 770,
+        "y": 288,
+        "w": 311,
+        "h": 224
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 41,
+        "y": 11,
+        "w": 311,
+        "h": 224
+      },
+      "sourceSize": {
+        "w": 363,
+        "h": 243
+      }
+    },
+    "frame-03": {
+      "frame": {
+        "x": 1128,
+        "y": 289,
+        "w": 315,
+        "h": 223
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 39,
+        "y": 12,
+        "w": 315,
+        "h": 223
+      },
+      "sourceSize": {
+        "w": 363,
+        "h": 243
+      }
+    },
+    "frame-04": {
+      "frame": {
+        "x": 36,
+        "y": 767,
+        "w": 307,
+        "h": 227
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 29,
+        "y": 8,
+        "w": 307,
+        "h": 227
+      },
+      "sourceSize": {
+        "w": 363,
+        "h": 243
+      }
+    },
+    "frame-05": {
+      "frame": {
+        "x": 387,
+        "y": 768,
+        "w": 313,
+        "h": 226
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 15,
+        "y": 9,
+        "w": 313,
+        "h": 226
+      },
+      "sourceSize": {
+        "w": 363,
+        "h": 243
+      }
+    },
+    "frame-06": {
+      "frame": {
+        "x": 742,
+        "y": 770,
+        "w": 309,
+        "h": 224
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 8,
+        "y": 11,
+        "w": 309,
+        "h": 224
+      },
+      "sourceSize": {
+        "w": 363,
+        "h": 243
+      }
+    },
+    "frame-07": {
+      "frame": {
+        "x": 1107,
+        "y": 770,
+        "w": 308,
+        "h": 224
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 21,
+        "y": 11,
+        "w": 308,
+        "h": 224
+      },
+      "sourceSize": {
+        "w": 363,
+        "h": 243
+      }
+    }
+  },
+  "meta": {
+    "app": "Bitacora animated flora",
+    "version": "1.0",
+    "image": "round-bush-sway.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1448,
+      "h": 1086
+    },
+    "scale": "1"
+  }
+}

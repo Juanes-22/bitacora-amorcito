@@ -12,11 +12,14 @@ export type ReadingState =
   | { kind: "reading"; learningId: string; active: SectionId }
   | { kind: "reward"; learningId: string };
 
-/** Ventanas que no son una lectura: la colección de insignias (o el cierre del recorrido) y la confirmación de reinicio. */
-export type OverlayState = { kind: "collection"; completion: boolean } | { kind: "confirm-reset" };
+/** Ventanas que no son una lectura: la colección de insignias (o el cierre del recorrido), la confirmación de reinicio y la lista accesible de aprendizajes. */
+export type OverlayState = { kind: "collection"; completion: boolean } | { kind: "confirm-reset" } | { kind: "list" };
 
 export interface OverlayActions {
   openCollection: () => void;
+  /** Lista accesible de aprendizajes (SPEC 14): abre los mismos aprendizajes con las mismas reglas que el mapa. */
+  openList: () => void;
+  openFromList: (learningId: string) => void;
   closeOverlay: () => void;
   askReset: () => void;
   cancelReset: () => void;
@@ -42,7 +45,7 @@ export interface ProgressController {
 const NO_ACTIONS: ReadingActions = {
   continueReading() {}, selectSection() {}, markRead() {}, claimBadge() {}, close() {},
 };
-const NO_OVERLAY_ACTIONS: OverlayActions = { openCollection() {}, closeOverlay() {}, askReset() {}, cancelReset() {}, confirmReset() {} };
+const NO_OVERLAY_ACTIONS: OverlayActions = { openCollection() {}, openList() {}, openFromList() {}, closeOverlay() {}, askReset() {}, cancelReset() {}, confirmReset() {} };
 
 /** Cuánto esperar tras la última insignia para mostrar el cierre: que la celebración no quede tapada (SPEC 11.6). */
 const COMPLETION_DELAY_MS = 3300;
@@ -76,6 +79,8 @@ export function useProgressController(
     let current: ReadingState | null = null;
     let currentOverlay: OverlayState | null = null;
     let celebration: { effectId: string; learningId: string } | null = null;
+    // La lectura se abrió desde la lista accesible: al cerrarla se vuelve a la lista (salvo que haya celebración).
+    let fromList = false;
     let completionTimer: ReturnType<typeof setTimeout> | undefined;
     const pending = unapprovedIds(config);
     const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
@@ -116,6 +121,26 @@ export function useProgressController(
       publishControls();
     };
 
+    /**
+     * Única regla para abrir un aprendizaje, la use el mapa (al pulsar Enter junto a una estación) o la lista accesible:
+     * una estación bloqueada o pendiente solo muestra su mensaje; nunca se salta la secuencia (SPEC 8 y 14).
+     */
+    const tryOpen = (learningId: string): { accepted: boolean; reason?: string } => {
+      if (!config.route.includes(learningId)) return { accepted: false, reason: "unknown-learning" };
+      if (currentOverlay || current) return { accepted: false, reason: "busy" };
+      const state = stationStatesOf(config, store.getState())[learningId];
+      if (state === "locked") {
+        open({ kind: "message", learningId, event: "locked" });
+        return { accepted: false, reason: "locked" };
+      }
+      if (state !== "completed" && !isAdmissible(config, learningId)) {
+        open({ kind: "message", learningId, event: "pending" });
+        return { accepted: false, reason: "not-admissible" };
+      }
+      open({ kind: "intro", learningId, event: state === "completed" ? "completed" : "open" });
+      return { accepted: true };
+    };
+
     const offs = [
       bridge.on("game:ready", ({ zoneId: z, token, position }) => {
         if (!bridge.isActive(token)) return;
@@ -134,19 +159,8 @@ export function useProgressController(
       }),
       bridge.on("game:learning-open-request", ({ learningId, token, requestId }) => {
         if (!bridge.isActive(token)) return; // mensaje de una escena sustituida
-        if (!config.route.includes(learningId)) return resolve(requestId, false, "unknown-learning");
-        if (currentOverlay || current) return resolve(requestId, false, "busy");
-        const state = stationStatesOf(config, store.getState())[learningId];
-        if (state === "locked") {
-          resolve(requestId, false, "locked");
-          return open({ kind: "message", learningId, event: "locked" });
-        }
-        if (state !== "completed" && !isAdmissible(config, learningId)) {
-          resolve(requestId, false, "not-admissible");
-          return open({ kind: "message", learningId, event: "pending" });
-        }
-        resolve(requestId, true);
-        open({ kind: "intro", learningId, event: state === "completed" ? "completed" : "open" });
+        const result = tryOpen(learningId);
+        resolve(requestId, result.accepted, result.reason);
       }),
       bridge.on("game:portal-request", ({ portalId, fromZoneId, token, requestId }) => {
         if (!bridge.isActive(token)) return;
@@ -197,8 +211,14 @@ export function useProgressController(
         if (!current) return;
         const pending = celebration;
         celebration = null;
+        const backToList = fromList && !pending;
+        fromList = false;
         show(null);
         reasons.delete("reading");
+        if (backToList) {
+          openOverlay({ kind: "list" }); // vuelve a la lista: el mapa sigue detenido, sin parpadeo de controles
+          return;
+        }
         publishControls(); // la escena se reanuda antes de celebrar: la animación no queda tras la ventana
         if (pending) {
           bridge.emit("app:celebrate", pending);
@@ -217,6 +237,21 @@ export function useProgressController(
     overlayRef.current = {
       openCollection() {
         if (!current && !currentOverlay) openOverlay({ kind: "collection", completion: false });
+      },
+      openList() {
+        if (!current && !currentOverlay) openOverlay({ kind: "list" });
+      },
+      openFromList(learningId) {
+        if (currentOverlay?.kind !== "list") return;
+        showOverlay(null);
+        reasons.delete("overlay");
+        fromList = true;
+        const result = tryOpen(learningId);
+        if (!result.accepted && !current) {
+          // Id desconocido o nada que abrir: se vuelve a la lista sin dejar bloqueos colgados.
+          fromList = false;
+          openOverlay({ kind: "list" });
+        }
       },
       closeOverlay,
       askReset() {
@@ -266,6 +301,8 @@ export function useProgressController(
   };
   const overlayActions: OverlayActions = {
     openCollection: useCallback(() => overlayRef.current.openCollection(), []),
+    openList: useCallback(() => overlayRef.current.openList(), []),
+    openFromList: useCallback((id) => overlayRef.current.openFromList(id), []),
     closeOverlay: useCallback(() => overlayRef.current.closeOverlay(), []),
     askReset: useCallback(() => overlayRef.current.askReset(), []),
     cancelReset: useCallback(() => overlayRef.current.cancelReset(), []),

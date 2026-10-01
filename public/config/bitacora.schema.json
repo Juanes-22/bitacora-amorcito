@@ -262,6 +262,7 @@
         "scale": { "type": "number", "exclusiveMinimum": 0 },
         "flipX": { "type": "boolean" },
         "alpha": { "type": "number", "minimum": 0, "maximum": 1 },
+        "speedFactor": { "type": "number", "exclusiveMinimum": 0 },
         "depth": { "$ref": "#/$defs/depth" }
       },
       "additionalProperties": false
@@ -490,7 +491,7 @@
             "startRoute", "pending", "demo", "previous", "next", "progressTemplate", "stationTitleTemplate",
             "semester", "teacher", "sectionRead", "sectionUnread", "badgeEarned", "remainingTemplate", "rewardTitle", "xpTemplate", "levelTemplate", "objectiveTemplate", "finishedLabel", "emptyRouteLabel", "mapLabel",
             "badges", "notEarned", "earnedOnTemplate", "badgeCountTemplate", "completionTitle", "finalReflectionTitle", "finalReflectionPending", "resetConfirmTitle", "resetConfirmText", "resetConfirm", "cancel", "preparationTemplate",
-            "musicMute", "musicUnmute"
+            "musicMute", "musicUnmute", "stateLocked", "stateAvailable", "stateCompleted", "controlsLabel", "moveUp", "moveDown", "moveLeft", "moveRight"
           ],
           "properties": {
             "explore": { "type": "string", "minLength": 1 },
@@ -533,7 +534,15 @@
             "cancel": { "type": "string", "minLength": 1 },
             "preparationTemplate": { "type": "string", "minLength": 1 },
             "musicMute": { "type": "string", "minLength": 1 },
-            "musicUnmute": { "type": "string", "minLength": 1 }
+            "musicUnmute": { "type": "string", "minLength": 1 },
+            "stateLocked": { "type": "string", "minLength": 1 },
+            "stateAvailable": { "type": "string", "minLength": 1 },
+            "stateCompleted": { "type": "string", "minLength": 1 },
+            "controlsLabel": { "type": "string", "minLength": 1 },
+            "moveUp": { "type": "string", "minLength": 1 },
+            "moveDown": { "type": "string", "minLength": 1 },
+            "moveLeft": { "type": "string", "minLength": 1 },
+            "moveRight": { "type": "string", "minLength": 1 }
           },
           "additionalProperties": false
         },

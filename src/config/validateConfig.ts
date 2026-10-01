@@ -39,6 +39,8 @@ const AMBIENT_KINDS = {
   animation: ["animation-sheet"], sway: ["foliage", "light-prop"], drift: ["sky-element"], particles: ["particle"],
   glow: ["light-glow"], swim: ["animation-sheet"],
 } as const;
+/** Presupuesto de efectos por zona (SPEC 3.2, AC-57). */
+export const MAX_AMBIENT_PER_ZONE = 60;
 const AMBIENT_MOTION = { sway: "sway", drift: "drift", particles: "particle", glow: "pulse", swim: "swim" } as const;
 
 export interface ValidateOptions {
@@ -192,6 +194,7 @@ export function validateBitacora(
     }
     zone.decorations.forEach((d, i) => checkAsset(`${at}.decorations[${i}].assetId`, d.assetId, KINDS.stationObject));
 
+    if (zone.ambient.length > MAX_AMBIENT_PER_ZONE) err(`${at}.ambient`, `tiene ${zone.ambient.length} efectos; el máximo por zona es ${MAX_AMBIENT_PER_ZONE} (presupuesto de rendimiento)`);
     zone.ambient.forEach((fx, i) => {
       const ap = `${at}.ambient[${i}]`;
       checkAsset(`${ap}.assetId`, fx.assetId, AMBIENT_KINDS[fx.type]);

@@ -24,10 +24,10 @@ export async function harness() {
   const browser = await chromium.launch();
 
   /**
-   * Abre la app y espera `waitFor`. `edit(config)` modifica bitacora.json solo para esta página;
+   * Abre la app y espera `waitFor`. `edit(config)` modifica bitacora.json y `editAssets(manifest)` assets.json solo para esta página;
    * `seed` escribe en localStorage antes de cargar (progreso previo); `init` es un script previo a la carga.
    */
-  async function open({ viewport = { width: 1280, height: 720 }, query = "", edit, reducedMotion, blockUrl, waitFor = ".cover", seed, init, context } = {}) {
+  async function open({ viewport = { width: 1280, height: 720 }, query = "", edit, editAssets, reducedMotion, blockUrl, waitFor = ".cover", seed, init, context } = {}) {
     const ctx = context ?? (await browser.newContext({ viewport, reducedMotion: reducedMotion ? "reduce" : "no-preference" }));
     const page = await ctx.newPage();
     page.setDefaultTimeout(5000);
@@ -40,6 +40,15 @@ export async function harness() {
       await page.route("**/config/bitacora.json", (route) => {
         const copy = structuredClone(configJson);
         edit(copy);
+        route.fulfill({ contentType: "application/json", body: JSON.stringify(copy) });
+      });
+    }
+    if (editAssets) {
+      // Igual que `edit`, pero para assets.json (manifiesto roto o incoherente solo para esta página).
+      const manifest = JSON.parse(readFileSync("public/assets/assets.json", "utf8"));
+      await page.route("**/assets/assets.json", (route) => {
+        const copy = structuredClone(manifest);
+        editAssets(copy);
         route.fulfill({ contentType: "application/json", body: JSON.stringify(copy) });
       });
     }

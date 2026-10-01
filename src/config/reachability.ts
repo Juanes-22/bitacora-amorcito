@@ -118,6 +118,18 @@ export function checkWorldReachability(config: BitacoraConfig): ConfigIssue[] {
 }
 
 /**
+ * Celdas de una zona a las que puede llegar Vanessa desde su punto de partida (rejilla de `cell` px del mundo).
+ * Lo usan las herramientas de colocación para ver dónde SÍ se pueden poner plantas (SPEC 3.2).
+ */
+export function reachableCells(config: BitacoraConfig, zoneId: string): { cols: number; rows: number; cell: number; reach: Uint8Array } {
+  const zone = config.maps[zoneId];
+  const grid = walkableGrid(zone, bodyRadius(config));
+  const first = zone.spawns[zone.initialSpawnId] ?? Object.values(zone.spawns)[0];
+  const start = Math.floor(first.y / CELL) * grid.cols + Math.floor(first.x / CELL);
+  return { cols: grid.cols, rows: grid.rows, cell: CELL, reach: grid.blocked[start] ? new Uint8Array(grid.blocked.length) : flood(grid, start) };
+}
+
+/**
  * Los efectos ambientales no pueden estorbar el recorrido (SPEC 3.2, AC-45): el agua animada y las plantas se
  * colocan donde Vanessa no puede estar (agua, rocas, vegetación densa), nunca sobre un camino transitable. Comprueba
  * la base de cada pieza contra las celdas alcanzables desde los spawns de su zona. Nubes, luces y partículas no se

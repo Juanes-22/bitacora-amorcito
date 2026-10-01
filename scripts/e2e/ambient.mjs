@@ -25,6 +25,7 @@ const snapshot = (page) => page.evaluate(({ kit, clouds, ducks }) => {
     updateListeners: s.events.listenerCount("update"), cloudX: list.filter((o) => clouds.includes(o.texture?.key)).map((o) => o.x),
     ducks: list.filter((o) => ducks.includes(o.texture?.key)).map((o) => ({ x: o.x, y: o.y, flip: o.flipX })),
     additive: list.filter((o) => o.blendMode === 1).length,
+    flora: list.filter((o) => o.type === "Sprite" && o.texture.key.startsWith("animation.flora.")).map((o) => ({ frame: o.frame.name, scale: o.anims.timeScale, playing: o.anims.isPlaying })),
   };
 }, { kit: [...KIT], clouds: CLOUDS, ducks: DUCKS });
 
@@ -44,6 +45,9 @@ try {
     const want = expected("zona-a");
     check(`AC-41/48/49: zona A crea ${want.animation} hojas animadas (con ${want.swim} patos), ${want.sway} balanceos, ${want.glow} luces, ${want.drift} nubes y ${want.particles} emisores`,
       a.animated === want.animation && a.sway >= want.sway + want.glow && a.emitters === want.particles && a.cloudX.length === want.drift && a.ducks.length === want.swim, JSON.stringify(a));
+    const flora = configJson.maps["zona-a"].ambient.filter((f) => f.assetId.startsWith("animation.flora."));
+    check(`AC-56: la zona A tiene ${flora.length} flores y arbustos animados, todos reproduciéndose`, a.flora.length === flora.length && flora.length >= 8 && a.flora.every((p) => p.playing), JSON.stringify(a.flora));
+    check("AC-56: con fases y velocidades distintas (no se balancean todas a la vez)", new Set(a.flora.map((p) => p.frame)).size >= 3 && new Set(a.flora.map((p) => p.scale)).size >= 3, JSON.stringify(a.flora));
     check("AC-48: el halo y los rayos usan mezcla aditiva", a.additive >= want.glow, `${a.additive} objetos ADD`);
     check("AC-41: todas las hojas animadas están reproduciéndose", a.playing === a.animated, `${a.playing}/${a.animated}`);
     await t.page.waitForTimeout(1500);
@@ -106,6 +110,7 @@ try {
     const want = expected("zona-a");
     check("AC-42: con movimiento reducido las hojas animadas existen pero no se reproducen", a.animated === want.animation && a.playing === 0 && a.frames === b.frames, JSON.stringify({ a, b }));
     check("AC-42: sin vaivén, sin pulso, sin deriva de nubes y sin partículas", b.sway === 0 && b.emitters === 0 && b.alive === 0 && JSON.stringify(a.cloudX) === JSON.stringify(b.cloudX), JSON.stringify(b));
+    check("AC-56: con movimiento reducido la flora queda en un fotograma fijo", b.flora.length > 0 && b.flora.every((p) => !p.playing) && JSON.stringify(a.flora) === JSON.stringify(b.flora), JSON.stringify(b.flora));
     check("AC-49: con movimiento reducido los patos quedan quietos en el primer punto de su trayectoria", JSON.stringify(a.ducks) === JSON.stringify(b.ducks) && b.ducks.length === want.swim, JSON.stringify(b.ducks));
     check("AC-42: las nubes y plantas siguen visibles (estáticas)", b.cloudX.length === want.drift, JSON.stringify(b.cloudX));
     check("sin errores de consola con movimiento reducido", t.errors.length === 0, t.errors.join(" | "));

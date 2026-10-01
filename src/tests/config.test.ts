@@ -31,7 +31,7 @@ const at = (issues: ConfigIssue[], path: string) => issues.filter((i) => i.path 
 
 describe("assets.json real", () => {
   it("es válido y conserva sus entradas originales sin migrar", () => {
-    expect(Object.keys(realManifest.assets)).toHaveLength(69);
+    expect(Object.keys(realManifest.assets)).toHaveLength(75);
     expect(realManifest.assets["ui.panel.cream.nine-slice"].nineSlice).toEqual({ top: 32, right: 32, bottom: 32, left: 32 });
     expect(realManifest.assets["character.vanessa-jerry.walk.poses-v4"].requiresFrameDefinition).toBe(true);
     expect(realManifest).not.toHaveProperty("animations");
@@ -375,6 +375,20 @@ describe("bitacora.json: animaciones del paisaje (SPEC 3.2)", () => {
     expect(at(issuesOf(withFx({ ...swim, assetId: "animation.water.ripples" })), "maps.zona-a.ambient[0].type").length).toBeGreaterThan(0);
     expect(at(issuesOf(withFx({ ...swim, path: [{ x: 100, y: 100 }, { x: 5000, y: 100 }] })), "maps.zona-a.ambient[0].path[1]")).toHaveLength(1);
     expect(at(issuesOf(withFx({ ...ripple, assetId: "animation.fauna.white-duck-swim" })), "maps.zona-a.ambient[0].type")).toHaveLength(1);
+  });
+
+  it("acepta flora animada con velocidad propia (speedFactor) y rechaza una velocidad no positiva", () => {
+    const flora = { type: "animation", assetId: "animation.flora.sunflowers", position: { x: 500, y: 500 }, speedFactor: 1.3, depth: { mode: "y", offset: 0 } } as const;
+    expect(issuesOf(withFx(flora))).toEqual([]);
+    expect(issuesOf(withFx({ ...flora, speedFactor: 0 })).length).toBeGreaterThan(0);
+    expect(issuesOf(withFx({ ...flora, speedFactor: -1 })).length).toBeGreaterThan(0);
+  });
+
+  it("limita los efectos por zona (presupuesto de rendimiento, AC-57)", () => {
+    const many = Array.from({ length: 61 }, (_, i) => ({ ...ripple, position: { x: 10 + i, y: 10 } }));
+    const i = issuesOf(withFx(...many));
+    expect(at(i, "maps.zona-a.ambient")[0]?.message).toContain("el máximo por zona es 60");
+    expect(at(issuesOf(withFx(...many.slice(0, 60))), "maps.zona-a.ambient")).toHaveLength(0);
   });
 
   it("el esquema exige al menos dos puntos en la trayectoria y un alpha entre 0 y 1", () => {

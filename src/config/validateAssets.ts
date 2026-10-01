@@ -62,6 +62,24 @@ export function validateAssetManifest(data: unknown): ValidationResult<AssetMani
       }
       if (!a.origin || !a.recommendedScale) issues.push({ path: at, message: "una hoja animada necesita origin y recommendedScale" });
     }
+    if (a.kind === "idle-sheet") {
+      if (!a.atlasPath) issues.push({ path: `${at}.atlasPath`, message: "una hoja de reposo necesita su atlas" });
+      if (!a.animations?.length) issues.push({ path: `${at}.animations`, message: "una hoja de reposo necesita animations (clave, fotogramas, velocidad)" });
+      if (!a.origin || (!a.sourceFrameSize && !a.frameAdjust)) issues.push({ path: at, message: "una hoja de reposo necesita origin (los pies) y, o bien sourceFrameSize (el lienzo lógico común), o bien frameAdjust (origen por fotograma)" });
+      if (a.frameAdjust) {
+        const used = new Set((a.animations ?? []).flatMap((x) => x.frameNames));
+        const adjusted = new Set(a.frameAdjust.map((f) => f.name));
+        for (const f of a.frameAdjust) if (!used.has(f.name)) issues.push({ path: `${at}.frameAdjust`, message: `«${f.name}» no es un fotograma de las animaciones` });
+        for (const name of used) if (!adjusted.has(name)) issues.push({ path: `${at}.frameAdjust`, message: `falta el ajuste del fotograma «${name}»: o todos o ninguno` });
+        if (adjusted.size !== a.frameAdjust.length) issues.push({ path: `${at}.frameAdjust`, message: "hay fotogramas repetidos" });
+      }
+      const keys = (a.animations ?? []).map((x) => x.key);
+      if (new Set(keys).size !== keys.length) issues.push({ path: `${at}.animations`, message: "las claves de animación no pueden repetirse" });
+      const names = new Set((a.animations ?? []).flatMap((x) => x.frameNames));
+      if (a.frameCount !== undefined && names.size !== a.frameCount) {
+        issues.push({ path: `${at}.animations`, message: `las animaciones usan ${names.size} fotogramas distintos y frameCount es ${a.frameCount}` });
+      }
+    }
     if (a.kind === "particle" && a.motion?.type !== "particle") {
       issues.push({ path: `${at}.motion`, message: "una partícula necesita motion de tipo «particle»" });
     }

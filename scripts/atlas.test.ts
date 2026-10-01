@@ -23,6 +23,8 @@ const FLORA_IDS = [
   "animation.flora.daisies", "animation.flora.flowering-bush", "animation.flora.pink-flowers",
   "animation.flora.purple-spikes", "animation.flora.round-bush", "animation.flora.sunflowers",
 ];
+const IDLE_IDS = ["character.vanessa-jerry.idle-anim.look", "character.vanessa-jerry.idle-anim.play", "character.vanessa-jerry.idle-anim.rest"];
+const TRICKS_IDS = ["character.vanessa-jerry.idle-anim.fetch", "character.vanessa-jerry.idle-anim.tricks"];
 const MUSIC_IDS = ["audio.music.beyond-the-clouds", "audio.music.enchanted-festival", "audio.music.little-town-orchestral"];
 const ATLAS_IDS = [
   "animation.water.ripples", "animation.water.waterfall", "animation.water.foam-splash",
@@ -43,11 +45,11 @@ const issues = (id: string, mutate?: (atlas: any, entry: AssetEntry) => void) =>
 };
 
 describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)", () => {
-  it("el manifiesto con los dos kits y la música es válido: 75 entradas y recuentos coherentes", () => {
+  it("el manifiesto con los dos kits y la música es válido: 80 entradas y recuentos coherentes", () => {
     const r = validateAssetManifest(manifest);
     expect(r.ok ? "" : JSON.stringify(r.ok ? [] : r.issues)).toBe("");
-    expect(manifest.assetCount).toBe(75);
-    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, decorations: 11, effects: 15 });
+    expect(manifest.assetCount).toBe(80);
+    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, characters: 12, decorations: 11, effects: 15 });
   });
 
   it("las 45 entradas originales siguen en su sitio y con sus campos (el kit solo se añadió)", () => {
@@ -58,7 +60,9 @@ describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)
     expect(ids.slice(45, 55).sort()).toEqual(KIT_IDS);
     expect(ids.slice(55, 66).sort()).toEqual(EXTRAS_IDS);
     expect(ids.slice(66, 69)).toEqual(MUSIC_IDS);
-    expect(ids.slice(69).sort()).toEqual(FLORA_IDS);
+    expect(ids.slice(69, 75).sort()).toEqual(FLORA_IDS);
+    expect(ids.slice(75, 78).sort()).toEqual(IDLE_IDS);
+    expect(ids.slice(78).sort()).toEqual(TRICKS_IDS);
   });
 
   it("el kit conserva su metadata (origen, escala recomendada, animación y movimiento) sin duplicarla en otro sitio", () => {
@@ -75,7 +79,7 @@ describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)
     expect(r.warnings).toEqual([]);
   });
 
-  it("los trece atlas son válidos contra su imagen real", () => {
+  it("los dieciséis atlas son válidos contra su imagen real", () => {
     expect(checkAtlases(manifest, manifestPath)).toEqual([]);
   });
 
@@ -146,6 +150,107 @@ describe("flores y arbustos animados (SPEC 3.2; AC-55)", () => {
   });
 });
 
+describe("hojas de reposo de Vanessa y Jerry (SPEC 6.2; AC-62)", () => {
+  const rest = "character.vanessa-jerry.idle-anim.rest", look = "character.vanessa-jerry.idle-anim.look", play = "character.vanessa-jerry.idle-anim.play";
+
+  it.each(IDLE_IDS)("%s: 12 regiones de un lienzo lógico de 362 × 362, validadas contra la imagen", (id) => {
+    const { atlas, entry } = load(id);
+    expect(entry).toMatchObject({ kind: "idle-sheet", category: "characters", frameCount: 12, sourceFrameSize: { width: 362, height: 362 }, width: 1086, height: 1448 });
+    expect(Object.keys(atlas.frames)).toHaveLength(12);
+    expect(new Set(entry.animations!.flatMap((a) => a.frameNames))).toEqual(new Set(Object.keys(atlas.frames)));
+    expect(issues(id)).toEqual([]);
+    expect(entry.origin!.y).toBeGreaterThan(0.9); // los pies, en la base del lienzo
+  });
+
+  it("reposo y mirada tienen una animación por dirección; el juego, una de frente que se reproduce una vez", () => {
+    for (const id of [rest, look]) expect(manifest.assets[id].animations!.map((a) => a.direction).sort()).toEqual(["back", "front", "left", "right"]);
+    expect(manifest.assets[play].animations).toHaveLength(1);
+    expect(manifest.assets[play].animations![0]).toMatchObject({ direction: "front", repeat: 0, frameRate: 6 });
+    expect(manifest.assets[rest].animations!.every((a) => a.repeat === -1 && a.repeatDelay === 1700)).toBe(true);
+    expect(manifest.assets[look].animations!.every((a) => a.repeat === 0)).toBe(true);
+  });
+
+  it("las claves de animación no chocan con las de otras hojas", () => {
+    const keys = IDLE_IDS.flatMap((id) => manifest.assets[id].animations!.map((a) => a.key));
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  const bad = (edit: (m: AssetManifest) => void) => {
+    const m = structuredClone(manifest);
+    edit(m);
+    const r = validateAssetManifest(m);
+    return r.ok ? "" : r.issues.map((i) => `${i.path}: ${i.message}`).join("|");
+  };
+  it("el manifiesto rechaza una hoja de reposo incompleta", () => {
+    expect(bad((m) => { delete m.assets[rest].atlasPath; })).toContain("necesita su atlas");
+    expect(bad((m) => { delete m.assets[rest].animations; })).toContain("necesita animations");
+    expect(bad((m) => { delete m.assets[rest].origin; })).toContain("necesita origin");
+    expect(bad((m) => { m.assets[rest].animations![1].key = m.assets[rest].animations![0].key; })).toContain("no pueden repetirse");
+    expect(bad((m) => { m.assets[rest].animations!.pop(); })).toContain("frameCount");
+  });
+});
+
+describe("trucos de Jerry y búsqueda del peluche (SPEC 6.2; AC-65)", () => {
+  const tricks = "character.vanessa-jerry.idle-anim.tricks", fetch = "character.vanessa-jerry.idle-anim.fetch";
+
+  it.each(TRICKS_IDS)("%s: 12 fotogramas cronológicos validados contra la imagen, con los pies como origen", (id) => {
+    const { atlas, entry } = load(id);
+    expect(entry).toMatchObject({ kind: "idle-sheet", category: "characters", frameCount: 12, width: 1086, height: 1448 });
+    expect(Object.keys(atlas.frames)).toHaveLength(12);
+    expect(issues(id)).toEqual([]);
+    expect(entry.origin!.y).toBeGreaterThan(0.9);
+    expect(entry.animations!.some((a) => new Set(a.frameNames).size === 12)).toBe(true); // la secuencia completa
+  });
+
+  it("los trucos traen la secuencia completa y sus partes (salto, sentarse, dar la pata, levantarse)", () => {
+    const keys = manifest.assets[tricks].animations!.map((a) => a.key);
+    expect(keys).toEqual(["vanessa-jerry-tricks", "jerry-jump", "jerry-sit", "jerry-give-paw", "jerry-stand"]);
+    expect(manifest.assets[tricks].animations!.every((a) => a.repeat === 0)).toBe(true);
+  });
+
+  it("la hoja de trucos corregida (v2) trae escala y origen por fotograma para igualar la altura de Vanessa", () => {
+    const e = manifest.assets[tricks];
+    expect(e.referenceHeightPx).toBe(316);
+    expect(e.sourceFrameSize).toBeUndefined(); // recortes sin relleno: el origen va en cada fotograma
+    expect(e.frameAdjust).toHaveLength(12);
+    expect(e.frameAdjust!.map((f) => f.name)).toEqual(Array.from({ length: 12 }, (_, i) => `frame-${String(i).padStart(2, "0")}`));
+    for (const f of e.frameAdjust!) {
+      expect(f.scaleMultiplier).toBeGreaterThan(0.9); // la v1 dibujaba a Vanessa entre un 3 % y un 5 % más grande
+      expect(f.scaleMultiplier).toBeLessThan(1);
+      expect(f.origin.x).toBeGreaterThan(0);
+      expect(f.origin.y).toBeGreaterThan(0.9); // los pies, en la base del recorte
+    }
+    const { atlas } = load(tricks);
+    expect(Object.values(atlas.frames).every((f: any) => f.sourceSize.w === f.frame.w && f.sourceSize.h === f.frame.h)).toBe(true); // sin relleno
+    expect(manifest.assets[fetch].frameAdjust).toBeUndefined(); // la búsqueda del peluche no cambió
+  });
+
+  it("el manifiesto rechaza un ajuste por fotograma incompleto, repetido o ajeno", () => {
+    const bad = (edit: (m: AssetManifest) => void) => {
+      const m = structuredClone(manifest);
+      edit(m);
+      const r = validateAssetManifest(m);
+      return r.ok ? "" : r.issues.map((i) => `${i.path}: ${i.message}`).join("|");
+    };
+    expect(bad((m) => { m.assets[tricks].frameAdjust!.pop(); })).toContain("falta el ajuste");
+    expect(bad((m) => { m.assets[tricks].frameAdjust!.push({ ...m.assets[tricks].frameAdjust![0] }); })).toContain("repetidos");
+    expect(bad((m) => { m.assets[tricks].frameAdjust![0].name = "frame-99"; })).toContain("no es un fotograma");
+    expect(bad((m) => { m.assets[tricks].frameAdjust![0].scaleMultiplier = 0; })).not.toBe("");
+    expect(bad((m) => { delete m.assets[tricks].frameAdjust; })).toContain("sourceFrameSize");
+  });
+
+  it("la búsqueda es una sola secuencia que se reproduce una vez, en un lienzo más ancho (405 × 362)", () => {
+    expect(manifest.assets[fetch].animations).toHaveLength(1);
+    expect(manifest.assets[fetch].animations![0]).toMatchObject({ key: "vanessa-jerry-fetch-plush", repeat: 0, frameRate: 6 });
+    expect(manifest.assets[fetch].sourceFrameSize).toEqual({ width: 405, height: 362 });
+  });
+
+  it("las claves de animación no chocan con las del reposo", () => {
+    const keys = [...IDLE_IDS, ...TRICKS_IDS].flatMap((id) => manifest.assets[id].animations!.map((a) => a.key));
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+});
+
 describe("validateAtlasData detecta atlas incoherentes", () => {
   const id = "animation.water.waterfall";
 
@@ -161,8 +266,8 @@ describe("validateAtlasData detecta atlas incoherentes", () => {
     expect(issues(id, (a) => { a.frames["frame-01"].frame = { ...a.frames["frame-00"].frame }; }).join("|")).toContain("se solapa con");
   });
 
-  it("nombres que no coinciden con animation.frameNames, o distinto número de regiones", () => {
-    expect(issues(id, (a) => { a.frames["extra"] = a.frames["frame-00"]; delete a.frames["frame-07"]; }).join("|")).toContain("no coinciden con animation.frameNames");
+  it("nombres que no coinciden con los fotogramas de las animaciones, o distinto número de regiones", () => {
+    expect(issues(id, (a) => { a.frames["extra"] = a.frames["frame-00"]; delete a.frames["frame-07"]; }).join("|")).toContain("no coinciden con los fotogramas de las animaciones");
     expect(issues(id, (_a, e) => { e.frameCount = 6; }).join("|")).toContain("frameCount es 6");
   });
 

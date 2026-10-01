@@ -40,9 +40,9 @@ export function validateAtlasData(
   }
 
   const names = Object.keys(a.frames);
-  const expected = entry.animation?.frameNames ?? [];
+  const expected = entry.animation?.frameNames ?? [...new Set((entry.animations ?? []).flatMap((x) => x.frameNames))];
   if (JSON.stringify([...names].sort()) !== JSON.stringify([...expected].sort())) {
-    err(".frames", `los nombres del atlas (${names.join(", ")}) no coinciden con animation.frameNames (${expected.join(", ")})`);
+    err(".frames", `los nombres del atlas (${names.join(", ")}) no coinciden con los fotogramas de las animaciones (${expected.join(", ")})`);
   }
   if (entry.frameCount !== undefined && names.length !== entry.frameCount) err(".frames", `hay ${names.length} regiones y frameCount es ${entry.frameCount}`);
 

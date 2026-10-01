@@ -85,12 +85,12 @@ export class ExplorationScene extends Phaser.Scene {
 
     this.world = buildWorld(this, config, assets, this.zoneId, reducedMotion);
     this.ambient = buildAmbient(this, config, assets, this.zoneId, reducedMotion);
-    this.player = new Player(this, config.gameplay.player, start);
+    this.player = new Player(this, config.gameplay.player, start, { assets, reducedMotion });
     this.physics.world.setBounds(0, 0, zone.width, zone.height);
     this.physics.add.collider(this.player.feet, this.world.obstacles);
     this.cleanups.push(setupCamera(this, this.world, this.player, config.gameplay, reducedMotion));
 
-    this.input2 = new InputController(this, bridge);
+    this.input2 = new InputController(this, bridge, config.gameplay.player.idle?.actionKey);
     this.interaction = new InteractionSystem(bridge, this.token, this.zoneId, this.world.targets);
     // Tocar para caminar y tocar la estación para explorar (SPEC 6.1): usa la misma rejilla que valida la alcanzabilidad.
     this.tap = new TapNavigation(this, {
@@ -140,11 +140,15 @@ export class ExplorationScene extends Phaser.Scene {
     const { config, bridge } = this.deps;
     if (!this.player || !this.input2 || !this.interaction) return;
     // Las flechas mandan: cualquier tecla cancela el recorrido por toque. Si no, el recorrido entrega su dirección.
+    if (this.input2.consumeAction()) {
+      this.tap?.cancel(); // jugar con Jerry detiene cualquier recorrido por toque
+      this.player.requestAction();
+    }
     const manual = this.input2.vector();
     const manualActive = manual.x !== 0 || manual.y !== 0;
     if (manualActive) this.tap?.cancel();
     const vector = manualActive ? manual : (this.tap?.vector(this.player.position, delta, config.gameplay.playerSpeed) ?? manual);
-    this.player.update(vector, config.gameplay.playerSpeed);
+    this.player.update(vector, config.gameplay.playerSpeed, delta);
 
     const requested = this.interaction.update(this.player.position, this.input2.consumeInteract());
     if (requested) {

@@ -5,8 +5,8 @@ import { configJson, harness } from "./helpers.mjs";
 
 const { open, check, finish } = await harness();
 const manifest = JSON.parse(readFileSync("public/assets/assets.json", "utf8"));
-// Hojas animadas (con atlas) y nubes del manifiesto: lo que el motor crea como sprites animados o como nubes a la deriva.
-const KIT = new Set(Object.entries(manifest.assets).filter(([, a]) => a.atlasPath).map(([id]) => id));
+// Hojas animadas del paisaje (con atlas; no las de reposo del personaje) y nubes del manifiesto: lo que el motor crea como sprites animados o como nubes a la deriva.
+const KIT = new Set(Object.entries(manifest.assets).filter(([, a]) => a.atlasPath && a.kind !== "idle-sheet").map(([id]) => id));
 const CLOUDS = Object.keys(manifest.assets).filter((id) => id.startsWith("background.sky.cloud"));
 const DUCKS = Object.keys(manifest.assets).filter((id) => id.startsWith("animation.fauna."));
 

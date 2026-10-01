@@ -1,0 +1,550 @@
+{
+  "schemaVersion": 1,
+  "project": "Bitácora Amorcito",
+  "pack": "jerry-tricks-fetch-v2",
+  "referenceCanvas": {
+    "width": 1086,
+    "height": 1448
+  },
+  "assets": {
+    "vanessa-jerry-tricks": {
+      "label": "Jerry salta, se sienta y da la pata",
+      "type": "atlas",
+      "textureKey": "vanessa-jerry-tricks",
+      "path": "character/gestures/vanessa-jerry-tricks.png",
+      "atlasPath": "character/gestures/vanessa-jerry-tricks.atlas.json",
+      "width": 1086,
+      "height": 1448,
+      "hasAlpha": true,
+      "sha256": "1e85fb6955432ebb9d865597f95b821aac873b9dc6f0cf667afd09c4b3a8c975",
+      "frameCount": 12,
+      "logicalFrameSize": null,
+      "origin": {
+        "x": 0.42391304347826086,
+        "y": 0.9761904761904762
+      },
+      "anchor": "Vanessa-feet",
+      "layout": {
+        "columns": 3,
+        "rows": 4,
+        "rowMeaning": "timeline",
+        "useAtlasForCropping": true
+      },
+      "animations": [
+        {
+          "key": "vanessa-jerry-tricks",
+          "frameNames": [
+            "frame-00",
+            "frame-01",
+            "frame-02",
+            "frame-03",
+            "frame-04",
+            "frame-05",
+            "frame-06",
+            "frame-07",
+            "frame-08",
+            "frame-09",
+            "frame-10",
+            "frame-11"
+          ],
+          "frameRate": 6,
+          "repeat": 0,
+          "repeatDelay": 0
+        },
+        {
+          "key": "jerry-jump",
+          "frameNames": [
+            "frame-00",
+            "frame-01",
+            "frame-02",
+            "frame-03",
+            "frame-04"
+          ],
+          "frameRate": 8,
+          "repeat": 0,
+          "repeatDelay": 0
+        },
+        {
+          "key": "jerry-sit",
+          "frameNames": [
+            "frame-04",
+            "frame-05",
+            "frame-06"
+          ],
+          "frameRate": 6,
+          "repeat": 0,
+          "repeatDelay": 0
+        },
+        {
+          "key": "jerry-give-paw",
+          "frameNames": [
+            "frame-06",
+            "frame-07",
+            "frame-08",
+            "frame-09"
+          ],
+          "frameRate": 6,
+          "repeat": 0,
+          "repeatDelay": 0
+        },
+        {
+          "key": "jerry-stand",
+          "frameNames": [
+            "frame-09",
+            "frame-10",
+            "frame-11"
+          ],
+          "frameRate": 6,
+          "repeat": 0,
+          "repeatDelay": 0
+        }
+      ],
+      "frames": [
+        {
+          "name": "frame-00",
+          "frame": {
+            "x": 64,
+            "y": 21,
+            "w": 276,
+            "h": 336
+          },
+          "footInCrop": {
+            "x": 117.0,
+            "y": 328
+          },
+          "vanessaHeightPx": 326,
+          "scaleMultiplier": 0.9693251533742331,
+          "origin": {
+            "x": 0.42391304347826086,
+            "y": 0.9761904761904762
+          }
+        },
+        {
+          "name": "frame-01",
+          "frame": {
+            "x": 428,
+            "y": 21,
+            "w": 273,
+            "h": 345
+          },
+          "footInCrop": {
+            "x": 92.0,
+            "y": 328
+          },
+          "vanessaHeightPx": 326,
+          "scaleMultiplier": 0.9693251533742331,
+          "origin": {
+            "x": 0.336996336996337,
+            "y": 0.9507246376811594
+          }
+        },
+        {
+          "name": "frame-02",
+          "frame": {
+            "x": 788,
+            "y": 20,
+            "w": 278,
+            "h": 331
+          },
+          "footInCrop": {
+            "x": 113.5,
+            "y": 329
+          },
+          "vanessaHeightPx": 327,
+          "scaleMultiplier": 0.9663608562691132,
+          "origin": {
+            "x": 0.40827338129496404,
+            "y": 0.9939577039274925
+          }
+        },
+        {
+          "name": "frame-03",
+          "frame": {
+            "x": 50,
+            "y": 382,
+            "w": 313,
+            "h": 331
+          },
+          "footInCrop": {
+            "x": 117.0,
+            "y": 329
+          },
+          "vanessaHeightPx": 327,
+          "scaleMultiplier": 0.9663608562691132,
+          "origin": {
+            "x": 0.3738019169329074,
+            "y": 0.9939577039274925
+          }
+        },
+        {
+          "name": "frame-04",
+          "frame": {
+            "x": 417,
+            "y": 382,
+            "w": 323,
+            "h": 344
+          },
+          "footInCrop": {
+            "x": 98.5,
+            "y": 329
+          },
+          "vanessaHeightPx": 327,
+          "scaleMultiplier": 0.9663608562691132,
+          "origin": {
+            "x": 0.30495356037151705,
+            "y": 0.9563953488372093
+          }
+        },
+        {
+          "name": "frame-05",
+          "frame": {
+            "x": 786,
+            "y": 382,
+            "w": 282,
+            "h": 339
+          },
+          "footInCrop": {
+            "x": 94.0,
+            "y": 329
+          },
+          "vanessaHeightPx": 327,
+          "scaleMultiplier": 0.9663608562691132,
+          "origin": {
+            "x": 0.3333333333333333,
+            "y": 0.9705014749262537
+          }
+        },
+        {
+          "name": "frame-06",
+          "frame": {
+            "x": 50,
+            "y": 732,
+            "w": 313,
+            "h": 337
+          },
+          "footInCrop": {
+            "x": 115.5,
+            "y": 335
+          },
+          "vanessaHeightPx": 333,
+          "scaleMultiplier": 0.948948948948949,
+          "origin": {
+            "x": 0.36900958466453676,
+            "y": 0.9940652818991098
+          }
+        },
+        {
+          "name": "frame-07",
+          "frame": {
+            "x": 425,
+            "y": 732,
+            "w": 303,
+            "h": 337
+          },
+          "footInCrop": {
+            "x": 114.0,
+            "y": 335
+          },
+          "vanessaHeightPx": 333,
+          "scaleMultiplier": 0.948948948948949,
+          "origin": {
+            "x": 0.37623762376237624,
+            "y": 0.9940652818991098
+          }
+        },
+        {
+          "name": "frame-08",
+          "frame": {
+            "x": 777,
+            "y": 732,
+            "w": 299,
+            "h": 339
+          },
+          "footInCrop": {
+            "x": 119.5,
+            "y": 335
+          },
+          "vanessaHeightPx": 333,
+          "scaleMultiplier": 0.948948948948949,
+          "origin": {
+            "x": 0.3996655518394649,
+            "y": 0.9882005899705014
+          }
+        },
+        {
+          "name": "frame-09",
+          "frame": {
+            "x": 55,
+            "y": 1084,
+            "w": 322,
+            "h": 334
+          },
+          "footInCrop": {
+            "x": 114.0,
+            "y": 331
+          },
+          "vanessaHeightPx": 329,
+          "scaleMultiplier": 0.9604863221884499,
+          "origin": {
+            "x": 0.35403726708074534,
+            "y": 0.9910179640718563
+          }
+        },
+        {
+          "name": "frame-10",
+          "frame": {
+            "x": 423,
+            "y": 1084,
+            "w": 286,
+            "h": 334
+          },
+          "footInCrop": {
+            "x": 115.5,
+            "y": 326
+          },
+          "vanessaHeightPx": 324,
+          "scaleMultiplier": 0.9753086419753086,
+          "origin": {
+            "x": 0.40384615384615385,
+            "y": 0.9760479041916168
+          }
+        },
+        {
+          "name": "frame-11",
+          "frame": {
+            "x": 786,
+            "y": 1084,
+            "w": 280,
+            "h": 333
+          },
+          "footInCrop": {
+            "x": 95.5,
+            "y": 327
+          },
+          "vanessaHeightPx": 325,
+          "scaleMultiplier": 0.9723076923076923,
+          "origin": {
+            "x": 0.3410714285714286,
+            "y": 0.9819819819819819
+          }
+        }
+      ],
+      "recommendedScale": "Use phaser-idle.js normalization; baseScale is the unchanged idle/walk scale",
+      "referenceHeightPx": 316,
+      "scaleCorrection": {
+        "mode": "per-frame",
+        "reference": "vanessa-jerry-idle.png, frontal standing pose",
+        "targetHeightPx": 316,
+        "requiresHelper": true
+      }
+    },
+    "vanessa-jerry-fetch-plush": {
+      "label": "Vanessa señala y Jerry trae el peluche",
+      "type": "atlas",
+      "textureKey": "vanessa-jerry-fetch-plush",
+      "path": "character/gestures/vanessa-jerry-fetch-plush.png",
+      "atlasPath": "character/gestures/vanessa-jerry-fetch-plush.atlas.json",
+      "width": 1086,
+      "height": 1448,
+      "hasAlpha": true,
+      "sha256": "14de52cadc80804e2a7190a6c3520ee7467ca68db07d494fab97ead7253dfa8b",
+      "frameCount": 12,
+      "logicalFrameSize": {
+        "width": 405,
+        "height": 362
+      },
+      "origin": {
+        "x": 0.32839506172839505,
+        "y": 0.914364640883978
+      },
+      "anchor": "Vanessa-feet",
+      "layout": {
+        "columns": 3,
+        "rows": 4,
+        "rowMeaning": "timeline",
+        "useAtlasForCropping": true
+      },
+      "animations": [
+        {
+          "key": "vanessa-jerry-fetch-plush",
+          "frameNames": [
+            "frame-00",
+            "frame-01",
+            "frame-02",
+            "frame-03",
+            "frame-04",
+            "frame-05",
+            "frame-06",
+            "frame-07",
+            "frame-08",
+            "frame-09",
+            "frame-10",
+            "frame-11"
+          ],
+          "frameRate": 6,
+          "repeat": 0,
+          "repeatDelay": 0
+        }
+      ],
+      "frames": [
+        {
+          "name": "frame-00",
+          "frame": {
+            "x": 22,
+            "y": 30,
+            "w": 346,
+            "h": 325
+          },
+          "footInCrop": {
+            "x": 93.0,
+            "y": 306
+          }
+        },
+        {
+          "name": "frame-01",
+          "frame": {
+            "x": 381,
+            "y": 30,
+            "w": 347,
+            "h": 325
+          },
+          "footInCrop": {
+            "x": 130.5,
+            "y": 310
+          }
+        },
+        {
+          "name": "frame-02",
+          "frame": {
+            "x": 739,
+            "y": 30,
+            "w": 344,
+            "h": 325
+          },
+          "footInCrop": {
+            "x": 94.0,
+            "y": 306
+          }
+        },
+        {
+          "name": "frame-03",
+          "frame": {
+            "x": 20,
+            "y": 387,
+            "w": 364,
+            "h": 327
+          },
+          "footInCrop": {
+            "x": 94.5,
+            "y": 309
+          }
+        },
+        {
+          "name": "frame-04",
+          "frame": {
+            "x": 384,
+            "y": 388,
+            "w": 350,
+            "h": 337
+          },
+          "footInCrop": {
+            "x": 95.5,
+            "y": 308
+          }
+        },
+        {
+          "name": "frame-05",
+          "frame": {
+            "x": 740,
+            "y": 387,
+            "w": 332,
+            "h": 331
+          },
+          "footInCrop": {
+            "x": 97.0,
+            "y": 309
+          }
+        },
+        {
+          "name": "frame-06",
+          "frame": {
+            "x": 20,
+            "y": 746,
+            "w": 349,
+            "h": 323
+          },
+          "footInCrop": {
+            "x": 96.0,
+            "y": 308
+          }
+        },
+        {
+          "name": "frame-07",
+          "frame": {
+            "x": 378,
+            "y": 746,
+            "w": 339,
+            "h": 323
+          },
+          "footInCrop": {
+            "x": 99.5,
+            "y": 308
+          }
+        },
+        {
+          "name": "frame-08",
+          "frame": {
+            "x": 741,
+            "y": 746,
+            "w": 263,
+            "h": 323
+          },
+          "footInCrop": {
+            "x": 98.5,
+            "y": 308
+          }
+        },
+        {
+          "name": "frame-09",
+          "frame": {
+            "x": 13,
+            "y": 1102,
+            "w": 337,
+            "h": 323
+          },
+          "footInCrop": {
+            "x": 102.0,
+            "y": 308
+          }
+        },
+        {
+          "name": "frame-10",
+          "frame": {
+            "x": 380,
+            "y": 1102,
+            "w": 294,
+            "h": 324
+          },
+          "footInCrop": {
+            "x": 96.0,
+            "y": 308
+          }
+        },
+        {
+          "name": "frame-11",
+          "frame": {
+            "x": 742,
+            "y": 1102,
+            "w": 262,
+            "h": 325
+          },
+          "footInCrop": {
+            "x": 92.0,
+            "y": 308
+          }
+        }
+      ],
+      "recommendedScale": "Use existing character scale"
+    }
+  }
+}

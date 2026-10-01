@@ -46,6 +46,8 @@ export interface BridgeEvents {
   "app:controls-mode": { mode: ControlsMode };
 
   "ui:direction": { direction: Direction; pressed: boolean };
+  /** El visitante pide jugar con Jerry (botón de la cabecera); la tecla llega directo al InputController. */
+  "ui:jerry-action": Record<string, never>;
   "ui:interact": { pressed: boolean };
 }
 

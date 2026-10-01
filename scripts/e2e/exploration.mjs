@@ -44,7 +44,7 @@ try {
     for (let i = 0; i < 10; i++) { await t.page.waitForTimeout(80); frames.add((await t.scene()).frame); }
     await t.page.keyboard.up("ArrowUp"); await t.page.waitForTimeout(150);
     const rest = (await t.scene()).frame;
-    check("B3 animación de caminar con frames explícitos y pose de pie al detenerse", [...frames].every((f) => f.startsWith("up-")) && frames.size >= 2 && rest === "up-1", `${[...frames]} rest=${rest}`);
+    check("B3 animación de caminar con frames explícitos y, al detenerse, el reposo de espaldas", [...frames].every((f) => f.startsWith("up-")) && frames.size >= 2 && /^back-0[0-2]$/.test(rest), `${[...frames]} rest=${rest}`);
 
     // Pestaña oculta con una flecha pulsada y regreso (SPEC 6.2). Un navegador real detiene requestAnimationFrame
     // al ocultarse la pestaña; aquí se reproduce esa cadena (hidden + sleep, luego wake + visible) y se exige

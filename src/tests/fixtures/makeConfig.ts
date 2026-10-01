@@ -188,6 +188,7 @@ export function makeConfig(count = 6): BitacoraConfig {
         moveRight: "Mover hacia la derecha",
         controlsUseDpad: "Usar cruceta",
         controlsUseTap: "Tocar para caminar",
+        jerryAction: "Jugar con Jerry",
       },
       assets: {
         window: "ui.panel.cream.nine-slice",

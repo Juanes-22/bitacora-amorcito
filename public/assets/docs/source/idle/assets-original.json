@@ -1,0 +1,958 @@
+{
+  "schemaVersion": 1,
+  "project": "Bitácora Amorcito",
+  "referenceCanvas": {
+    "width": 1086,
+    "height": 1448
+  },
+  "logicalFrameSize": {
+    "width": 362,
+    "height": 362
+  },
+  "assets": {
+    "vanessa-jerry-idle": {
+      "label": "Reposo, respiración y parpadeo",
+      "type": "atlas",
+      "textureKey": "vanessa-jerry-idle",
+      "path": "character/idle/vanessa-jerry-idle.png",
+      "atlasPath": "character/idle/vanessa-jerry-idle.atlas.json",
+      "width": 1086,
+      "height": 1448,
+      "hasAlpha": true,
+      "sha256": "3399e79f54c623e2039b1473c13ae318285dc0a06fd48001de0b162754da10ad",
+      "logicalFrameSize": {
+        "width": 362,
+        "height": 362
+      },
+      "frameCount": 12,
+      "layout": {
+        "columns": 3,
+        "rows": 4,
+        "useAtlasForCropping": true,
+        "rowMeaning": "direction",
+        "sourceRowBoundariesPx": [
+          0,
+          359,
+          712,
+          1066,
+          1448
+        ]
+      },
+      "origin": {
+        "x": 0.44751381215469616,
+        "y": 0.9392265193370166
+      },
+      "anchor": "Vanessa-feet",
+      "recommendedScale": "Use the existing walking sprite scale; PNG pixels were not resized",
+      "animations": [
+        {
+          "key": "vanessa-jerry-idle-front",
+          "direction": "front",
+          "frameNames": [
+            "front-00",
+            "front-01",
+            "front-02"
+          ],
+          "frameRate": 4,
+          "repeat": -1,
+          "repeatDelay": 1700
+        },
+        {
+          "key": "vanessa-jerry-idle-left",
+          "direction": "left",
+          "frameNames": [
+            "left-00",
+            "left-01",
+            "left-02"
+          ],
+          "frameRate": 4,
+          "repeat": -1,
+          "repeatDelay": 1700
+        },
+        {
+          "key": "vanessa-jerry-idle-right",
+          "direction": "right",
+          "frameNames": [
+            "right-00",
+            "right-01",
+            "right-02"
+          ],
+          "frameRate": 4,
+          "repeat": -1,
+          "repeatDelay": 1700
+        },
+        {
+          "key": "vanessa-jerry-idle-back",
+          "direction": "back",
+          "frameNames": [
+            "back-00",
+            "back-01",
+            "back-02"
+          ],
+          "frameRate": 4,
+          "repeat": -1,
+          "repeatDelay": 1700
+        }
+      ],
+      "frames": [
+        {
+          "name": "front-00",
+          "frame": {
+            "x": 67,
+            "y": 22,
+            "w": 266,
+            "h": 326
+          },
+          "footInCrop": {
+            "x": 113.5,
+            "y": 309
+          },
+          "footInTexture": {
+            "x": 180.5,
+            "y": 331
+          },
+          "row": 0,
+          "column": 0
+        },
+        {
+          "name": "front-01",
+          "frame": {
+            "x": 430,
+            "y": 21,
+            "w": 260,
+            "h": 327
+          },
+          "footInCrop": {
+            "x": 111.0,
+            "y": 310
+          },
+          "footInTexture": {
+            "x": 541.0,
+            "y": 331
+          },
+          "row": 0,
+          "column": 1
+        },
+        {
+          "name": "front-02",
+          "frame": {
+            "x": 792,
+            "y": 22,
+            "w": 264,
+            "h": 326
+          },
+          "footInCrop": {
+            "x": 110.0,
+            "y": 310
+          },
+          "footInTexture": {
+            "x": 902.0,
+            "y": 332
+          },
+          "row": 0,
+          "column": 2
+        },
+        {
+          "name": "left-00",
+          "frame": {
+            "x": 76,
+            "y": 371,
+            "w": 284,
+            "h": 329
+          },
+          "footInCrop": {
+            "x": 87.5,
+            "y": 318
+          },
+          "footInTexture": {
+            "x": 163.5,
+            "y": 689
+          },
+          "row": 1,
+          "column": 0
+        },
+        {
+          "name": "left-01",
+          "frame": {
+            "x": 435,
+            "y": 371,
+            "w": 287,
+            "h": 329
+          },
+          "footInCrop": {
+            "x": 89.0,
+            "y": 318
+          },
+          "footInTexture": {
+            "x": 524.0,
+            "y": 689
+          },
+          "row": 1,
+          "column": 1
+        },
+        {
+          "name": "left-02",
+          "frame": {
+            "x": 799,
+            "y": 371,
+            "w": 279,
+            "h": 329
+          },
+          "footInCrop": {
+            "x": 89.0,
+            "y": 318
+          },
+          "footInTexture": {
+            "x": 888.0,
+            "y": 689
+          },
+          "row": 1,
+          "column": 2
+        },
+        {
+          "name": "right-00",
+          "frame": {
+            "x": 74,
+            "y": 724,
+            "w": 289,
+            "h": 333
+          },
+          "footInCrop": {
+            "x": 113.0,
+            "y": 322
+          },
+          "footInTexture": {
+            "x": 187.0,
+            "y": 1046
+          },
+          "row": 2,
+          "column": 0
+        },
+        {
+          "name": "right-01",
+          "frame": {
+            "x": 434,
+            "y": 724,
+            "w": 288,
+            "h": 333
+          },
+          "footInCrop": {
+            "x": 111.0,
+            "y": 322
+          },
+          "footInTexture": {
+            "x": 545.0,
+            "y": 1046
+          },
+          "row": 2,
+          "column": 1
+        },
+        {
+          "name": "right-02",
+          "frame": {
+            "x": 797,
+            "y": 724,
+            "w": 281,
+            "h": 333
+          },
+          "footInCrop": {
+            "x": 112.0,
+            "y": 322
+          },
+          "footInTexture": {
+            "x": 909.0,
+            "y": 1046
+          },
+          "row": 2,
+          "column": 2
+        },
+        {
+          "name": "back-00",
+          "frame": {
+            "x": 62,
+            "y": 1075,
+            "w": 294,
+            "h": 336
+          },
+          "footInCrop": {
+            "x": 111.5,
+            "y": 323
+          },
+          "footInTexture": {
+            "x": 173.5,
+            "y": 1398
+          },
+          "row": 3,
+          "column": 0
+        },
+        {
+          "name": "back-01",
+          "frame": {
+            "x": 424,
+            "y": 1075,
+            "w": 291,
+            "h": 335
+          },
+          "footInCrop": {
+            "x": 112.5,
+            "y": 323
+          },
+          "footInTexture": {
+            "x": 536.5,
+            "y": 1398
+          },
+          "row": 3,
+          "column": 1
+        },
+        {
+          "name": "back-02",
+          "frame": {
+            "x": 786,
+            "y": 1075,
+            "w": 280,
+            "h": 336
+          },
+          "footInCrop": {
+            "x": 113.0,
+            "y": 323
+          },
+          "footInTexture": {
+            "x": 899.0,
+            "y": 1398
+          },
+          "row": 3,
+          "column": 2
+        }
+      ],
+      "maximumFootAlignmentErrorSourcePx": 0.5
+    },
+    "vanessa-jerry-idle-look": {
+      "label": "Vanessa mira a Jerry",
+      "type": "atlas",
+      "textureKey": "vanessa-jerry-idle-look",
+      "path": "character/idle/vanessa-jerry-idle-look.png",
+      "atlasPath": "character/idle/vanessa-jerry-idle-look.atlas.json",
+      "width": 1086,
+      "height": 1448,
+      "hasAlpha": true,
+      "sha256": "5ba7af5dfee9506a45f07bb44df6497995fb8d231427e86349bb4b2a78bdc4b7",
+      "logicalFrameSize": {
+        "width": 362,
+        "height": 362
+      },
+      "frameCount": 12,
+      "layout": {
+        "columns": 3,
+        "rows": 4,
+        "useAtlasForCropping": true,
+        "rowMeaning": "direction",
+        "sourceRowBoundariesPx": [
+          0,
+          367,
+          726,
+          1077,
+          1448
+        ]
+      },
+      "origin": {
+        "x": 0.4585635359116022,
+        "y": 0.9392265193370166
+      },
+      "anchor": "Vanessa-feet",
+      "recommendedScale": "Use the existing walking sprite scale; PNG pixels were not resized",
+      "animations": [
+        {
+          "key": "vanessa-jerry-idle-look-front",
+          "direction": "front",
+          "frameNames": [
+            "front-00",
+            "front-01",
+            "front-02"
+          ],
+          "frameRate": 4,
+          "repeat": 0,
+          "repeatDelay": 0
+        },
+        {
+          "key": "vanessa-jerry-idle-look-left",
+          "direction": "left",
+          "frameNames": [
+            "left-00",
+            "left-01",
+            "left-02"
+          ],
+          "frameRate": 4,
+          "repeat": 0,
+          "repeatDelay": 0
+        },
+        {
+          "key": "vanessa-jerry-idle-look-right",
+          "direction": "right",
+          "frameNames": [
+            "right-00",
+            "right-01",
+            "right-02"
+          ],
+          "frameRate": 4,
+          "repeat": 0,
+          "repeatDelay": 0
+        },
+        {
+          "key": "vanessa-jerry-idle-look-back",
+          "direction": "back",
+          "frameNames": [
+            "back-00",
+            "back-01",
+            "back-02"
+          ],
+          "frameRate": 4,
+          "repeat": 0,
+          "repeatDelay": 0
+        }
+      ],
+      "frames": [
+        {
+          "name": "front-00",
+          "frame": {
+            "x": 66,
+            "y": 22,
+            "w": 261,
+            "h": 329
+          },
+          "footInCrop": {
+            "x": 112.5,
+            "y": 313
+          },
+          "footInTexture": {
+            "x": 178.5,
+            "y": 335
+          },
+          "row": 0,
+          "column": 0
+        },
+        {
+          "name": "front-01",
+          "frame": {
+            "x": 427,
+            "y": 23,
+            "w": 279,
+            "h": 329
+          },
+          "footInCrop": {
+            "x": 110.0,
+            "y": 312
+          },
+          "footInTexture": {
+            "x": 537.0,
+            "y": 335
+          },
+          "row": 0,
+          "column": 1
+        },
+        {
+          "name": "front-02",
+          "frame": {
+            "x": 792,
+            "y": 22,
+            "w": 259,
+            "h": 329
+          },
+          "footInCrop": {
+            "x": 110.0,
+            "y": 313
+          },
+          "footInTexture": {
+            "x": 902.0,
+            "y": 335
+          },
+          "row": 0,
+          "column": 2
+        },
+        {
+          "name": "left-00",
+          "frame": {
+            "x": 75,
+            "y": 383,
+            "w": 283,
+            "h": 329
+          },
+          "footInCrop": {
+            "x": 89.5,
+            "y": 316
+          },
+          "footInTexture": {
+            "x": 164.5,
+            "y": 699
+          },
+          "row": 1,
+          "column": 0
+        },
+        {
+          "name": "left-01",
+          "frame": {
+            "x": 420,
+            "y": 383,
+            "w": 283,
+            "h": 328
+          },
+          "footInCrop": {
+            "x": 107.5,
+            "y": 316
+          },
+          "footInTexture": {
+            "x": 527.5,
+            "y": 699
+          },
+          "row": 1,
+          "column": 1
+        },
+        {
+          "name": "left-02",
+          "frame": {
+            "x": 800,
+            "y": 383,
+            "w": 272,
+            "h": 329
+          },
+          "footInCrop": {
+            "x": 89.0,
+            "y": 316
+          },
+          "footInTexture": {
+            "x": 889.0,
+            "y": 699
+          },
+          "row": 1,
+          "column": 2
+        },
+        {
+          "name": "right-00",
+          "frame": {
+            "x": 74,
+            "y": 740,
+            "w": 279,
+            "h": 331
+          },
+          "footInCrop": {
+            "x": 107.5,
+            "y": 320
+          },
+          "footInTexture": {
+            "x": 181.5,
+            "y": 1060
+          },
+          "row": 2,
+          "column": 0
+        },
+        {
+          "name": "right-01",
+          "frame": {
+            "x": 426,
+            "y": 740,
+            "w": 290,
+            "h": 331
+          },
+          "footInCrop": {
+            "x": 109.0,
+            "y": 320
+          },
+          "footInTexture": {
+            "x": 535.0,
+            "y": 1060
+          },
+          "row": 2,
+          "column": 1
+        },
+        {
+          "name": "right-02",
+          "frame": {
+            "x": 797,
+            "y": 740,
+            "w": 279,
+            "h": 331
+          },
+          "footInCrop": {
+            "x": 108.5,
+            "y": 320
+          },
+          "footInTexture": {
+            "x": 905.5,
+            "y": 1060
+          },
+          "row": 2,
+          "column": 2
+        },
+        {
+          "name": "back-00",
+          "frame": {
+            "x": 62,
+            "y": 1084,
+            "w": 276,
+            "h": 340
+          },
+          "footInCrop": {
+            "x": 112.5,
+            "y": 329
+          },
+          "footInTexture": {
+            "x": 174.5,
+            "y": 1413
+          },
+          "row": 3,
+          "column": 0
+        },
+        {
+          "name": "back-01",
+          "frame": {
+            "x": 418,
+            "y": 1084,
+            "w": 279,
+            "h": 340
+          },
+          "footInCrop": {
+            "x": 110.5,
+            "y": 329
+          },
+          "footInTexture": {
+            "x": 528.5,
+            "y": 1413
+          },
+          "row": 3,
+          "column": 1
+        },
+        {
+          "name": "back-02",
+          "frame": {
+            "x": 786,
+            "y": 1084,
+            "w": 274,
+            "h": 340
+          },
+          "footInCrop": {
+            "x": 111.5,
+            "y": 329
+          },
+          "footInTexture": {
+            "x": 897.5,
+            "y": 1413
+          },
+          "row": 3,
+          "column": 2
+        }
+      ],
+      "maximumFootAlignmentErrorSourcePx": 0.5
+    },
+    "vanessa-jerry-idle-play": {
+      "label": "Vanessa acaricia y juega con Jerry",
+      "type": "atlas",
+      "textureKey": "vanessa-jerry-idle-play",
+      "path": "character/idle/vanessa-jerry-idle-play.png",
+      "atlasPath": "character/idle/vanessa-jerry-idle-play.atlas.json",
+      "width": 1086,
+      "height": 1448,
+      "hasAlpha": true,
+      "sha256": "73d4564480cb9b33d3bdb327535727b96729ba092294b0719242601e521df2bc",
+      "logicalFrameSize": {
+        "width": 362,
+        "height": 362
+      },
+      "frameCount": 12,
+      "layout": {
+        "columns": 3,
+        "rows": 4,
+        "useAtlasForCropping": true,
+        "rowMeaning": "timeline",
+        "sourceRowBoundariesPx": [
+          0,
+          376,
+          723,
+          1069,
+          1448
+        ]
+      },
+      "origin": {
+        "x": 0.4198895027624309,
+        "y": 0.9392265193370166
+      },
+      "anchor": "Vanessa-feet",
+      "recommendedScale": "Use the existing walking sprite scale; PNG pixels were not resized",
+      "animations": [
+        {
+          "key": "vanessa-jerry-idle-play",
+          "direction": "front",
+          "frameNames": [
+            "frame-00",
+            "frame-01",
+            "frame-02",
+            "frame-03",
+            "frame-04",
+            "frame-05",
+            "frame-06",
+            "frame-07",
+            "frame-08",
+            "frame-09",
+            "frame-10",
+            "frame-11"
+          ],
+          "frameRate": 6,
+          "repeat": 0,
+          "repeatDelay": 0
+        }
+      ],
+      "frames": [
+        {
+          "name": "frame-00",
+          "frame": {
+            "x": 61,
+            "y": 22,
+            "w": 281,
+            "h": 336
+          },
+          "footInCrop": {
+            "x": 114.5,
+            "y": 321
+          },
+          "footInTexture": {
+            "x": 175.5,
+            "y": 343
+          },
+          "row": 0,
+          "column": 0
+        },
+        {
+          "name": "frame-01",
+          "frame": {
+            "x": 423,
+            "y": 25,
+            "w": 278,
+            "h": 334
+          },
+          "footInCrop": {
+            "x": 105.5,
+            "y": 321
+          },
+          "footInTexture": {
+            "x": 528.5,
+            "y": 346
+          },
+          "row": 0,
+          "column": 1
+        },
+        {
+          "name": "frame-02",
+          "frame": {
+            "x": 779,
+            "y": 63,
+            "w": 277,
+            "h": 296
+          },
+          "footInCrop": {
+            "x": 99.0,
+            "y": 283
+          },
+          "footInTexture": {
+            "x": 878.0,
+            "y": 346
+          },
+          "row": 0,
+          "column": 2
+        },
+        {
+          "name": "frame-03",
+          "frame": {
+            "x": 63,
+            "y": 399,
+            "w": 277,
+            "h": 315
+          },
+          "footInCrop": {
+            "x": 107.5,
+            "y": 301
+          },
+          "footInTexture": {
+            "x": 170.5,
+            "y": 700
+          },
+          "row": 1,
+          "column": 0
+        },
+        {
+          "name": "frame-04",
+          "frame": {
+            "x": 412,
+            "y": 394,
+            "w": 310,
+            "h": 320
+          },
+          "footInCrop": {
+            "x": 107.0,
+            "y": 307
+          },
+          "footInTexture": {
+            "x": 519.0,
+            "y": 701
+          },
+          "row": 1,
+          "column": 1
+        },
+        {
+          "name": "frame-05",
+          "frame": {
+            "x": 760,
+            "y": 396,
+            "w": 311,
+            "h": 318
+          },
+          "footInCrop": {
+            "x": 107.5,
+            "y": 304
+          },
+          "footInTexture": {
+            "x": 867.5,
+            "y": 700
+          },
+          "row": 1,
+          "column": 2
+        },
+        {
+          "name": "frame-06",
+          "frame": {
+            "x": 53,
+            "y": 750,
+            "w": 317,
+            "h": 312
+          },
+          "footInCrop": {
+            "x": 109.0,
+            "y": 300
+          },
+          "footInTexture": {
+            "x": 162.0,
+            "y": 1050
+          },
+          "row": 2,
+          "column": 0
+        },
+        {
+          "name": "frame-07",
+          "frame": {
+            "x": 413,
+            "y": 755,
+            "w": 292,
+            "h": 307
+          },
+          "footInCrop": {
+            "x": 107.0,
+            "y": 295
+          },
+          "footInTexture": {
+            "x": 520.0,
+            "y": 1050
+          },
+          "row": 2,
+          "column": 1
+        },
+        {
+          "name": "frame-08",
+          "frame": {
+            "x": 776,
+            "y": 732,
+            "w": 281,
+            "h": 330
+          },
+          "footInCrop": {
+            "x": 95.0,
+            "y": 318
+          },
+          "footInTexture": {
+            "x": 871.0,
+            "y": 1050
+          },
+          "row": 2,
+          "column": 2
+        },
+        {
+          "name": "frame-09",
+          "frame": {
+            "x": 54,
+            "y": 1077,
+            "w": 288,
+            "h": 334
+          },
+          "footInCrop": {
+            "x": 112.0,
+            "y": 322
+          },
+          "footInTexture": {
+            "x": 166.0,
+            "y": 1399
+          },
+          "row": 3,
+          "column": 0
+        },
+        {
+          "name": "frame-10",
+          "frame": {
+            "x": 423,
+            "y": 1077,
+            "w": 289,
+            "h": 334
+          },
+          "footInCrop": {
+            "x": 111.0,
+            "y": 319
+          },
+          "footInTexture": {
+            "x": 534.0,
+            "y": 1396
+          },
+          "row": 3,
+          "column": 1
+        },
+        {
+          "name": "frame-11",
+          "frame": {
+            "x": 783,
+            "y": 1077,
+            "w": 280,
+            "h": 334
+          },
+          "footInCrop": {
+            "x": 113.5,
+            "y": 319
+          },
+          "footInTexture": {
+            "x": 896.5,
+            "y": 1396
+          },
+          "row": 3,
+          "column": 2
+        }
+      ],
+      "maximumFootAlignmentErrorSourcePx": 0.5
+    }
+  },
+  "idleConfig": {
+    "cancelOnMove": true,
+    "restAfterMs": 0,
+    "glanceAfterMs": 4500,
+    "playAfterMs": 10000,
+    "playSupportedDirections": [
+      "front"
+    ],
+    "gestureCooldownMs": 8000,
+    "restByDirection": {
+      "front": "vanessa-jerry-idle-front",
+      "left": "vanessa-jerry-idle-left",
+      "right": "vanessa-jerry-idle-right",
+      "back": "vanessa-jerry-idle-back"
+    },
+    "glanceByDirection": {
+      "front": "vanessa-jerry-idle-look-front",
+      "left": "vanessa-jerry-idle-look-left",
+      "right": "vanessa-jerry-idle-look-right",
+      "back": "vanessa-jerry-idle-look-back"
+    },
+    "playAnimation": "vanessa-jerry-idle-play"
+  }
+}

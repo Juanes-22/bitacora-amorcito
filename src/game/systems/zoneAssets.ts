@@ -20,6 +20,8 @@ export function zoneAssetIds(config: BitacoraConfig, zoneId: string): string[] {
   const { glow, lockIcon, xpStar } = config.ui.assets;
   [glow, lockIcon, xpStar].forEach((a) => a && ids.add(a));
   ids.add(config.gameplay.player.assetId);
+  const idle = config.gameplay.player.idle;
+  if (idle) [idle.rest, idle.glance, idle.play, idle.tricks?.sheet, idle.fetch?.sheet].forEach((a) => a && ids.add(a));
   // La celebración puede venir de otra hoja y usa el asset de la insignia de cada aprendizaje activo.
   const celebrate = config.gameplay.player.animations.celebrate;
   const sheet = celebrate ? findAnimation(celebrate)?.sheet.assetId : undefined;

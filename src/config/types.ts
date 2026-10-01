@@ -119,6 +119,27 @@ export interface ActorSpec {
   animations: Partial<Record<AnimationName, string>>;
 }
 
+/**
+ * Reposo de Vanessa y Jerry (SPEC 6.2): tres hojas de `kind` «idle-sheet» y los tiempos de los gestos. Al quedarse quieta
+ * respira y parpadea (`rest`); tras `glanceAfterMs` sin entrada se miran (`glance`); tras `playAfterMs`, estando de
+ * frente, juegan (`play`). Entre gestos pasan al menos `gestureCooldownMs`. Aparte, el visitante pide jugar con Jerry
+ * (tecla `actionKey` o botón): se turnan `fetch` (trae el peluche) y `tricks` (sus trucos, con dar la pata).
+ */
+export interface IdleConfig {
+  rest: string;
+  glance: string;
+  play: string;
+  glanceAfterMs: number;
+  playAfterMs: number;
+  gestureCooldownMs: number;
+  /** Trucos de Jerry (salto, sentarse, dar la pata, levantarse): una de las acciones que pide el visitante. */
+  tricks?: { sheet: string };
+  /** Búsqueda del peluche: la otra acción que pide el visitante; el último fotograma se mantiene `holdMs`. */
+  fetch?: { sheet: string; holdMs: number };
+  /** Tecla (una letra mayúscula) con la que el visitante pide jugar con Jerry; el botón de la cabecera hace lo mismo. */
+  actionKey?: string;
+}
+
 export interface UiConfig {
   tabs: Array<{ id: SectionId; label: string; required: boolean }>;
   labels: {
@@ -136,7 +157,7 @@ export interface UiConfig {
     stateLocked: string; stateAvailable: string; stateCompleted: string;
     tapExplore: string; tapTravel: string;
     controlsLabel: string; moveUp: string; moveDown: string; moveLeft: string; moveRight: string;
-    controlsUseDpad: string; controlsUseTap: string;
+    controlsUseDpad: string; controlsUseTap: string; jerryAction: string;
   };
   assets: {
     window: string; button: string; buttonHover?: string; stationSign: string;
@@ -158,7 +179,9 @@ export interface GameplayConfig {
   signScale: number;
   /** Controles táctiles de partida: `tap` (tocar para caminar) o `dpad` (cruceta y «Explorar»). El visitante puede cambiarlos. */
   touchControls: "tap" | "dpad";
-  player: ActorSpec & { body: { width: number; height: number; offset: Point } };
+  player: ActorSpec & {
+    /** Animaciones de reposo; sin ellas se queda la pose quieta de la hoja de caminar. */
+    idle?: IdleConfig; body: { width: number; height: number; offset: Point } };
   companion: { mode: "separate" | "included"; actor?: ActorSpec; followDistance: number };
 }
 
@@ -201,6 +224,23 @@ export type AssetMotion =
   | { type: "pulse"; alphaMin: number; alphaMax: number; durationMs: number }
   | { type: "swim"; speedPxPerSecond: number }
   | { type: "particle"; lifespanMs: number; lifespanMaxMs?: number; speedX: { min: number; max: number }; speedY: { min: number; max: number }; gravityY?: number };
+
+/** Escala y origen de un fotograma de una hoja de reposo cuya altura no es uniforme. */
+export interface FrameAdjust {
+  name: string;
+  scaleMultiplier: number;
+  origin: { x: number; y: number };
+}
+
+/** Una animación de una hoja de reposo; `direction` es la del kit (`front` = de frente, `back` = de espaldas). */
+export interface IdleAnimation {
+  key: string;
+  direction?: "front" | "left" | "right" | "back";
+  frameNames: string[];
+  frameRate: number;
+  repeat: number;
+  repeatDelay?: number;
+}
 
 /** Atribución de una pista. `verified: false` impide la entrega final: no se supone ninguna licencia (SPEC 6.4). */
 export interface MusicCredit {
@@ -245,6 +285,13 @@ export interface AssetEntry {
   sourceFrameSize?: { width: number; height: number };
   layout?: { columns: number; rows: number; order: string };
   animation?: { frameNames: string[]; frameRate: number; repeat: number };
+  /** Hojas de reposo (`kind` «idle-sheet»): varias animaciones por hoja, una por dirección. */
+  animations?: IdleAnimation[];
+  anchor?: string;
+  /** Altura de Vanessa en la hoja de referencia (px); las hojas con `frameAdjust` la normalizan fotograma a fotograma. */
+  referenceHeightPx?: number;
+  /** Corrección visual por fotograma (SPEC 6.2): factor de escala y origen (los pies, respecto del recorte). */
+  frameAdjust?: FrameAdjust[];
   motion?: AssetMotion;
   origin?: { x: number; y: number };
   recommendedScale?: number;

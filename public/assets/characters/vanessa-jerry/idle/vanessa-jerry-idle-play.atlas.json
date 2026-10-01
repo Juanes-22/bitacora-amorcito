@@ -1,0 +1,255 @@
+{
+  "frames": {
+    "frame-00": {
+      "frame": {
+        "x": 61,
+        "y": 22,
+        "w": 281,
+        "h": 336
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 38,
+        "y": 19,
+        "w": 281,
+        "h": 336
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 362
+      }
+    },
+    "frame-01": {
+      "frame": {
+        "x": 423,
+        "y": 25,
+        "w": 278,
+        "h": 334
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 46,
+        "y": 19,
+        "w": 278,
+        "h": 334
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 362
+      }
+    },
+    "frame-02": {
+      "frame": {
+        "x": 779,
+        "y": 63,
+        "w": 277,
+        "h": 296
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 53,
+        "y": 57,
+        "w": 277,
+        "h": 296
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 362
+      }
+    },
+    "frame-03": {
+      "frame": {
+        "x": 63,
+        "y": 399,
+        "w": 277,
+        "h": 315
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 44,
+        "y": 39,
+        "w": 277,
+        "h": 315
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 362
+      }
+    },
+    "frame-04": {
+      "frame": {
+        "x": 412,
+        "y": 394,
+        "w": 310,
+        "h": 320
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 45,
+        "y": 33,
+        "w": 310,
+        "h": 320
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 362
+      }
+    },
+    "frame-05": {
+      "frame": {
+        "x": 760,
+        "y": 396,
+        "w": 311,
+        "h": 318
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 44,
+        "y": 36,
+        "w": 311,
+        "h": 318
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 362
+      }
+    },
+    "frame-06": {
+      "frame": {
+        "x": 53,
+        "y": 750,
+        "w": 317,
+        "h": 312
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 43,
+        "y": 40,
+        "w": 317,
+        "h": 312
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 362
+      }
+    },
+    "frame-07": {
+      "frame": {
+        "x": 413,
+        "y": 755,
+        "w": 292,
+        "h": 307
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 45,
+        "y": 45,
+        "w": 292,
+        "h": 307
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 362
+      }
+    },
+    "frame-08": {
+      "frame": {
+        "x": 776,
+        "y": 732,
+        "w": 281,
+        "h": 330
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 57,
+        "y": 22,
+        "w": 281,
+        "h": 330
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 362
+      }
+    },
+    "frame-09": {
+      "frame": {
+        "x": 54,
+        "y": 1077,
+        "w": 288,
+        "h": 334
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 40,
+        "y": 18,
+        "w": 288,
+        "h": 334
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 362
+      }
+    },
+    "frame-10": {
+      "frame": {
+        "x": 423,
+        "y": 1077,
+        "w": 289,
+        "h": 334
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 41,
+        "y": 21,
+        "w": 289,
+        "h": 334
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 362
+      }
+    },
+    "frame-11": {
+      "frame": {
+        "x": 783,
+        "y": 1077,
+        "w": 280,
+        "h": 334
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 38,
+        "y": 21,
+        "w": 280,
+        "h": 334
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 362
+      }
+    }
+  },
+  "meta": {
+    "app": "Bitacora character idle",
+    "version": "1.0",
+    "image": "vanessa-jerry-idle-play.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1086,
+      "h": 1448
+    },
+    "scale": "1"
+  }
+}

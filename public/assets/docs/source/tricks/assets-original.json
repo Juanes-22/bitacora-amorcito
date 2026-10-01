@@ -1,0 +1,474 @@
+{
+  "schemaVersion": 1,
+  "project": "Bitácora Amorcito",
+  "pack": "jerry-tricks-fetch",
+  "referenceCanvas": {
+    "width": 1086,
+    "height": 1448
+  },
+  "assets": {
+    "vanessa-jerry-tricks": {
+      "label": "Jerry salta, se sienta y da la pata",
+      "type": "atlas",
+      "textureKey": "vanessa-jerry-tricks",
+      "path": "character/gestures/vanessa-jerry-tricks.png",
+      "atlasPath": "character/gestures/vanessa-jerry-tricks.atlas.json",
+      "width": 1086,
+      "height": 1448,
+      "hasAlpha": true,
+      "sha256": "778fe506e8bce475cc1f896353cf5d42382aa8be8f4b866b18066616ce1ff98f",
+      "frameCount": 12,
+      "logicalFrameSize": {
+        "width": 362,
+        "height": 362
+      },
+      "origin": {
+        "x": 0.40331491712707185,
+        "y": 0.9392265193370166
+      },
+      "anchor": "Vanessa-feet",
+      "layout": {
+        "columns": 3,
+        "rows": 4,
+        "rowMeaning": "timeline",
+        "useAtlasForCropping": true
+      },
+      "animations": [
+        {
+          "key": "vanessa-jerry-tricks",
+          "frameNames": [
+            "frame-00",
+            "frame-01",
+            "frame-02",
+            "frame-03",
+            "frame-04",
+            "frame-05",
+            "frame-06",
+            "frame-07",
+            "frame-08",
+            "frame-09",
+            "frame-10",
+            "frame-11"
+          ],
+          "frameRate": 6,
+          "repeat": 0,
+          "repeatDelay": 0
+        },
+        {
+          "key": "jerry-jump",
+          "frameNames": [
+            "frame-00",
+            "frame-01",
+            "frame-02",
+            "frame-03",
+            "frame-04"
+          ],
+          "frameRate": 8,
+          "repeat": 0,
+          "repeatDelay": 0
+        },
+        {
+          "key": "jerry-sit",
+          "frameNames": [
+            "frame-04",
+            "frame-05",
+            "frame-06"
+          ],
+          "frameRate": 6,
+          "repeat": 0,
+          "repeatDelay": 0
+        },
+        {
+          "key": "jerry-give-paw",
+          "frameNames": [
+            "frame-06",
+            "frame-07",
+            "frame-08",
+            "frame-09"
+          ],
+          "frameRate": 6,
+          "repeat": 0,
+          "repeatDelay": 0
+        },
+        {
+          "key": "jerry-stand",
+          "frameNames": [
+            "frame-09",
+            "frame-10",
+            "frame-11"
+          ],
+          "frameRate": 6,
+          "repeat": 0,
+          "repeatDelay": 0
+        }
+      ],
+      "frames": [
+        {
+          "name": "frame-00",
+          "frame": {
+            "x": 54,
+            "y": 19,
+            "w": 274,
+            "h": 348
+          },
+          "footInCrop": {
+            "x": 110.0,
+            "y": 336
+          }
+        },
+        {
+          "name": "frame-01",
+          "frame": {
+            "x": 405,
+            "y": 18,
+            "w": 301,
+            "h": 349
+          },
+          "footInCrop": {
+            "x": 112.5,
+            "y": 337
+          }
+        },
+        {
+          "name": "frame-02",
+          "frame": {
+            "x": 778,
+            "y": 18,
+            "w": 273,
+            "h": 348
+          },
+          "footInCrop": {
+            "x": 109.0,
+            "y": 337
+          }
+        },
+        {
+          "name": "frame-03",
+          "frame": {
+            "x": 52,
+            "y": 383,
+            "w": 305,
+            "h": 346
+          },
+          "footInCrop": {
+            "x": 112.0,
+            "y": 334
+          }
+        },
+        {
+          "name": "frame-04",
+          "frame": {
+            "x": 407,
+            "y": 383,
+            "w": 325,
+            "h": 346
+          },
+          "footInCrop": {
+            "x": 111.5,
+            "y": 334
+          }
+        },
+        {
+          "name": "frame-05",
+          "frame": {
+            "x": 777,
+            "y": 383,
+            "w": 289,
+            "h": 346
+          },
+          "footInCrop": {
+            "x": 110.5,
+            "y": 334
+          }
+        },
+        {
+          "name": "frame-06",
+          "frame": {
+            "x": 52,
+            "y": 739,
+            "w": 315,
+            "h": 332
+          },
+          "footInCrop": {
+            "x": 108.0,
+            "y": 321
+          }
+        },
+        {
+          "name": "frame-07",
+          "frame": {
+            "x": 409,
+            "y": 739,
+            "w": 313,
+            "h": 334
+          },
+          "footInCrop": {
+            "x": 111.0,
+            "y": 322
+          }
+        },
+        {
+          "name": "frame-08",
+          "frame": {
+            "x": 777,
+            "y": 739,
+            "w": 290,
+            "h": 333
+          },
+          "footInCrop": {
+            "x": 110.5,
+            "y": 322
+          }
+        },
+        {
+          "name": "frame-09",
+          "frame": {
+            "x": 50,
+            "y": 1081,
+            "w": 314,
+            "h": 346
+          },
+          "footInCrop": {
+            "x": 114.0,
+            "y": 334
+          }
+        },
+        {
+          "name": "frame-10",
+          "frame": {
+            "x": 406,
+            "y": 1081,
+            "w": 301,
+            "h": 346
+          },
+          "footInCrop": {
+            "x": 112.5,
+            "y": 334
+          }
+        },
+        {
+          "name": "frame-11",
+          "frame": {
+            "x": 776,
+            "y": 1081,
+            "w": 281,
+            "h": 346
+          },
+          "footInCrop": {
+            "x": 112.0,
+            "y": 334
+          }
+        }
+      ],
+      "recommendedScale": "Use existing character scale"
+    },
+    "vanessa-jerry-fetch-plush": {
+      "label": "Vanessa señala y Jerry trae el peluche",
+      "type": "atlas",
+      "textureKey": "vanessa-jerry-fetch-plush",
+      "path": "character/gestures/vanessa-jerry-fetch-plush.png",
+      "atlasPath": "character/gestures/vanessa-jerry-fetch-plush.atlas.json",
+      "width": 1086,
+      "height": 1448,
+      "hasAlpha": true,
+      "sha256": "14de52cadc80804e2a7190a6c3520ee7467ca68db07d494fab97ead7253dfa8b",
+      "frameCount": 12,
+      "logicalFrameSize": {
+        "width": 405,
+        "height": 362
+      },
+      "origin": {
+        "x": 0.32839506172839505,
+        "y": 0.914364640883978
+      },
+      "anchor": "Vanessa-feet",
+      "layout": {
+        "columns": 3,
+        "rows": 4,
+        "rowMeaning": "timeline",
+        "useAtlasForCropping": true
+      },
+      "animations": [
+        {
+          "key": "vanessa-jerry-fetch-plush",
+          "frameNames": [
+            "frame-00",
+            "frame-01",
+            "frame-02",
+            "frame-03",
+            "frame-04",
+            "frame-05",
+            "frame-06",
+            "frame-07",
+            "frame-08",
+            "frame-09",
+            "frame-10",
+            "frame-11"
+          ],
+          "frameRate": 6,
+          "repeat": 0,
+          "repeatDelay": 0
+        }
+      ],
+      "frames": [
+        {
+          "name": "frame-00",
+          "frame": {
+            "x": 22,
+            "y": 30,
+            "w": 346,
+            "h": 325
+          },
+          "footInCrop": {
+            "x": 93.0,
+            "y": 306
+          }
+        },
+        {
+          "name": "frame-01",
+          "frame": {
+            "x": 381,
+            "y": 30,
+            "w": 347,
+            "h": 325
+          },
+          "footInCrop": {
+            "x": 130.5,
+            "y": 310
+          }
+        },
+        {
+          "name": "frame-02",
+          "frame": {
+            "x": 739,
+            "y": 30,
+            "w": 344,
+            "h": 325
+          },
+          "footInCrop": {
+            "x": 94.0,
+            "y": 306
+          }
+        },
+        {
+          "name": "frame-03",
+          "frame": {
+            "x": 20,
+            "y": 387,
+            "w": 364,
+            "h": 327
+          },
+          "footInCrop": {
+            "x": 94.5,
+            "y": 309
+          }
+        },
+        {
+          "name": "frame-04",
+          "frame": {
+            "x": 384,
+            "y": 388,
+            "w": 350,
+            "h": 337
+          },
+          "footInCrop": {
+            "x": 95.5,
+            "y": 308
+          }
+        },
+        {
+          "name": "frame-05",
+          "frame": {
+            "x": 740,
+            "y": 387,
+            "w": 332,
+            "h": 331
+          },
+          "footInCrop": {
+            "x": 97.0,
+            "y": 309
+          }
+        },
+        {
+          "name": "frame-06",
+          "frame": {
+            "x": 20,
+            "y": 746,
+            "w": 349,
+            "h": 323
+          },
+          "footInCrop": {
+            "x": 96.0,
+            "y": 308
+          }
+        },
+        {
+          "name": "frame-07",
+          "frame": {
+            "x": 378,
+            "y": 746,
+            "w": 339,
+            "h": 323
+          },
+          "footInCrop": {
+            "x": 99.5,
+            "y": 308
+          }
+        },
+        {
+          "name": "frame-08",
+          "frame": {
+            "x": 741,
+            "y": 746,
+            "w": 263,
+            "h": 323
+          },
+          "footInCrop": {
+            "x": 98.5,
+            "y": 308
+          }
+        },
+        {
+          "name": "frame-09",
+          "frame": {
+            "x": 13,
+            "y": 1102,
+            "w": 337,
+            "h": 323
+          },
+          "footInCrop": {
+            "x": 102.0,
+            "y": 308
+          }
+        },
+        {
+          "name": "frame-10",
+          "frame": {
+            "x": 380,
+            "y": 1102,
+            "w": 294,
+            "h": 324
+          },
+          "footInCrop": {
+            "x": 96.0,
+            "y": 308
+          }
+        },
+        {
+          "name": "frame-11",
+          "frame": {
+            "x": 742,
+            "y": 1102,
+            "w": 262,
+            "h": 325
+          },
+          "footInCrop": {
+            "x": 92.0,
+            "y": 308
+          }
+        }
+      ],
+      "recommendedScale": "Use existing character scale"
+    }
+  }
+}

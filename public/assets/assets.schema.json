@@ -87,6 +87,44 @@
         "requiresFrameDefinition": { "type": "boolean" },
         "atlasPath": { "type": "string", "minLength": 1 },
         "frameCount": { "type": "integer", "exclusiveMinimum": 0 },
+        "animations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["key", "frameNames", "frameRate", "repeat"],
+            "properties": {
+              "key": { "type": "string", "minLength": 1 },
+              "direction": { "enum": ["front", "left", "right", "back"] },
+              "frameNames": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+              "frameRate": { "type": "number", "exclusiveMinimum": 0 },
+              "repeat": { "type": "integer", "minimum": -1 },
+              "repeatDelay": { "type": "number", "minimum": 0 }
+            },
+            "additionalProperties": false
+          }
+        },
+        "anchor": { "type": "string", "minLength": 1 },
+        "referenceHeightPx": { "type": "number", "exclusiveMinimum": 0 },
+        "frameAdjust": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "scaleMultiplier", "origin"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "scaleMultiplier": { "type": "number", "exclusiveMinimum": 0 },
+              "origin": {
+                "type": "object",
+                "required": ["x", "y"],
+                "properties": { "x": { "type": "number", "minimum": 0, "maximum": 1 }, "y": { "type": "number", "minimum": 0, "maximum": 1 } },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          }
+        },
         "animation": {
           "type": "object",
           "required": ["frameNames", "frameRate", "repeat"],

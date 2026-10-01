@@ -1600,7 +1600,8 @@
       "moveLeft": "Mover hacia la izquierda",
       "moveRight": "Mover hacia la derecha",
       "controlsUseDpad": "Usar cruceta",
-      "controlsUseTap": "Tocar para caminar"
+      "controlsUseTap": "Tocar para caminar",
+      "jerryAction": "Jugar con Jerry"
     },
     "assets": {
       "window": "ui.panel.cream.nine-slice",
@@ -1637,6 +1638,17 @@
         "walkLeft": "vanessa-walk-left",
         "walkRight": "vanessa-walk-right",
         "walkUp": "vanessa-walk-up"
+      },
+      "idle": {
+        "rest": "character.vanessa-jerry.idle-anim.rest",
+        "glance": "character.vanessa-jerry.idle-anim.look",
+        "play": "character.vanessa-jerry.idle-anim.play",
+        "glanceAfterMs": 4500,
+        "playAfterMs": 10000,
+        "gestureCooldownMs": 8000,
+        "tricks": {"sheet": "character.vanessa-jerry.idle-anim.tricks"},
+        "fetch": {"sheet": "character.vanessa-jerry.idle-anim.fetch", "holdMs": 2200},
+        "actionKey": "P"
       },
       "body": {"width": 42, "height": 25, "offset": {"x": -21, "y": -25}}
     },

@@ -12,11 +12,13 @@ export class InputController {
   private readonly enter: Phaser.Input.Keyboard.Key;
   private readonly ui = new Set<Direction>();
   private pendingInteract = false;
+  private pendingAction = false;
+  private actionKey?: Phaser.Input.Keyboard.Key;
   private enabled = true;
   private readonly offs: Array<() => void> = [];
   private readonly host: HTMLElement | null;
 
-  constructor(private readonly scene: Phaser.Scene, bridge: GameBridge) {
+  constructor(private readonly scene: Phaser.Scene, bridge: GameBridge, actionKeyCode?: string) {
     const keyboard = scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin;
     this.cursors = keyboard.createCursorKeys();
     // Solo una pulsación NUEVA interactúa: `down` no se repite con la tecla mantenida.
@@ -27,7 +29,17 @@ export class InputController {
       if (!event?.repeat) this.press();
     });
 
+    // Jugar con Jerry: una tecla de letra (config `idle.actionKey`) o el botón (`ui:jerry-action`). Solo una pulsación NUEVA.
+    if (actionKeyCode) {
+      this.actionKey = keyboard.addKey(actionKeyCode, false, false);
+      this.actionKey.on("down", (_key: Phaser.Input.Keyboard.Key, event: KeyboardEvent) => {
+        if (!event?.repeat && this.enabled) this.pendingAction = true;
+      });
+    }
     this.offs.push(
+      bridge.on("ui:jerry-action", () => {
+        if (this.enabled) this.pendingAction = true;
+      }),
       bridge.on("ui:direction", ({ direction, pressed }) => void (pressed ? this.ui.add(direction) : this.ui.delete(direction))),
       bridge.on("ui:interact", ({ pressed }) => pressed && this.press()),
     );
@@ -74,6 +86,13 @@ export class InputController {
     return pressed;
   }
 
+  /** `true` una sola vez por petición de jugar con Jerry. */
+  consumeAction(): boolean {
+    const pressed = this.pendingAction;
+    this.pendingAction = false;
+    return pressed;
+  }
+
   setEnabled(enabled: boolean): void {
     this.enabled = enabled;
     if (!enabled) this.reset();
@@ -83,6 +102,7 @@ export class InputController {
     this.scene.input.keyboard?.resetKeys();
     this.ui.clear();
     this.pendingInteract = false;
+    this.pendingAction = false;
   }
 
   destroy(): void {
@@ -90,6 +110,10 @@ export class InputController {
     this.offs.length = 0;
     this.enter.removeAllListeners();
     this.scene.input.keyboard?.removeKey(this.enter);
+    if (this.actionKey) {
+      this.actionKey.removeAllListeners();
+      this.scene.input.keyboard?.removeKey(this.actionKey);
+    }
     this.reset();
   }
 }

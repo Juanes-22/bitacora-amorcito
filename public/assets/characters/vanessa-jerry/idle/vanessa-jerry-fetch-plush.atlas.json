@@ -1,0 +1,254 @@
+{
+  "frames": {
+    "frame-00": {
+      "frame": {
+        "x": 22,
+        "y": 30,
+        "w": 346,
+        "h": 325
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 40,
+        "y": 25,
+        "w": 346,
+        "h": 325
+      },
+      "sourceSize": {
+        "w": 405,
+        "h": 362
+      }
+    },
+    "frame-01": {
+      "frame": {
+        "x": 381,
+        "y": 30,
+        "w": 347,
+        "h": 325
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 2,
+        "y": 21,
+        "w": 347,
+        "h": 325
+      },
+      "sourceSize": {
+        "w": 405,
+        "h": 362
+      }
+    },
+    "frame-02": {
+      "frame": {
+        "x": 739,
+        "y": 30,
+        "w": 344,
+        "h": 325
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 39,
+        "y": 25,
+        "w": 344,
+        "h": 325
+      },
+      "sourceSize": {
+        "w": 405,
+        "h": 362
+      }
+    },
+    "frame-03": {
+      "frame": {
+        "x": 20,
+        "y": 387,
+        "w": 364,
+        "h": 327
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 38,
+        "y": 22,
+        "w": 364,
+        "h": 327
+      },
+      "sourceSize": {
+        "w": 405,
+        "h": 362
+      }
+    },
+    "frame-04": {
+      "frame": {
+        "x": 384,
+        "y": 388,
+        "w": 350,
+        "h": 337
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 38,
+        "y": 23,
+        "w": 350,
+        "h": 337
+      },
+      "sourceSize": {
+        "w": 405,
+        "h": 362
+      }
+    },
+    "frame-05": {
+      "frame": {
+        "x": 740,
+        "y": 387,
+        "w": 332,
+        "h": 331
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 36,
+        "y": 22,
+        "w": 332,
+        "h": 331
+      },
+      "sourceSize": {
+        "w": 405,
+        "h": 362
+      }
+    },
+    "frame-06": {
+      "frame": {
+        "x": 20,
+        "y": 746,
+        "w": 349,
+        "h": 323
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 37,
+        "y": 23,
+        "w": 349,
+        "h": 323
+      },
+      "sourceSize": {
+        "w": 405,
+        "h": 362
+      }
+    },
+    "frame-07": {
+      "frame": {
+        "x": 378,
+        "y": 746,
+        "w": 339,
+        "h": 323
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 34,
+        "y": 23,
+        "w": 339,
+        "h": 323
+      },
+      "sourceSize": {
+        "w": 405,
+        "h": 362
+      }
+    },
+    "frame-08": {
+      "frame": {
+        "x": 741,
+        "y": 746,
+        "w": 263,
+        "h": 323
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 34,
+        "y": 23,
+        "w": 263,
+        "h": 323
+      },
+      "sourceSize": {
+        "w": 405,
+        "h": 362
+      }
+    },
+    "frame-09": {
+      "frame": {
+        "x": 13,
+        "y": 1102,
+        "w": 337,
+        "h": 323
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 31,
+        "y": 23,
+        "w": 337,
+        "h": 323
+      },
+      "sourceSize": {
+        "w": 405,
+        "h": 362
+      }
+    },
+    "frame-10": {
+      "frame": {
+        "x": 380,
+        "y": 1102,
+        "w": 294,
+        "h": 324
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 37,
+        "y": 23,
+        "w": 294,
+        "h": 324
+      },
+      "sourceSize": {
+        "w": 405,
+        "h": 362
+      }
+    },
+    "frame-11": {
+      "frame": {
+        "x": 742,
+        "y": 1102,
+        "w": 262,
+        "h": 325
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 41,
+        "y": 23,
+        "w": 262,
+        "h": 325
+      },
+      "sourceSize": {
+        "w": 405,
+        "h": 362
+      }
+    }
+  },
+  "meta": {
+    "image": "vanessa-jerry-fetch-plush.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1086,
+      "h": 1448
+    },
+    "scale": "1",
+    "version": "1.0"
+  }
+}

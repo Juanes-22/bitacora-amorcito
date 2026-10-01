@@ -2,7 +2,7 @@
 
 **Documento:** especificación funcional y técnica; fuente de verdad de los requisitos.  
 **Stack:** React + Vite + TypeScript + Phaser.  
-**Revisión documental:** 11. La revisión 11 sustituye la cruceta por defecto en móvil por «tocar para caminar» (la cruceta pasa a ser un ajuste), con los criterios AC-58 a AC-61 (§6.1). La revisión 10 añade (c) las flores y arbustos animados fotograma a fotograma (`bitacora-flowers-bushes-animations`; §3.2) y el límite de efectos por zona, con los criterios AC-55 a AC-57. La revisión 9 añade (a) las piezas adicionales del paisaje (`bitacora-landscape-extras`: luces del árbol, patos, nubes y partículas luminosas; §3.2) y (b) la música de fondo con rotación de pistas y control de encendido/apagado (§6.4, §14), con los criterios AC-47 a AC-54. La revisión 8 (a) añade el kit de animaciones del paisaje (§3.2), el encuadre y la escala visual (§6.3, §14) y los criterios AC-37 a AC-46; y (b) alinea el contrato de §12.4 y el puente de §11.5 con lo ya implementado en las fases 1 a 4. El contrato de assets se adapta al `assets.json` real entregado por el usuario. Ese manifiesto existente es autoritativo: conserva sus IDs, `pathConvention`, `path`, categorías, `kind`, dimensiones, transparencia, procedencia y metadatos específicos; no se reemplaza por un esquema inventado.  
+**Revisión documental:** 14. La revisión 14 sustituye la hoja de trucos por su versión corregida (Vanessa a la misma altura que al caminar, §6.2). La revisión 13 La revisión 13 añade los trucos de Jerry y la búsqueda del peluche, que el visitante pide con la tecla P o con un botón y se turnan (§6.2, AC-65 y AC-66). La revisión 12 La revisión 12 añade las animaciones de reposo de Vanessa y Jerry (§6.2, `kind` «idle-sheet», AC-62 a AC-64). La revisión 11 sustituye la cruceta por defecto en móvil por «tocar para caminar» (la cruceta pasa a ser un ajuste), con los criterios AC-58 a AC-61 (§6.1). Antes, la 11. La revisión 11 sustituye la cruceta por defecto en móvil por «tocar para caminar» (la cruceta pasa a ser un ajuste), con los criterios AC-58 a AC-61 (§6.1). La revisión 10 añade (c) las flores y arbustos animados fotograma a fotograma (`bitacora-flowers-bushes-animations`; §3.2) y el límite de efectos por zona, con los criterios AC-55 a AC-57. La revisión 9 añade (a) las piezas adicionales del paisaje (`bitacora-landscape-extras`: luces del árbol, patos, nubes y partículas luminosas; §3.2) y (b) la música de fondo con rotación de pistas y control de encendido/apagado (§6.4, §14), con los criterios AC-47 a AC-54. La revisión 8 (a) añade el kit de animaciones del paisaje (§3.2), el encuadre y la escala visual (§6.3, §14) y los criterios AC-37 a AC-46; y (b) alinea el contrato de §12.4 y el puente de §11.5 con lo ya implementado en las fases 1 a 4. El contrato de assets se adapta al `assets.json` real entregado por el usuario. Ese manifiesto existente es autoritativo: conserva sus IDs, `pathConvention`, `path`, categorías, `kind`, dimensiones, transparencia, procedencia y metadatos específicos; no se reemplaza por un esquema inventado.  
 **Estado:** requisitos definidos para implementar; este documento no acredita funcionalidades construidas ni pruebas ejecutadas.
 
 <a id="spec-0"></a>
@@ -320,6 +320,21 @@ Al perder el foco, ocultarse la pestaña, abrirse un diálogo o terminar una pul
 ### 6.2. Movimiento y colisiones
 
 **Utiliza el ciclo de Phaser; no crees `useGameLoop`, un segundo `requestAnimationFrame` ni un temporizador de React para mover los sprites.** La escena puede delegar desde `update(time, delta)` a controladores locales. React solo recibe cambios discretos, no cada coordenada de cada fotograma. El ciclo y la actualización de escenas pertenecen al motor. [T2]
+
+**Reposo animado.** El usuario aportó tres hojas de reposo de Vanessa con Jerry (`vanessa-jerry-idle-spritesheets`): *reposo* (respiración sutil, parpadeo y cola; una animación por dirección), *mirada* (Vanessa mira a Jerry y él a ella; una por dirección) y *juego* (se agacha, lo acaricia y se levanta; solo de frente). Son atlas de 1086 × 1448 px con doce fotogramas lógicos de 362 × 362 px cuyos pies están alineados: se cargan con su atlas JSON (no como cuadrícula), se indexan en `assets.json` con `kind: "idle-sheet"` (conservando `origin` —los pies— y la lista `animations` con su dirección, velocidad y `repeatDelay`) y se usan **a la escala del caminar**, sin reescalar píxeles. Los tiempos van en `gameplay.player.idle` (§12.4), no en el manifiesto.
+
+- Al soltar el movimiento se pasa al reposo en la dirección en que miraba Vanessa, de inmediato. Tras `glanceAfterMs` (4,5 s) sin entrada se reproduce una vez la mirada y se vuelve al reposo en la misma dirección. Tras `playAfterMs` (10 s) desde el gesto anterior, y solo de frente, se reproduce una vez el juego; de lado o de espaldas se repite la mirada. Entre gestos pasan al menos `gestureCooldownMs` (8 s), y el temporizador se reinicia con cualquier entrada y al terminar cada gesto.
+- Al recibir movimiento (o al celebrar) se cancela el gesto y se camina al instante. Nunca suenan dos de estas animaciones a la vez en el mismo sprite. Una lectura o cualquier pausa detiene el reposo con el resto del mapa y lo reanuda al volver.
+- Con `prefers-reduced-motion` no hay bucle ni gestos: se muestra el primer fotograma del reposo en la dirección en que mira. Si una hoja de reposo no carga, se conserva la pose quieta de la hoja de caminar y el juego sigue.
+- El reposo es solo aspecto: no cambia el cuerpo de colisión, la proximidad ni la alcanzabilidad.
+
+**Jugar con Jerry (trucos y peluche).** Un segundo kit (`vanessa-jerry-tricks-fetch`) aporta dos hojas más del mismo tipo `idle-sheet`: *trucos* (Jerry salta y aterriza, se sienta, da la pata y se levanta; además de la secuencia completa, el kit trae sus partes: salto, sentarse, dar la pata, levantarse) y *buscar el peluche* (Vanessa señala a la derecha, Jerry trae el peluche de foca marrón y lo deja junto a ella; el lienzo lógico es más ancho, 405 × 362 px, para el recorrido de Jerry). Ninguna de las dos sale sola: **las pide el visitante**, con la tecla `gameplay.player.idle.actionKey` (por defecto **P**) o con el botón «Jugar con Jerry (P)» de la cabecera, que es el camino táctil y también un recordatorio de la tecla. Cada petición lanza la siguiente acción: primero buscar el peluche y, la vez siguiente, los trucos con dar la pata, y así alternando.
+
+- **Altura de Vanessa en los trucos.** La primera versión de la hoja de trucos dibujaba a Vanessa entre un 3 % y un 5 % más grande que al caminar. La hoja corregida (v2) no tiene lienzo lógico común: sus fotogramas son recortes sin relleno cuyo `frameAdjust` (en `assets.json`) da, por fotograma, el **factor de escala** y el **origen** (los pies, respecto del recorte) que dejan a Vanessa a la altura de referencia (`referenceHeightPx`, 316 px por la escala del juego) y a Jerry en proporción. Se aplican al cambiar de fotograma, solo como efecto visual (no tocan el cuerpo de colisión), y al terminar se restituye la escala del caminar. O hay ajuste para todos los fotogramas de una hoja o para ninguno.
+- Cada acción se reproduce **una sola vez** (un bucle devolvería el peluche al instante a su sitio). Al terminar la búsqueda se mantiene el último fotograma, con el peluche, `fetch.holdMs` y se vuelve al reposo; los trucos vuelven al reposo directamente. Una acción en curso no se reinicia ni se cambia por la otra.
+- La petición detiene a Vanessa (también si caminaba por toque) y se hace con ella parada en el sitio; cualquier movimiento cancela la acción y camina al instante. No se activa con una ventana abierta (el botón se desactiva) ni durante la celebración.
+- Con `prefers-reduced-motion` no hay animación, pero lo pedido tiene efecto: se muestra un único fotograma —el del peluche, o Jerry dando la pata— durante la espera y se vuelve a la pose fija del reposo.
+- Si solo hay una de las dos hojas, la tecla siempre lanza esa; si ninguna carga o no están configuradas, no hay botón y la tecla no hace nada. La tecla actúa con el mapa enfocado, como las flechas.
 
 Para esta versión utiliza **Arcade Physics**, sin gravedad, con un cuerpo pequeño cerca de los pies de Vanessa y obstáculos estáticos. Limita el mundo a las dimensiones reales del mapa y usa las colisiones del motor. No mantengas a la vez un solucionador propio que también desplace ese cuerpo. Arcade utiliza cuerpos rectangulares o circulares; no le asignes polígonos arbitrarios como si fueran compatibles. [T8]
 
@@ -753,6 +768,7 @@ Además de la forma, valida con funciones propias:
 - `nineSlice`, `placement`, `zone`, `layer`, `variant` y otros metadatos especializados deben validarse solo cuando estén presentes y ser consumidos por el código que corresponda.
 - En `maps[zona].ambient`, cada `assetId` existe y su metadata es coherente con el tipo: `animation` exige `atlasPath`, `animation` y `frameCount`; `sway` y `drift` exigen `motion` del mismo tipo; `particles` exige `motion.type = "particle"`. Las posiciones y áreas caen dentro de la zona y las escalas son positivas.
 - `ambient` no tiene más de 60 efectos por zona; `speedFactor`, cuando existe, es mayor que 0.
+- En `gameplay.player.idle`, `tricks` y `fetch` (opcionales) apuntan a hojas `idle-sheet` con una animación que cubre todos sus fotogramas, `holdMs` no es negativo y `actionKey` es una sola letra mayúscula, obligatoria si hay alguna de las dos. `rest`, `glance` y `play` existen con `kind` `idle-sheet`; `rest` y `glance` tienen una animación para cada dirección (`front`, `left`, `right`, `back`) y `play` una de frente; `glanceAfterMs` y `playAfterMs` son positivos, `playAfterMs` no es menor que `glanceAfterMs` y `gestureCooldownMs` no es negativo. Una hoja de reposo declara `atlasPath`, `animations`, `origin` y, o bien el lienzo lógico común en `sourceFrameSize`, o bien un `frameAdjust` completo (factor de escala y origen por fotograma, sin repetidos ni ajenos), y sus animaciones usan todas las regiones de su atlas.
 - Los tipos `glow` y `swim` también exigen coherencia con la metadata: `glow` pide un asset de `kind` `light-glow` con `motion.type = "pulse"`; `swim` pide una hoja animada con `motion.type = "swim"` y una trayectoria de al menos dos puntos dentro de la zona; `animation` rechaza una hoja con `motion.type = "swim"` (debe usarse `swim`). `blendMode` solo admite `NORMAL` o `ADD` y `opacity` está entre 0 y 1.
 - En `audio.music`, cada ID de `tracks` existe en `assets.json` con `kind` `music`, sin repetirse; `volume` está entre 0 y 1; `crossfadeMs` no es negativo y es menor que la mitad de la pista más corta; `rotation` es `sequential` o `shuffle`. Cada archivo de audio existe; su `sizeBytes` y `sha256` se contrastan y avisan si difieren. Los créditos con licencia sin verificar se informan como bloqueo de entrega final (§10).
 - Cada `atlasPath` existe, su `meta.image` coincide con el archivo del asset y sus regiones están dentro de la imagen, sin solaparse, con contenido y en número igual a `frameCount`. Los efectos ambientales no cambian colisiones ni alcanzabilidad.
@@ -906,6 +922,7 @@ interface UiConfig {
     tapExplore: string; tapTravel: string;   // aviso de proximidad al tocar
     controlsLabel: string; moveUp: string; moveDown: string; moveLeft: string; moveRight: string;   // cruceta táctil
     controlsUseDpad: string; controlsUseTap: string;   // botón que cambia de modo de controles
+    jerryAction: string;             // botón «Jugar con Jerry» (la tecla se muestra junto a la etiqueta)
   };                                 // las plantillas solo admiten las variables permitidas de cada una (§12.7)
   assets: {
     window: string; button: string; stationSign: string; titleSign: string; portrait: string;
@@ -913,6 +930,18 @@ interface UiConfig {
     buttonHover?: string; xpStar?: string; openBook?: string; lockIcon?: string;
   };
   defaultDialogueIds: Record<DialogueEvent, string>;
+}
+
+interface IdleConfig {
+  rest: string;                      // assetId de la hoja de reposo (kind «idle-sheet»), una animación por dirección
+  glance: string;                    // hoja de la mirada a Jerry, una animación por dirección
+  play: string;                      // hoja del juego con Jerry (una animación de frente)
+  glanceAfterMs: number;             // quieta este tiempo sin entrada: mirada
+  playAfterMs: number;               // y este tiempo desde el gesto anterior, de frente: juego
+  gestureCooldownMs: number;         // pausa mínima entre gestos
+  tricks?: { sheet: string };        // trucos de Jerry (kind «idle-sheet»): una acción que pide el visitante
+  fetch?: { sheet: string; holdMs: number };   // buscar el peluche: la otra acción; el último fotograma se mantiene holdMs
+  actionKey?: string;                // letra mayúscula con la que se piden (obligatoria si hay alguna acción)
 }
 
 interface GameplayConfig {
@@ -925,6 +954,7 @@ interface GameplayConfig {
   signScale: number;                 // escala en el mundo de las señales de estación (§6.3)
   touchControls: "tap" | "dpad";     // controles táctiles de partida (§6.1); el visitante puede cambiarlos
   player: ActorSpec & {
+    idle?: IdleConfig;               // reposo animado (§6.2); sin él se queda la pose quieta de la hoja de caminar
     // Píxeles de textura × scale, medidos desde el punto de apoyo (los pies): offset (0,0) son los pies.
     body: { width: number; height: number; offset: Point };
   };
@@ -1217,7 +1247,7 @@ Comunica `prefers-reduced-motion` también a Phaser para desactivar sacudidas, d
 
 ### 15.1. Resultados exigidos
 
-Estos criterios describen el resultado requerido, no pruebas ya superadas. Los IDs `AC-01` a `AC-61` permiten relacionarlos con las tareas y evidencias de [PLAN.md](PLAN.md). No renumerarlos al actualizar el estado de implementación.
+Estos criterios describen el resultado requerido, no pruebas ya superadas. Los IDs `AC-01` a `AC-66` permiten relacionarlos con las tareas y evidencias de [PLAN.md](PLAN.md). No renumerarlos al actualizar el estado de implementación.
 
 | ID | Prueba | Resultado esperado |
 |---|---|---|
@@ -1284,6 +1314,13 @@ Estos criterios describen el resultado requerido, no pruebas ya superadas. Los I
 | <a id="ac-59"></a>AC-59 | Explorar tocando | Junto a una estación o portal, tocarlos equivale a «Explorar» con las mismas reglas de secuencia; lejos de ellos, tocarlos lleva a su punto de interacción sin abrirlos y un segundo toque los abre; el aviso dice qué tocar. |
 | <a id="ac-60"></a>AC-60 | Ajuste de controles | Un botón accesible (≥ 44 px) cambia entre tocar para caminar y la cruceta; el modo de partida sale de `gameplay.touchControls`, la elección del visitante se recuerda aparte del progreso y manda sobre la configuración; en cada modo el otro no actúa. |
 | <a id="ac-61"></a>AC-61 | Movimiento reducido y escritorio | Con `prefers-reduced-motion` el círculo del destino aparece quieto y sin onda y el toque camina igual; en escritorio con ratón hacer clic en el mapa no mueve a Vanessa y no se muestran los controles táctiles. |
+
+| <a id="ac-62"></a>AC-62 | Reposo animado | Al detenerse se usa la hoja de reposo en la dirección en que miraba (respiración y parpadeo en bucle), a la escala del caminar y con los pies sobre el punto de apoyo, sin saltos entre la pose de caminar y la de reposo; las tres hojas se añaden a `assets.json` sin alterar las existentes y sus atlas validan contra la imagen. |
+| <a id="ac-63"></a>AC-63 | Gestos de reposo | Tras 4,5 s sin entrada Vanessa y Jerry se miran una vez; tras 10 s, de frente, juegan una vez; de lado o de espaldas solo hay mirada; hay una pausa mínima entre gestos, nunca dos animaciones a la vez, y cualquier movimiento los cancela de inmediato y reinicia la espera. |
+| <a id="ac-64"></a>AC-64 | Reposo y accesibilidad | Con `prefers-reduced-motion` queda un fotograma fijo del reposo sin gestos; si una hoja no carga se conserva la pose quieta del caminar y el juego sigue; abrir y cerrar una lectura o cambiar de zona no deja el reposo detenido ni duplicado. |
+
+| <a id="ac-65"></a>AC-65 | Trucos y peluche | (Con la hoja de trucos corregida: Vanessa conserva la altura del caminar en cada fotograma gracias a su escala y origen por fotograma.) Las dos hojas del kit se añaden a `assets.json` sin alterar lo anterior y validan contra su imagen; la tecla P lanza buscar el peluche y, la siguiente vez, los trucos con dar la pata, alternando; cada uno se reproduce una vez, el peluche se mantiene en el último fotograma y luego se vuelve al reposo; no se reinician, el movimiento los cancela y no actúan con una ventana abierta. |
+| <a id="ac-66"></a>AC-66 | Botón de Jerry | Un botón accesible «Jugar con Jerry (P)» (≥ 44 px, con la tecla en su etiqueta, desactivado con una ventana abierta) hace lo mismo que la tecla, detiene un recorrido por toque y devuelve el foco al mapa tras pulsarlo con ratón o toque; con movimiento reducido muestra un fotograma fijo del resultado; sin acciones configuradas no existe. |
 
 <a id="spec-15-2"></a>
 

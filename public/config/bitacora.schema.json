@@ -491,7 +491,7 @@
             "startRoute", "pending", "demo", "previous", "next", "progressTemplate", "stationTitleTemplate",
             "semester", "teacher", "sectionRead", "sectionUnread", "badgeEarned", "remainingTemplate", "rewardTitle", "xpTemplate", "levelTemplate", "objectiveTemplate", "finishedLabel", "emptyRouteLabel", "mapLabel",
             "badges", "notEarned", "earnedOnTemplate", "badgeCountTemplate", "completionTitle", "finalReflectionTitle", "finalReflectionPending", "resetConfirmTitle", "resetConfirmText", "resetConfirm", "cancel", "preparationTemplate",
-            "musicMute", "musicUnmute", "stateLocked", "stateAvailable", "stateCompleted", "tapExplore", "tapTravel", "controlsLabel", "moveUp", "moveDown", "moveLeft", "moveRight", "controlsUseDpad", "controlsUseTap"
+            "musicMute", "musicUnmute", "stateLocked", "stateAvailable", "stateCompleted", "tapExplore", "tapTravel", "controlsLabel", "moveUp", "moveDown", "moveLeft", "moveRight", "controlsUseDpad", "controlsUseTap", "jerryAction"
           ],
           "properties": {
             "explore": { "type": "string", "minLength": 1 },
@@ -546,7 +546,8 @@
             "moveLeft": { "type": "string", "minLength": 1 },
             "moveRight": { "type": "string", "minLength": 1 },
             "controlsUseDpad": { "type": "string", "minLength": 1 },
-            "controlsUseTap": { "type": "string", "minLength": 1 }
+            "controlsUseTap": { "type": "string", "minLength": 1 },
+            "jerryAction": { "type": "string", "minLength": 1 }
           },
           "additionalProperties": false
         },
@@ -639,6 +640,32 @@
             "origin": { "$ref": "#/$defs/normalizedPoint" },
             "scale": { "type": "number", "exclusiveMinimum": 0 },
             "animations": { "$ref": "#/$defs/actor/properties/animations" },
+            "idle": {
+              "type": "object",
+              "required": ["rest", "glance", "play", "glanceAfterMs", "playAfterMs", "gestureCooldownMs"],
+              "properties": {
+                "rest": { "$ref": "#/$defs/assetId" },
+                "glance": { "$ref": "#/$defs/assetId" },
+                "play": { "$ref": "#/$defs/assetId" },
+                "glanceAfterMs": { "type": "number", "exclusiveMinimum": 0 },
+                "playAfterMs": { "type": "number", "exclusiveMinimum": 0 },
+                "gestureCooldownMs": { "type": "number", "minimum": 0 },
+                "tricks": {
+                  "type": "object",
+                  "required": ["sheet"],
+                  "properties": { "sheet": { "$ref": "#/$defs/assetId" } },
+                  "additionalProperties": false
+                },
+                "fetch": {
+                  "type": "object",
+                  "required": ["sheet", "holdMs"],
+                  "properties": { "sheet": { "$ref": "#/$defs/assetId" }, "holdMs": { "type": "number", "minimum": 0 } },
+                  "additionalProperties": false
+                },
+                "actionKey": { "type": "string", "pattern": "^[A-Z]$" }
+              },
+              "additionalProperties": false
+            },
             "body": {
               "type": "object",
               "required": ["width", "height", "offset"],

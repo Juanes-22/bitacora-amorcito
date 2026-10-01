@@ -3,11 +3,11 @@
   "project": "Bitácora Amorcito",
   "basePath": ".",
   "pathConvention": "Paths are relative to the directory containing this assets.json.",
-  "assetCount": 75,
+  "assetCount": 80,
   "categoryCounts": {
     "audio": 3,
     "backgrounds": 17,
-    "characters": 7,
+    "characters": 12,
     "decorations": 11,
     "effects": 15,
     "references": 2,
@@ -2231,6 +2231,470 @@
         "frameRate": 4,
         "repeat": -1
       }
+    },
+    "character.vanessa-jerry.idle-anim.rest": {
+      "path": "characters/vanessa-jerry/idle/vanessa-jerry-idle.png",
+      "type": "image",
+      "format": "png",
+      "category": "characters",
+      "label": "Vanessa y Jerry: reposo, respiración y parpadeo",
+      "kind": "idle-sheet",
+      "width": 1086,
+      "height": 1448,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1398112,
+      "sha256": "3399e79f54c623e2039b1473c13ae318285dc0a06fd48001de0b162754da10ad",
+      "originalPath": "vanessa-jerry-idle-spritesheets/character/idle/vanessa-jerry-idle.png",
+      "atlasPath": "characters/vanessa-jerry/idle/vanessa-jerry-idle.atlas.json",
+      "frameCount": 12,
+      "sourceFrameSize": {
+        "width": 362,
+        "height": 362
+      },
+      "layout": {
+        "columns": 3,
+        "rows": 4,
+        "order": "direction"
+      },
+      "origin": {
+        "x": 0.44751381215469616,
+        "y": 0.9392265193370166
+      },
+      "anchor": "Vanessa-feet",
+      "animations": [
+        {
+          "key": "vanessa-jerry-idle-front",
+          "direction": "front",
+          "frameNames": [
+            "front-00",
+            "front-01",
+            "front-02"
+          ],
+          "frameRate": 4,
+          "repeat": -1,
+          "repeatDelay": 1700
+        },
+        {
+          "key": "vanessa-jerry-idle-left",
+          "direction": "left",
+          "frameNames": [
+            "left-00",
+            "left-01",
+            "left-02"
+          ],
+          "frameRate": 4,
+          "repeat": -1,
+          "repeatDelay": 1700
+        },
+        {
+          "key": "vanessa-jerry-idle-right",
+          "direction": "right",
+          "frameNames": [
+            "right-00",
+            "right-01",
+            "right-02"
+          ],
+          "frameRate": 4,
+          "repeat": -1,
+          "repeatDelay": 1700
+        },
+        {
+          "key": "vanessa-jerry-idle-back",
+          "direction": "back",
+          "frameNames": [
+            "back-00",
+            "back-01",
+            "back-02"
+          ],
+          "frameRate": 4,
+          "repeat": -1,
+          "repeatDelay": 1700
+        }
+      ]
+    },
+    "character.vanessa-jerry.idle-anim.look": {
+      "path": "characters/vanessa-jerry/idle/vanessa-jerry-idle-look.png",
+      "type": "image",
+      "format": "png",
+      "category": "characters",
+      "label": "Vanessa y Jerry: vanessa mira a jerry",
+      "kind": "idle-sheet",
+      "width": 1086,
+      "height": 1448,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1414318,
+      "sha256": "5ba7af5dfee9506a45f07bb44df6497995fb8d231427e86349bb4b2a78bdc4b7",
+      "originalPath": "vanessa-jerry-idle-spritesheets/character/idle/vanessa-jerry-idle-look.png",
+      "atlasPath": "characters/vanessa-jerry/idle/vanessa-jerry-idle-look.atlas.json",
+      "frameCount": 12,
+      "sourceFrameSize": {
+        "width": 362,
+        "height": 362
+      },
+      "layout": {
+        "columns": 3,
+        "rows": 4,
+        "order": "direction"
+      },
+      "origin": {
+        "x": 0.4585635359116022,
+        "y": 0.9392265193370166
+      },
+      "anchor": "Vanessa-feet",
+      "animations": [
+        {
+          "key": "vanessa-jerry-idle-look-front",
+          "direction": "front",
+          "frameNames": [
+            "front-00",
+            "front-01",
+            "front-02"
+          ],
+          "frameRate": 4,
+          "repeat": 0,
+          "repeatDelay": 0
+        },
+        {
+          "key": "vanessa-jerry-idle-look-left",
+          "direction": "left",
+          "frameNames": [
+            "left-00",
+            "left-01",
+            "left-02"
+          ],
+          "frameRate": 4,
+          "repeat": 0,
+          "repeatDelay": 0
+        },
+        {
+          "key": "vanessa-jerry-idle-look-right",
+          "direction": "right",
+          "frameNames": [
+            "right-00",
+            "right-01",
+            "right-02"
+          ],
+          "frameRate": 4,
+          "repeat": 0,
+          "repeatDelay": 0
+        },
+        {
+          "key": "vanessa-jerry-idle-look-back",
+          "direction": "back",
+          "frameNames": [
+            "back-00",
+            "back-01",
+            "back-02"
+          ],
+          "frameRate": 4,
+          "repeat": 0,
+          "repeatDelay": 0
+        }
+      ]
+    },
+    "character.vanessa-jerry.idle-anim.play": {
+      "path": "characters/vanessa-jerry/idle/vanessa-jerry-idle-play.png",
+      "type": "image",
+      "format": "png",
+      "category": "characters",
+      "label": "Vanessa y Jerry: vanessa acaricia y juega con jerry",
+      "kind": "idle-sheet",
+      "width": 1086,
+      "height": 1448,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1496820,
+      "sha256": "73d4564480cb9b33d3bdb327535727b96729ba092294b0719242601e521df2bc",
+      "originalPath": "vanessa-jerry-idle-spritesheets/character/idle/vanessa-jerry-idle-play.png",
+      "atlasPath": "characters/vanessa-jerry/idle/vanessa-jerry-idle-play.atlas.json",
+      "frameCount": 12,
+      "sourceFrameSize": {
+        "width": 362,
+        "height": 362
+      },
+      "layout": {
+        "columns": 3,
+        "rows": 4,
+        "order": "timeline"
+      },
+      "origin": {
+        "x": 0.4198895027624309,
+        "y": 0.9392265193370166
+      },
+      "anchor": "Vanessa-feet",
+      "animations": [
+        {
+          "key": "vanessa-jerry-idle-play",
+          "direction": "front",
+          "frameNames": [
+            "frame-00",
+            "frame-01",
+            "frame-02",
+            "frame-03",
+            "frame-04",
+            "frame-05",
+            "frame-06",
+            "frame-07",
+            "frame-08",
+            "frame-09",
+            "frame-10",
+            "frame-11"
+          ],
+          "frameRate": 6,
+          "repeat": 0,
+          "repeatDelay": 0
+        }
+      ]
+    },
+    "character.vanessa-jerry.idle-anim.tricks": {
+      "path": "characters/vanessa-jerry/idle/vanessa-jerry-tricks.png",
+      "type": "image",
+      "format": "png",
+      "category": "characters",
+      "label": "Vanessa y Jerry: jerry salta, se sienta y da la pata",
+      "kind": "idle-sheet",
+      "width": 1086,
+      "height": 1448,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1500164,
+      "sha256": "1e85fb6955432ebb9d865597f95b821aac873b9dc6f0cf667afd09c4b3a8c975",
+      "originalPath": "vanessa-jerry-tricks-fetch-v2/character/gestures/vanessa-jerry-tricks.png",
+      "atlasPath": "characters/vanessa-jerry/idle/vanessa-jerry-tricks.atlas.json",
+      "frameCount": 12,
+      "layout": {
+        "columns": 3,
+        "rows": 4,
+        "order": "timeline"
+      },
+      "origin": {
+        "x": 0.42391304347826086,
+        "y": 0.9761904761904762
+      },
+      "anchor": "Vanessa-feet",
+      "animations": [
+        {
+          "key": "vanessa-jerry-tricks",
+          "frameNames": [
+            "frame-00",
+            "frame-01",
+            "frame-02",
+            "frame-03",
+            "frame-04",
+            "frame-05",
+            "frame-06",
+            "frame-07",
+            "frame-08",
+            "frame-09",
+            "frame-10",
+            "frame-11"
+          ],
+          "frameRate": 6,
+          "repeat": 0,
+          "repeatDelay": 0
+        },
+        {
+          "key": "jerry-jump",
+          "frameNames": [
+            "frame-00",
+            "frame-01",
+            "frame-02",
+            "frame-03",
+            "frame-04"
+          ],
+          "frameRate": 8,
+          "repeat": 0,
+          "repeatDelay": 0
+        },
+        {
+          "key": "jerry-sit",
+          "frameNames": [
+            "frame-04",
+            "frame-05",
+            "frame-06"
+          ],
+          "frameRate": 6,
+          "repeat": 0,
+          "repeatDelay": 0
+        },
+        {
+          "key": "jerry-give-paw",
+          "frameNames": [
+            "frame-06",
+            "frame-07",
+            "frame-08",
+            "frame-09"
+          ],
+          "frameRate": 6,
+          "repeat": 0,
+          "repeatDelay": 0
+        },
+        {
+          "key": "jerry-stand",
+          "frameNames": [
+            "frame-09",
+            "frame-10",
+            "frame-11"
+          ],
+          "frameRate": 6,
+          "repeat": 0,
+          "repeatDelay": 0
+        }
+      ],
+      "referenceHeightPx": 316,
+      "frameAdjust": [
+        {
+          "name": "frame-00",
+          "scaleMultiplier": 0.969325,
+          "origin": {
+            "x": 0.423913,
+            "y": 0.97619
+          }
+        },
+        {
+          "name": "frame-01",
+          "scaleMultiplier": 0.969325,
+          "origin": {
+            "x": 0.336996,
+            "y": 0.950725
+          }
+        },
+        {
+          "name": "frame-02",
+          "scaleMultiplier": 0.966361,
+          "origin": {
+            "x": 0.408273,
+            "y": 0.993958
+          }
+        },
+        {
+          "name": "frame-03",
+          "scaleMultiplier": 0.966361,
+          "origin": {
+            "x": 0.373802,
+            "y": 0.993958
+          }
+        },
+        {
+          "name": "frame-04",
+          "scaleMultiplier": 0.966361,
+          "origin": {
+            "x": 0.304954,
+            "y": 0.956395
+          }
+        },
+        {
+          "name": "frame-05",
+          "scaleMultiplier": 0.966361,
+          "origin": {
+            "x": 0.333333,
+            "y": 0.970501
+          }
+        },
+        {
+          "name": "frame-06",
+          "scaleMultiplier": 0.948949,
+          "origin": {
+            "x": 0.36901,
+            "y": 0.994065
+          }
+        },
+        {
+          "name": "frame-07",
+          "scaleMultiplier": 0.948949,
+          "origin": {
+            "x": 0.376238,
+            "y": 0.994065
+          }
+        },
+        {
+          "name": "frame-08",
+          "scaleMultiplier": 0.948949,
+          "origin": {
+            "x": 0.399666,
+            "y": 0.988201
+          }
+        },
+        {
+          "name": "frame-09",
+          "scaleMultiplier": 0.960486,
+          "origin": {
+            "x": 0.354037,
+            "y": 0.991018
+          }
+        },
+        {
+          "name": "frame-10",
+          "scaleMultiplier": 0.975309,
+          "origin": {
+            "x": 0.403846,
+            "y": 0.976048
+          }
+        },
+        {
+          "name": "frame-11",
+          "scaleMultiplier": 0.972308,
+          "origin": {
+            "x": 0.341071,
+            "y": 0.981982
+          }
+        }
+      ]
+    },
+    "character.vanessa-jerry.idle-anim.fetch": {
+      "path": "characters/vanessa-jerry/idle/vanessa-jerry-fetch-plush.png",
+      "type": "image",
+      "format": "png",
+      "category": "characters",
+      "label": "Vanessa y Jerry: vanessa señala y jerry trae el peluche",
+      "kind": "idle-sheet",
+      "width": 1086,
+      "height": 1448,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1548477,
+      "sha256": "14de52cadc80804e2a7190a6c3520ee7467ca68db07d494fab97ead7253dfa8b",
+      "originalPath": "vanessa-jerry-tricks-fetch/character/gestures/vanessa-jerry-fetch-plush.png",
+      "atlasPath": "characters/vanessa-jerry/idle/vanessa-jerry-fetch-plush.atlas.json",
+      "frameCount": 12,
+      "sourceFrameSize": {
+        "width": 405,
+        "height": 362
+      },
+      "layout": {
+        "columns": 3,
+        "rows": 4,
+        "order": "timeline"
+      },
+      "origin": {
+        "x": 0.32839506172839505,
+        "y": 0.914364640883978
+      },
+      "anchor": "Vanessa-feet",
+      "animations": [
+        {
+          "key": "vanessa-jerry-fetch-plush",
+          "frameNames": [
+            "frame-00",
+            "frame-01",
+            "frame-02",
+            "frame-03",
+            "frame-04",
+            "frame-05",
+            "frame-06",
+            "frame-07",
+            "frame-08",
+            "frame-09",
+            "frame-10",
+            "frame-11"
+          ],
+          "frameRate": 6,
+          "repeat": 0,
+          "repeatDelay": 0
+        }
+      ]
     }
   },
   "sourceDocuments": [
@@ -2311,12 +2775,75 @@
       "originalPath": "bitacora-flowers-bushes-animations/generation-prompts.json",
       "sizeBytes": 18605,
       "sha256": "c030db348ab91cd569d8e3f25c15f270504c1903ae55854ea9d2d8578e3a4014"
+    },
+    {
+      "path": "docs/source/idle/readme-original.md",
+      "originalPath": "vanessa-jerry-idle-spritesheets/README.md",
+      "sizeBytes": 3847,
+      "sha256": "27fc836bacaf1d2545fc1a1b2133cab386adf6d273427400e46ae29fbb8a6e77"
+    },
+    {
+      "path": "docs/source/idle/assets-original.json",
+      "originalPath": "vanessa-jerry-idle-spritesheets/assets.json",
+      "sizeBytes": 20880,
+      "sha256": "80bfacbbfbd7615608e95ffe9f3896efbb0149f8c37857dd67282067cff1acbd"
+    },
+    {
+      "path": "docs/source/idle/generation-prompts.json",
+      "originalPath": "vanessa-jerry-idle-spritesheets/generation-prompts.json",
+      "sizeBytes": 13088,
+      "sha256": "7a5ee71cbd4d089020c0138a38e16b7d51bff2732c3cf7d43d21c6a50a3f164b"
+    },
+    {
+      "path": "docs/source/tricks/readme-original.md",
+      "originalPath": "vanessa-jerry-tricks-fetch/README.md",
+      "sizeBytes": 3161,
+      "sha256": "d490aa979356c28b6f17261c62d64ae2dc70c76c97265a7e1758235e20c6eef9"
+    },
+    {
+      "path": "docs/source/tricks/assets-original.json",
+      "originalPath": "vanessa-jerry-tricks-fetch/assets.json",
+      "sizeBytes": 10109,
+      "sha256": "510ee28a0b503304c04f666110d12bad27210262e1af24416a8ab6afc37725e4"
+    },
+    {
+      "path": "docs/source/tricks/generation-prompts.json",
+      "originalPath": "vanessa-jerry-tricks-fetch/generation-prompts.json",
+      "sizeBytes": 7440,
+      "sha256": "38a930be04b79274b0c144b2ad4812eb28ba88b56423a2bb250af4653ce07417"
+    },
+    {
+      "path": "docs/source/tricks-v2/readme-original.md",
+      "originalPath": "vanessa-jerry-tricks-fetch-v2/README.md",
+      "sizeBytes": 1585,
+      "sha256": "2016c9350cdafb2a93685b113bb821459fd590e4134503622e3b5e3f02e414bf"
+    },
+    {
+      "path": "docs/source/tricks-v2/assets-original.json",
+      "originalPath": "vanessa-jerry-tricks-fetch-v2/assets.json",
+      "sizeBytes": 12631,
+      "sha256": "df4d295ea1db37800ea302a90edcbfb454092c1f8ab9df1c23f9153ed2e37bc9"
+    },
+    {
+      "path": "docs/source/tricks-v2/generation-prompts.json",
+      "originalPath": "vanessa-jerry-tricks-fetch-v2/generation-prompts.json",
+      "sizeBytes": 11849,
+      "sha256": "5c2c966d4dbf3f0ecbe685afbea5788b7fb1720d3466582c02aa62495bdb9a9f"
+    },
+    {
+      "path": "docs/source/tricks-v2/scale-correction.json",
+      "originalPath": "vanessa-jerry-tricks-fetch-v2/scale-correction.json",
+      "sizeBytes": 4660,
+      "sha256": "50ba027f363db6be54a1f69d8833e29b8099860af7045d45d9d14e8a424759a8"
     }
   ],
   "notes": [
     "Añadido el kit de animaciones del paisaje (10 imágenes, 3 atlas): ver docs/source/animations/. Las entradas anteriores no se modificaron.",
     "Añadido el kit de piezas adicionales del paisaje (11 imágenes, 4 atlas): ver docs/source/extras/. Las entradas anteriores no se modificaron.",
     "Añadidas tres pistas de música de fondo (category «audio»): ver `credit` de cada entrada y SPEC 6.4.",
-    "Añadido el kit de flores y arbustos animados (6 imágenes, 6 atlas): ver docs/source/flora/. Las entradas anteriores no se modificaron."
+    "Añadido el kit de flores y arbustos animados (6 imágenes, 6 atlas): ver docs/source/flora/. Las entradas anteriores no se modificaron.",
+    "Añadidas tres hojas de reposo de Vanessa y Jerry (kind «idle-sheet», con atlas): ver docs/source/idle/. Las entradas anteriores no se modificaron.",
+    "Añadidas las hojas de trucos de Jerry y de búsqueda del peluche (kind «idle-sheet», con atlas): ver docs/source/tricks/. Las entradas anteriores no se modificaron.",
+    "Sustituida la hoja de trucos de Jerry por la v2 (altura de Vanessa corregida con escala y origen por fotograma, `frameAdjust`): ver docs/source/tricks-v2/. La hoja de buscar el peluche no cambió."
   ]
 }

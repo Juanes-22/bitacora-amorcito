@@ -1,0 +1,254 @@
+{
+  "frames": {
+    "frame-00": {
+      "frame": {
+        "x": 64,
+        "y": 21,
+        "w": 276,
+        "h": 336
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 276,
+        "h": 336
+      },
+      "sourceSize": {
+        "w": 276,
+        "h": 336
+      }
+    },
+    "frame-01": {
+      "frame": {
+        "x": 428,
+        "y": 21,
+        "w": 273,
+        "h": 345
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 273,
+        "h": 345
+      },
+      "sourceSize": {
+        "w": 273,
+        "h": 345
+      }
+    },
+    "frame-02": {
+      "frame": {
+        "x": 788,
+        "y": 20,
+        "w": 278,
+        "h": 331
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 278,
+        "h": 331
+      },
+      "sourceSize": {
+        "w": 278,
+        "h": 331
+      }
+    },
+    "frame-03": {
+      "frame": {
+        "x": 50,
+        "y": 382,
+        "w": 313,
+        "h": 331
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 313,
+        "h": 331
+      },
+      "sourceSize": {
+        "w": 313,
+        "h": 331
+      }
+    },
+    "frame-04": {
+      "frame": {
+        "x": 417,
+        "y": 382,
+        "w": 323,
+        "h": 344
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 323,
+        "h": 344
+      },
+      "sourceSize": {
+        "w": 323,
+        "h": 344
+      }
+    },
+    "frame-05": {
+      "frame": {
+        "x": 786,
+        "y": 382,
+        "w": 282,
+        "h": 339
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 282,
+        "h": 339
+      },
+      "sourceSize": {
+        "w": 282,
+        "h": 339
+      }
+    },
+    "frame-06": {
+      "frame": {
+        "x": 50,
+        "y": 732,
+        "w": 313,
+        "h": 337
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 313,
+        "h": 337
+      },
+      "sourceSize": {
+        "w": 313,
+        "h": 337
+      }
+    },
+    "frame-07": {
+      "frame": {
+        "x": 425,
+        "y": 732,
+        "w": 303,
+        "h": 337
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 303,
+        "h": 337
+      },
+      "sourceSize": {
+        "w": 303,
+        "h": 337
+      }
+    },
+    "frame-08": {
+      "frame": {
+        "x": 777,
+        "y": 732,
+        "w": 299,
+        "h": 339
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 299,
+        "h": 339
+      },
+      "sourceSize": {
+        "w": 299,
+        "h": 339
+      }
+    },
+    "frame-09": {
+      "frame": {
+        "x": 55,
+        "y": 1084,
+        "w": 322,
+        "h": 334
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 322,
+        "h": 334
+      },
+      "sourceSize": {
+        "w": 322,
+        "h": 334
+      }
+    },
+    "frame-10": {
+      "frame": {
+        "x": 423,
+        "y": 1084,
+        "w": 286,
+        "h": 334
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 286,
+        "h": 334
+      },
+      "sourceSize": {
+        "w": 286,
+        "h": 334
+      }
+    },
+    "frame-11": {
+      "frame": {
+        "x": 786,
+        "y": 1084,
+        "w": 280,
+        "h": 333
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 280,
+        "h": 333
+      },
+      "sourceSize": {
+        "w": 280,
+        "h": 333
+      }
+    }
+  },
+  "meta": {
+    "app": "Vanessa/Jerry assets",
+    "image": "vanessa-jerry-tricks.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1086,
+      "h": 1448
+    },
+    "scale": "1"
+  }
+}

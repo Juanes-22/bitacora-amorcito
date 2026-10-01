@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import manifestJson from "../../public/assets/assets.json";
+import bitacoraJson from "../../public/config/bitacora.json";
 import bitacoraSchema from "../../public/config/bitacora.schema.json";
 import { validateAssetManifest } from "../config/validateAssets";
 import { validateBitacora, type ValidateOptions } from "../config/validateConfig";
@@ -31,7 +32,7 @@ const at = (issues: ConfigIssue[], path: string) => issues.filter((i) => i.path 
 
 describe("assets.json real", () => {
   it("es válido y conserva sus entradas originales sin migrar", () => {
-    expect(Object.keys(realManifest.assets)).toHaveLength(75);
+    expect(Object.keys(realManifest.assets)).toHaveLength(80);
     expect(realManifest.assets["ui.panel.cream.nine-slice"].nineSlice).toEqual({ top: 32, right: 32, bottom: 32, left: 32 });
     expect(realManifest.assets["character.vanessa-jerry.walk.poses-v4"].requiresFrameDefinition).toBe(true);
     expect(realManifest).not.toHaveProperty("animations");
@@ -494,5 +495,87 @@ describe("bitacora.json: música de fondo (SPEC 6.4; AC-53)", () => {
     const d = makeConfig() as unknown as { ui: { labels: Record<string, unknown> } };
     delete d.ui.labels.musicMute;
     expect(validateBitacora(d, realManifest).ok).toBe(false);
+  });
+});
+
+describe("bitacora.json: reposo de Vanessa y Jerry (SPEC 6.2; AC-62)", () => {
+  const IDLE = { rest: "character.vanessa-jerry.idle-anim.rest", glance: "character.vanessa-jerry.idle-anim.look", play: "character.vanessa-jerry.idle-anim.play", glanceAfterMs: 4500, playAfterMs: 10000, gestureCooldownMs: 8000 };
+  const withIdle = (idle: Partial<typeof IDLE> | undefined) => (c: BitacoraConfig) => { c.gameplay.player.idle = idle === undefined ? undefined : { ...IDLE, ...idle }; };
+
+  it("es opcional y con las tres hojas del kit es válido", () => {
+    expect(issuesOf(withIdle(undefined))).toEqual([]);
+    expect(issuesOf(withIdle({}))).toEqual([]);
+  });
+
+  it("rechaza un asset inexistente o que no es una hoja de reposo, con su ruta", () => {
+    expect(at(issuesOf(withIdle({ rest: "character.vanessa-jerry.no-existe" })), "gameplay.player.idle.rest")[0]?.message).toContain("no-existe");
+    expect(at(issuesOf(withIdle({ glance: "character.vanessa-jerry.idle" })), "gameplay.player.idle.glance")[0]?.message).toContain("idle-sheet");
+  });
+
+  it("el reposo y la mirada exigen las cuatro direcciones; el juego, una de frente", () => {
+    const m = structuredClone(manifestJson) as unknown as AssetManifest;
+    m.assets["character.vanessa-jerry.idle-anim.rest"].animations = m.assets["character.vanessa-jerry.idle-anim.rest"].animations!.filter((a) => a.direction !== "back");
+    m.assets["character.vanessa-jerry.idle-anim.play"].animations![0].direction = "left";
+    const c = makeConfig();
+    c.gameplay.player.idle = { ...IDLE };
+    const r = validateBitacora(c, m);
+    const issues = r.ok ? [] : r.issues;
+    expect(at(issues, "gameplay.player.idle.rest")[0]?.message).toContain("back");
+    expect(at(issues, "gameplay.player.idle.play")[0]?.message).toContain("de frente");
+  });
+
+  it("los tiempos: positivos, el juego no antes que la mirada y la pausa puede ser cero", () => {
+    expect(at(issuesOf(withIdle({ playAfterMs: 1000 })), "gameplay.player.idle.playAfterMs")).toHaveLength(1);
+    expect(issuesOf(withIdle({ glanceAfterMs: 0 })).length).toBeGreaterThan(0);
+    expect(issuesOf(withIdle({ gestureCooldownMs: -1 })).length).toBeGreaterThan(0);
+    expect(issuesOf(withIdle({ gestureCooldownMs: 0 }))).toEqual([]);
+  });
+
+  it("el esquema exige todos los campos del reposo", () => {
+    const c = makeConfig();
+    c.gameplay.player.idle = { ...IDLE };
+    delete (c.gameplay.player.idle as Partial<typeof IDLE>).play;
+    expect(validateBitacora(c, realManifest).ok).toBe(false);
+  });
+
+  describe("jugar con Jerry: trucos, búsqueda del peluche y tecla", () => {
+    const TRICKS = { sheet: "character.vanessa-jerry.idle-anim.tricks" };
+    const FETCH = { sheet: "character.vanessa-jerry.idle-anim.fetch", holdMs: 2200 };
+    const withExtras = (extra: Partial<NonNullable<BitacoraConfig["gameplay"]["player"]["idle"]>>) => (c: BitacoraConfig) => { c.gameplay.player.idle = { ...IDLE, ...extra }; };
+
+    it("son opcionales y, con las hojas del kit y la tecla, válidos", () => {
+      expect(issuesOf(withExtras({ tricks: TRICKS, fetch: FETCH, actionKey: "P" }))).toEqual([]);
+      expect(issuesOf(withExtras({ tricks: TRICKS, actionKey: "P" }))).toEqual([]);
+      expect(issuesOf(withExtras({ fetch: FETCH, actionKey: "P" }))).toEqual([]);
+    });
+
+    it("la tecla es obligatoria si hay alguna acción", () => {
+      expect(at(issuesOf(withExtras({ tricks: TRICKS })), "gameplay.player.idle.actionKey")).toHaveLength(1);
+      expect(at(issuesOf(withExtras({ fetch: FETCH })), "gameplay.player.idle.actionKey")).toHaveLength(1);
+    });
+
+    it("rechazan un asset inexistente, de otro kind o sin la secuencia completa", () => {
+      expect(at(issuesOf(withExtras({ tricks: { sheet: "character.vanessa-jerry.no-existe" }, actionKey: "P" })), "gameplay.player.idle.tricks.sheet")[0]?.message).toContain("no-existe");
+      expect(at(issuesOf(withExtras({ fetch: { ...FETCH, sheet: "character.vanessa-jerry.idle" }, actionKey: "P" })), "gameplay.player.idle.fetch.sheet")[0]?.message).toContain("idle-sheet");
+      const m = structuredClone(manifestJson) as unknown as AssetManifest;
+      m.assets["character.vanessa-jerry.idle-anim.tricks"].animations![0].frameNames.pop();
+      const c = makeConfig();
+      c.gameplay.player.idle = { ...IDLE, tricks: TRICKS, actionKey: "P" };
+      const r = validateBitacora(c, m);
+      expect(at(r.ok ? [] : r.issues, "gameplay.player.idle.tricks.sheet").length).toBeGreaterThan(0);
+    });
+
+    it("la tecla es una sola letra mayúscula y la espera de la búsqueda no es negativa", () => {
+      for (const actionKey of ["p", "PP", "1", "", "Enter"]) expect(issuesOf(withExtras({ fetch: FETCH, actionKey })).length, actionKey).toBeGreaterThan(0);
+      expect(issuesOf(withExtras({ fetch: { ...FETCH, holdMs: 0 }, actionKey: "P" }))).toEqual([]);
+      expect(issuesOf(withExtras({ fetch: { ...FETCH, holdMs: -1 }, actionKey: "P" })).length).toBeGreaterThan(0);
+    });
+
+    it("el kit real trae las dos acciones y la tecla P", () => {
+      const idle = (bitacoraJson as unknown as BitacoraConfig).gameplay.player.idle!;
+      expect(idle.actionKey).toBe("P");
+      expect(idle.tricks?.sheet).toBe("character.vanessa-jerry.idle-anim.tricks");
+      expect(idle.fetch?.sheet).toBe("character.vanessa-jerry.idle-anim.fetch");
+    });
   });
 });

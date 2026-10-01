@@ -286,6 +286,39 @@ export function validateBitacora(
     }
   };
   checkActor("gameplay.player", c.gameplay.player);
+  const idle = c.gameplay.player.idle;
+  if (idle) {
+    // Reposo y mirada necesitan una animación por dirección; el juego, al menos una (SPEC 6.2).
+    const DIRECTIONS = ["front", "left", "right", "back"];
+    for (const slot of ["rest", "glance", "play"] as const) {
+      const path = `gameplay.player.idle.${slot}`;
+      checkAsset(path, idle[slot], ["idle-sheet"]);
+      const sheet = manifest.assets[idle[slot]];
+      if (!sheet?.animations) continue;
+      const have = new Set(sheet.animations.map((a) => a.direction));
+      if (slot === "play") {
+        if (!have.has("front")) err(path, `«${idle[slot]}» no tiene una animación de frente: el juego con Jerry se reproduce de frente`);
+      } else {
+        const missing = DIRECTIONS.filter((d) => !have.has(d as never));
+        if (missing.length) err(path, `«${idle[slot]}» no tiene animación para: ${missing.join(", ")}`);
+      }
+    }
+    // Cada gesto extra es una hoja con una animación que cubre todos sus fotogramas (la secuencia completa del kit).
+    const fullSequence = (assetId: string) => {
+      const sheet = manifest.assets[assetId];
+      return sheet?.animations?.some((a) => new Set(a.frameNames).size === sheet.frameCount);
+    };
+    if (idle.tricks) {
+      checkAsset("gameplay.player.idle.tricks.sheet", idle.tricks.sheet, ["idle-sheet"]);
+      if (manifest.assets[idle.tricks.sheet] && !fullSequence(idle.tricks.sheet)) err("gameplay.player.idle.tricks.sheet", `«${idle.tricks.sheet}» no tiene una animación con la secuencia completa`);
+    }
+    if (idle.fetch) {
+      checkAsset("gameplay.player.idle.fetch.sheet", idle.fetch.sheet, ["idle-sheet"]);
+      if (manifest.assets[idle.fetch.sheet] && !fullSequence(idle.fetch.sheet)) err("gameplay.player.idle.fetch.sheet", `«${idle.fetch.sheet}» no tiene una animación con la secuencia completa`);
+    }
+    if ((idle.tricks || idle.fetch) && !idle.actionKey) err("gameplay.player.idle.actionKey", "es obligatoria cuando hay trucos o búsqueda del peluche: es la tecla con la que se piden");
+    if (idle.playAfterMs < idle.glanceAfterMs) err("gameplay.player.idle.playAfterMs", "no puede ser menor que glanceAfterMs (primero se miran y después juegan)");
+  }
   const comp = c.gameplay.companion;
   if (comp.mode === "separate" && !comp.actor) err("gameplay.companion.actor", "es obligatorio cuando mode es «separate»");
   if (comp.mode === "included" && comp.actor) err("gameplay.companion.actor", "no debe existir cuando mode es «included» (el sprite ya incluye a Jerry)");

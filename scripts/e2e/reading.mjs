@@ -63,7 +63,7 @@ try {
     check("A12 al cerrar la recompensa se celebra exactamente una vez en el mapa", celebrate.length === 1 && during.celebrating && during.frame.startsWith("celebrate-"), JSON.stringify({ n: celebrate.length, ...during }));
     check("A13 el foco vuelve al mapa", await t.page.evaluate(() => document.activeElement?.classList.contains("game-host")));
     await t.page.waitForTimeout(2800);
-    check("A14 la celebración termina y Vanessa vuelve a caminar", !(await t.page.evaluate(() => window.__PHASER_GAME__.scene.getScene("ExplorationScene").player.isCelebrating)) && (await t.scene()).frame === "down-1");
+    check("A14 la celebración termina y Vanessa vuelve a su reposo de frente", !(await t.page.evaluate(() => window.__PHASER_GAME__.scene.getScene("ExplorationScene").player.isCelebrating)) && /^front-0[0-2]$/.test((await t.scene()).frame));
     check("A15 la cabecera muestra el progreso, la XP y el siguiente objetivo derivados", (await hud(t)).includes("1 de 6 aprendizajes") && (await hud(t)).includes("100 / 600 XP") && (await hud(t)).includes("Continúa en Aprendizaje 2"));
     check("A16 la estación 1 queda completada y la 2 disponible", JSON.stringify((await t.stations()).map((s) => [s.id, s.state])) === JSON.stringify([["apr-a", "completed"], ["apr-b", "available"], ["apr-c", "locked"]]));
 

@@ -89,6 +89,12 @@ export class Station {
     this.pendingTag.setText(label).setVisible(true);
   }
 
+  /** ¿Cae el punto del mundo sobre la señal (con un margen para dedos gruesos)? Lo usa el toque para explorar. */
+  contains(x: number, y: number, pad = 0): boolean {
+    const b = this.sign.getBounds();
+    return x >= b.x - pad && x <= b.right + pad && y >= b.y - pad && y <= b.bottom + pad;
+  }
+
   get currentState(): StationState | null {
     return this.state;
   }

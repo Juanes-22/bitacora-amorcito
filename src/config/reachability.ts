@@ -118,6 +118,14 @@ export function checkWorldReachability(config: BitacoraConfig): ConfigIssue[] {
 }
 
 /**
+ * Rejilla de navegación de una zona: las celdas bloqueadas son las que el cuerpo de Vanessa no puede ocupar. Es la misma
+ * que valida la alcanzabilidad, así que los caminos que se calculan sobre ella son los que el mapa permite (SPEC 6.1).
+ */
+export function navigationGrid(config: BitacoraConfig, zoneId: string): { cols: number; rows: number; cell: number; blocked: Uint8Array } {
+  return { ...walkableGrid(config.maps[zoneId], bodyRadius(config)), cell: CELL };
+}
+
+/**
  * Celdas de una zona a las que puede llegar Vanessa desde su punto de partida (rejilla de `cell` px del mundo).
  * Lo usan las herramientas de colocación para ver dónde SÍ se pueden poner plantas (SPEC 3.2).
  */

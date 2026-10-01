@@ -391,6 +391,14 @@ describe("bitacora.json: animaciones del paisaje (SPEC 3.2)", () => {
     expect(at(issuesOf(withFx(...many.slice(0, 60))), "maps.zona-a.ambient")).toHaveLength(0);
   });
 
+  it("gameplay.touchControls solo admite «tap» o «dpad» y es obligatorio", () => {
+    expect(issuesOf((c) => { c.gameplay.touchControls = "dpad"; })).toEqual([]);
+    expect(issuesOf((c) => { (c.gameplay as { touchControls: string }).touchControls = "joystick"; }).length).toBeGreaterThan(0);
+    const c = makeConfig() as unknown as { gameplay: Record<string, unknown> };
+    delete c.gameplay.touchControls;
+    expect(validateBitacora(c, realManifest).ok).toBe(false);
+  });
+
   it("el esquema exige al menos dos puntos en la trayectoria y un alpha entre 0 y 1", () => {
     expect(issuesOf(withFx({ ...swim, path: [{ x: 1, y: 1 }] } as never)).length).toBeGreaterThan(0);
     expect(issuesOf(withFx({ ...glow, alpha: 2 } as never)).length).toBeGreaterThan(0);

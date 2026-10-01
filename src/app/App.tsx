@@ -5,15 +5,16 @@ import { LearningDialog } from "../components/reading/LearningDialog";
 import { BadgeCollection } from "../components/ui/BadgeCollection";
 import { ConfirmDialog } from "../components/ui/ConfirmDialog";
 import { LearningList } from "../components/ui/LearningList";
+import { ControlsModeToggle } from "../components/ui/ControlsModeToggle";
 import { MusicToggle } from "../components/ui/MusicToggle";
 import { TouchControls } from "../components/ui/TouchControls";
 import { ProgressHUD } from "../components/ui/ProgressHUD";
-import { NearbyPrompt } from "../components/ui/NearbyPrompt";
+import { NearbyPrompt, type PromptHint } from "../components/ui/NearbyPrompt";
 import type { AssetRegistry } from "../config/assetRegistry";
 import { createLoader, describeFailure, type LoadResult } from "../config/loadApp";
 import type { BitacoraConfig } from "../config/types";
 import { GameBridge } from "../game/bridge/GameBridge";
-import type { AssetFailure } from "../game/bridge/events";
+import type { AssetFailure, ControlsMode } from "../game/bridge/events";
 import { BitacoraProvider } from "./BitacoraProvider";
 import { createMusicPlayer } from "../audio/createMusicPlayer";
 import { PreferencesStorage } from "../storage/preferencesStorage";
@@ -21,6 +22,7 @@ import { ProgressStorage } from "../storage/progressStorage";
 import { ProgressProvider } from "./ProgressProvider";
 import { ProgressStore } from "./progressStore";
 import { useProgressController } from "./useProgressController";
+import { useTouchMode } from "./useTouchMode";
 
 type Loader = () => Promise<LoadResult>;
 const defaultLoader: Loader = createLoader();
@@ -65,7 +67,16 @@ function Loaded({ config, assets }: { config: BitacoraConfig; assets: AssetRegis
   const bridge = useMemo(() => new GameBridge(), [config, assets]);
   const initial = useMemo(() => ({ zoneId: store.getState().currentZoneId, position: store.getState().player }), [store]);
   // La música es independiente del mapa y del progreso: no se corta al cambiar de zona ni al reiniciar el recorrido.
-  const music = useMemo(() => createMusicPlayer(config, assets, new PreferencesStorage()), [config, assets]);
+  const preferences = useMemo(() => new PreferencesStorage(), []);
+  const music = useMemo(() => createMusicPlayer(config, assets, preferences), [config, assets, preferences]);
+  // Controles táctiles: el visitante elige; sin elección manda la configuración (por defecto, tocar para caminar).
+  const [controlsMode, setControlsMode] = useState<ControlsMode>(() => preferences.touchControls ?? config.gameplay.touchControls);
+  useEffect(() => bridge.emit("app:controls-mode", { mode: controlsMode }), [bridge, controlsMode]);
+  const toggleControls = () => {
+    const next: ControlsMode = controlsMode === "tap" ? "dpad" : "tap";
+    preferences.setTouchControls(next);
+    setControlsMode(next);
+  };
   useEffect(() => () => music?.dispose(), [music]);
   const [started, setStarted] = useState(false);
   const [assetFailures, setAssetFailures] = useState<AssetFailure[]>([]);
@@ -96,11 +107,14 @@ function Loaded({ config, assets }: { config: BitacoraConfig; assets: AssetRegis
 
   // Herramientas junto a la cabecera: la lista accesible (SPEC 14) y, si hay música, su botón de apagar/encender.
   const modalOpen = !!reading || !!overlay;
+  const touchMode = useTouchMode();
+  const hint: PromptHint = !touchMode ? "key" : controlsMode === "tap" ? "tap" : "button";
   const tools = (
     <>
       <button type="button" className="hud__list" onClick={overlayActions.openList} disabled={modalOpen}>
         {config.ui.labels.index}
       </button>
+      <ControlsModeToggle mode={controlsMode} onToggle={toggleControls} />
       {music ? <MusicToggle player={music} onPointerUse={() => { if (!modalOpen) hostRef.current?.focus(); }} /> : null}
     </>
   );
@@ -111,8 +125,8 @@ function Loaded({ config, assets }: { config: BitacoraConfig; assets: AssetRegis
         <div className="app">
           <PhaserGame config={config} assets={assets} bridge={bridge} initial={initial} inert={!started || !!reading || !!overlay} hostRef={hostRef} />
           {started ? <ProgressHUD onOpenBadges={reading || overlay ? undefined : overlayActions.openCollection} tools={tools} /> : null}
-          {started ? <NearbyPrompt target={reading ? null : nearby} /> : null}
-          {started && !modalOpen ? <TouchControls bridge={bridge} /> : null}
+          {started ? <NearbyPrompt target={reading ? null : nearby} hint={hint} /> : null}
+          {started && !modalOpen && controlsMode === "dpad" ? <TouchControls bridge={bridge} /> : null}
           {reading ? <LearningDialog reading={reading} actions={actions} /> : null}
           {overlay?.kind === "collection" ? (
             <BadgeCollection completion={overlay.completion} onClose={overlayActions.closeOverlay} onReset={overlayActions.askReset} />

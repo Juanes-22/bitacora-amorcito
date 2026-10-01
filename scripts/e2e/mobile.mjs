@@ -20,6 +20,25 @@ const finger = (t, selector, type, id) =>
     el.dispatchEvent(new PointerEvent(type, { pointerId: id, bubbles: true, cancelable: true, clientX: r.x + r.width / 2, clientY: r.y + r.height / 2, pointerType: "touch", isPrimary: id === 1 }));
   }, [selector, type, id]);
 const ARROW = (d) => `.touch__arrow--${d}`;
+/** Coordenadas del mundo → píxeles de la ventana (el canvas ocupa toda la ventana). */
+const toScreen = (t, wx, wy) =>
+  t.page.evaluate(([wx, wy]) => { const c = window.__PHASER_GAME__.scene.getScene("ExplorationScene").cameras.main; return { x: (wx - c.worldView.x) * c.zoom, y: (wy - c.worldView.y) * c.zoom }; }, [wx, wy]);
+const tap = async (t, wx, wy) => { const p = await toScreen(t, wx, wy); await t.page.touchscreen.tap(p.x, p.y); };
+/** El círculo del destino (profundidad 1800) y cuántas ondas hay además de él. */
+const markers = (t) =>
+  t.page.evaluate(() => {
+    const arcs = window.__PHASER_GAME__.scene.getScene("ExplorationScene").children.list.filter((o) => o.type === "Arc" && o.depth === 1800);
+    const ring = arcs.find((o) => o.visible && o.fillAlpha > 0);
+    return { ring: ring ? { x: ring.x, y: ring.y } : null, waves: arcs.filter((o) => o.fillAlpha === 0).length };
+  });
+const waitStopped = async (t, max = 8000) => {
+  const t0 = Date.now();
+  await t.page.waitForTimeout(300);
+  while (Date.now() - t0 < max) {
+    if ((await speedOf(t)) === 0) return;
+    await t.page.waitForTimeout(100);
+  }
+};
 const reasons = (t) => t.page.evaluate(() => [...window.__BITACORA_BRIDGE__.controlReasons]);
 const speedOf = async (t) => { const s = await t.scene(); return Math.hypot(...s.vel); };
 const dialogs = (t) => t.page.locator("[role=dialog]").count();
@@ -27,12 +46,176 @@ const nearStation = (id) => { const p = configJson.placements[id]; return [p.pos
 const OPEN_SPOT = [330, 990]; // junto a «apr-a»: zona abierta del camino
 
 try {
-  // ---- Cruceta táctil -----------------------------------------------------------------------------------
+  // ---- Teléfono: por defecto se camina tocando el mapa (SPEC 6.1; AC-03, AC-04) -------------------------------
   {
     const t = await touchCtx(390, 844);
     await t.start();
+    check("AC-03: en un móvil no hay cruceta ni botón «Explorar»: se camina tocando el mapa", (await t.page.locator(".touch, .touch__explore").count()) === 0);
     await t.place(...OPEN_SPOT);
     await t.page.waitForTimeout(300);
+
+    // Tocar un punto del camino: camina hasta allí, con un círculo animado en el destino
+    const goal = [200, 1030];
+    await tap(t, ...goal);
+    await t.page.waitForTimeout(120);
+    const early = await markers(t);
+    check("AC-03: al tocar aparece un círculo en el destino y una onda que sale del toque", early.ring && early.waves >= 1 && Math.hypot(early.ring.x - goal[0], early.ring.y - goal[1]) < 12, JSON.stringify(early));
+    await t.page.waitForTimeout(250);
+    const mid = await t.scene();
+    check("AC-03: Vanessa echa a andar hacia el punto tocado (por el mismo ciclo de movimiento)", Math.hypot(...mid.vel) > 100 && mid.pos.x < OPEN_SPOT[0], JSON.stringify(mid));
+    check("el círculo sigue visible mientras camina", (await markers(t)).ring !== null);
+    await waitStopped(t);
+    const end = (await t.scene()).pos;
+    check("AC-03: llega al punto tocado (a menos de 6 px) y se detiene", Math.hypot(end.x - goal[0], end.y - goal[1]) < 6 && (await speedOf(t)) === 0, JSON.stringify(end));
+    await t.page.waitForTimeout(450);
+    check("al llegar el círculo desaparece", (await markers(t)).ring === null);
+
+    // Una flecha cancela el recorrido; un nuevo toque lo cambia
+    await t.place(...OPEN_SPOT);
+    await tap(t, 200, 1030);
+    await t.page.waitForTimeout(200);
+    await t.page.evaluate(() => document.querySelector(".game-host").focus());
+    await t.page.keyboard.down("ArrowUp");
+    await t.page.waitForTimeout(150);
+    await t.page.keyboard.up("ArrowUp");
+    await t.page.waitForTimeout(600);
+    check("una flecha cancela el recorrido por toque (no sigue andando sola)", (await speedOf(t)) === 0 && (await markers(t)).ring === null);
+    await t.place(...OPEN_SPOT);
+    await tap(t, 200, 1030);
+    await t.page.waitForTimeout(150);
+    await tap(t, 330, 1060);
+    await waitStopped(t);
+    const p4 = (await t.scene()).pos;
+    check("tocar otro punto mientras camina cambia el destino", Math.hypot(p4.x - 330, p4.y - 1060) < 8, JSON.stringify(p4));
+
+    // Tocar la estación estando junto a ella equivale a «Explorar»
+    await t.place(...nearStation("apr-a"));
+    await tap(t, 230, 1045); // un toque real sobre el suelo: el aviso se adapta al dedo
+    await t.page.waitForTimeout(500);
+    await t.place(...nearStation("apr-a"));
+    await t.page.waitForTimeout(400);
+    check("AC-04: junto a la estación el aviso dice qué tocar", /Toca la estación para explorar/.test(await t.page.locator(".nearby-region").innerText()), await t.page.locator(".nearby-region").innerText());
+    const sign = configJson.placements["apr-a"].position;
+    await tap(t, sign.x, sign.y - 22);
+    await t.page.waitForTimeout(500);
+    check("AC-04: tocar la estación estando junto a ella abre el aprendizaje", (await dialogs(t)) === 1 && /Aprendizaje 1/.test(await t.page.locator("[role=dialog]").innerText()));
+    check("AC-17: al abrirse, el mapa se detiene y no queda recorrido", (await speedOf(t)) === 0 && (await reasons(t)).includes("reading"));
+    await t.page.keyboard.press("Escape");
+    await t.page.waitForTimeout(400);
+    const axeTap = await t.axe();
+    check("axe-core: cabecera y herramientas con el modo de toque sin violaciones", axeTap.length === 0, axeTap.join(" | "));
+    check("sin errores de consola", t.errors.length === 0, t.errors.join(" | "));
+    await t.close();
+  }
+
+  // ---- Pantalla táctil ancha: el mapa visible llega más lejos --------------------------------------------------
+  {
+    const t = await touchCtx(1280, 720);
+    await t.start();
+    await t.place(...OPEN_SPOT);
+    await t.page.waitForTimeout(300);
+    // Camino con curvas: rodea los obstáculos hasta la estación 2 y llega
+    const apr2 = nearStation("apr-b");
+    await t.place(...OPEN_SPOT);
+    await tap(t, ...apr2);
+    await waitStopped(t, 14000);
+    const p2 = (await t.scene()).pos;
+    check("AC-03: tocando lejos, rodea los obstáculos por el camino y llega (sin atascarse)", Math.hypot(p2.x - apr2[0], p2.y - apr2[1]) < 40, JSON.stringify({ p2, apr2 }));
+
+    // Tocar un arbusto: va a su orilla, no se queda quieta ni lo atraviesa
+    await t.place(...OPEN_SPOT);
+    await tap(t, 700, 650);
+    await waitStopped(t, 14000);
+    const p3 = (await t.scene()).pos;
+    check("tocar una zona no transitable lleva a la orilla alcanzable más cercana", Math.hypot(p3.x - OPEN_SPOT[0], p3.y - OPEN_SPOT[1]) > 60 && Math.hypot(p3.x - 700, p3.y - 650) < 220, JSON.stringify(p3));
+
+    // Arrastrar el dedo reorienta el destino
+    await t.place(...OPEN_SPOT);
+    await t.page.waitForTimeout(200);
+    const cdp = await t.ctx.newCDPSession(t.page);
+    const a = await toScreen(t, 285, 1050), b = await toScreen(t, 200, 1030);
+    await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: a.x, y: a.y }] });
+    for (let i = 1; i <= 8; i++) {
+      await cdp.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: a.x + ((b.x - a.x) * i) / 8, y: a.y + ((b.y - a.y) * i) / 8 }] });
+      await t.page.waitForTimeout(60);
+    }
+    await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+    await waitStopped(t);
+    const p5 = (await t.scene()).pos;
+    check("arrastrar el dedo lleva a Vanessa hasta donde se suelta", Math.hypot(p5.x - 200, p5.y - 1030) < 25, JSON.stringify(p5));
+
+    const sign = configJson.placements["apr-a"].position;
+    await t.place(...nearStation("apr-a"));
+    await t.page.waitForTimeout(400);
+    // Tocar la estación estando junto a ella equivale a «Explorar»
+    await tap(t, sign.x, sign.y - 22);
+    await t.page.waitForTimeout(500);
+    check("AC-04: tocar la estación estando junto a ella abre el aprendizaje", (await dialogs(t)) === 1 && /Aprendizaje 1/.test(await t.page.locator("[role=dialog]").innerText()));
+    check("AC-17: al abrirse, el mapa se detiene y no queda recorrido", (await speedOf(t)) === 0 && (await reasons(t)).includes("reading"));
+    await t.page.keyboard.press("Escape");
+    await t.page.waitForTimeout(400);
+
+    // Tocar una estación lejana: camina hasta ella, avisa y NO la abre; otro toque la abre
+    await t.place(200, 1030);
+    await t.page.waitForTimeout(300);
+    await tap(t, sign.x, sign.y - 22);
+    await waitStopped(t);
+    check("tocar una estación lejana camina hasta su punto de interacción sin abrirla", (await dialogs(t)) === 0 && /Toca la estación para explorar/.test(await t.page.locator(".nearby-region").innerText()));
+    await tap(t, sign.x, sign.y - 22);
+    await t.page.waitForTimeout(500);
+    check("AC-04: y un segundo toque sobre la estación la abre", (await dialogs(t)) === 1);
+    await t.page.keyboard.press("Escape");
+    await t.page.waitForTimeout(300);
+
+    // Una estación bloqueada se toca con las mismas reglas: mensaje, sin lectura
+    const b2 = configJson.placements["apr-b"].position;
+    await t.place(...nearStation("apr-b"));
+    await t.page.waitForTimeout(400);
+    await tap(t, b2.x, b2.y - 22);
+    await t.page.waitForTimeout(500);
+    check("AC-04: tocar una estación bloqueada muestra su mensaje, no una lectura", /Todavía no puedes abrir/.test(await t.page.locator("[role=dialog]").innerText()) && (await t.page.getByRole("tab").count()) === 0);
+    await t.page.keyboard.press("Escape");
+    await t.page.waitForTimeout(300);
+
+    // Portal: tocarlo estando junto a él viaja
+    await t.place(1380, 440);
+    await t.page.waitForTimeout(400);
+    check("junto a un portal el aviso dice qué tocar", /toca el portal para viajar/i.test(await t.page.locator(".nearby-region").innerText()));
+    const portal = configJson.maps["zona-a"].portals["a-b"].interaction;
+    await tap(t, portal.x, portal.y);
+    await t.page.waitForTimeout(900);
+    check("tocar el portal estando junto a él cambia de zona", (await t.scene()).zone === "zona-b");
+
+    // Con una ventana abierta los toques no mueven al personaje
+    await t.place(...OPEN_SPOT);
+    await t.page.getByRole("button", { name: L.badges }).click();
+    await t.page.waitForTimeout(300);
+    const frozenAt = (await t.scene()).pos;
+    await t.page.mouse.click(60, 400);
+    await t.page.waitForTimeout(400);
+    check("AC-17: con la colección abierta, tocar fuera no mueve a Vanessa", JSON.stringify((await t.scene()).pos) === JSON.stringify(frozenAt) || (await t.scene()).zone !== "zona-a");
+    check("sin errores de consola", t.errors.length === 0, t.errors.join(" | "));
+    await t.close();
+  }
+
+  // ---- Modo cruceta: se elige en el juego y se recuerda (SPEC 6.1; AC-03, AC-04) --------------------------------
+  {
+    const t = await touchCtx(390, 844);
+    await t.start();
+    const toggle = t.page.getByRole("button", { name: L.controlsUseDpad });
+    const tbox = await toggle.boundingBox();
+    check("el botón para cambiar de modo está en las herramientas, con etiqueta textual y ≥ 44 px", tbox && tbox.width >= 43.5 && tbox.height >= 43.5, JSON.stringify(tbox));
+    await toggle.click();
+    await t.page.waitForTimeout(300);
+    check("al pasar a la cruceta el botón ofrece volver a «Tocar para caminar»", (await t.page.getByRole("button", { name: L.controlsUseTap }).count()) === 1 && (await t.page.locator(".touch").count()) === 1);
+    check("la preferencia se guarda aparte del progreso", JSON.parse((await t.stored())["bitacora:preferences:v1"]).touchControls === "dpad");
+    check("tras usar el botón con ratón o toque, el foco vuelve al mapa", await t.page.evaluate(() => document.activeElement?.classList.contains("game-host")));
+    await t.place(...OPEN_SPOT);
+    await t.page.waitForTimeout(300);
+    const still = (await t.scene()).pos;
+    await tap(t, 200, 1030);
+    await t.page.waitForTimeout(900);
+    check("en modo cruceta tocar el mapa NO mueve a Vanessa", JSON.stringify((await t.scene()).pos) === JSON.stringify(still) && (await markers(t)).ring === null);
     const box = async (sel) => t.page.locator(sel).boundingBox();
     const boxes = await Promise.all([ARROW("up"), ARROW("down"), ARROW("left"), ARROW("right"), ".touch__explore"].map(box));
     check("AC-03: en un móvil se ven la cruceta de cuatro direcciones y «Explorar», todos ≥ 44 px", boxes.every((b) => b && b.width >= 43.5 && b.height >= 43.5), JSON.stringify(boxes));
@@ -109,15 +292,56 @@ try {
     await t.page.waitForTimeout(300);
     const axeList = await t.axe();
     check("axe-core: la lista accesible no tiene violaciones", axeList.length === 0, axeList.join(" | "));
+    check("en modo cruceta el aviso invita a pulsar «Explorar», no a tocar la estación", await (async () => { await t.page.keyboard.press("Escape"); await t.page.waitForTimeout(300); await t.place(...nearStation("apr-a")); await t.page.waitForTimeout(400); const x = await t.page.locator(".nearby-region").innerText(); return /Explorar/.test(x) && !/Toca la estación/.test(x); })());
+    const axePad = await t.axe();
+    check("axe-core: la cruceta táctil no tiene violaciones", axePad.length === 0, axePad.join(" | "));
+
+    // Recordado: al recargar sigue en cruceta; y se puede volver a tocar para caminar
+    await t.page.reload();
+    await t.page.waitForSelector(".pixel-button");
+    await t.start();
+    check("la elección se recuerda al recargar (sigue la cruceta)", (await t.page.locator(".touch").count()) === 1 && (await t.page.getByRole("button", { name: L.controlsUseTap }).count()) === 1);
+    await t.page.getByRole("button", { name: L.controlsUseTap }).click();
+    await t.page.waitForTimeout(300);
+    check("al volver a «Tocar para caminar» desaparece la cruceta", (await t.page.locator(".touch").count()) === 0);
+    await t.place(...OPEN_SPOT);
+    await t.page.waitForTimeout(300);
+    await tap(t, 200, 1030);
+    await waitStopped(t);
+    const back = (await t.scene()).pos;
+    check("y el toque vuelve a llevar a Vanessa al destino", Math.hypot(back.x - 200, back.y - 1030) < 6, JSON.stringify(back));
     check("sin errores de consola", t.errors.length === 0, t.errors.join(" | "));
     await t.close();
   }
 
-  // ---- Sin puntero táctil y con pantalla ancha no hay cruceta -------------------------------------------
+  // ---- La configuración decide el modo de partida ------------------------------------------------------------
+  {
+    const t = await touchCtx(390, 844, { edit: (c) => { c.gameplay.touchControls = "dpad"; } });
+    await t.start();
+    check("con gameplay.touchControls = «dpad» se parte de la cruceta", (await t.page.locator(".touch").count()) === 1 && (await t.page.getByRole("button", { name: L.controlsUseTap }).count()) === 1);
+    await t.close();
+    const u = await touchCtx(390, 844, { edit: (c) => { c.gameplay.touchControls = "dpad"; } });
+    await u.page.evaluate(() => localStorage.setItem("bitacora:preferences:v1", JSON.stringify({ musicMuted: false, touchControls: "tap" })));
+    await u.page.reload();
+    await u.page.waitForSelector(".pixel-button");
+    await u.start();
+    check("la elección del visitante manda sobre la configuración", (await u.page.locator(".touch").count()) === 0);
+    await u.close();
+  }
+
+
+  // ---- Con ratón en escritorio, tocar el mapa no mueve a Vanessa (se usa el teclado) -----------------------
   {
     const t = await open({ viewport: { width: 1280, height: 720 } });
     await t.start();
-    check("en escritorio con ratón la cruceta no se muestra (se usa el teclado)", await t.page.locator(".touch").isHidden());
+    await t.place(...OPEN_SPOT);
+    await t.page.waitForTimeout(300);
+    const before = (await t.scene()).pos;
+    const target = await toScreen(t, 200, 1030);
+    await t.page.mouse.click(target.x, target.y);
+    await t.page.waitForTimeout(600);
+    check("en escritorio con ratón, hacer clic en el mapa no mueve a Vanessa", JSON.stringify((await t.scene()).pos) === JSON.stringify(before));
+    check("y el aviso de proximidad habla del teclado", await (async () => { await t.place(...nearStation("apr-a")); await t.page.waitForTimeout(400); return /\(Enter\)/.test(await t.page.locator(".nearby-region").innerText()); })());
     await t.close();
   }
 
@@ -241,18 +465,18 @@ try {
       await t.page.waitForTimeout(300);
       const fits = () => t.page.evaluate(() => {
         const inside = (sel) => [...document.querySelectorAll(sel)].every((el) => { const r = el.getBoundingClientRect(); return r.left >= -0.5 && r.top >= -0.5 && r.right <= innerWidth + 0.5 && r.bottom <= innerHeight + 0.5; });
-        return { hscroll: document.documentElement.scrollWidth > innerWidth, hud: inside(".hud"), tools: inside(".hud__tools > *"), touch: inside(".touch__arrow, .touch__explore"), dialog: inside("[role=dialog]") };
+        return { hscroll: document.documentElement.scrollWidth > innerWidth, hud: inside(".hud"), tools: inside(".hud__tools > *"), dialog: inside("[role=dialog]") };
       });
       const base = await fits();
-      check(`${name}: cabecera, herramientas y controles caben sin scroll horizontal`, !base.hscroll && base.hud && base.tools && base.touch, JSON.stringify(base));
+      check(`${name}: cabecera y herramientas caben sin scroll horizontal`, !base.hscroll && base.hud && base.tools, JSON.stringify(base));
       const overlap = await t.page.evaluate(() => {
-        const rects = [".hud", ".hud__tools > *", ".touch__pad", ".touch__explore"].flatMap((s) => [...document.querySelectorAll(s)].map((e) => [s, e.getBoundingClientRect()]));
+        const rects = [".hud", ".hud__tools > *"].flatMap((s) => [...document.querySelectorAll(s)].map((e) => [s, e.getBoundingClientRect()]));
         const hit = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
         const bad = [];
         for (let i = 0; i < rects.length; i++) for (let j = i + 1; j < rects.length; j++) if (hit(rects[i][1], rects[j][1]) && !(rects[i][0] === ".hud" && rects[j][0].startsWith(".hud__tools"))) bad.push(`${rects[i][0]} × ${rects[j][0]}`);
         return bad;
       });
-      check(`${name}: la cabecera, las herramientas y los controles táctiles no se solapan`, overlap.length === 0, overlap.join(", "));
+      check(`${name}: la cabecera y las herramientas no se solapan`, overlap.length === 0, overlap.join(", "));
       await t.page.keyboard.press("Enter");
       await t.page.waitForTimeout(350);
       const reading = await fits();
@@ -292,16 +516,24 @@ try {
     await t.close();
   }
 
-  // ---- Con movimiento reducido la cruceta y la lista funcionan igual -------------------------------------
+  // ---- Con movimiento reducido el toque camina igual, pero sin onda ni latido ------------------------------------
   {
     const t = await touchCtx(390, 844, { reducedMotion: true });
     await t.start();
     await t.place(...OPEN_SPOT);
-    const x0 = (await t.scene()).pos.x;
-    await finger(t, ARROW("right"), "pointerdown", 1);
-    await t.page.waitForTimeout(400);
-    await finger(t, ARROW("right"), "pointerup", 1);
-    check("con prefers-reduced-motion la cruceta sigue moviendo a Vanessa (el movimiento reducido no es un modo sin juego)", (await t.scene()).pos.x > x0 + 20);
+    await t.page.waitForTimeout(300);
+    await tap(t, 200, 1030);
+    await t.page.waitForTimeout(150);
+    const m = await markers(t);
+    check("con prefers-reduced-motion el círculo aparece quieto: sin onda que se expande", m.ring !== null && m.waves === 0, JSON.stringify(m));
+    const scale = await t.page.evaluate(() => { const o = window.__PHASER_GAME__.scene.getScene("ExplorationScene").children.list.find((x) => x.type === "Arc" && x.depth === 1800 && x.visible); return o?.scale; });
+    await t.page.waitForTimeout(300);
+    const scale2 = await t.page.evaluate(() => { const o = window.__PHASER_GAME__.scene.getScene("ExplorationScene").children.list.find((x) => x.type === "Arc" && x.depth === 1800 && x.visible); return o?.scale; });
+    check("y no late (su tamaño no cambia)", scale === 1 && scale2 === 1, `${scale} → ${scale2}`);
+    await waitStopped(t);
+    const end = (await t.scene()).pos;
+    check("con movimiento reducido el toque sigue llevando a Vanessa al destino", Math.hypot(end.x - 200, end.y - 1030) < 6, JSON.stringify(end));
+    check("y al llegar el círculo desaparece al instante", (await markers(t)).ring === null);
     await t.close();
   }
 } catch (error) {

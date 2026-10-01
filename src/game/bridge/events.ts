@@ -3,6 +3,9 @@ import type { Point } from "../../config/types";
 
 export type Direction = "up" | "down" | "left" | "right";
 
+/** Controles táctiles: `tap` (tocar para caminar) o `dpad` (cruceta y «Explorar»). */
+export type ControlsMode = "tap" | "dpad";
+
 /** Lo que el visitante tiene al alcance: un aprendizaje o un portal (SPEC 11.5). */
 export type NearbyTarget = { kind: "learning"; id: string } | { kind: "portal"; id: string };
 
@@ -39,6 +42,8 @@ export interface BridgeEvents {
   /** Motivos de bloqueo activos (lectura, transición…): con alguno, la exploración se detiene. */
   "app:controls": { reasons: readonly string[] };
   "app:celebrate": { effectId: string; learningId: string };
+  /** Cómo se maneja con el dedo: tocar para caminar o cruceta (SPEC 6.1). El teclado funciona siempre. */
+  "app:controls-mode": { mode: ControlsMode };
 
   "ui:direction": { direction: Direction; pressed: boolean };
   "ui:interact": { pressed: boolean };

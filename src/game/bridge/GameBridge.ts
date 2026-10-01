@@ -1,4 +1,4 @@
-import type { AppSnapshot, BridgeEventName, BridgeEvents } from "./events";
+import type { AppSnapshot, BridgeEventName, BridgeEvents, ControlsMode } from "./events";
 
 type Handler<K extends BridgeEventName> = (payload: BridgeEvents[K]) => void;
 
@@ -13,6 +13,7 @@ export class GameBridge {
   private activeToken = 0;
   private lastSnapshot: AppSnapshot | null = null;
   private lastControls: readonly string[] = [];
+  private lastMode: ControlsMode = "tap";
 
   /** Suscribe y devuelve la función que retira exactamente esa suscripción. */
   on<K extends BridgeEventName>(event: K, handler: Handler<K>): () => void {
@@ -25,6 +26,7 @@ export class GameBridge {
   emit<K extends BridgeEventName>(event: K, payload: BridgeEvents[K]): void {
     if (event === "app:sync") this.lastSnapshot = payload as AppSnapshot;
     if (event === "app:controls") this.lastControls = (payload as BridgeEvents["app:controls"]).reasons;
+    if (event === "app:controls-mode") this.lastMode = (payload as BridgeEvents["app:controls-mode"]).mode;
     // Copia: un manejador puede darse de baja mientras se emite.
     for (const handler of [...(this.handlers.get(event) ?? [])]) (handler as Handler<K>)(payload);
   }
@@ -41,6 +43,11 @@ export class GameBridge {
 
   get snapshot(): AppSnapshot | null {
     return this.lastSnapshot;
+  }
+
+  /** Último modo de controles táctiles publicado (para quien arranque después del emisor). */
+  get controlsMode(): ControlsMode {
+    return this.lastMode;
   }
 
   get controlReasons(): readonly string[] {

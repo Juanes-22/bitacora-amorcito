@@ -24,6 +24,11 @@ export class ZonePortal {
     }
   }
 
+  /** ¿Cae el punto del mundo sobre el anillo del portal (con un margen para dedos gruesos)? */
+  contains(x: number, y: number, pad = 0): boolean {
+    return Math.hypot(x - this.interaction.x, y - this.interaction.y) <= this.ring.radius * this.ring.scaleX + pad;
+  }
+
   destroy(): void {
     this.ring.destroy();
     this.label.destroy();

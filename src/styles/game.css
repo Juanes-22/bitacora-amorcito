@@ -26,6 +26,7 @@ body,
   position: absolute;
   inset: 0;
   overflow: hidden;
+  touch-action: none; /* el toque sobre el mapa camina; no desplaza ni acerca la página */
   outline-offset: -0.25rem;
 }
 .game-host:focus-visible {

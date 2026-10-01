@@ -1,6 +1,17 @@
 import { describe, expect, it, vi } from "vitest";
 import { GameBridge } from "../game/bridge/GameBridge";
 
+describe("GameBridge: modo de controles", () => {
+  it("conserva el último modo para quien arranque después y parte de «tap»", () => {
+    const bridge = new GameBridge();
+    expect(bridge.controlsMode).toBe("tap");
+    bridge.emit("app:controls-mode", { mode: "dpad" });
+    expect(bridge.controlsMode).toBe("dpad");
+    bridge.emit("app:controls-mode", { mode: "tap" });
+    expect(bridge.controlsMode).toBe("tap");
+  });
+});
+
 describe("GameBridge", () => {
   it("entrega a quien se suscribió y permite darse de baja solo a esa suscripción", () => {
     const bridge = new GameBridge();

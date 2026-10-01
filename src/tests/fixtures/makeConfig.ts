@@ -179,11 +179,15 @@ export function makeConfig(count = 6): BitacoraConfig {
         stateLocked: "Bloqueado",
         stateAvailable: "Disponible",
         stateCompleted: "Completado",
+        tapExplore: "Toca la estación para explorar",
+        tapTravel: "Toca el portal para viajar",
         controlsLabel: "Controles de movimiento",
         moveUp: "Mover hacia arriba",
         moveDown: "Mover hacia abajo",
         moveLeft: "Mover hacia la izquierda",
         moveRight: "Mover hacia la derecha",
+        controlsUseDpad: "Usar cruceta",
+        controlsUseTap: "Tocar para caminar",
       },
       assets: {
         window: "ui.panel.cream.nine-slice",
@@ -208,6 +212,7 @@ export function makeConfig(count = 6): BitacoraConfig {
       cameraZoom: 1,
       camera: { fit: "cover", maxZoom: 3, minPlayerHeight: 0.12 },
       signScale: 0.16,
+      touchControls: "tap",
       player: {
         assetId: "character.vanessa-jerry.idle",
         origin: { x: 0.5, y: 1 },

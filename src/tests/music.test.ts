@@ -433,6 +433,26 @@ describe("PreferencesStorage (AC-51)", () => {
     expect(none.musicMuted).toBe(true);
   });
 
+  it("guarda el modo de controles táctiles junto a la música, sin pisarse", () => {
+    const store = memory();
+    const a = new PreferencesStorage(store);
+    expect(a.touchControls).toBeUndefined();
+    a.setTouchControls("dpad");
+    a.setMusicMuted(true);
+    expect(JSON.parse(store.data.get(PREFERENCES_KEY) as string)).toEqual({ musicMuted: true, touchControls: "dpad" });
+    const b = new PreferencesStorage(store);
+    expect(b.touchControls).toBe("dpad");
+    expect(b.musicMuted).toBe(true);
+    b.setTouchControls("tap");
+    expect(new PreferencesStorage(store)).toMatchObject({ touchControls: "tap", musicMuted: true });
+  });
+
+  it("ignora un modo de controles desconocido", () => {
+    const store = memory();
+    store.data.set(PREFERENCES_KEY, JSON.stringify({ musicMuted: false, touchControls: "joystick" }));
+    expect(new PreferencesStorage(store).touchControls).toBeUndefined();
+  });
+
   it("es independiente del progreso: usa su propia clave", () => {
     expect(PREFERENCES_KEY).not.toContain("progress");
   });

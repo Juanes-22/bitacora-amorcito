@@ -1,13 +1,15 @@
 import Phaser from "phaser";
 import type { Point } from "../../config/types";
-import type { AppSnapshot, AssetFailure } from "../bridge/events";
+import type { AppSnapshot, AssetFailure, ControlsMode } from "../bridge/events";
 import { Player } from "../entities/Player";
 import { getDeps, type GameDeps } from "../createGame";
 import { setupCamera } from "../systems/CameraController";
 import { debugEnabled, setupDebugOverlay } from "../systems/DebugOverlay";
 import { InputController } from "../systems/InputController";
 import { buildAmbient, type Ambient } from "../systems/AmbientBuilder";
+import { navigationGrid } from "../../config/reachability";
 import { InteractionSystem } from "../systems/InteractionSystem";
+import { TapNavigation } from "../systems/TapNavigation";
 import { playCelebration } from "../systems/Celebration";
 import { buildWorld, type World } from "../systems/WorldBuilder";
 import { zoneAssetIds } from "../systems/zoneAssets";
@@ -33,6 +35,8 @@ export class ExplorationScene extends Phaser.Scene {
   private ambient?: Ambient;
   private player?: Player;
   private input2?: InputController;
+  private tap?: TapNavigation;
+  private controlsMode: ControlsMode = "tap";
   private interaction?: InteractionSystem;
   private cleanups: Array<() => void> = [];
   private failures: AssetFailure[] = [];
@@ -88,10 +92,27 @@ export class ExplorationScene extends Phaser.Scene {
 
     this.input2 = new InputController(this, bridge);
     this.interaction = new InteractionSystem(bridge, this.token, this.zoneId, this.world.targets);
+    // Tocar para caminar y tocar la estación para explorar (SPEC 6.1): usa la misma rejilla que valida la alcanzabilidad.
+    this.tap = new TapNavigation(this, {
+      grid: navigationGrid(config, this.zoneId),
+      targets: this.world.targets,
+      stations: this.world.stations,
+      portals: this.world.portals,
+      position: () => this.player?.position ?? start,
+      nearest: (feet) => this.interaction?.nearest(feet) ?? null,
+      requestInteract: () => this.input2?.requestInteract(),
+      enabled: () => this.controlsMode === "tap" && !!this.input2 && !this.scene.isPaused() && !this.interaction?.hasPending,
+      reducedMotion,
+    });
     if (debugEnabled()) this.cleanups.push(setupDebugOverlay(this, this.world, this.player));
 
+    this.controlsMode = bridge.controlsMode;
     // Receptores antes de avisar: los eventos son avisos; la instantánea retenida es la verdad (SPEC 11.5).
     this.cleanups.push(
+      bridge.on("app:controls-mode", ({ mode }) => {
+        this.controlsMode = mode;
+        this.tap?.cancel(); // al cambiar de modo se detiene cualquier recorrido por toque
+      }),
       bridge.on("app:sync", (snapshot) => this.applySnapshot(snapshot)),
       bridge.on("app:celebrate", ({ effectId, learningId }) => {
         // Cada efecto se consume una sola vez (también ante emisiones duplicadas o comprobaciones de desarrollo).
@@ -115,16 +136,21 @@ export class ExplorationScene extends Phaser.Scene {
     if (bridge.controlReasons.length) this.scene.pause();
   }
 
-  update(): void {
+  update(_time: number, delta: number): void {
     const { config, bridge } = this.deps;
     if (!this.player || !this.input2 || !this.interaction) return;
-    const vector = this.input2.vector();
+    // Las flechas mandan: cualquier tecla cancela el recorrido por toque. Si no, el recorrido entrega su dirección.
+    const manual = this.input2.vector();
+    const manualActive = manual.x !== 0 || manual.y !== 0;
+    if (manualActive) this.tap?.cancel();
+    const vector = manualActive ? manual : (this.tap?.vector(this.player.position, delta, config.gameplay.playerSpeed) ?? manual);
     this.player.update(vector, config.gameplay.playerSpeed);
 
     const requested = this.interaction.update(this.player.position, this.input2.consumeInteract());
     if (requested) {
       this.player.stop(); // detención inmediata mientras la aplicación valida
       this.input2.reset();
+      this.tap?.cancel();
     }
 
     // Checkpoint al detenerse (no por fotograma).
@@ -149,6 +175,7 @@ export class ExplorationScene extends Phaser.Scene {
   private onPause(): void {
     this.player?.stop();
     this.input2?.reset();
+    this.tap?.cancel();
     this.interaction?.clearNearby();
   }
 
@@ -158,6 +185,7 @@ export class ExplorationScene extends Phaser.Scene {
     if (snapshot) this.applySnapshot(snapshot);
     this.player?.stop();
     this.input2?.reset();
+    this.tap?.cancel();
     this.wasMoving = false;
   }
 
@@ -169,6 +197,7 @@ export class ExplorationScene extends Phaser.Scene {
     this.events.off(Phaser.Scenes.Events.RESUME, this.onResume, this);
     this.cleanups.forEach((off) => off());
     this.cleanups = [];
+    this.tap?.destroy();
     this.interaction?.destroy();
     this.input2?.destroy();
     this.player?.destroy();
@@ -176,6 +205,7 @@ export class ExplorationScene extends Phaser.Scene {
     this.world?.destroy();
     this.ambient = undefined;
     this.interaction = undefined;
+    this.tap = undefined;
     this.input2 = undefined;
     this.player = undefined;
     this.world = undefined;

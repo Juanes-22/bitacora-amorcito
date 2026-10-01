@@ -491,7 +491,7 @@
             "startRoute", "pending", "demo", "previous", "next", "progressTemplate", "stationTitleTemplate",
             "semester", "teacher", "sectionRead", "sectionUnread", "badgeEarned", "remainingTemplate", "rewardTitle", "xpTemplate", "levelTemplate", "objectiveTemplate", "finishedLabel", "emptyRouteLabel", "mapLabel",
             "badges", "notEarned", "earnedOnTemplate", "badgeCountTemplate", "completionTitle", "finalReflectionTitle", "finalReflectionPending", "resetConfirmTitle", "resetConfirmText", "resetConfirm", "cancel", "preparationTemplate",
-            "musicMute", "musicUnmute", "stateLocked", "stateAvailable", "stateCompleted", "controlsLabel", "moveUp", "moveDown", "moveLeft", "moveRight"
+            "musicMute", "musicUnmute", "stateLocked", "stateAvailable", "stateCompleted", "tapExplore", "tapTravel", "controlsLabel", "moveUp", "moveDown", "moveLeft", "moveRight", "controlsUseDpad", "controlsUseTap"
           ],
           "properties": {
             "explore": { "type": "string", "minLength": 1 },
@@ -538,11 +538,15 @@
             "stateLocked": { "type": "string", "minLength": 1 },
             "stateAvailable": { "type": "string", "minLength": 1 },
             "stateCompleted": { "type": "string", "minLength": 1 },
+            "tapExplore": { "type": "string", "minLength": 1 },
+            "tapTravel": { "type": "string", "minLength": 1 },
             "controlsLabel": { "type": "string", "minLength": 1 },
             "moveUp": { "type": "string", "minLength": 1 },
             "moveDown": { "type": "string", "minLength": 1 },
             "moveLeft": { "type": "string", "minLength": 1 },
-            "moveRight": { "type": "string", "minLength": 1 }
+            "moveRight": { "type": "string", "minLength": 1 },
+            "controlsUseDpad": { "type": "string", "minLength": 1 },
+            "controlsUseTap": { "type": "string", "minLength": 1 }
           },
           "additionalProperties": false
         },
@@ -603,7 +607,7 @@
     },
     "gameplay": {
       "type": "object",
-      "required": ["progressionMode", "zoneTravel", "start", "playerSpeed", "cameraZoom", "camera", "signScale", "player", "companion"],
+      "required": ["progressionMode", "zoneTravel", "start", "playerSpeed", "cameraZoom", "camera", "signScale", "touchControls", "player", "companion"],
       "properties": {
         "progressionMode": { "const": "sequential" },
         "zoneTravel": { "const": "free" },
@@ -626,6 +630,7 @@
           "additionalProperties": false
         },
         "signScale": { "type": "number", "exclusiveMinimum": 0 },
+        "touchControls": { "enum": ["tap", "dpad"] },
         "player": {
           "type": "object",
           "required": ["assetId", "origin", "scale", "animations", "body"],

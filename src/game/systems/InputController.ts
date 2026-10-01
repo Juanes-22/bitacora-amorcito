@@ -49,6 +49,11 @@ export class InputController {
     if (this.enabled) this.pendingInteract = true;
   }
 
+  /** Pide interactuar con lo que haya cerca (Enter, «Explorar» o el toque sobre la estación). */
+  requestInteract(): void {
+    this.press();
+  }
+
   /** Vector de movimiento de longitud ≤ 1: la diagonal no es más rápida. Direcciones opuestas se anulan. */
   vector(): { x: number; y: number } {
     if (!this.enabled) return { x: 0, y: 0 };

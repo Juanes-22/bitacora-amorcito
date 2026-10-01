@@ -2,7 +2,7 @@
 
 **Documento:** especificación funcional y técnica; fuente de verdad de los requisitos.  
 **Stack:** React + Vite + TypeScript + Phaser.  
-**Revisión documental:** 10. La revisión 10 añade (c) las flores y arbustos animados fotograma a fotograma (`bitacora-flowers-bushes-animations`; §3.2) y el límite de efectos por zona, con los criterios AC-55 a AC-57. La revisión 9 añade (a) las piezas adicionales del paisaje (`bitacora-landscape-extras`: luces del árbol, patos, nubes y partículas luminosas; §3.2) y (b) la música de fondo con rotación de pistas y control de encendido/apagado (§6.4, §14), con los criterios AC-47 a AC-54. La revisión 8 (a) añade el kit de animaciones del paisaje (§3.2), el encuadre y la escala visual (§6.3, §14) y los criterios AC-37 a AC-46; y (b) alinea el contrato de §12.4 y el puente de §11.5 con lo ya implementado en las fases 1 a 4. El contrato de assets se adapta al `assets.json` real entregado por el usuario. Ese manifiesto existente es autoritativo: conserva sus IDs, `pathConvention`, `path`, categorías, `kind`, dimensiones, transparencia, procedencia y metadatos específicos; no se reemplaza por un esquema inventado.  
+**Revisión documental:** 11. La revisión 11 sustituye la cruceta por defecto en móvil por «tocar para caminar» (la cruceta pasa a ser un ajuste), con los criterios AC-58 a AC-61 (§6.1). La revisión 10 añade (c) las flores y arbustos animados fotograma a fotograma (`bitacora-flowers-bushes-animations`; §3.2) y el límite de efectos por zona, con los criterios AC-55 a AC-57. La revisión 9 añade (a) las piezas adicionales del paisaje (`bitacora-landscape-extras`: luces del árbol, patos, nubes y partículas luminosas; §3.2) y (b) la música de fondo con rotación de pistas y control de encendido/apagado (§6.4, §14), con los criterios AC-47 a AC-54. La revisión 8 (a) añade el kit de animaciones del paisaje (§3.2), el encuadre y la escala visual (§6.3, §14) y los criterios AC-37 a AC-46; y (b) alinea el contrato de §12.4 y el puente de §11.5 con lo ya implementado en las fases 1 a 4. El contrato de assets se adapta al `assets.json` real entregado por el usuario. Ese manifiesto existente es autoritativo: conserva sus IDs, `pathConvention`, `path`, categorías, `kind`, dimensiones, transparencia, procedencia y metadatos específicos; no se reemplaza por un esquema inventado.  
 **Estado:** requisitos definidos para implementar; este documento no acredita funcionalidades construidas ni pruebas ejecutadas.
 
 <a id="spec-0"></a>
@@ -302,7 +302,14 @@ Permite volver a las estaciones completadas y revisar sus contenidos en cualquie
 
 ### 6.1. Controles y foco
 
-En escritorio, las flechas mueven a Vanessa y `Enter` interactúa. `Escape` cierra la lectura desde React. En móvil, construye una cruceta HTML de cuatro direcciones y un botón «Explorar» con el estilo de los assets. La cruceta es una región con etiqueta textual y se muestra con puntero táctil (`pointer: coarse`) o en pantallas estrechas (≤ 640 px de ancho); en escritorio con ratón no se muestra, porque se usa el teclado. Se oculta mientras hay una ventana abierta y no tapa la cabecera, sus herramientas ni el aviso de proximidad. Sus pulsaciones deben llegar al mismo controlador de entrada de Phaser que usa el teclado, no a un segundo sistema de movimiento.
+En escritorio, las flechas mueven a Vanessa y `Enter` interactúa. `Escape` cierra la lectura desde React.
+
+**Controles táctiles.** En pantallas táctiles (`pointer: coarse`) y estrechas (≤ 640 px) hay dos modos, elegibles dentro del juego con un botón de las herramientas de la cabecera. El modo de partida lo fija `gameplay.touchControls` (`"tap"` por defecto) y la elección del visitante se guarda en sus preferencias, aparte del progreso, y prevalece sobre la configuración.
+
+- **Tocar para caminar (`tap`, por defecto).** Un toque en el mapa lleva a Vanessa hasta ese punto por el camino que el mapa permite: la ruta se calcula sobre la misma rejilla de obstáculos que valida la alcanzabilidad (§4.4), de modo que rodea arbustos, vallas y rocas en lugar de chocar con ellos; si se toca una zona no transitable, camina hasta su orilla alcanzable más cercana. Donde se tocó aparece un círculo animado (una onda que se expande y un anillo que late en el destino hasta que llega); con `prefers-reduced-motion` el anillo aparece quieto y sin onda. Arrastrar el dedo reorienta el destino. Cualquier flecha del teclado, una ventana abierta, una solicitud de apertura, un cambio de zona o un nuevo toque cancelan o sustituyen el recorrido. El recorrido entrega un vector al mismo ciclo de movimiento que usan las flechas (§6.2); no hay un segundo sistema de movimiento.
+- **Explorar tocando la estación.** Estando Vanessa junto a una estación o un portal (dentro de su radio de interacción), tocar su señal o su anillo equivale a «Explorar» y sigue exactamente las mismas reglas de secuencia que `Enter` (§8): una estación bloqueada o pendiente solo muestra su mensaje. Si aún no está junto a ella, tocarla lleva a Vanessa a su punto de interacción sin abrirla; un segundo toque la abre. El aviso de proximidad dice «Toca la estación para explorar» (o «Toca el portal para viajar») en lugar de «Enter».
+- **Cruceta (`dpad`).** Una cruceta HTML de cuatro direcciones y un botón «Explorar» con el estilo de los assets. Sus pulsaciones deben llegar al mismo controlador de entrada de Phaser que usa el teclado, no a un segundo sistema de movimiento. Es una región con etiqueta textual, se oculta mientras hay una ventana abierta y no tapa la cabecera, sus herramientas ni el aviso de proximidad. En este modo el aviso nombra el botón «Explorar» y tocar el mapa no mueve a Vanessa.
+- En escritorio con ratón no se muestra ninguna de las dos interfaces ni el botón de cambio: se usa el teclado, y hacer clic en el mapa no mueve al personaje.
 
 Habilita las flechas del juego solo cuando el área del mapa tiene el foco o hay un control táctil activo, no hay una ventana modal y la aplicación está visible. Desactiva también la captura preventiva de esas teclas fuera de ese contexto: deshabilitar solo la lógica de movimiento no basta si se sigue impidiendo el comportamiento normal del navegador. `Tab` debe permitir entrar y salir del mapa. [T9]
 
@@ -896,7 +903,9 @@ interface UiConfig {
     preparationTemplate: string;
     musicMute: string; musicUnmute: string;     // etiqueta del botón de música según su estado
     stateLocked: string; stateAvailable: string; stateCompleted: string;   // estado de cada aprendizaje en la lista accesible
+    tapExplore: string; tapTravel: string;   // aviso de proximidad al tocar
     controlsLabel: string; moveUp: string; moveDown: string; moveLeft: string; moveRight: string;   // cruceta táctil
+    controlsUseDpad: string; controlsUseTap: string;   // botón que cambia de modo de controles
   };                                 // las plantillas solo admiten las variables permitidas de cada una (§12.7)
   assets: {
     window: string; button: string; stationSign: string; titleSign: string; portrait: string;
@@ -914,6 +923,7 @@ interface GameplayConfig {
   cameraZoom: number;                // zoom base (mínimo)
   camera: { fit: "cover" | "fixed"; maxZoom: number };
   signScale: number;                 // escala en el mundo de las señales de estación (§6.3)
+  touchControls: "tap" | "dpad";     // controles táctiles de partida (§6.1); el visitante puede cambiarlos
   player: ActorSpec & {
     // Píxeles de textura × scale, medidos desde el punto de apoyo (los pies): offset (0,0) son los pies.
     body: { width: number; height: number; offset: Point };
@@ -1207,7 +1217,7 @@ Comunica `prefers-reduced-motion` también a Phaser para desactivar sacudidas, d
 
 ### 15.1. Resultados exigidos
 
-Estos criterios describen el resultado requerido, no pruebas ya superadas. Los IDs `AC-01` a `AC-57` permiten relacionarlos con las tareas y evidencias de [PLAN.md](PLAN.md). No renumerarlos al actualizar el estado de implementación.
+Estos criterios describen el resultado requerido, no pruebas ya superadas. Los IDs `AC-01` a `AC-61` permiten relacionarlos con las tareas y evidencias de [PLAN.md](PLAN.md). No renumerarlos al actualizar el estado de implementación.
 
 | ID | Prueba | Resultado esperado |
 |---|---|---|
@@ -1269,6 +1279,11 @@ Estos criterios describen el resultado requerido, no pruebas ya superadas. Los I
 | <a id="ac-55"></a>AC-55 | Flora animada integrada | Las seis plantas del tercer kit se añaden a `assets.json` sin alterar las entradas existentes; archivos, atlas, hashes y regiones son válidos y cada una declara `origin` (raíz) y `recommendedScale`. |
 | <a id="ac-56"></a>AC-56 | Flora viva y bien colocada | Cada zona muestra flores y arbustos que cambian de fotograma con velocidades y fases distintas; su raíz está sobre suelo no transitable y no se superpone a plantas pintadas ni a puntos de interacción; con movimiento reducido quedan en un fotograma fijo. |
 | <a id="ac-57"></a>AC-57 | Presupuesto de efectos | Una zona con más de 60 efectos produce un error localizado, y con todo el ambiente de ambas zonas activo la mediana sigue siendo ≥ 50 fps sin objetos residuales al cambiar de zona. |
+
+| <a id="ac-58"></a>AC-58 | Tocar para caminar | En un móvil, por defecto, tocar el mapa lleva a Vanessa al punto tocado rodeando los obstáculos (sin atascarse ni atravesarlos), con un círculo animado en el destino que desaparece al llegar; tocar una zona no transitable lleva a su orilla; arrastrar reorienta; una flecha, una ventana o un cambio de zona cancelan. |
+| <a id="ac-59"></a>AC-59 | Explorar tocando | Junto a una estación o portal, tocarlos equivale a «Explorar» con las mismas reglas de secuencia; lejos de ellos, tocarlos lleva a su punto de interacción sin abrirlos y un segundo toque los abre; el aviso dice qué tocar. |
+| <a id="ac-60"></a>AC-60 | Ajuste de controles | Un botón accesible (≥ 44 px) cambia entre tocar para caminar y la cruceta; el modo de partida sale de `gameplay.touchControls`, la elección del visitante se recuerda aparte del progreso y manda sobre la configuración; en cada modo el otro no actúa. |
+| <a id="ac-61"></a>AC-61 | Movimiento reducido y escritorio | Con `prefers-reduced-motion` el círculo del destino aparece quieto y sin onda y el toque camina igual; en escritorio con ratón hacer clic en el mapa no mueve a Vanessa y no se muestran los controles táctiles. |
 
 <a id="spec-15-2"></a>
 

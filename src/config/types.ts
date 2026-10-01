@@ -134,7 +134,9 @@ export interface UiConfig {
     resetConfirm: string; cancel: string; preparationTemplate: string;
     musicMute: string; musicUnmute: string;
     stateLocked: string; stateAvailable: string; stateCompleted: string;
+    tapExplore: string; tapTravel: string;
     controlsLabel: string; moveUp: string; moveDown: string; moveLeft: string; moveRight: string;
+    controlsUseDpad: string; controlsUseTap: string;
   };
   assets: {
     window: string; button: string; buttonHover?: string; stationSign: string;
@@ -154,6 +156,8 @@ export interface GameplayConfig {
   camera: { fit: "cover" | "fixed"; maxZoom: number; minPlayerHeight: number };
   /** Escala en el mundo de las señales de estación (y de los textos que las acompañan). */
   signScale: number;
+  /** Controles táctiles de partida: `tap` (tocar para caminar) o `dpad` (cruceta y «Explorar»). El visitante puede cambiarlos. */
+  touchControls: "tap" | "dpad";
   player: ActorSpec & { body: { width: number; height: number; offset: Point } };
   companion: { mode: "separate" | "included"; actor?: ActorSpec; followDistance: number };
 }

@@ -1,0 +1,139 @@
+{
+  "project": "Bitácora Amorcito",
+  "version": "4.0",
+  "map_size": [
+    1672,
+    941
+  ],
+  "hair_palette_reference": {
+    "base": "#795042",
+    "highlights": "#c68864",
+    "shadows": "#573a31"
+  },
+  "stations": [
+    {
+      "number": 1,
+      "title": "Conocer la infancia",
+      "item": "item_01_libros.png",
+      "center_percent": [
+        20,
+        83
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Planificar con sentido",
+      "item": "item_02_cuaderno_lapiz.png",
+      "center_percent": [
+        22,
+        54
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Ambientes que inspiran",
+      "item": "item_03_estante_materiales.png",
+      "center_percent": [
+        43,
+        31
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Aprender jugando",
+      "item": "item_04_girasoles.png",
+      "center_percent": [
+        47,
+        66
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Evaluar para crecer",
+      "item": "item_05_candado.png",
+      "center_percent": [
+        76,
+        48
+      ]
+    }
+  ],
+  "files": [
+    {
+      "file": "mapa_paisaje.png",
+      "width": 1672,
+      "height": 941,
+      "transparent": false
+    },
+    {
+      "file": "letrero_estacion_vacio.png",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true
+    },
+    {
+      "file": "item_01_libros.png",
+      "width": 1536,
+      "height": 1024,
+      "transparent": true
+    },
+    {
+      "file": "item_02_cuaderno_lapiz.png",
+      "width": 1536,
+      "height": 1024,
+      "transparent": true
+    },
+    {
+      "file": "item_03_estante_materiales.png",
+      "width": 1536,
+      "height": 1024,
+      "transparent": true
+    },
+    {
+      "file": "item_04_girasoles.png",
+      "width": 1366,
+      "height": 1151,
+      "transparent": true
+    },
+    {
+      "file": "item_05_candado.png",
+      "width": 1312,
+      "height": 1199,
+      "transparent": true
+    },
+    {
+      "file": "personaje_movible_con_jerry.png",
+      "width": 1294,
+      "height": 1216,
+      "transparent": true
+    },
+    {
+      "file": "retrato_xp_con_jerry.png",
+      "width": 1536,
+      "height": 1024,
+      "transparent": true
+    },
+    {
+      "file": "poses_movimiento_con_jerry.png",
+      "width": 1086,
+      "height": 1448,
+      "transparent": true
+    }
+  ],
+  "hair_palette_exact_pixel_counts": {
+    "personaje_movible_con_jerry.png": {
+      "shadow": 21006,
+      "base": 45052,
+      "highlights": 9560
+    },
+    "retrato_xp_con_jerry.png": {
+      "shadow": 27280,
+      "base": 72456,
+      "highlights": 26433
+    },
+    "poses_movimiento_con_jerry.png": {
+      "shadow": 44702,
+      "base": 124246,
+      "highlights": 15609
+    }
+  }
+}

@@ -1,0 +1,40 @@
+/*
+ * Escala de la interfaz (SPEC 14, AC-39): todo el CSS usa rem sobre una raíz fluida. Parte de la preferencia de
+ * tamaño de letra del navegador (rem), de modo que quien la aumente también la aumenta aquí. ≈17 px a 1280 px,
+ * ≈21 px a 1920 px (×1,22), ≈23 px a 2177 px, con tope de 28 px; mínimo 17 px (móvil).
+ */
+html {
+  font-size: clamp(1.0625rem, 0.6vw + 0.6rem, 1.75rem);
+}
+
+/* Colores muestreados de los assets de interfaz (panel crema, botón verde, letrero de madera). */
+:root {
+  --cream: #fff7e9; /* interior real del panel de nueve secciones */
+  --cream-warm: #f8e8c8;
+  --tan: #d0a078;
+  --brown: #583020;
+  --brown-deep: #502010;
+  --green: #408068;
+  --green-deep: #204030;
+  --green-light: #70a888;
+  --forest: #1f2a1f;
+  --ink: var(--brown);
+  --ink-soft: #7a4a34;
+  --focus: #b3470f;
+
+  --font-ui: "Trebuchet MS", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-reading: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  --panel-edge: 1.5rem;
+  --gutter: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion: 0s;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    --motion: 0.15s;
+  }
+}

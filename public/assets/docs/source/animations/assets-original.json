@@ -1,0 +1,550 @@
+{
+  "schemaVersion": 1,
+  "name": "Bitácora Amorcito — animaciones del paisaje",
+  "assetRoot": "assets",
+  "style": "pixel-art",
+  "assets": {
+    "water-ripples": {
+      "label": "Agua — ondas y reflejos",
+      "type": "atlas",
+      "textureKey": "landscape-water-ripples",
+      "path": "assets/animations/water-ripples.png",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "sha256": "e625aed0185dc846f26e54b729e10504bf2712a5bf62aef81269ca47a4091684",
+      "recommendedContentHeightPx": 44,
+      "filter": "nearest",
+      "atlasPath": "assets/animations/water-ripples.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 362,
+        "height": 543
+      },
+      "contentBounds": {
+        "x": 22,
+        "y": 197,
+        "width": 318,
+        "height": 200
+      },
+      "frameContentBounds": [
+        {
+          "x": 22,
+          "y": 255,
+          "width": 317,
+          "height": 134
+        },
+        {
+          "x": 25,
+          "y": 255,
+          "width": 315,
+          "height": 134
+        },
+        {
+          "x": 24,
+          "y": 255,
+          "width": 316,
+          "height": 134
+        },
+        {
+          "x": 29,
+          "y": 255,
+          "width": 311,
+          "height": 142
+        },
+        {
+          "x": 26,
+          "y": 198,
+          "width": 313,
+          "height": 136
+        },
+        {
+          "x": 26,
+          "y": 197,
+          "width": 314,
+          "height": 137
+        },
+        {
+          "x": 28,
+          "y": 197,
+          "width": 312,
+          "height": 132
+        },
+        {
+          "x": 25,
+          "y": 197,
+          "width": 315,
+          "height": 132
+        }
+      ],
+      "origin": {
+        "x": 0.5,
+        "y": 0.546961
+      },
+      "recommendedScale": 0.22,
+      "animation": {
+        "key": "landscape-water-ripples-loop",
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 8,
+        "repeat": -1
+      }
+    },
+    "waterfall": {
+      "label": "Cascada — flujo de agua",
+      "type": "atlas",
+      "textureKey": "landscape-waterfall",
+      "path": "assets/animations/waterfall.png",
+      "width": 1447,
+      "height": 1087,
+      "hasAlpha": true,
+      "sha256": "5d6fbf7d1314e34bff12a01ab013f8438ebf124ceffd22e32db1e94a8c14c8f0",
+      "recommendedContentHeightPx": 100,
+      "filter": "nearest",
+      "atlasPath": "assets/animations/waterfall.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 362,
+        "height": 544
+      },
+      "contentBounds": {
+        "x": 56,
+        "y": 116,
+        "width": 260,
+        "height": 397
+      },
+      "frameContentBounds": [
+        {
+          "x": 58,
+          "y": 117,
+          "width": 257,
+          "height": 393
+        },
+        {
+          "x": 60,
+          "y": 117,
+          "width": 256,
+          "height": 394
+        },
+        {
+          "x": 57,
+          "y": 118,
+          "width": 257,
+          "height": 395
+        },
+        {
+          "x": 57,
+          "y": 117,
+          "width": 257,
+          "height": 395
+        },
+        {
+          "x": 58,
+          "y": 117,
+          "width": 258,
+          "height": 393
+        },
+        {
+          "x": 58,
+          "y": 117,
+          "width": 258,
+          "height": 393
+        },
+        {
+          "x": 56,
+          "y": 117,
+          "width": 259,
+          "height": 393
+        },
+        {
+          "x": 57,
+          "y": 116,
+          "width": 258,
+          "height": 394
+        }
+      ],
+      "origin": {
+        "x": 0.513812,
+        "y": 0.943015
+      },
+      "recommendedScale": 0.251889,
+      "animation": {
+        "key": "landscape-waterfall-loop",
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 10,
+        "repeat": -1
+      }
+    },
+    "foam-splash": {
+      "label": "Espuma — salpicadura en bucle",
+      "type": "atlas",
+      "textureKey": "landscape-foam-splash",
+      "path": "assets/animations/foam-splash.png",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "sha256": "0afe994ba47ecdb998a434144313f80dc99ae3eea92de5e9e5de47f9ff33f2ac",
+      "recommendedContentHeightPx": 28,
+      "filter": "nearest",
+      "atlasPath": "assets/animations/foam-splash.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 362,
+        "height": 543
+      },
+      "contentBounds": {
+        "x": 12,
+        "y": 213,
+        "width": 338,
+        "height": 287
+      },
+      "frameContentBounds": [
+        {
+          "x": 19,
+          "y": 275,
+          "width": 331,
+          "height": 218
+        },
+        {
+          "x": 16,
+          "y": 272,
+          "width": 332,
+          "height": 224
+        },
+        {
+          "x": 12,
+          "y": 213,
+          "width": 338,
+          "height": 287
+        },
+        {
+          "x": 13,
+          "y": 253,
+          "width": 332,
+          "height": 245
+        },
+        {
+          "x": 15,
+          "y": 214,
+          "width": 335,
+          "height": 252
+        },
+        {
+          "x": 17,
+          "y": 281,
+          "width": 330,
+          "height": 182
+        },
+        {
+          "x": 15,
+          "y": 266,
+          "width": 331,
+          "height": 200
+        },
+        {
+          "x": 13,
+          "y": 246,
+          "width": 332,
+          "height": 219
+        }
+      ],
+      "origin": {
+        "x": 0.5,
+        "y": 0.92081
+      },
+      "recommendedScale": 0.097561,
+      "animation": {
+        "key": "landscape-foam-splash-loop",
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 10,
+        "repeat": -1
+      }
+    },
+    "flower-daisies": {
+      "label": "Planta de margaritas",
+      "type": "image",
+      "textureKey": "landscape-flower-daisies",
+      "path": "assets/decorations/flower-daisies.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "sha256": "100b4c6beb4ca81a5afa59395a68db2b5d45a2bfdf50f752773e4c3168faa76a",
+      "recommendedContentHeightPx": 70,
+      "filter": "nearest",
+      "contentBounds": {
+        "x": 151,
+        "y": 137,
+        "width": 964,
+        "height": 1017
+      },
+      "origin": {
+        "x": 0.504785,
+        "y": 0.920255
+      },
+      "recommendedScale": 0.06883,
+      "motion": {
+        "type": "sway",
+        "angleDegrees": {
+          "from": -1,
+          "to": 1
+        },
+        "durationMs": 1800,
+        "yoyo": true,
+        "repeat": -1,
+        "ease": "Sine.easeInOut"
+      }
+    },
+    "bush": {
+      "label": "Arbusto",
+      "type": "image",
+      "textureKey": "landscape-bush",
+      "path": "assets/decorations/bush.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "sha256": "b250ffaa4beba625295ad99f1fe57d364262397c713512ee7e3b333364ab5c6c",
+      "recommendedContentHeightPx": 90,
+      "filter": "nearest",
+      "contentBounds": {
+        "x": 97,
+        "y": 343,
+        "width": 1099,
+        "height": 755
+      },
+      "origin": {
+        "x": 0.51555,
+        "y": 0.875598
+      },
+      "recommendedScale": 0.119205,
+      "motion": {
+        "type": "sway",
+        "angleDegrees": {
+          "from": -0.7,
+          "to": 0.7
+        },
+        "durationMs": 2200,
+        "yoyo": true,
+        "repeat": -1,
+        "ease": "Sine.easeInOut"
+      }
+    },
+    "oak-canopy": {
+      "label": "Copa de árbol",
+      "type": "image",
+      "textureKey": "landscape-oak-canopy",
+      "path": "assets/decorations/oak-canopy.png",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "sha256": "16888e351787c07508976d8e49bfb363a000ca122bca996e79a08405f17fe2f1",
+      "recommendedContentHeightPx": 320,
+      "filter": "nearest",
+      "contentBounds": {
+        "x": 8,
+        "y": 64,
+        "width": 1428,
+        "height": 969
+      },
+      "origin": {
+        "x": 0.498619,
+        "y": 0.951197
+      },
+      "recommendedScale": 0.330237,
+      "motion": {
+        "type": "sway",
+        "offsetXPx": {
+          "from": -2,
+          "to": 2
+        },
+        "durationMs": 2800,
+        "yoyo": true,
+        "repeat": -1,
+        "ease": "Sine.easeInOut"
+      }
+    },
+    "cloud": {
+      "label": "Nube",
+      "type": "image",
+      "textureKey": "landscape-cloud",
+      "path": "assets/background/cloud.png",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "sha256": "134492f81a3896b7ab2384c47698fa8bc8678e7649d6c8e64c46957355f2f325",
+      "recommendedContentHeightPx": 110,
+      "filter": "nearest",
+      "contentBounds": {
+        "x": 53,
+        "y": 292,
+        "width": 1344,
+        "height": 542
+      },
+      "origin": {
+        "x": 0.500691,
+        "y": 0.518416
+      },
+      "recommendedScale": 0.202952,
+      "motion": {
+        "type": "drift",
+        "direction": "right",
+        "speedPxPerSecond": 4,
+        "wrapAtMapEdge": true
+      }
+    },
+    "leaf": {
+      "label": "Partícula — hoja",
+      "type": "image",
+      "textureKey": "landscape-leaf",
+      "path": "assets/particles/leaf.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "sha256": "b12cddd625ae6db4a97c0793cf30efaf74cb153f5ed84c32547f8b22bb9c115e",
+      "recommendedContentHeightPx": 12,
+      "filter": "nearest",
+      "contentBounds": {
+        "x": 277,
+        "y": 275,
+        "width": 715,
+        "height": 720
+      },
+      "origin": {
+        "x": 0.505981,
+        "y": 0.50638
+      },
+      "recommendedScale": 0.016667,
+      "motion": {
+        "type": "particle",
+        "lifespanMs": 4500,
+        "speedX": {
+          "min": -8,
+          "max": 8
+        },
+        "speedY": {
+          "min": 8,
+          "max": 18
+        }
+      }
+    },
+    "petal": {
+      "label": "Partícula — pétalo",
+      "type": "image",
+      "textureKey": "landscape-petal",
+      "path": "assets/particles/petal.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "sha256": "89b233f390cfdf5447a0e46b74ddd4d2468d76a28c90c1527186248087ab8336",
+      "recommendedContentHeightPx": 8,
+      "filter": "nearest",
+      "contentBounds": {
+        "x": 442,
+        "y": 451,
+        "width": 393,
+        "height": 387
+      },
+      "origin": {
+        "x": 0.509171,
+        "y": 0.513955
+      },
+      "recommendedScale": 0.020672,
+      "motion": {
+        "type": "particle",
+        "lifespanMs": 5000,
+        "speedX": {
+          "min": -12,
+          "max": 10
+        },
+        "speedY": {
+          "min": 10,
+          "max": 22
+        }
+      }
+    },
+    "water-droplet": {
+      "label": "Partícula — gota de agua",
+      "type": "image",
+      "textureKey": "landscape-water-droplet",
+      "path": "assets/particles/water-droplet.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "sha256": "9f8388ab1f68d7b99831dbf9757a1e3edb667dee8907c23480845bcc3b68f47a",
+      "recommendedContentHeightPx": 7,
+      "filter": "nearest",
+      "contentBounds": {
+        "x": 489,
+        "y": 341,
+        "width": 300,
+        "height": 603
+      },
+      "origin": {
+        "x": 0.509569,
+        "y": 0.51236
+      },
+      "recommendedScale": 0.011609,
+      "motion": {
+        "type": "particle",
+        "lifespanMs": 450,
+        "speedX": {
+          "min": -20,
+          "max": 20
+        },
+        "speedY": {
+          "min": -75,
+          "max": -35
+        },
+        "gravityY": 180
+      }
+    }
+  },
+  "integration": {
+    "animatedSheets": "Cargar el PNG y su atlas JSON mediante scene.load.atlas.",
+    "singleImages": "Cargar con scene.load.image; aplicar movimiento por tween o emisor de partículas.",
+    "placements": "Configurar posiciones y escalas para cada mapa. Son assets reutilizables, no capas completas alineadas con los mapas.",
+    "staticReplacement": "Sustituir el objeto estático para animar una planta o copa ya dibujada.",
+    "waterMask": "Situar reflejos y espuma dentro del agua, respetando las rocas y los puentes.",
+    "pixelArt": true
+  }
+}

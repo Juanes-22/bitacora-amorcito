@@ -1,0 +1,130 @@
+[
+  {
+    "file": "boton-verde-hover.png",
+    "size": [
+      528,
+      104
+    ],
+    "alpha": true
+  },
+  {
+    "file": "boton-verde.png",
+    "size": [
+      528,
+      104
+    ],
+    "alpha": true
+  },
+  {
+    "file": "estrella-xp.png",
+    "size": [
+      160,
+      149
+    ],
+    "alpha": true
+  },
+  {
+    "file": "insignia-escucha-activa.png",
+    "size": [
+      320,
+      318
+    ],
+    "alpha": true
+  },
+  {
+    "file": "letrero-estacion.png",
+    "size": [
+      520,
+      609
+    ],
+    "alpha": true
+  },
+  {
+    "file": "letrero-titulo-mi-bitacora.png",
+    "size": [
+      1080,
+      280
+    ],
+    "alpha": true
+  },
+  {
+    "file": "letrero-titulo-vacio.png",
+    "size": [
+      1080,
+      280
+    ],
+    "alpha": true
+  },
+  {
+    "file": "libro-abierto.png",
+    "size": [
+      220,
+      149
+    ],
+    "alpha": true
+  },
+  {
+    "file": "ramas-hojas.png",
+    "size": [
+      620,
+      454
+    ],
+    "alpha": true
+  },
+  {
+    "file": "resplandor-jugador.png",
+    "size": [
+      480,
+      288
+    ],
+    "alpha": true
+  },
+  {
+    "file": "ventana-crema-9slice.png",
+    "size": [
+      128,
+      128
+    ],
+    "alpha": true
+  },
+  {
+    "file": "ventana-crema-grande.png",
+    "size": [
+      960,
+      640
+    ],
+    "alpha": true
+  },
+  {
+    "file": "ventana-crema-pequena.png",
+    "size": [
+      640,
+      360
+    ],
+    "alpha": true
+  },
+  {
+    "file": "xp-barra-ejemplo.png",
+    "size": [
+      880,
+      80
+    ],
+    "alpha": true
+  },
+  {
+    "file": "xp-marco.png",
+    "size": [
+      880,
+      80
+    ],
+    "alpha": true
+  },
+  {
+    "file": "xp-relleno.png",
+    "size": [
+      848,
+      40
+    ],
+    "alpha": true
+  }
+]

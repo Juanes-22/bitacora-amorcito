@@ -1,0 +1,1159 @@
+{
+  "schemaVersion": 1,
+  "project": "Bitácora Amorcito",
+  "pack": "landscape-extras",
+  "assetRoot": "assets",
+  "assets": {
+    "tree-fairy-lights": {
+      "label": "Guirnalda dorada animada",
+      "type": "atlas",
+      "textureKey": "landscape-extra-tree-fairy-lights",
+      "path": "assets/lights/tree-fairy-lights.png",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "sha256": "00f4bc03b66e27d7dddff5461dece0800ded877ef94c661f761e98abbe7b08dd",
+      "filter": "nearest",
+      "contentBounds": {
+        "x": 26,
+        "y": 291,
+        "width": 1397,
+        "height": 496
+      },
+      "contentBoundsAlphaThreshold": 16,
+      "recommendedContentHeightPx": 72,
+      "atlasPath": "assets/lights/tree-fairy-lights.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 358,
+        "height": 157
+      },
+      "alignment": "center",
+      "frames": [
+        {
+          "name": "frame-00",
+          "frame": {
+            "x": 15,
+            "y": 287,
+            "w": 342,
+            "h": 135
+          },
+          "cell": {
+            "x": 0,
+            "y": 0,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 26,
+            "y": 291,
+            "width": 327,
+            "height": 123
+          }
+        },
+        {
+          "name": "frame-01",
+          "frame": {
+            "x": 381,
+            "y": 287,
+            "w": 332,
+            "h": 136
+          },
+          "cell": {
+            "x": 362,
+            "y": 0,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 25,
+            "y": 291,
+            "width": 322,
+            "height": 127
+          }
+        },
+        {
+          "name": "frame-02",
+          "frame": {
+            "x": 738,
+            "y": 287,
+            "w": 332,
+            "h": 138
+          },
+          "cell": {
+            "x": 724,
+            "y": 0,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 19,
+            "y": 291,
+            "width": 321,
+            "height": 129
+          }
+        },
+        {
+          "name": "frame-03",
+          "frame": {
+            "x": 1095,
+            "y": 287,
+            "w": 338,
+            "h": 134
+          },
+          "cell": {
+            "x": 1086,
+            "y": 0,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 14,
+            "y": 291,
+            "width": 323,
+            "height": 124
+          }
+        },
+        {
+          "name": "frame-04",
+          "frame": {
+            "x": 24,
+            "y": 653,
+            "w": 333,
+            "h": 141
+          },
+          "cell": {
+            "x": 0,
+            "y": 543,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 31,
+            "y": 116,
+            "width": 322,
+            "height": 127
+          }
+        },
+        {
+          "name": "frame-05",
+          "frame": {
+            "x": 383,
+            "y": 654,
+            "w": 330,
+            "h": 139
+          },
+          "cell": {
+            "x": 362,
+            "y": 543,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 26,
+            "y": 116,
+            "width": 321,
+            "height": 128
+          }
+        },
+        {
+          "name": "frame-06",
+          "frame": {
+            "x": 738,
+            "y": 654,
+            "w": 332,
+            "h": 134
+          },
+          "cell": {
+            "x": 724,
+            "y": 543,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 19,
+            "y": 116,
+            "width": 320,
+            "height": 122
+          }
+        },
+        {
+          "name": "frame-07",
+          "frame": {
+            "x": 1091,
+            "y": 654,
+            "w": 336,
+            "h": 134
+          },
+          "cell": {
+            "x": 1086,
+            "y": 543,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 12,
+            "y": 115,
+            "width": 324,
+            "height": 123
+          }
+        }
+      ],
+      "recommendedScale": 0.55814,
+      "origin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "animation": {
+        "key": "tree-fairy-lights-loop",
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 6,
+        "repeat": -1
+      },
+      "recommendedBlendMode": "NORMAL",
+      "recommendedOpacity": 1,
+      "motionSuggestion": {
+        "type": "frame-animation"
+      }
+    },
+    "hanging-lantern": {
+      "label": "Farol cálido para el árbol",
+      "type": "image",
+      "textureKey": "landscape-extra-hanging-lantern",
+      "path": "assets/lights/hanging-lantern.png",
+      "width": 1320,
+      "height": 1191,
+      "hasAlpha": true,
+      "sha256": "760bfc3ab448b4ed51bf7702c58f2a5ae7d20fc00f815968e50aacb4c3d1cc64",
+      "filter": "nearest",
+      "contentBounds": {
+        "x": 372,
+        "y": 98,
+        "width": 578,
+        "height": 891
+      },
+      "contentBoundsAlphaThreshold": 16,
+      "recommendedContentHeightPx": 68,
+      "origin": {
+        "x": 0.500758,
+        "y": 0.082284
+      },
+      "recommendedScale": 0.076319,
+      "recommendedBlendMode": "NORMAL",
+      "recommendedOpacity": 1,
+      "motionSuggestion": {
+        "type": "sway",
+        "angleDegrees": 1.5,
+        "durationMs": 2600
+      }
+    },
+    "warm-light-glow": {
+      "label": "Halo de luz dorada",
+      "type": "image",
+      "textureKey": "landscape-extra-warm-light-glow",
+      "path": "assets/lights/warm-light-glow.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "sha256": "e4da6bac463301f743ea4da4972fa820c1d298675ca448304330dd21820a5673",
+      "filter": "nearest",
+      "contentBounds": {
+        "x": 234,
+        "y": 232,
+        "width": 787,
+        "height": 779
+      },
+      "contentBoundsAlphaThreshold": 16,
+      "recommendedContentHeightPx": 210,
+      "origin": {
+        "x": 0.500399,
+        "y": 0.495614
+      },
+      "recommendedScale": 0.269576,
+      "recommendedBlendMode": "ADD",
+      "recommendedOpacity": 0.14,
+      "motionSuggestion": {
+        "type": "pulse",
+        "alphaMin": 0.09,
+        "alphaMax": 0.18,
+        "durationMs": 2200
+      }
+    },
+    "tree-light-rays": {
+      "label": "Rayos de luz entre las hojas",
+      "type": "image",
+      "textureKey": "landscape-extra-tree-light-rays",
+      "path": "assets/lights/tree-light-rays.png",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "sha256": "22e9ba76a9ca60c2a97ebb1224d4c9981816dbd2e711a0d34d937d3cc379c94c",
+      "filter": "nearest",
+      "contentBounds": {
+        "x": 89,
+        "y": 58,
+        "width": 1090,
+        "height": 964
+      },
+      "contentBoundsAlphaThreshold": 16,
+      "recommendedContentHeightPx": 190,
+      "origin": {
+        "x": 0.061464,
+        "y": 0.053407
+      },
+      "recommendedScale": 0.197095,
+      "recommendedBlendMode": "ADD",
+      "recommendedOpacity": 0.08,
+      "motionSuggestion": {
+        "type": "pulse",
+        "alphaMin": 0.05,
+        "alphaMax": 0.11,
+        "durationMs": 3600
+      }
+    },
+    "gold-sparkle": {
+      "label": "Destello dorado animado",
+      "type": "atlas",
+      "textureKey": "landscape-extra-gold-sparkle",
+      "path": "assets/particles/gold-sparkle.png",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "sha256": "1db01193746662fd3c37d7ba9f7847bae7d7397ff3f31198aaa5d69e70e97f7c",
+      "filter": "nearest",
+      "contentBounds": {
+        "x": 119,
+        "y": 270,
+        "width": 1255,
+        "height": 578
+      },
+      "contentBoundsAlphaThreshold": 16,
+      "recommendedContentHeightPx": 13,
+      "atlasPath": "assets/particles/gold-sparkle.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 265,
+        "height": 270
+      },
+      "alignment": "center",
+      "frames": [
+        {
+          "name": "frame-00",
+          "frame": {
+            "x": 160,
+            "y": 377,
+            "w": 46,
+            "h": 45
+          },
+          "cell": {
+            "x": 0,
+            "y": 0,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 162,
+            "y": 379,
+            "width": 42,
+            "height": 41
+          }
+        },
+        {
+          "name": "frame-01",
+          "frame": {
+            "x": 491,
+            "y": 346,
+            "w": 105,
+            "h": 105
+          },
+          "cell": {
+            "x": 362,
+            "y": 0,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 131,
+            "y": 348,
+            "width": 101,
+            "height": 101
+          }
+        },
+        {
+          "name": "frame-02",
+          "frame": {
+            "x": 826,
+            "y": 318,
+            "w": 158,
+            "h": 159
+          },
+          "cell": {
+            "x": 724,
+            "y": 0,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 104,
+            "y": 320,
+            "width": 154,
+            "height": 155
+          }
+        },
+        {
+          "name": "frame-03",
+          "frame": {
+            "x": 1127,
+            "y": 268,
+            "w": 249,
+            "h": 254
+          },
+          "cell": {
+            "x": 1086,
+            "y": 0,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 43,
+            "y": 270,
+            "width": 245,
+            "height": 250
+          }
+        },
+        {
+          "name": "frame-04",
+          "frame": {
+            "x": 117,
+            "y": 699,
+            "w": 147,
+            "h": 151
+          },
+          "cell": {
+            "x": 0,
+            "y": 543,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 119,
+            "y": 158,
+            "width": 143,
+            "height": 147
+          }
+        },
+        {
+          "name": "frame-05",
+          "frame": {
+            "x": 491,
+            "y": 724,
+            "w": 105,
+            "h": 106
+          },
+          "cell": {
+            "x": 362,
+            "y": 543,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 131,
+            "y": 183,
+            "width": 101,
+            "height": 102
+          }
+        },
+        {
+          "name": "frame-06",
+          "frame": {
+            "x": 883,
+            "y": 755,
+            "w": 46,
+            "h": 45
+          },
+          "cell": {
+            "x": 724,
+            "y": 543,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 161,
+            "y": 214,
+            "width": 42,
+            "height": 41
+          }
+        },
+        {
+          "name": "frame-07",
+          "frame": {
+            "x": 1246,
+            "y": 767,
+            "w": 24,
+            "h": 22
+          },
+          "cell": {
+            "x": 1086,
+            "y": 543,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 162,
+            "y": 226,
+            "width": 20,
+            "height": 18
+          }
+        }
+      ],
+      "recommendedScale": 0.052,
+      "origin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "animation": {
+        "key": "gold-sparkle-loop",
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 12,
+        "repeat": -1
+      },
+      "recommendedBlendMode": "NORMAL",
+      "recommendedOpacity": 0.9,
+      "motionSuggestion": {
+        "type": "frame-animation",
+        "emittedLifetimeMs": 667
+      }
+    },
+    "firefly-mote": {
+      "label": "Partícula luminosa",
+      "type": "image",
+      "textureKey": "landscape-extra-firefly-mote",
+      "path": "assets/particles/firefly-mote.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "sha256": "0f5fd10c23bd43d7f4169b6820622ebe651e59af949118d4b3e59040aa50e69f",
+      "filter": "nearest",
+      "contentBounds": {
+        "x": 495,
+        "y": 497,
+        "width": 264,
+        "height": 261
+      },
+      "contentBoundsAlphaThreshold": 16,
+      "recommendedContentHeightPx": 7,
+      "origin": {
+        "x": 0.5,
+        "y": 0.500399
+      },
+      "recommendedScale": 0.02682,
+      "recommendedBlendMode": "ADD",
+      "recommendedOpacity": 0.65,
+      "motionSuggestion": {
+        "type": "particle",
+        "lifespanMs": [
+          2200,
+          4400
+        ],
+        "speedPxPerSecond": [
+          4,
+          12
+        ],
+        "frequencyMs": 450
+      }
+    },
+    "pollen-speck": {
+      "label": "Polen flotante",
+      "type": "image",
+      "textureKey": "landscape-extra-pollen-speck",
+      "path": "assets/particles/pollen-speck.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "sha256": "cc0aa46201670092775ef2969da84c7a17a3664c4ae13a9e8ed4d4feadf67347",
+      "filter": "nearest",
+      "contentBounds": {
+        "x": 554,
+        "y": 577,
+        "width": 164,
+        "height": 178
+      },
+      "contentBoundsAlphaThreshold": 16,
+      "recommendedContentHeightPx": 5,
+      "origin": {
+        "x": 0.507177,
+        "y": 0.5311
+      },
+      "recommendedScale": 0.02809,
+      "recommendedBlendMode": "NORMAL",
+      "recommendedOpacity": 0.5,
+      "motionSuggestion": {
+        "type": "particle",
+        "lifespanMs": [
+          3000,
+          5500
+        ],
+        "speedPxPerSecond": [
+          3,
+          9
+        ],
+        "frequencyMs": 700
+      }
+    },
+    "cloud-small": {
+      "label": "Nube pequeña",
+      "type": "image",
+      "textureKey": "landscape-extra-cloud-small",
+      "path": "assets/clouds/cloud-small.png",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "sha256": "6f54376f7e0d6257f5064000db0dbf24739b395113289d02f90c2a160e678156",
+      "filter": "nearest",
+      "contentBounds": {
+        "x": 255,
+        "y": 347,
+        "width": 934,
+        "height": 435
+      },
+      "contentBoundsAlphaThreshold": 16,
+      "recommendedContentHeightPx": 62,
+      "origin": {
+        "x": 0.498619,
+        "y": 0.519797
+      },
+      "recommendedScale": 0.142529,
+      "recommendedBlendMode": "NORMAL",
+      "recommendedOpacity": 0.88,
+      "motionSuggestion": {
+        "type": "drift",
+        "speedPxPerSecond": 5
+      }
+    },
+    "cloud-long": {
+      "label": "Nube alargada",
+      "type": "image",
+      "textureKey": "landscape-extra-cloud-long",
+      "path": "assets/clouds/cloud-long.png",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "sha256": "5b9cadcd5a73e5f36ec44311dbbc1a263562c1af609b764dae3fc633079bffba",
+      "filter": "nearest",
+      "contentBounds": {
+        "x": 57,
+        "y": 407,
+        "width": 1336,
+        "height": 299
+      },
+      "contentBoundsAlphaThreshold": 16,
+      "recommendedContentHeightPx": 54,
+      "origin": {
+        "x": 0.500691,
+        "y": 0.512431
+      },
+      "recommendedScale": 0.180602,
+      "recommendedBlendMode": "NORMAL",
+      "recommendedOpacity": 0.82,
+      "motionSuggestion": {
+        "type": "drift",
+        "speedPxPerSecond": 3
+      }
+    },
+    "duckling-swim": {
+      "label": "Patito amarillo nadando",
+      "type": "atlas",
+      "textureKey": "landscape-extra-duckling-swim",
+      "path": "assets/ducks/duckling-swim.png",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "sha256": "a9f79773b217aa972c61e1438d4811ae42de962a0d6ae1f5b586451057275502",
+      "filter": "nearest",
+      "contentBounds": {
+        "x": 58,
+        "y": 164,
+        "width": 1355,
+        "height": 776
+      },
+      "contentBoundsAlphaThreshold": 16,
+      "recommendedContentHeightPx": 30,
+      "atlasPath": "assets/ducks/duckling-swim.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 308,
+        "height": 316
+      },
+      "alignment": "bottom-center",
+      "frames": [
+        {
+          "name": "frame-00",
+          "frame": {
+            "x": 57,
+            "y": 178,
+            "w": 287,
+            "h": 283
+          },
+          "cell": {
+            "x": 0,
+            "y": 0,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 59,
+            "y": 180,
+            "width": 283,
+            "height": 279
+          }
+        },
+        {
+          "name": "frame-01",
+          "frame": {
+            "x": 423,
+            "y": 201,
+            "w": 284,
+            "h": 285
+          },
+          "cell": {
+            "x": 362,
+            "y": 0,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 63,
+            "y": 203,
+            "width": 280,
+            "height": 281
+          }
+        },
+        {
+          "name": "frame-02",
+          "frame": {
+            "x": 774,
+            "y": 162,
+            "w": 284,
+            "h": 293
+          },
+          "cell": {
+            "x": 724,
+            "y": 0,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 52,
+            "y": 164,
+            "width": 280,
+            "height": 289
+          }
+        },
+        {
+          "name": "frame-03",
+          "frame": {
+            "x": 1124,
+            "y": 186,
+            "w": 291,
+            "h": 288
+          },
+          "cell": {
+            "x": 1086,
+            "y": 0,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 40,
+            "y": 188,
+            "width": 287,
+            "height": 284
+          }
+        },
+        {
+          "name": "frame-04",
+          "frame": {
+            "x": 56,
+            "y": 642,
+            "w": 286,
+            "h": 300
+          },
+          "cell": {
+            "x": 0,
+            "y": 543,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 58,
+            "y": 101,
+            "width": 282,
+            "height": 296
+          }
+        },
+        {
+          "name": "frame-05",
+          "frame": {
+            "x": 418,
+            "y": 621,
+            "w": 286,
+            "h": 285
+          },
+          "cell": {
+            "x": 362,
+            "y": 543,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 58,
+            "y": 80,
+            "width": 282,
+            "height": 281
+          }
+        },
+        {
+          "name": "frame-06",
+          "frame": {
+            "x": 774,
+            "y": 647,
+            "w": 289,
+            "h": 282
+          },
+          "cell": {
+            "x": 724,
+            "y": 543,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 52,
+            "y": 106,
+            "width": 285,
+            "height": 278
+          }
+        },
+        {
+          "name": "frame-07",
+          "frame": {
+            "x": 1123,
+            "y": 641,
+            "w": 292,
+            "h": 276
+          },
+          "cell": {
+            "x": 1086,
+            "y": 543,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 39,
+            "y": 100,
+            "width": 288,
+            "height": 272
+          }
+        }
+      ],
+      "recommendedScale": 0.101351,
+      "origin": {
+        "x": 0.5,
+        "y": 0.909114
+      },
+      "animation": {
+        "key": "duckling-swim-loop",
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 8,
+        "repeat": -1
+      },
+      "recommendedBlendMode": "NORMAL",
+      "recommendedOpacity": 1,
+      "motionSuggestion": {
+        "type": "swim",
+        "distancePx": 50,
+        "durationMs": 7000
+      },
+      "facing": "right",
+      "flipForLeft": true,
+      "wakeIncluded": false
+    },
+    "white-duck-swim": {
+      "label": "Patico blanco nadando",
+      "type": "atlas",
+      "textureKey": "landscape-extra-white-duck-swim",
+      "path": "assets/ducks/white-duck-swim.png",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "sha256": "61b57fe0221da8446f1871d3d4f4795e3a86105cac9d4809b5c1825dd5e7a759",
+      "filter": "nearest",
+      "contentBounds": {
+        "x": 26,
+        "y": 285,
+        "width": 1389,
+        "height": 664
+      },
+      "contentBoundsAlphaThreshold": 16,
+      "recommendedContentHeightPx": 35,
+      "atlasPath": "assets/ducks/white-duck-swim.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 326,
+        "height": 269
+      },
+      "alignment": "bottom-center",
+      "frames": [
+        {
+          "name": "frame-00",
+          "frame": {
+            "x": 24,
+            "y": 303,
+            "w": 307,
+            "h": 227
+          },
+          "cell": {
+            "x": 0,
+            "y": 0,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 26,
+            "y": 305,
+            "width": 303,
+            "height": 223
+          }
+        },
+        {
+          "name": "frame-01",
+          "frame": {
+            "x": 383,
+            "y": 288,
+            "w": 310,
+            "h": 248
+          },
+          "cell": {
+            "x": 362,
+            "y": 0,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 23,
+            "y": 290,
+            "width": 306,
+            "height": 244
+          }
+        },
+        {
+          "name": "frame-02",
+          "frame": {
+            "x": 746,
+            "y": 283,
+            "w": 310,
+            "h": 253
+          },
+          "cell": {
+            "x": 724,
+            "y": 0,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 24,
+            "y": 285,
+            "width": 306,
+            "height": 249
+          }
+        },
+        {
+          "name": "frame-03",
+          "frame": {
+            "x": 1111,
+            "y": 290,
+            "w": 306,
+            "h": 242
+          },
+          "cell": {
+            "x": 1086,
+            "y": 0,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 27,
+            "y": 292,
+            "width": 302,
+            "height": 238
+          }
+        },
+        {
+          "name": "frame-04",
+          "frame": {
+            "x": 30,
+            "y": 710,
+            "w": 301,
+            "h": 241
+          },
+          "cell": {
+            "x": 0,
+            "y": 543,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 32,
+            "y": 169,
+            "width": 297,
+            "height": 237
+          }
+        },
+        {
+          "name": "frame-05",
+          "frame": {
+            "x": 398,
+            "y": 710,
+            "w": 303,
+            "h": 233
+          },
+          "cell": {
+            "x": 362,
+            "y": 543,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 38,
+            "y": 169,
+            "width": 299,
+            "height": 229
+          }
+        },
+        {
+          "name": "frame-06",
+          "frame": {
+            "x": 758,
+            "y": 718,
+            "w": 298,
+            "h": 227
+          },
+          "cell": {
+            "x": 724,
+            "y": 543,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 36,
+            "y": 177,
+            "width": 294,
+            "height": 223
+          }
+        },
+        {
+          "name": "frame-07",
+          "frame": {
+            "x": 1111,
+            "y": 717,
+            "w": 305,
+            "h": 226
+          },
+          "cell": {
+            "x": 1086,
+            "y": 543,
+            "width": 362,
+            "height": 543
+          },
+          "originalContentBounds": {
+            "x": 27,
+            "y": 176,
+            "width": 301,
+            "height": 222
+          }
+        }
+      ],
+      "recommendedScale": 0.140562,
+      "origin": {
+        "x": 0.5,
+        "y": 0.905465
+      },
+      "animation": {
+        "key": "white-duck-swim-loop",
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 8,
+        "repeat": -1
+      },
+      "recommendedBlendMode": "NORMAL",
+      "recommendedOpacity": 1,
+      "motionSuggestion": {
+        "type": "swim",
+        "distancePx": 65,
+        "durationMs": 8000
+      },
+      "facing": "right",
+      "flipForLeft": true,
+      "wakeIncluded": true
+    }
+  },
+  "notes": [
+    "PNGs originales con canal alfa, sin reescalar ni modificar los píxeles.",
+    "Usar los atlas de las secuencias: compensan el desplazamiento de los dibujos entre filas.",
+    "Tamaños y opacidades sugeridos como punto de partida; ajustar al mapa."
+  ]
+}

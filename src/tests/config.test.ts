@@ -1,0 +1,476 @@
+import { describe, expect, it } from "vitest";
+import manifestJson from "../../public/assets/assets.json";
+import bitacoraSchema from "../../public/config/bitacora.schema.json";
+import { validateAssetManifest } from "../config/validateAssets";
+import { validateBitacora, type ValidateOptions } from "../config/validateConfig";
+import type { AssetManifest, BitacoraConfig, ConfigIssue } from "../config/types";
+import { learningId, makeConfig } from "./fixtures/makeConfig";
+
+const realManifest = (() => {
+  const r = validateAssetManifest(manifestJson);
+  if (!r.ok) throw new Error(`assets.json real inválido: ${JSON.stringify(r.issues)}`);
+  return r.value;
+})();
+
+const clone = <T>(v: T): T => structuredClone(v);
+
+/** Aplica `edit` a una copia del fixture y devuelve los errores (o [] si es válido). */
+function issuesOf(edit: (c: BitacoraConfig) => void, options?: ValidateOptions, count = 6): ConfigIssue[] {
+  const c = makeConfig(count);
+  edit(c);
+  const r = validateBitacora(c, realManifest, options);
+  return r.ok ? [] : r.issues;
+}
+const manifestIssues = (edit: (m: AssetManifest) => void): ConfigIssue[] => {
+  const m = clone(manifestJson) as unknown as AssetManifest;
+  edit(m);
+  const r = validateAssetManifest(m);
+  return r.ok ? [] : r.issues;
+};
+const at = (issues: ConfigIssue[], path: string) => issues.filter((i) => i.path === path);
+
+describe("assets.json real", () => {
+  it("es válido y conserva sus entradas originales sin migrar", () => {
+    expect(Object.keys(realManifest.assets)).toHaveLength(69);
+    expect(realManifest.assets["ui.panel.cream.nine-slice"].nineSlice).toEqual({ top: 32, right: 32, bottom: 32, left: 32 });
+    expect(realManifest.assets["character.vanessa-jerry.walk.poses-v4"].requiresFrameDefinition).toBe(true);
+    expect(realManifest).not.toHaveProperty("animations");
+  });
+
+  it("detecta assetCount y categoryCounts incoherentes", () => {
+    const i = manifestIssues((m) => {
+      m.assetCount = 44;
+      m.categoryCounts.ui = 99;
+    });
+    expect(at(i, "assetCount")).toHaveLength(1);
+    expect(at(i, "categoryCounts.ui")).toHaveLength(1);
+  });
+
+  it("rechaza paths absolutos o que salen del directorio del manifiesto", () => {
+    const i = manifestIssues((m) => {
+      m.assets["ui.icon.xp-star"].path = "/assets/ui/icons/xp-star.png";
+      m.assets["ui.icon.open-book"].path = "../open-book.png";
+    });
+    expect(at(i, "assets.ui.icon.xp-star.path")).toHaveLength(1);
+    expect(at(i, "assets.ui.icon.open-book.path")).toHaveLength(1);
+  });
+
+  it("valida la metadata especializada solo cuando está presente", () => {
+    const i = manifestIssues((m) => {
+      m.assets["character.vanessa-jerry.walk.poses-v4"].poseCount = 11;
+      m.assets["ui.progress.xp.fill"].placement = { relativeTo: "ui.progress.no-existe", x: 16, y: 20 };
+      m.assets["ui.icon.xp-star"].requiresFrameDefinition = true;
+    });
+    expect(at(i, "assets.character.vanessa-jerry.walk.poses-v4.poseCount")).toHaveLength(1);
+    expect(at(i, "assets.ui.progress.xp.fill.placement.relativeTo")).toHaveLength(1);
+    expect(at(i, "assets.ui.icon.xp-star.requiresFrameDefinition")).toHaveLength(1);
+  });
+
+  it("falla por forma si falta un campo común o un tipo es incorrecto", () => {
+    const i = manifestIssues((m) => {
+      delete (m.assets["ui.icon.xp-star"] as Partial<AssetManifest["assets"][string]>).path;
+      (m.assets["ui.icon.open-book"] as Record<string, unknown>).width = -5;
+    });
+    expect(at(i, "assets.ui.icon.xp-star.path")).toHaveLength(1);
+    expect(at(i, "assets.ui.icon.open-book.width")).toHaveLength(1);
+  });
+
+  it("conserva metadata desconocida en lugar de rechazarla", () => {
+    const m = clone(manifestJson) as unknown as AssetManifest;
+    m.assets["ui.icon.xp-star"].futureField = { a: 1 };
+    const r = validateAssetManifest(m);
+    expect(r.ok && r.value.assets["ui.icon.xp-star"].futureField).toEqual({ a: 1 });
+  });
+});
+
+describe("bitacora.json: forma", () => {
+  it.each([5, 6, 7])("acepta el fixture con %i aprendizajes con el mismo código", (n) => {
+    expect(issuesOf(() => {}, undefined, n)).toEqual([]);
+  });
+
+  it("acepta modo final y ruta vacía (estado de preparación, no error)", () => {
+    expect(issuesOf((c) => { c.mode = "final"; })).toEqual([]);
+    expect(issuesOf((c) => { c.route = []; })).toEqual([]);
+  });
+
+  it("localiza propiedades obligatorias ausentes y sobrantes", () => {
+    const i = issuesOf((c) => {
+      delete (c.project as Partial<typeof c.project>).courseName;
+      (c as unknown as Record<string, unknown>).totalStations = 6;
+    });
+    expect(at(i, "project.courseName")).toHaveLength(1);
+    expect(at(i, "totalStations")).toHaveLength(1);
+  });
+
+  it("rechaza IDs repetidos en route y claves con formato inválido", () => {
+    const i = issuesOf((c) => { c.route = ["apr-a", "apr-a"]; });
+    expect(at(i, "route")).toHaveLength(1);
+  });
+
+  it("trata un tipo de bloque desconocido como error editorial, sin ejecutarlo", () => {
+    const i = issuesOf((c) => {
+      (c.learnings["apr-a"].sections.lived as unknown[]).push({ type: "script", text: "alert(1)" });
+    });
+    expect(i.some((x) => x.path.startsWith("learnings.apr-a.sections.lived[1]"))).toBe(true);
+  });
+
+  it("exige exactamente las cuatro secciones", () => {
+    const i = issuesOf((c) => {
+      delete (c.learnings["apr-a"].sections as Partial<typeof c.learnings["apr-a"]["sections"]>).classroom;
+    });
+    expect(at(i, "learnings.apr-a.sections.classroom")).toHaveLength(1);
+  });
+
+  it("el tipo BitacoraConfig y el esquema coinciden en las claves de nivel superior", () => {
+    const typed: BitacoraConfig = makeConfig();
+    expect(Object.keys(typed).sort()).toEqual([...bitacoraSchema.required].sort());
+    const optional = Object.keys(bitacoraSchema.properties).filter((k) => !bitacoraSchema.required.includes(k));
+    expect(optional.sort()).toEqual(["$schema", "editorNotes"]);
+  });
+});
+
+describe("bitacora.json: referencias cruzadas", () => {
+  it("ID de route sin learnings o sin placement", () => {
+    const i = issuesOf((c) => {
+      c.route.push("apr-x");
+      delete c.placements["apr-b"];
+    });
+    expect(at(i, "route[6]")).toHaveLength(2);
+    expect(at(i, "route[1]")).toHaveLength(1);
+  });
+
+  it("un aprendizaje archivado no necesita ubicación, pero sus referencias se validan", () => {
+    const ok = issuesOf((c) => {
+      c.learnings["apr-archivado"] = clone(c.learnings["apr-a"]);
+      c.badges["insignia-archivada"] = clone(c.badges["insignia-apr-a"]);
+      c.learnings["apr-archivado"].badgeId = "insignia-archivada";
+    });
+    expect(ok).toEqual([]);
+    const bad = issuesOf((c) => {
+      c.learnings["apr-archivado"] = clone(c.learnings["apr-a"]);
+      c.learnings["apr-archivado"].badgeId = "no-existe";
+    });
+    expect(at(bad, "learnings.apr-archivado.badgeId")).toHaveLength(1);
+  });
+
+  it("assetId inexistente da error localizado con ruta", () => {
+    const i = issuesOf((c) => {
+      c.placements["apr-c"].decorationAssetId = "station.item.no-existe";
+    });
+    expect(at(i, "placements.apr-c.decorationAssetId")).toEqual([
+      { path: "placements.apr-c.decorationAssetId", message: "asset ID no encontrado: «station.item.no-existe»" },
+    ]);
+  });
+
+  it("assetId de otro kind o resuelto por nombre de archivo es incompatible", () => {
+    const i = issuesOf((c) => {
+      c.badges["insignia-apr-a"].assetId = "ui.panel.cream.small";
+      c.placements["apr-a"].signAssetId = "ui.icon.xp-star";
+      c.ui.assets.window = "ui.button.green.default";
+    });
+    expect(at(i, "badges.insignia-apr-a.assetId")).toHaveLength(1);
+    expect(at(i, "placements.apr-a.signAssetId")).toHaveLength(1);
+    expect(at(i, "ui.assets.window")).toHaveLength(1);
+  });
+
+  it("verifica assets de imágenes de evidencias y portadas de diálogo", () => {
+    const i = issuesOf((c) => {
+      c.learnings["apr-a"].sections.lived.push({ type: "image", assetId: "evidencia.falsa", alt: "x" });
+      c.dialogues.abrir.lines[0].portraitAssetId = "character.fantasma";
+    });
+    expect(at(i, "learnings.apr-a.sections.lived[1].assetId")).toHaveLength(1);
+    expect(at(i, "dialogues.abrir.lines[0].portraitAssetId")).toHaveLength(1);
+  });
+
+  it("cada aprendizaje activo necesita una insignia distinta", () => {
+    const i = issuesOf((c) => { c.learnings["apr-b"].badgeId = c.learnings["apr-a"].badgeId; });
+    expect(at(i, "learnings.apr-b.badgeId")).toHaveLength(1);
+  });
+
+  it("diálogos referenciados deben existir", () => {
+    const i = issuesOf((c) => {
+      c.ui.defaultDialogueIds.reward = "no-hay";
+      c.learnings["apr-a"].dialogueOverrides = { open: "tampoco" };
+    });
+    expect(at(i, "ui.defaultDialogueIds.reward")).toHaveLength(1);
+    expect(at(i, "learnings.apr-a.dialogueOverrides.open")).toHaveLength(1);
+  });
+
+  it("solo admite variables de diálogo de la lista permitida", () => {
+    const i = issuesOf((c) => {
+      c.dialogues.abrir.lines[0].text = "Hola {studentName} {secreto}";
+      c.ui.labels.progressTemplate = "{number} de {totalCount}";
+    });
+    expect(at(i, "dialogues.abrir.lines[0].text")).toHaveLength(1);
+    expect(at(i, "ui.labels.progressTemplate")).toHaveLength(1);
+  });
+
+  it("limita los protocolos de los enlaces de referencias", () => {
+    const i = issuesOf((c) => {
+      c.learnings["apr-a"].sections.lived.push(
+        { type: "reference", label: "ok", url: "https://example.org/x" },
+        { type: "reference", label: "mal", url: "javascript:alert(1)" },
+        { type: "reference", label: "relativa", url: "/x" },
+      );
+    });
+    expect(at(i, "learnings.apr-a.sections.lived[1].url")).toHaveLength(0);
+    expect(at(i, "learnings.apr-a.sections.lived[2].url")).toHaveLength(1);
+    expect(at(i, "learnings.apr-a.sections.lived[3].url")).toHaveLength(1);
+  });
+
+  it("las pestañas deben cubrir las cuatro secciones sin duplicados", () => {
+    const i = issuesOf((c) => { c.ui.tabs[3].id = "lived"; });
+    expect(at(i, "ui.tabs")).toHaveLength(1);
+  });
+});
+
+describe("bitacora.json: mapas, portales y accesibilidad", () => {
+  it("ubicaciones: zona inexistente, fuera de la zona o interacción dentro de un obstáculo", () => {
+    const i = issuesOf((c) => {
+      c.placements["apr-a"].zoneId = "zona-z";
+      c.placements["apr-b"].position = { x: 5000, y: 10 };
+      c.placements["apr-c"].position = { x: 550, y: 100 };
+      c.placements["apr-c"].interactionOffset = { x: 0, y: 40 };
+    });
+    expect(at(i, "placements.apr-a.zoneId")).toHaveLength(1);
+    expect(at(i, "placements.apr-b.position")).toHaveLength(1);
+    expect(at(i, "placements.apr-c.interactionOffset")).toHaveLength(1);
+  });
+
+  it("spawns válidos: dentro del mundo, fuera de obstáculos y con inicial existente", () => {
+    const i = issuesOf((c) => {
+      c.maps["zona-a"].spawns.inicio = { x: 520, y: 120 };
+      c.maps["zona-b"].initialSpawnId = "no-existe";
+      c.maps["zona-b"].spawns["desde-a"] = { x: -1, y: 5 };
+    });
+    expect(at(i, "maps.zona-a.spawns.inicio")).toHaveLength(1);
+    expect(at(i, "maps.zona-b.initialSpawnId")).toHaveLength(1);
+    expect(at(i, "maps.zona-b.spawns.desde-a")).toHaveLength(1);
+  });
+
+  it("portales: destino y punto de aparición reales, sin bucle a la misma zona", () => {
+    const i = issuesOf((c) => {
+      c.maps["zona-a"].portals["a-b"].targetSpawnId = "no-existe";
+      c.maps["zona-b"].portals["b-a"].targetZoneId = "zona-b";
+    });
+    expect(at(i, "maps.zona-a.portals.a-b.targetSpawnId")).toHaveLength(1);
+    expect(at(i, "maps.zona-b.portals.b-a.targetZoneId")).toHaveLength(1);
+  });
+
+  it("el punto de aparición de un portal no puede caer dentro del radio de otro portal (sin bucles)", () => {
+    const i = issuesOf((c) => {
+      c.maps["zona-b"].spawns["desde-a"] = { x: 150, y: 520 }; // sobre el portal «b-a» (150,520, radio 60)
+    });
+    expect(at(i, "maps.zona-a.portals.a-b.targetSpawnId")).toHaveLength(1);
+    expect(issuesOf(() => {})).toEqual([]);
+  });
+
+  it("exige poder llegar a cada zona usada y regresar de ella", () => {
+    const sinIda = issuesOf((c) => { c.maps["zona-a"].portals = {}; });
+    expect(at(sinIda, "maps.zona-b")).toHaveLength(1);
+    const sinRegreso = issuesOf((c) => { c.maps["zona-b"].portals = {}; });
+    expect(at(sinRegreso, "maps.zona-b")).toHaveLength(1);
+  });
+
+  it("zona sin estaciones activas no exige portales", () => {
+    const i = issuesOf((c) => {
+      c.route = ["apr-a", "apr-b", "apr-c"];
+      c.maps["zona-a"].portals = {};
+      c.maps["zona-b"].portals = {};
+    });
+    expect(i).toEqual([]);
+  });
+
+  it("zona de partida inexistente", () => {
+    const i = issuesOf((c) => { c.gameplay.start.zoneId = "zona-q"; });
+    expect(at(i, "gameplay.start.zoneId")).toHaveLength(1);
+  });
+});
+
+describe("bitacora.json: capas de fondo (SPEC 3.1)", () => {
+  it("rechaza dos variantes de la misma capa", () => {
+    const i = issuesOf((c) => {
+      c.maps["zona-a"].layers.push({ assetId: "background.zone-01.midground.cherry-tree.v02", depth: 21 });
+    });
+    expect(at(i, "maps.zona-a.layers[4].assetId")).toHaveLength(1);
+  });
+
+  it("rechaza capas de zonas distintas del catálogo en un mismo mapa", () => {
+    const i = issuesOf((c) => { c.maps["zona-a"].layers[0].assetId = "background.zone-02.horizon.v01"; });
+    expect(at(i, "maps.zona-a.layers")).toHaveLength(1);
+  });
+
+  it("rechaza profundidades que contradicen horizon < terrain < midground < foreground", () => {
+    const i = issuesOf((c) => { c.maps["zona-a"].layers[3].depth = 5; });
+    expect(at(i, "maps.zona-a.layers").length).toBeGreaterThan(0);
+  });
+
+  it("un asset que no es capa no sirve de fondo", () => {
+    const i = issuesOf((c) => { c.maps["zona-a"].layers[0].assetId = "station.item.books"; });
+    expect(at(i, "maps.zona-a.layers[0].assetId")).toHaveLength(1);
+  });
+
+  it("permite el paisaje completo como alternativa explícita", () => {
+    const i = issuesOf((c) => {
+      c.maps["zona-a"].layers = [{ assetId: "background.complete.garden", depth: 0 }];
+    });
+    expect(i).toEqual([]);
+  });
+});
+
+describe("bitacora.json: animaciones del paisaje (SPEC 3.2)", () => {
+  const ripple = { type: "animation", assetId: "animation.water.ripples", position: { x: 500, y: 500 }, depth: { mode: "fixed", value: 11 } } as const;
+  const sway = { type: "sway", assetId: "decoration.plant.bush", position: { x: 500, y: 500 }, depth: { mode: "y", offset: 0 } } as const;
+  const drift = { type: "drift", assetId: "background.sky.cloud", position: { x: 500, y: 40 }, depth: { mode: "fixed", value: 5 } } as const;
+  const rain = { type: "particles", assetId: "particle.petal", area: { x: 100, y: 100, width: 200, height: 100 }, frequencyMs: 500, depth: { mode: "fixed", value: 1500 } } as const;
+  const withFx = (...fx: BitacoraConfig["maps"][string]["ambient"]) => (c: BitacoraConfig) => { c.maps["zona-a"].ambient = clone(fx); };
+
+  it("acepta un efecto de cada tipo con su asset", () => {
+    expect(issuesOf(withFx(ripple, sway, drift, rain))).toEqual([]);
+  });
+
+  it("rechaza un asset inexistente, nombrando su ID", () => {
+    const i = issuesOf(withFx({ ...ripple, assetId: "animation.water.no-existe" }));
+    expect(at(i, "maps.zona-a.ambient[0].assetId")[0]?.message).toContain("animation.water.no-existe");
+  });
+
+  it("rechaza un asset de otro tipo (kind) para el efecto", () => {
+    expect(at(issuesOf(withFx({ ...ripple, assetId: "decoration.plant.bush" })), "maps.zona-a.ambient[0].assetId").length).toBeGreaterThan(0);
+    expect(at(issuesOf(withFx({ ...sway, assetId: "animation.water.ripples" })), "maps.zona-a.ambient[0].assetId").length).toBeGreaterThan(0);
+  });
+
+  it("rechaza un movimiento que no corresponde al tipo (vaivén sobre una nube)", () => {
+    const i = issuesOf(withFx({ ...sway, assetId: "background.sky.cloud" }));
+    expect(at(i, "maps.zona-a.ambient[0].assetId").length + at(i, "maps.zona-a.ambient[0].type").length).toBeGreaterThan(0);
+  });
+
+  it("rechaza posiciones y áreas fuera de la zona", () => {
+    expect(at(issuesOf(withFx({ ...ripple, position: { x: -5, y: 10 } })), "maps.zona-a.ambient[0].position")).toHaveLength(1);
+    expect(at(issuesOf(withFx({ ...ripple, position: { x: 1449, y: 10 } })), "maps.zona-a.ambient[0].position")).toHaveLength(1);
+    expect(at(issuesOf(withFx({ ...rain, area: { x: 1400, y: 100, width: 100, height: 50 } })), "maps.zona-a.ambient[0].area")).toHaveLength(1);
+  });
+
+  it("exige que el asset declare origin y recommendedScale", () => {
+    const m = clone(manifestJson) as unknown as AssetManifest;
+    delete (m.assets["background.sky.cloud"] as { origin?: unknown }).origin;
+    const r = validateBitacora((() => { const c = makeConfig(); c.maps["zona-a"].ambient = [clone(drift)]; return c; })(), m);
+    expect(r.ok).toBe(false);
+  });
+
+  const glow = { type: "glow", assetId: "decoration.light.warm-glow", position: { x: 500, y: 500 }, depth: { mode: "fixed", value: 54 } } as const;
+  const swim = { type: "swim", assetId: "animation.fauna.white-duck-swim", path: [{ x: 100, y: 100 }, { x: 200, y: 100 }] as Array<{ x: number; y: number }>, depth: { mode: "y", offset: 0 } } as const;
+  const lantern = { type: "sway", assetId: "decoration.light.hanging-lantern", position: { x: 500, y: 500 }, depth: { mode: "fixed", value: 52 } } as const;
+
+  it("acepta luces (glow), un farol que se mece, patos (swim) y las nubes y partículas nuevas", () => {
+    const extra = [
+      { type: "drift", assetId: "background.sky.cloud-long", position: { x: 500, y: 40 }, depth: { mode: "fixed", value: 5 } },
+      { type: "particles", assetId: "particle.firefly-mote", area: { x: 100, y: 100, width: 100, height: 50 }, frequencyMs: 700, depth: { mode: "fixed", value: 1500 } },
+      { type: "animation", assetId: "animation.light.gold-sparkle", position: { x: 300, y: 300 }, depth: { mode: "fixed", value: 60 } },
+    ] as const;
+    expect(issuesOf(withFx(glow, swim, lantern, ...extra))).toEqual([]);
+  });
+
+  it("glow exige una luz con pulso; swim exige un pato con motion swim y una trayectoria dentro de la zona", () => {
+    expect(at(issuesOf(withFx({ ...glow, assetId: "decoration.light.hanging-lantern" })), "maps.zona-a.ambient[0].assetId").length).toBeGreaterThan(0);
+    expect(at(issuesOf(withFx({ ...swim, assetId: "animation.water.ripples" })), "maps.zona-a.ambient[0].type").length).toBeGreaterThan(0);
+    expect(at(issuesOf(withFx({ ...swim, path: [{ x: 100, y: 100 }, { x: 5000, y: 100 }] })), "maps.zona-a.ambient[0].path[1]")).toHaveLength(1);
+    expect(at(issuesOf(withFx({ ...ripple, assetId: "animation.fauna.white-duck-swim" })), "maps.zona-a.ambient[0].type")).toHaveLength(1);
+  });
+
+  it("el esquema exige al menos dos puntos en la trayectoria y un alpha entre 0 y 1", () => {
+    expect(issuesOf(withFx({ ...swim, path: [{ x: 1, y: 1 }] } as never)).length).toBeGreaterThan(0);
+    expect(issuesOf(withFx({ ...glow, alpha: 2 } as never)).length).toBeGreaterThan(0);
+  });
+
+  it("el esquema exige la lista ambient en cada zona", () => {
+    const c = makeConfig() as unknown as { maps: Record<string, Record<string, unknown>> };
+    delete c.maps["zona-a"].ambient;
+    expect(validateBitacora(c, realManifest).ok).toBe(false);
+  });
+});
+
+describe("bitacora.json: personajes y frames (AC-35)", () => {
+  it("una hoja de poses con requiresFrameDefinition no sirve como sprite sin frames validados", () => {
+    const i = issuesOf((c) => { c.gameplay.player.assetId = "character.vanessa-jerry.walk.poses-v4"; });
+    expect(at(i, "gameplay.player.assetId")).toHaveLength(1);
+  });
+
+  it("una animación declarada exige una definición de frames validada", () => {
+    const edit = (c: BitacoraConfig) => { c.gameplay.player.animations = { idle: "vanessa-idle" }; };
+    expect(at(issuesOf(edit), "gameplay.player.animations.idle")).toHaveLength(1);
+    const withFrames: ValidateOptions = {
+      frameDefinitions: { "character.vanessa-jerry.idle": { animations: ["vanessa-idle"] } },
+    };
+    expect(issuesOf(edit, withFrames)).toEqual([]);
+  });
+
+  it("la hoja de poses sí es válida cuando tiene definición de frames", () => {
+    const edit = (c: BitacoraConfig) => {
+      c.gameplay.player.assetId = "character.vanessa-jerry.walk.poses-v4";
+      c.gameplay.player.animations = { walkDown: "walk-down" };
+      c.gameplay.companion = { mode: "included", followDistance: 0 };
+    };
+    const opts: ValidateOptions = {
+      frameDefinitions: { "character.vanessa-jerry.walk.poses-v4": { animations: ["walk-down"] } },
+    };
+    expect(issuesOf(edit, opts)).toEqual([]);
+  });
+
+  it("companion separate exige actor; included no admite otro perro", () => {
+    const sin = issuesOf((c) => { c.gameplay.companion = { mode: "separate", followDistance: 30 }; });
+    expect(at(sin, "gameplay.companion.actor")).toHaveLength(1);
+    const doble = issuesOf((c) => {
+      c.gameplay.companion = {
+        mode: "included",
+        followDistance: 0,
+        actor: { assetId: "character.vanessa-jerry.idle", origin: { x: 0.5, y: 1 }, scale: 0.1, animations: {} },
+      };
+    });
+    expect(at(doble, "gameplay.companion.actor")).toHaveLength(1);
+  });
+});
+
+describe("bitacora.json: orden por route", () => {
+  it("el orden de las claves de learnings no importa; learningId es estable", () => {
+    const c = makeConfig(5);
+    c.learnings = Object.fromEntries(Object.entries(c.learnings).reverse());
+    expect(validateBitacora(c, realManifest).ok).toBe(true);
+    expect(c.route[2]).toBe(learningId(2));
+  });
+});
+
+describe("bitacora.json: música de fondo (SPEC 6.4; AC-53)", () => {
+  const MUSIC = ["audio.music.beyond-the-clouds", "audio.music.enchanted-festival", "audio.music.little-town-orchestral"];
+  const music = (c: BitacoraConfig) => c.audio.music;
+
+  it("el fixture con las tres pistas es válido", () => {
+    expect(issuesOf(() => undefined)).toEqual([]);
+  });
+
+  it("rechaza un ID inexistente, una imagen como pista y una pista repetida", () => {
+    expect(at(issuesOf((c) => { music(c).tracks = [MUSIC[0], "audio.music.no-existe"]; }), "audio.music.tracks[1]")[0]?.message).toContain("audio.music.no-existe");
+    expect(at(issuesOf((c) => { music(c).tracks = ["station.item.books"]; }), "audio.music.tracks[0]").length).toBeGreaterThan(0);
+    expect(at(issuesOf((c) => { music(c).tracks = [MUSIC[0], MUSIC[0]]; }), "audio.music.tracks[1]")[0]?.message).toContain("repetida");
+  });
+
+  it("rechaza volumen fuera de rango, rotación desconocida y fundido imposible", () => {
+    expect(issuesOf((c) => { music(c).volume = 1.5; }).length).toBeGreaterThan(0);
+    expect(issuesOf((c) => { (music(c) as { rotation: string }).rotation = "aleatorio"; }).length).toBeGreaterThan(0);
+    expect(at(issuesOf((c) => { music(c).crossfadeMs = 70_000; }), "audio.music.crossfadeMs")).toHaveLength(1);
+    expect(at(issuesOf((c) => { music(c).crossfadeMs = 60_000; }), "audio.music.crossfadeMs")).toHaveLength(0);
+  });
+
+  it("una lista vacía solo es válida con la música desactivada", () => {
+    expect(at(issuesOf((c) => { music(c).tracks = []; }), "audio.music.tracks")).toHaveLength(1);
+    expect(issuesOf((c) => { music(c).tracks = []; music(c).active = false; })).toEqual([]);
+  });
+
+  it("la sección audio y las etiquetas del botón son obligatorias", () => {
+    const c = makeConfig() as unknown as Record<string, unknown>;
+    delete c.audio;
+    expect(validateBitacora(c, realManifest).ok).toBe(false);
+    const d = makeConfig() as unknown as { ui: { labels: Record<string, unknown> } };
+    delete d.ui.labels.musicMute;
+    expect(validateBitacora(d, realManifest).ok).toBe(false);
+  });
+});

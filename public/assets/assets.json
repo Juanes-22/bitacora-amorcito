@@ -1,0 +1,2009 @@
+{
+  "version": 1,
+  "project": "Bitácora Amorcito",
+  "basePath": ".",
+  "pathConvention": "Paths are relative to the directory containing this assets.json.",
+  "assetCount": 69,
+  "categoryCounts": {
+    "audio": 3,
+    "backgrounds": 17,
+    "characters": 7,
+    "decorations": 5,
+    "effects": 15,
+    "references": 2,
+    "stations": 7,
+    "ui": 13
+  },
+  "assets": {
+    "background.complete.garden": {
+      "path": "backgrounds/complete/garden-landscape.png",
+      "type": "image",
+      "format": "png",
+      "category": "backgrounds",
+      "label": "Paisaje completo del jardín",
+      "kind": "complete-background",
+      "width": 1672,
+      "height": 941,
+      "hasAlphaChannel": false,
+      "transparent": false,
+      "sizeBytes": 3052416,
+      "sha256": "4337f84eec9a61dc60247463fa98f635b4848ce4b6676ee149c05d42a84a2aa1",
+      "originalPath": "assets/bitacora-amorcito-assets-v4/mapa_paisaje.png"
+    },
+    "background.zone-01.foreground.foliage.v01": {
+      "path": "backgrounds/zone-01/foreground-oak-foliage-v01.png",
+      "type": "image",
+      "format": "png",
+      "category": "backgrounds",
+      "label": "Copa de roble y arbustos en las esquinas: variante 1",
+      "kind": "background-layer",
+      "zone": "zone-01",
+      "layer": "foreground",
+      "variant": "v01",
+      "width": 1447,
+      "height": 1087,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 461854,
+      "sha256": "431c3fde2a5f7e03d4d9eebf99a54e261ab0a85dad9f45cc1d59d4963463a0bc",
+      "originalPath": "assets/Oak canopy with corner shrubs-5.png"
+    },
+    "background.zone-01.foreground.foliage.v02": {
+      "path": "backgrounds/zone-01/foreground-oak-foliage-v02.png",
+      "type": "image",
+      "format": "png",
+      "category": "backgrounds",
+      "label": "Copa de roble y flores en las esquinas: variante 2",
+      "kind": "background-layer",
+      "zone": "zone-01",
+      "layer": "foreground",
+      "variant": "v02",
+      "width": 1447,
+      "height": 1087,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 453354,
+      "sha256": "be8fc88a4fa3041a46bf03205ebe61bdfa847de05e52e9c1ad50a8360c829a45",
+      "originalPath": "assets/Oak Canopy and Flower Patch-9.png"
+    },
+    "background.zone-01.foreground.foliage.v03": {
+      "path": "backgrounds/zone-01/foreground-oak-foliage-v03.png",
+      "type": "image",
+      "format": "png",
+      "category": "backgrounds",
+      "label": "Copa de roble y follaje en las esquinas: variante 3",
+      "kind": "background-layer",
+      "zone": "zone-01",
+      "layer": "foreground",
+      "variant": "v03",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 460107,
+      "sha256": "24c7ff8ea1721f82144f762810c6b5707d2da6ca3666af2669937af7fed1d801",
+      "originalPath": "assets/Oak canopy and corner foliage-13.png"
+    },
+    "background.zone-01.horizon": {
+      "path": "backgrounds/zone-01/horizon-mountains-village.png",
+      "type": "image",
+      "format": "png",
+      "category": "backgrounds",
+      "label": "Horizonte con montañas, bosque y pueblo a la derecha",
+      "kind": "background-layer",
+      "zone": "zone-01",
+      "layer": "horizon",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": false,
+      "transparent": false,
+      "sizeBytes": 2410895,
+      "sha256": "f788660d047ad8163399f38bcb6f1b13b934401f775e997f74a88f55a2f1d7fe",
+      "originalPath": "assets/Pixel-art sky, mountains, village, and forest-3.png"
+    },
+    "background.zone-01.midground.cherry-tree.v01": {
+      "path": "backgrounds/zone-01/midground-cherry-tree-v01.png",
+      "type": "image",
+      "format": "png",
+      "category": "backgrounds",
+      "label": "Jardín con cerezo: capa intermedia, variante 1",
+      "kind": "background-layer",
+      "zone": "zone-01",
+      "layer": "midground",
+      "variant": "v01",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1492541,
+      "sha256": "9407f5b92d6d1604bf2e6d719b5754e2fed278514bf6a8f3418f55bc5b408a99",
+      "originalPath": "assets/Pixel-art garden midground layer-4.png"
+    },
+    "background.zone-01.midground.cherry-tree.v02": {
+      "path": "backgrounds/zone-01/midground-cherry-tree-v02.png",
+      "type": "image",
+      "format": "png",
+      "category": "backgrounds",
+      "label": "Jardín con cerezo: capa intermedia, variante 2",
+      "kind": "background-layer",
+      "zone": "zone-01",
+      "layer": "midground",
+      "variant": "v02",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1492127,
+      "sha256": "c249d361b5003656baac1aff0f2ee207da51fe67f5a125c74a401ba7c82ff61e",
+      "originalPath": "assets/Clean transparent cherry tree map overlay-11.png"
+    },
+    "background.zone-01.terrain": {
+      "path": "backgrounds/zone-01/terrain-meadow-river-bridges.png",
+      "type": "image",
+      "format": "png",
+      "category": "backgrounds",
+      "label": "Mapa 1: pradera, caminos, río y puentes",
+      "kind": "background-layer",
+      "zone": "zone-01",
+      "layer": "terrain",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 2027890,
+      "sha256": "ab8ed77fd05d1b7415e7221e01d4c41cd73d7c2e0b84df164e13df3ebb31e318",
+      "originalPath": "assets/Pixel meadow, paths, rivers, and bridges-1.png"
+    },
+    "background.zone-02.foreground.foliage": {
+      "path": "backgrounds/zone-02/foreground-oak-foliage.png",
+      "type": "image",
+      "format": "png",
+      "category": "backgrounds",
+      "label": "Copa de roble superior derecha y arbustos inferiores izquierdos",
+      "kind": "background-layer",
+      "zone": "zone-02",
+      "layer": "foreground",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 544095,
+      "sha256": "37b9dcaf87341e64dccf8b91c979a71faad902b466285f30e35965daafc300b3",
+      "originalPath": "assets/Oak Crown and Corner Shrubs-7.png"
+    },
+    "background.zone-02.horizon.v01": {
+      "path": "backgrounds/zone-02/horizon-mountains-village-v01.png",
+      "type": "image",
+      "format": "png",
+      "category": "backgrounds",
+      "label": "Horizonte con montañas, bosque y pueblo a la izquierda: variante 1",
+      "kind": "background-layer",
+      "zone": "zone-02",
+      "layer": "horizon",
+      "variant": "v01",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": false,
+      "transparent": false,
+      "sizeBytes": 2445718,
+      "sha256": "7a0a1287488449a6c9556cbb37a344cd3036b388dc577303e74ab7b322360ef9",
+      "originalPath": "assets/Pixel-art sky, mountains, and village-6.png"
+    },
+    "background.zone-02.horizon.v02": {
+      "path": "backgrounds/zone-02/horizon-mountains-village-v02.png",
+      "type": "image",
+      "format": "png",
+      "category": "backgrounds",
+      "label": "Horizonte con montañas, bosque y pueblo a la izquierda: variante 2",
+      "kind": "background-layer",
+      "zone": "zone-02",
+      "layer": "horizon",
+      "variant": "v02",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": false,
+      "transparent": false,
+      "sizeBytes": 2638538,
+      "sha256": "16f700db30a7110b6f3c6a9389e0babfa3b7728772e501c01ffb8af563ac85a0",
+      "originalPath": "assets/Pixel-art mountain village horizon-10.png"
+    },
+    "background.zone-02.midground.pavilion.v01": {
+      "path": "backgrounds/zone-02/midground-pavilion-v01.png",
+      "type": "image",
+      "format": "png",
+      "category": "backgrounds",
+      "label": "Jardín con pabellón: capa intermedia, variante 1",
+      "kind": "background-layer",
+      "zone": "zone-02",
+      "layer": "midground",
+      "variant": "v01",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1669748,
+      "sha256": "7953ae916fcc8cb84cda59c047c9f6ca9079ab6eaed451098d60cc2ff9c7658d",
+      "originalPath": "assets/Pixel-art garden midground scenery-8.png"
+    },
+    "background.zone-02.midground.pavilion.v02": {
+      "path": "backgrounds/zone-02/midground-pavilion-v02.png",
+      "type": "image",
+      "format": "png",
+      "category": "backgrounds",
+      "label": "Jardín con pabellón: capa intermedia, variante 2",
+      "kind": "background-layer",
+      "zone": "zone-02",
+      "layer": "midground",
+      "variant": "v02",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1594923,
+      "sha256": "0cbba69490d64de6f01f2147c42903506214b90b5a315f00250229d24e2fba5f",
+      "originalPath": "assets/Clean transparent garden map overlay-12.png"
+    },
+    "background.zone-02.terrain": {
+      "path": "backgrounds/zone-02/terrain-meadow-river.png",
+      "type": "image",
+      "format": "png",
+      "category": "backgrounds",
+      "label": "Mapa 2: pradera, caminos y río",
+      "kind": "background-layer",
+      "zone": "zone-02",
+      "layer": "terrain",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1855876,
+      "sha256": "36dbd259f71487642f6dfb799353b1c4163a1f24496ae4e91c0924cab47508ac",
+      "originalPath": "assets/Map 2 Meadow, Paths, and Rivers-2.png"
+    },
+    "character.vanessa-jerry.celebrate-jump.poses": {
+      "path": "characters/vanessa-jerry/pose-sheets/vanessa-jerry-celebrate-jump-poses.png",
+      "type": "image",
+      "format": "png",
+      "category": "characters",
+      "label": "Vanessa y Jerry: poses de celebración y salto",
+      "kind": "pose-sheet",
+      "poseCount": 6,
+      "visualLayout": {
+        "columns": 3,
+        "rows": 2
+      },
+      "requiresFrameDefinition": true,
+      "width": 1536,
+      "height": 1024,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1778911,
+      "sha256": "fefa7f5d6455ea0170e78a3ecc50d06ef58f6cf5c04c2856f59b69050165840d",
+      "originalPath": "assets/character/ChatGPT Image Sep 30, 2026, 10_21_34 PM.png"
+    },
+    "character.vanessa-jerry.idle": {
+      "path": "characters/vanessa-jerry/vanessa-jerry-idle.png",
+      "type": "image",
+      "format": "png",
+      "category": "characters",
+      "label": "Vanessa y Jerry: personaje estático",
+      "kind": "character-sprite",
+      "width": 1294,
+      "height": 1216,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 429696,
+      "sha256": "7fa929a074b1b11ac8d26a83288b948e505eefc97e083dc7668cc3608f04f795",
+      "originalPath": "assets/bitacora-amorcito-assets-v4/personaje_movible_con_jerry.png"
+    },
+    "character.vanessa-jerry.idle-expressions.poses": {
+      "path": "characters/vanessa-jerry/pose-sheets/vanessa-jerry-idle-expressions-poses.png",
+      "type": "image",
+      "format": "png",
+      "category": "characters",
+      "label": "Vanessa y Jerry: poses de espera y expresiones",
+      "kind": "pose-sheet",
+      "poseCount": 6,
+      "visualLayout": {
+        "columns": 3,
+        "rows": 2
+      },
+      "requiresFrameDefinition": true,
+      "width": 1536,
+      "height": 1024,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1656494,
+      "sha256": "3feba069fa26ad2b33471879282b66e2b870f7dfa1b86c8efc0ed4087ea410f4",
+      "originalPath": "assets/character/ChatGPT Image Sep 30, 2026, 10_22_00 PM.png"
+    },
+    "character.vanessa-jerry.portrait.xp": {
+      "path": "characters/portraits/vanessa-jerry-xp-portrait.png",
+      "type": "image",
+      "format": "png",
+      "category": "characters",
+      "label": "Retrato de Vanessa con Jerry para la barra de XP",
+      "kind": "portrait",
+      "width": 1536,
+      "height": 1024,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1351219,
+      "sha256": "00ea4bf162e32e03ee2fd8832b20a3c98f2f784cdee7220f1eb9c8c410e9d407",
+      "originalPath": "assets/bitacora-amorcito-assets-v4/retrato_xp_con_jerry.png"
+    },
+    "character.vanessa-jerry.walk.poses-original": {
+      "path": "characters/vanessa-jerry/pose-sheets/vanessa-jerry-walk-poses-original.png",
+      "type": "image",
+      "format": "png",
+      "category": "characters",
+      "label": "Vanessa y Jerry: doce poses de movimiento, imagen original",
+      "kind": "pose-sheet",
+      "poseCount": 12,
+      "visualLayout": {
+        "columns": 3,
+        "rows": 4
+      },
+      "rowDirections": [
+        "down",
+        "left",
+        "right",
+        "up"
+      ],
+      "requiresFrameDefinition": true,
+      "width": 1086,
+      "height": 1448,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1458400,
+      "sha256": "b997c444a534e496db0df06cd26cf650cd664f7fe94581bb90da2ffe5cc3a7d1",
+      "originalPath": "assets/character/ChatGPT Image Sep 30, 2026, 10_21_04 PM.png"
+    },
+    "character.vanessa-jerry.walk.poses-padded": {
+      "path": "characters/vanessa-jerry/pose-sheets/vanessa-jerry-walk-poses-padded.png",
+      "type": "image",
+      "format": "png",
+      "category": "characters",
+      "label": "Vanessa y Jerry: doce poses de movimiento con márgenes",
+      "kind": "pose-sheet",
+      "poseCount": 12,
+      "visualLayout": {
+        "columns": 3,
+        "rows": 4
+      },
+      "rowDirections": [
+        "down",
+        "left",
+        "right",
+        "up"
+      ],
+      "requiresFrameDefinition": true,
+      "width": 1086,
+      "height": 1448,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 973358,
+      "sha256": "4c26511a38721e18f8a15cd9a05ae20fd915d05cd3fc767ed790aaaea1e24623",
+      "originalPath": "assets/character/Twelve padded girlfriend-and-Jerry sprite pairs.png"
+    },
+    "character.vanessa-jerry.walk.poses-v4": {
+      "path": "characters/vanessa-jerry/pose-sheets/vanessa-jerry-walk-poses-v4.png",
+      "type": "image",
+      "format": "png",
+      "category": "characters",
+      "label": "Vanessa y Jerry: doce poses de movimiento, versión v4",
+      "kind": "pose-sheet",
+      "poseCount": 12,
+      "visualLayout": {
+        "columns": 3,
+        "rows": 4
+      },
+      "rowDirections": [
+        "down",
+        "left",
+        "right",
+        "up"
+      ],
+      "requiresFrameDefinition": true,
+      "width": 1086,
+      "height": 1448,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1148764,
+      "sha256": "efa38d2c32eb783e3dbe1598f470f38ad6b89586cf66c3e0f4f8c46f027424e8",
+      "originalPath": "assets/bitacora-amorcito-assets-v4/poses_movimiento_con_jerry.png"
+    },
+    "decoration.foliage.branch-leaves": {
+      "path": "decorations/foliage/branch-leaves.png",
+      "type": "image",
+      "format": "png",
+      "category": "decorations",
+      "label": "Rama con hojas",
+      "kind": "foliage",
+      "width": 620,
+      "height": 454,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 153234,
+      "sha256": "1e2387403d827437892e0b6656b90b1eb89e77e92d3ace78258970795e7d9c37",
+      "originalPath": "assets/bitacora-ui-assets/assets/ramas-hojas.png"
+    },
+    "effect.player.glow": {
+      "path": "effects/glow/player-glow.png",
+      "type": "image",
+      "format": "png",
+      "category": "effects",
+      "label": "Resplandor del jugador",
+      "kind": "glow",
+      "width": 480,
+      "height": 288,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 10132,
+      "sha256": "7cc9e2e6d2888b7ad48ef2d61e0d26cfcf75088a0948f29a9c18fc099e7326c1",
+      "originalPath": "assets/bitacora-ui-assets/assets/resplandor-jugador.png"
+    },
+    "reference.ui.assets-overview": {
+      "path": "references/ui/ui-assets-overview.png",
+      "type": "image",
+      "format": "png",
+      "category": "references",
+      "label": "Vista previa original de los elementos de UI",
+      "kind": "preview",
+      "width": 1600,
+      "height": 1260,
+      "hasAlphaChannel": false,
+      "transparent": false,
+      "sizeBytes": 330888,
+      "sha256": "6e7b2480f972aa46b6798e33036a260d9943df30133cf71485c189a76b6fa377",
+      "originalPath": "assets/bitacora-ui-assets/vista-previa.png"
+    },
+    "reference.ui.journal-layout": {
+      "path": "references/ui/journal-layout-mockup.png",
+      "type": "image",
+      "format": "png",
+      "category": "references",
+      "label": "Referencia del layout de la bitácora",
+      "kind": "mockup",
+      "width": 1672,
+      "height": 941,
+      "hasAlphaChannel": false,
+      "transparent": false,
+      "sizeBytes": 1038065,
+      "sha256": "e39b2c8ee77737099e526833f6ded1be2bf50630c78b114cccd42df091afa82f",
+      "originalPath": "assets/Minimal RPG journal UI mockup.png"
+    },
+    "station.item.books": {
+      "path": "stations/items/books-stack.png",
+      "type": "image",
+      "format": "png",
+      "category": "stations",
+      "label": "Pila de libros",
+      "kind": "station-item",
+      "width": 1536,
+      "height": 1024,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1030686,
+      "sha256": "387e77d3a09f521e5ae2ba62193b62a77db0eda8b7295ae3234e94bb1f37720e",
+      "originalPath": "assets/bitacora-amorcito-assets-v4/item_01_libros.png"
+    },
+    "station.item.materials-shelf": {
+      "path": "stations/items/materials-shelf.png",
+      "type": "image",
+      "format": "png",
+      "category": "stations",
+      "label": "Estante de materiales educativos",
+      "kind": "station-item",
+      "width": 1536,
+      "height": 1024,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1384439,
+      "sha256": "4155b5ff259f4e6c1c7a5b174587ca838ce9a17eb91038ee92846b35a0f541f8",
+      "originalPath": "assets/bitacora-amorcito-assets-v4/item_03_estante_materiales.png"
+    },
+    "station.item.notebook-pencil": {
+      "path": "stations/items/notebook-pencil.png",
+      "type": "image",
+      "format": "png",
+      "category": "stations",
+      "label": "Cuaderno abierto con lápiz",
+      "kind": "station-item",
+      "width": 1536,
+      "height": 1024,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1126400,
+      "sha256": "1b357a6031971dd724e3a7797a1aea6b3a2df3fd18c11496aedec821c8c1429d",
+      "originalPath": "assets/bitacora-amorcito-assets-v4/item_02_cuaderno_lapiz.png"
+    },
+    "station.item.padlock": {
+      "path": "stations/items/padlock.png",
+      "type": "image",
+      "format": "png",
+      "category": "stations",
+      "label": "Candado",
+      "kind": "station-item",
+      "width": 1312,
+      "height": 1199,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 320449,
+      "sha256": "4561f2f9dca97b83852c6e90e519047eb762f4f46f635d378b50a8a24e6430b9",
+      "originalPath": "assets/bitacora-amorcito-assets-v4/item_05_candado.png"
+    },
+    "station.item.sunflowers": {
+      "path": "stations/items/sunflowers.png",
+      "type": "image",
+      "format": "png",
+      "category": "stations",
+      "label": "Girasoles",
+      "kind": "station-item",
+      "width": 1366,
+      "height": 1151,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 542436,
+      "sha256": "419b6bf9a51dc40d1d8b153963ab2615d4c71f7a6fbcf2a5e1e4121cb23de705",
+      "originalPath": "assets/bitacora-amorcito-assets-v4/item_04_girasoles.png"
+    },
+    "station.sign.wooden": {
+      "path": "stations/signs/station-wooden-sign.png",
+      "type": "image",
+      "format": "png",
+      "category": "stations",
+      "label": "Letrero de estación vacío",
+      "kind": "station-sign",
+      "width": 520,
+      "height": 609,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 186779,
+      "sha256": "0c6aadeefadd69463d8b4ab6eef21acc87733b25beed401a8f1e18e522b19d07",
+      "originalPath": "assets/bitacora-ui-assets/assets/letrero-estacion.png"
+    },
+    "station.sign.wooden-large": {
+      "path": "stations/signs/station-wooden-sign-large.png",
+      "type": "image",
+      "format": "png",
+      "category": "stations",
+      "label": "Letrero de estación vacío: variante grande",
+      "kind": "station-sign",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 412526,
+      "sha256": "dc4be2e4c4431ac9f3691937c8d19ade9bcdf3339809a95822a0039cfe163250",
+      "originalPath": "assets/bitacora-amorcito-assets-v4/letrero_estacion_vacio.png"
+    },
+    "ui.badge.active-listening": {
+      "path": "ui/badges/active-listening-badge.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Insignia de escucha activa",
+      "kind": "badge",
+      "width": 320,
+      "height": 318,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 115903,
+      "sha256": "a5956d96ddff55a179aa469f0f80857a732f703bd2f9143ada3bd7cf86cbc1ee",
+      "originalPath": "assets/bitacora-ui-assets/assets/insignia-escucha-activa.png"
+    },
+    "ui.button.green.default": {
+      "path": "ui/buttons/button-green.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Botón verde: estado normal",
+      "kind": "button",
+      "state": "default",
+      "width": 528,
+      "height": 104,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 773,
+      "sha256": "7d3d143968e577a185952fd140234f7ec9c424f85931a52d3ddf3b3f582e7243",
+      "originalPath": "assets/bitacora-ui-assets/assets/boton-verde.png"
+    },
+    "ui.button.green.hover": {
+      "path": "ui/buttons/button-green-hover.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Botón verde: hover",
+      "kind": "button",
+      "state": "hover",
+      "width": 528,
+      "height": 104,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 771,
+      "sha256": "846d571e35a402e1271c496716916736305b496c2cfb867b3de447eefd52f3dc",
+      "originalPath": "assets/bitacora-ui-assets/assets/boton-verde-hover.png"
+    },
+    "ui.icon.open-book": {
+      "path": "ui/icons/open-book.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Libro abierto",
+      "kind": "icon",
+      "width": 220,
+      "height": 149,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 40266,
+      "sha256": "76485a047c96e85db4da770e825a0e6a6d74e08f118a0fced7d761b32ad71bf5",
+      "originalPath": "assets/bitacora-ui-assets/assets/libro-abierto.png"
+    },
+    "ui.icon.xp-star": {
+      "path": "ui/icons/xp-star.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Estrella dorada de XP",
+      "kind": "icon",
+      "width": 160,
+      "height": 149,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 18570,
+      "sha256": "a9527a3f00faa67b382f4282bbd4f0be49052a65d2930738a99d7c80e22cdcfd",
+      "originalPath": "assets/bitacora-ui-assets/assets/estrella-xp.png"
+    },
+    "ui.panel.cream.large": {
+      "path": "ui/panels/panel-cream-large.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel crema grande",
+      "kind": "panel",
+      "width": 960,
+      "height": 640,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 4224,
+      "sha256": "1251734cff60077d70278b63b50a19b31e16f73c84d5d73e43d354d8463f064e",
+      "originalPath": "assets/bitacora-ui-assets/assets/ventana-crema-grande.png"
+    },
+    "ui.panel.cream.nine-slice": {
+      "path": "ui/panels/panel-cream-9slice.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel crema para escalado de nueve secciones",
+      "kind": "panel",
+      "nineSlice": {
+        "top": 32,
+        "right": 32,
+        "bottom": 32,
+        "left": 32
+      },
+      "width": 128,
+      "height": 128,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 749,
+      "sha256": "3b2bbc1b743775a60f6e4b8de65e60952c74c2a1873d514d79c0134f2a28e3c3",
+      "originalPath": "assets/bitacora-ui-assets/assets/ventana-crema-9slice.png"
+    },
+    "ui.panel.cream.small": {
+      "path": "ui/panels/panel-cream-small.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel crema pequeño",
+      "kind": "panel",
+      "width": 640,
+      "height": 360,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 2125,
+      "sha256": "fb7ab090acf0fa0bc57e7c90713546e434f027573b9ea505be276ba14039a432",
+      "originalPath": "assets/bitacora-ui-assets/assets/ventana-crema-pequena.png"
+    },
+    "ui.progress.xp.example": {
+      "path": "ui/progress/xp-bar-example.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Barra de XP de ejemplo al 64 %",
+      "kind": "progress-example",
+      "exampleFraction": 0.64,
+      "width": 880,
+      "height": 80,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 745,
+      "sha256": "6927c1e9bf6df309ec9fc08649f482173ad8a27b4f8ab243ee476933d532f864",
+      "originalPath": "assets/bitacora-ui-assets/assets/xp-barra-ejemplo.png"
+    },
+    "ui.progress.xp.fill": {
+      "path": "ui/progress/xp-bar-fill.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Relleno de la barra de XP",
+      "kind": "progress-fill",
+      "placement": {
+        "relativeTo": "ui.progress.xp.frame",
+        "x": 16,
+        "y": 20
+      },
+      "width": 848,
+      "height": 40,
+      "hasAlphaChannel": true,
+      "transparent": false,
+      "sizeBytes": 375,
+      "sha256": "0e1d83651595cc4448f5edb44f83f85ce5c9a99ffb9f0d7b49603a5cc3d819c7",
+      "originalPath": "assets/bitacora-ui-assets/assets/xp-relleno.png"
+    },
+    "ui.progress.xp.frame": {
+      "path": "ui/progress/xp-bar-frame.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Marco vacío de la barra de XP",
+      "kind": "progress-frame",
+      "width": 880,
+      "height": 80,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 686,
+      "sha256": "1ee080c693987688863bf37d9cd736eb72fb692218b7a65b08826c4b0e187c54",
+      "originalPath": "assets/bitacora-ui-assets/assets/xp-marco.png"
+    },
+    "ui.title.blank": {
+      "path": "ui/titles/title-sign-blank.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Letrero de título vacío",
+      "kind": "title-sign",
+      "width": 1080,
+      "height": 280,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 264914,
+      "sha256": "43b7ed8fff8832471c0339820d1939277bd7a9a11df455ac43ae42437a7de3cb",
+      "originalPath": "assets/bitacora-ui-assets/assets/letrero-titulo-vacio.png"
+    },
+    "ui.title.journal": {
+      "path": "ui/titles/journal-title-sign.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Letrero con el título Mi bitácora",
+      "kind": "title-sign",
+      "text": "Mi bitácora",
+      "width": 1080,
+      "height": 280,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 250101,
+      "sha256": "0c40909f14a3fea8f186fff1110562a20318ee9c75f656719c758636c0dad3fc",
+      "originalPath": "assets/bitacora-ui-assets/assets/letrero-titulo-mi-bitacora.png"
+    },
+    "animation.water.ripples": {
+      "path": "animations/water-ripples.png",
+      "type": "image",
+      "format": "png",
+      "category": "effects",
+      "label": "Agua — ondas y reflejos",
+      "kind": "animation-sheet",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 688532,
+      "sha256": "e625aed0185dc846f26e54b729e10504bf2712a5bf62aef81269ca47a4091684",
+      "originalPath": "bitacora-landscape-animations/assets/animations/water-ripples.png",
+      "origin": {
+        "x": 0.5,
+        "y": 0.546961
+      },
+      "recommendedScale": 0.22,
+      "recommendedContentHeightPx": 44,
+      "contentBounds": {
+        "x": 22,
+        "y": 197,
+        "width": 318,
+        "height": 200
+      },
+      "filter": "nearest",
+      "atlasPath": "animations/water-ripples.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 362,
+        "height": 543
+      },
+      "frameContentBounds": [
+        {
+          "x": 22,
+          "y": 255,
+          "width": 317,
+          "height": 134
+        },
+        {
+          "x": 25,
+          "y": 255,
+          "width": 315,
+          "height": 134
+        },
+        {
+          "x": 24,
+          "y": 255,
+          "width": 316,
+          "height": 134
+        },
+        {
+          "x": 29,
+          "y": 255,
+          "width": 311,
+          "height": 142
+        },
+        {
+          "x": 26,
+          "y": 198,
+          "width": 313,
+          "height": 136
+        },
+        {
+          "x": 26,
+          "y": 197,
+          "width": 314,
+          "height": 137
+        },
+        {
+          "x": 28,
+          "y": 197,
+          "width": 312,
+          "height": 132
+        },
+        {
+          "x": 25,
+          "y": 197,
+          "width": 315,
+          "height": 132
+        }
+      ],
+      "animation": {
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 8,
+        "repeat": -1
+      }
+    },
+    "animation.water.waterfall": {
+      "path": "animations/waterfall.png",
+      "type": "image",
+      "format": "png",
+      "category": "effects",
+      "label": "Cascada — flujo de agua",
+      "kind": "animation-sheet",
+      "width": 1447,
+      "height": 1087,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1086714,
+      "sha256": "5d6fbf7d1314e34bff12a01ab013f8438ebf124ceffd22e32db1e94a8c14c8f0",
+      "originalPath": "bitacora-landscape-animations/assets/animations/waterfall.png",
+      "origin": {
+        "x": 0.513812,
+        "y": 0.943015
+      },
+      "recommendedScale": 0.251889,
+      "recommendedContentHeightPx": 100,
+      "contentBounds": {
+        "x": 56,
+        "y": 116,
+        "width": 260,
+        "height": 397
+      },
+      "filter": "nearest",
+      "atlasPath": "animations/waterfall.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 362,
+        "height": 544
+      },
+      "frameContentBounds": [
+        {
+          "x": 58,
+          "y": 117,
+          "width": 257,
+          "height": 393
+        },
+        {
+          "x": 60,
+          "y": 117,
+          "width": 256,
+          "height": 394
+        },
+        {
+          "x": 57,
+          "y": 118,
+          "width": 257,
+          "height": 395
+        },
+        {
+          "x": 57,
+          "y": 117,
+          "width": 257,
+          "height": 395
+        },
+        {
+          "x": 58,
+          "y": 117,
+          "width": 258,
+          "height": 393
+        },
+        {
+          "x": 58,
+          "y": 117,
+          "width": 258,
+          "height": 393
+        },
+        {
+          "x": 56,
+          "y": 117,
+          "width": 259,
+          "height": 393
+        },
+        {
+          "x": 57,
+          "y": 116,
+          "width": 258,
+          "height": 394
+        }
+      ],
+      "animation": {
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 10,
+        "repeat": -1
+      }
+    },
+    "animation.water.foam-splash": {
+      "path": "animations/foam-splash.png",
+      "type": "image",
+      "format": "png",
+      "category": "effects",
+      "label": "Espuma — salpicadura en bucle",
+      "kind": "animation-sheet",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 844589,
+      "sha256": "0afe994ba47ecdb998a434144313f80dc99ae3eea92de5e9e5de47f9ff33f2ac",
+      "originalPath": "bitacora-landscape-animations/assets/animations/foam-splash.png",
+      "origin": {
+        "x": 0.5,
+        "y": 0.92081
+      },
+      "recommendedScale": 0.097561,
+      "recommendedContentHeightPx": 28,
+      "contentBounds": {
+        "x": 12,
+        "y": 213,
+        "width": 338,
+        "height": 287
+      },
+      "filter": "nearest",
+      "atlasPath": "animations/foam-splash.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 362,
+        "height": 543
+      },
+      "frameContentBounds": [
+        {
+          "x": 19,
+          "y": 275,
+          "width": 331,
+          "height": 218
+        },
+        {
+          "x": 16,
+          "y": 272,
+          "width": 332,
+          "height": 224
+        },
+        {
+          "x": 12,
+          "y": 213,
+          "width": 338,
+          "height": 287
+        },
+        {
+          "x": 13,
+          "y": 253,
+          "width": 332,
+          "height": 245
+        },
+        {
+          "x": 15,
+          "y": 214,
+          "width": 335,
+          "height": 252
+        },
+        {
+          "x": 17,
+          "y": 281,
+          "width": 330,
+          "height": 182
+        },
+        {
+          "x": 15,
+          "y": 266,
+          "width": 331,
+          "height": 200
+        },
+        {
+          "x": 13,
+          "y": 246,
+          "width": 332,
+          "height": 219
+        }
+      ],
+      "animation": {
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 10,
+        "repeat": -1
+      }
+    },
+    "decoration.plant.daisies": {
+      "path": "decorations/plants/flower-daisies.png",
+      "type": "image",
+      "format": "png",
+      "category": "decorations",
+      "label": "Planta de margaritas",
+      "kind": "foliage",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 738672,
+      "sha256": "100b4c6beb4ca81a5afa59395a68db2b5d45a2bfdf50f752773e4c3168faa76a",
+      "originalPath": "bitacora-landscape-animations/assets/decorations/flower-daisies.png",
+      "origin": {
+        "x": 0.504785,
+        "y": 0.920255
+      },
+      "recommendedScale": 0.06883,
+      "recommendedContentHeightPx": 70,
+      "contentBounds": {
+        "x": 151,
+        "y": 137,
+        "width": 964,
+        "height": 1017
+      },
+      "filter": "nearest",
+      "motion": {
+        "type": "sway",
+        "angleDegrees": {
+          "from": -1,
+          "to": 1
+        },
+        "durationMs": 1800,
+        "yoyo": true,
+        "repeat": -1,
+        "ease": "Sine.easeInOut"
+      }
+    },
+    "decoration.plant.bush": {
+      "path": "decorations/plants/bush.png",
+      "type": "image",
+      "format": "png",
+      "category": "decorations",
+      "label": "Arbusto",
+      "kind": "foliage",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 776800,
+      "sha256": "b250ffaa4beba625295ad99f1fe57d364262397c713512ee7e3b333364ab5c6c",
+      "originalPath": "bitacora-landscape-animations/assets/decorations/bush.png",
+      "origin": {
+        "x": 0.51555,
+        "y": 0.875598
+      },
+      "recommendedScale": 0.119205,
+      "recommendedContentHeightPx": 90,
+      "contentBounds": {
+        "x": 97,
+        "y": 343,
+        "width": 1099,
+        "height": 755
+      },
+      "filter": "nearest",
+      "motion": {
+        "type": "sway",
+        "angleDegrees": {
+          "from": -0.7,
+          "to": 0.7
+        },
+        "durationMs": 2200,
+        "yoyo": true,
+        "repeat": -1,
+        "ease": "Sine.easeInOut"
+      }
+    },
+    "decoration.tree.oak-canopy": {
+      "path": "decorations/plants/oak-canopy.png",
+      "type": "image",
+      "format": "png",
+      "category": "decorations",
+      "label": "Copa de árbol",
+      "kind": "foliage",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1755161,
+      "sha256": "16888e351787c07508976d8e49bfb363a000ca122bca996e79a08405f17fe2f1",
+      "originalPath": "bitacora-landscape-animations/assets/decorations/oak-canopy.png",
+      "origin": {
+        "x": 0.498619,
+        "y": 0.951197
+      },
+      "recommendedScale": 0.330237,
+      "recommendedContentHeightPx": 320,
+      "contentBounds": {
+        "x": 8,
+        "y": 64,
+        "width": 1428,
+        "height": 969
+      },
+      "filter": "nearest",
+      "motion": {
+        "type": "sway",
+        "offsetXPx": {
+          "from": -2,
+          "to": 2
+        },
+        "durationMs": 2800,
+        "yoyo": true,
+        "repeat": -1,
+        "ease": "Sine.easeInOut"
+      }
+    },
+    "background.sky.cloud": {
+      "path": "backgrounds/sky/cloud.png",
+      "type": "image",
+      "format": "png",
+      "category": "backgrounds",
+      "label": "Nube",
+      "kind": "sky-element",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 443881,
+      "sha256": "134492f81a3896b7ab2384c47698fa8bc8678e7649d6c8e64c46957355f2f325",
+      "originalPath": "bitacora-landscape-animations/assets/background/cloud.png",
+      "origin": {
+        "x": 0.500691,
+        "y": 0.518416
+      },
+      "recommendedScale": 0.202952,
+      "recommendedContentHeightPx": 110,
+      "contentBounds": {
+        "x": 53,
+        "y": 292,
+        "width": 1344,
+        "height": 542
+      },
+      "filter": "nearest",
+      "motion": {
+        "type": "drift",
+        "direction": "right",
+        "speedPxPerSecond": 4,
+        "wrapAtMapEdge": true
+      }
+    },
+    "particle.leaf": {
+      "path": "particles/leaf.png",
+      "type": "image",
+      "format": "png",
+      "category": "effects",
+      "label": "Partícula — hoja",
+      "kind": "particle",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 319632,
+      "sha256": "b12cddd625ae6db4a97c0793cf30efaf74cb153f5ed84c32547f8b22bb9c115e",
+      "originalPath": "bitacora-landscape-animations/assets/particles/leaf.png",
+      "origin": {
+        "x": 0.505981,
+        "y": 0.50638
+      },
+      "recommendedScale": 0.016667,
+      "recommendedContentHeightPx": 12,
+      "contentBounds": {
+        "x": 277,
+        "y": 275,
+        "width": 715,
+        "height": 720
+      },
+      "filter": "nearest",
+      "motion": {
+        "type": "particle",
+        "lifespanMs": 4500,
+        "speedX": {
+          "min": -8,
+          "max": 8
+        },
+        "speedY": {
+          "min": 8,
+          "max": 18
+        }
+      }
+    },
+    "particle.petal": {
+      "path": "particles/petal.png",
+      "type": "image",
+      "format": "png",
+      "category": "effects",
+      "label": "Partícula — pétalo",
+      "kind": "particle",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 132116,
+      "sha256": "89b233f390cfdf5447a0e46b74ddd4d2468d76a28c90c1527186248087ab8336",
+      "originalPath": "bitacora-landscape-animations/assets/particles/petal.png",
+      "origin": {
+        "x": 0.509171,
+        "y": 0.513955
+      },
+      "recommendedScale": 0.020672,
+      "recommendedContentHeightPx": 8,
+      "contentBounds": {
+        "x": 442,
+        "y": 451,
+        "width": 393,
+        "height": 387
+      },
+      "filter": "nearest",
+      "motion": {
+        "type": "particle",
+        "lifespanMs": 5000,
+        "speedX": {
+          "min": -12,
+          "max": 10
+        },
+        "speedY": {
+          "min": 10,
+          "max": 22
+        }
+      }
+    },
+    "particle.water-droplet": {
+      "path": "particles/water-droplet.png",
+      "type": "image",
+      "format": "png",
+      "category": "effects",
+      "label": "Partícula — gota de agua",
+      "kind": "particle",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 139417,
+      "sha256": "9f8388ab1f68d7b99831dbf9757a1e3edb667dee8907c23480845bcc3b68f47a",
+      "originalPath": "bitacora-landscape-animations/assets/particles/water-droplet.png",
+      "origin": {
+        "x": 0.509569,
+        "y": 0.51236
+      },
+      "recommendedScale": 0.011609,
+      "recommendedContentHeightPx": 7,
+      "contentBounds": {
+        "x": 489,
+        "y": 341,
+        "width": 300,
+        "height": 603
+      },
+      "filter": "nearest",
+      "motion": {
+        "type": "particle",
+        "lifespanMs": 450,
+        "speedX": {
+          "min": -20,
+          "max": 20
+        },
+        "speedY": {
+          "min": -75,
+          "max": -35
+        },
+        "gravityY": 180
+      }
+    },
+    "animation.light.fairy-lights": {
+      "path": "animations/lights/tree-fairy-lights.png",
+      "type": "image",
+      "format": "png",
+      "category": "effects",
+      "label": "Guirnalda dorada animada",
+      "kind": "animation-sheet",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 578154,
+      "sha256": "00f4bc03b66e27d7dddff5461dece0800ded877ef94c661f761e98abbe7b08dd",
+      "originalPath": "bitacora-landscape-extras/assets/lights/tree-fairy-lights.png",
+      "recommendedContentHeightPx": 72,
+      "contentBounds": {
+        "x": 26,
+        "y": 291,
+        "width": 1397,
+        "height": 496
+      },
+      "filter": "nearest",
+      "origin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "recommendedScale": 0.55814,
+      "blendMode": "NORMAL",
+      "opacity": 1,
+      "atlasPath": "animations/lights/tree-fairy-lights.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 358,
+        "height": 157
+      },
+      "alignment": "center",
+      "animation": {
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 6,
+        "repeat": -1
+      }
+    },
+    "animation.light.gold-sparkle": {
+      "path": "animations/lights/gold-sparkle.png",
+      "type": "image",
+      "format": "png",
+      "category": "effects",
+      "label": "Destello dorado animado",
+      "kind": "animation-sheet",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 134184,
+      "sha256": "1db01193746662fd3c37d7ba9f7847bae7d7397ff3f31198aaa5d69e70e97f7c",
+      "originalPath": "bitacora-landscape-extras/assets/particles/gold-sparkle.png",
+      "recommendedContentHeightPx": 13,
+      "contentBounds": {
+        "x": 119,
+        "y": 270,
+        "width": 1255,
+        "height": 578
+      },
+      "filter": "nearest",
+      "origin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "recommendedScale": 0.052,
+      "blendMode": "NORMAL",
+      "opacity": 0.9,
+      "atlasPath": "animations/lights/gold-sparkle.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 265,
+        "height": 270
+      },
+      "alignment": "center",
+      "animation": {
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 12,
+        "repeat": -1
+      }
+    },
+    "animation.fauna.duckling-swim": {
+      "path": "animations/fauna/duckling-swim.png",
+      "type": "image",
+      "format": "png",
+      "category": "effects",
+      "label": "Patito amarillo nadando",
+      "kind": "animation-sheet",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 653173,
+      "sha256": "a9f79773b217aa972c61e1438d4811ae42de962a0d6ae1f5b586451057275502",
+      "originalPath": "bitacora-landscape-extras/assets/ducks/duckling-swim.png",
+      "recommendedContentHeightPx": 30,
+      "contentBounds": {
+        "x": 58,
+        "y": 164,
+        "width": 1355,
+        "height": 776
+      },
+      "filter": "nearest",
+      "origin": {
+        "x": 0.5,
+        "y": 0.909114
+      },
+      "recommendedScale": 0.101351,
+      "blendMode": "NORMAL",
+      "opacity": 1,
+      "motion": {
+        "type": "swim",
+        "speedPxPerSecond": 7.14
+      },
+      "atlasPath": "animations/fauna/duckling-swim.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 308,
+        "height": 316
+      },
+      "alignment": "bottom-center",
+      "animation": {
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 8,
+        "repeat": -1
+      },
+      "facing": "right",
+      "flipForLeft": true
+    },
+    "animation.fauna.white-duck-swim": {
+      "path": "animations/fauna/white-duck-swim.png",
+      "type": "image",
+      "format": "png",
+      "category": "effects",
+      "label": "Patico blanco nadando",
+      "kind": "animation-sheet",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 730734,
+      "sha256": "61b57fe0221da8446f1871d3d4f4795e3a86105cac9d4809b5c1825dd5e7a759",
+      "originalPath": "bitacora-landscape-extras/assets/ducks/white-duck-swim.png",
+      "recommendedContentHeightPx": 35,
+      "contentBounds": {
+        "x": 26,
+        "y": 285,
+        "width": 1389,
+        "height": 664
+      },
+      "filter": "nearest",
+      "origin": {
+        "x": 0.5,
+        "y": 0.905465
+      },
+      "recommendedScale": 0.140562,
+      "blendMode": "NORMAL",
+      "opacity": 1,
+      "motion": {
+        "type": "swim",
+        "speedPxPerSecond": 8.12
+      },
+      "atlasPath": "animations/fauna/white-duck-swim.atlas.json",
+      "frameCount": 8,
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "sourceFrameSize": {
+        "width": 326,
+        "height": 269
+      },
+      "alignment": "bottom-center",
+      "animation": {
+        "frameNames": [
+          "frame-00",
+          "frame-01",
+          "frame-02",
+          "frame-03",
+          "frame-04",
+          "frame-05",
+          "frame-06",
+          "frame-07"
+        ],
+        "frameRate": 8,
+        "repeat": -1
+      },
+      "facing": "right",
+      "flipForLeft": true
+    },
+    "decoration.light.hanging-lantern": {
+      "path": "decorations/lights/hanging-lantern.png",
+      "type": "image",
+      "format": "png",
+      "category": "decorations",
+      "label": "Farol cálido para el árbol",
+      "kind": "light-prop",
+      "width": 1320,
+      "height": 1191,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 617791,
+      "sha256": "760bfc3ab448b4ed51bf7702c58f2a5ae7d20fc00f815968e50aacb4c3d1cc64",
+      "originalPath": "bitacora-landscape-extras/assets/lights/hanging-lantern.png",
+      "recommendedContentHeightPx": 68,
+      "contentBounds": {
+        "x": 372,
+        "y": 98,
+        "width": 578,
+        "height": 891
+      },
+      "filter": "nearest",
+      "origin": {
+        "x": 0.500758,
+        "y": 0.082284
+      },
+      "recommendedScale": 0.076319,
+      "blendMode": "NORMAL",
+      "opacity": 1,
+      "motion": {
+        "type": "sway",
+        "angleDegrees": {
+          "from": -1.5,
+          "to": 1.5
+        },
+        "durationMs": 2600,
+        "yoyo": true,
+        "repeat": -1,
+        "ease": "Sine.easeInOut"
+      }
+    },
+    "decoration.light.warm-glow": {
+      "path": "decorations/lights/warm-glow.png",
+      "type": "image",
+      "format": "png",
+      "category": "effects",
+      "label": "Halo de luz dorada",
+      "kind": "light-glow",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 674060,
+      "sha256": "e4da6bac463301f743ea4da4972fa820c1d298675ca448304330dd21820a5673",
+      "originalPath": "bitacora-landscape-extras/assets/lights/warm-light-glow.png",
+      "recommendedContentHeightPx": 210,
+      "contentBounds": {
+        "x": 234,
+        "y": 232,
+        "width": 787,
+        "height": 779
+      },
+      "filter": "nearest",
+      "origin": {
+        "x": 0.500399,
+        "y": 0.495614
+      },
+      "recommendedScale": 0.269576,
+      "blendMode": "ADD",
+      "opacity": 0.14,
+      "motion": {
+        "type": "pulse",
+        "alphaMin": 0.09,
+        "alphaMax": 0.18,
+        "durationMs": 2200
+      }
+    },
+    "decoration.light.tree-rays": {
+      "path": "decorations/lights/tree-rays.png",
+      "type": "image",
+      "format": "png",
+      "category": "effects",
+      "label": "Rayos de luz entre las hojas",
+      "kind": "light-glow",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 852913,
+      "sha256": "22e9ba76a9ca60c2a97ebb1224d4c9981816dbd2e711a0d34d937d3cc379c94c",
+      "originalPath": "bitacora-landscape-extras/assets/lights/tree-light-rays.png",
+      "recommendedContentHeightPx": 190,
+      "contentBounds": {
+        "x": 89,
+        "y": 58,
+        "width": 1090,
+        "height": 964
+      },
+      "filter": "nearest",
+      "origin": {
+        "x": 0.061464,
+        "y": 0.053407
+      },
+      "recommendedScale": 0.197095,
+      "blendMode": "ADD",
+      "opacity": 0.08,
+      "motion": {
+        "type": "pulse",
+        "alphaMin": 0.05,
+        "alphaMax": 0.11,
+        "durationMs": 3600
+      }
+    },
+    "particle.firefly-mote": {
+      "path": "particles/firefly-mote.png",
+      "type": "image",
+      "format": "png",
+      "category": "effects",
+      "label": "Partícula luminosa",
+      "kind": "particle",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 108425,
+      "sha256": "0f5fd10c23bd43d7f4169b6820622ebe651e59af949118d4b3e59040aa50e69f",
+      "originalPath": "bitacora-landscape-extras/assets/particles/firefly-mote.png",
+      "recommendedContentHeightPx": 7,
+      "contentBounds": {
+        "x": 495,
+        "y": 497,
+        "width": 264,
+        "height": 261
+      },
+      "filter": "nearest",
+      "origin": {
+        "x": 0.5,
+        "y": 0.500399
+      },
+      "recommendedScale": 0.02682,
+      "blendMode": "ADD",
+      "opacity": 0.65,
+      "motion": {
+        "type": "particle",
+        "lifespanMs": 2200,
+        "lifespanMaxMs": 4400,
+        "speedX": {
+          "min": -12,
+          "max": 12
+        },
+        "speedY": {
+          "min": -6.0,
+          "max": 6.0
+        }
+      }
+    },
+    "particle.pollen": {
+      "path": "particles/pollen.png",
+      "type": "image",
+      "format": "png",
+      "category": "effects",
+      "label": "Polen flotante",
+      "kind": "particle",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 52841,
+      "sha256": "cc0aa46201670092775ef2969da84c7a17a3664c4ae13a9e8ed4d4feadf67347",
+      "originalPath": "bitacora-landscape-extras/assets/particles/pollen-speck.png",
+      "recommendedContentHeightPx": 5,
+      "contentBounds": {
+        "x": 554,
+        "y": 577,
+        "width": 164,
+        "height": 178
+      },
+      "filter": "nearest",
+      "origin": {
+        "x": 0.507177,
+        "y": 0.5311
+      },
+      "recommendedScale": 0.02809,
+      "blendMode": "NORMAL",
+      "opacity": 0.5,
+      "motion": {
+        "type": "particle",
+        "lifespanMs": 3000,
+        "lifespanMaxMs": 5500,
+        "speedX": {
+          "min": -9,
+          "max": 9
+        },
+        "speedY": {
+          "min": -4.5,
+          "max": 4.5
+        }
+      }
+    },
+    "background.sky.cloud-small": {
+      "path": "backgrounds/sky/cloud-small.png",
+      "type": "image",
+      "format": "png",
+      "category": "backgrounds",
+      "label": "Nube pequeña",
+      "kind": "sky-element",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 280819,
+      "sha256": "6f54376f7e0d6257f5064000db0dbf24739b395113289d02f90c2a160e678156",
+      "originalPath": "bitacora-landscape-extras/assets/clouds/cloud-small.png",
+      "recommendedContentHeightPx": 62,
+      "contentBounds": {
+        "x": 255,
+        "y": 347,
+        "width": 934,
+        "height": 435
+      },
+      "filter": "nearest",
+      "origin": {
+        "x": 0.498619,
+        "y": 0.519797
+      },
+      "recommendedScale": 0.142529,
+      "blendMode": "NORMAL",
+      "opacity": 0.88,
+      "motion": {
+        "type": "drift",
+        "direction": "right",
+        "speedPxPerSecond": 5,
+        "wrapAtMapEdge": true
+      }
+    },
+    "background.sky.cloud-long": {
+      "path": "backgrounds/sky/cloud-long.png",
+      "type": "image",
+      "format": "png",
+      "category": "backgrounds",
+      "label": "Nube alargada",
+      "kind": "sky-element",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 277215,
+      "sha256": "5b9cadcd5a73e5f36ec44311dbbc1a263562c1af609b764dae3fc633079bffba",
+      "originalPath": "bitacora-landscape-extras/assets/clouds/cloud-long.png",
+      "recommendedContentHeightPx": 54,
+      "contentBounds": {
+        "x": 57,
+        "y": 407,
+        "width": 1336,
+        "height": 299
+      },
+      "filter": "nearest",
+      "origin": {
+        "x": 0.500691,
+        "y": 0.512431
+      },
+      "recommendedScale": 0.180602,
+      "blendMode": "NORMAL",
+      "opacity": 0.82,
+      "motion": {
+        "type": "drift",
+        "direction": "right",
+        "speedPxPerSecond": 3,
+        "wrapAtMapEdge": true
+      }
+    },
+    "audio.music.beyond-the-clouds": {
+      "path": "audio/music/beyond-the-clouds.mp3",
+      "type": "audio",
+      "format": "mp3",
+      "category": "audio",
+      "label": "Música: Beyond The Clouds",
+      "kind": "music",
+      "sizeBytes": 5669518,
+      "sha256": "166ea300aee48fe3f116b88287b9e59711b76175a5b4bf831e72907f18ef7244",
+      "originalPath": "bitacora-music/Beyond The Clouds (Theme for Modern Broadcast).mp3",
+      "durationSeconds": 141.48,
+      "credit": {
+        "title": "Beyond The Clouds (Theme for Modern Broadcast)",
+        "artist": "Matthew Pablo",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+        "sourceUrl": "https://opengameart.org/content/beyond-the-clouds-orchestral-theme",
+        "attribution": "Música: «Beyond The Clouds» de Matthew Pablo (matthewpablo.com), licencia CC BY 3.0.",
+        "verified": true
+      }
+    },
+    "audio.music.enchanted-festival": {
+      "path": "audio/music/enchanted-festival.mp3",
+      "type": "audio",
+      "format": "mp3",
+      "category": "audio",
+      "label": "Música: Enchanted Festival",
+      "kind": "music",
+      "sizeBytes": 5068686,
+      "sha256": "97646d2dc615cccec3e734532e332de0a8474c4f8e595775af5c43ae67647ec6",
+      "originalPath": "bitacora-music/Enchanted Festival.mp3",
+      "durationSeconds": 126.46,
+      "credit": {
+        "title": "Enchanted Festival",
+        "artist": "Matthew Pablo",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+        "sourceUrl": "https://opengameart.org/content/enchanted-festival",
+        "attribution": "Música: «Enchanted Festival» de Matthew Pablo (matthewpablo.com), licencia CC BY 3.0.",
+        "verified": true
+      }
+    },
+    "audio.music.little-town-orchestral": {
+      "path": "audio/music/little-town-orchestral.ogg",
+      "type": "audio",
+      "format": "ogg",
+      "category": "audio",
+      "label": "Música: Little Town (orquestal)",
+      "kind": "music",
+      "sizeBytes": 5460808,
+      "sha256": "c74afa65906eb8ae52ef33ccaf447b108c73b437a517e79b3718ae15d47db95e",
+      "originalPath": "bitacora-music/little town - orchestral.ogg",
+      "durationSeconds": 192.79,
+      "credit": {
+        "title": "Little Town (orchestral)",
+        "artist": "bart",
+        "license": "Por confirmar",
+        "sourceUrl": "https://opengameart.org/content/little-town",
+        "attribution": "",
+        "verified": false
+      }
+    }
+  },
+  "sourceDocuments": [
+    {
+      "path": "docs/source/ui/manifest-original.json",
+      "originalPath": "assets/bitacora-ui-assets/manifest.json",
+      "sizeBytes": 1686,
+      "sha256": "0035467f7b5ff80ff49db8fca4d9ef723a53846d25787ffa0d0cd040226c4eb1"
+    },
+    {
+      "path": "docs/source/ui/readme-original.txt",
+      "originalPath": "assets/bitacora-ui-assets/LEEME.txt",
+      "sizeBytes": 1654,
+      "sha256": "9967b9122d4ae603c15d0585831ccfd79da786eb4c166d13d5867c6a592c5967"
+    },
+    {
+      "path": "docs/source/v4/assets-original.json",
+      "originalPath": "assets/bitacora-amorcito-assets-v4/assets.json",
+      "sizeBytes": 2718,
+      "sha256": "ee09d8b402f42c50b5c404d76c15fee566a1137da543c1d6ed6ab4367796a54f"
+    },
+    {
+      "path": "docs/source/v4/readme-original.md",
+      "originalPath": "assets/bitacora-amorcito-assets-v4/LEEME.md",
+      "sizeBytes": 894,
+      "sha256": "99d4ebb3a401774d76c36e639678379644ab69474a11889352987674923ab9db"
+    },
+    {
+      "path": "docs/source/animations/readme-original.md",
+      "originalPath": "bitacora-landscape-animations/README.md",
+      "sizeBytes": 2272,
+      "sha256": "3abf4be52f046cc2ec293e1780dbffc23b87e6b1b1c0a52f8b0ec6321bbb1880"
+    },
+    {
+      "path": "docs/source/animations/assets-original.json",
+      "originalPath": "bitacora-landscape-animations/assets.json",
+      "sizeBytes": 12913,
+      "sha256": "96a7b016b77998b99d02d7012a8cc6e68f823748be4f6b8036a37f13ebc39d88"
+    },
+    {
+      "path": "docs/source/animations/generation-prompts.json",
+      "originalPath": "bitacora-landscape-animations/generation-prompts.json",
+      "sizeBytes": 15934,
+      "sha256": "c9a42bfb09944066b8348eca7b844e18168071b8115fb0ee7a538ff293e0bde1"
+    },
+    {
+      "path": "docs/source/extras/readme-original.md",
+      "originalPath": "bitacora-landscape-extras/README.md",
+      "sizeBytes": 5795,
+      "sha256": "419ec358e5ae87f70cebe466bfa6e094a048f029423420167178e346f2301082"
+    },
+    {
+      "path": "docs/source/extras/assets-original.json",
+      "originalPath": "bitacora-landscape-extras/assets.json",
+      "sizeBytes": 26960,
+      "sha256": "87b8c04935c0c05b7520cf9f5e0b86b9ac9123fba64af6cc7a5fd3e46f51679f"
+    },
+    {
+      "path": "docs/source/extras/generation-prompts.json",
+      "originalPath": "bitacora-landscape-extras/generation-prompts.json",
+      "sizeBytes": 16671,
+      "sha256": "b331dd72df0402d7f7fbbe8faee25ed9cda6f5d5debf3208bf620627c26fb3ca"
+    }
+  ],
+  "notes": [
+    "Añadido el kit de animaciones del paisaje (10 imágenes, 3 atlas): ver docs/source/animations/. Las entradas anteriores no se modificaron.",
+    "Añadido el kit de piezas adicionales del paisaje (11 imágenes, 4 atlas): ver docs/source/extras/. Las entradas anteriores no se modificaron.",
+    "Añadidas tres pistas de música de fondo (category «audio»): ver `credit` de cada entrada y SPEC 6.4."
+  ]
+}

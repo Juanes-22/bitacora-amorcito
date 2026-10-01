@@ -1,0 +1,375 @@
+/* Panel de nueve secciones: los márgenes llegan por --panel-slice desde assets.json. */
+.window {
+  border: var(--panel-edge) solid transparent;
+  border-image-source: var(--panel-url);
+  /* Sin `fill`: el centro del arte trae líneas de brillo que al estirarse forman bandas. */
+  border-image-slice: var(--panel-slice);
+  border-image-repeat: stretch;
+  image-rendering: pixelated;
+  color: var(--ink);
+  background: var(--cream);
+  background-clip: padding-box;
+}
+.window__body {
+  padding: 0.25rem 0.5rem 0.5rem;
+}
+
+.pixel-button {
+  --button-height: 3.25rem;
+  appearance: none;
+  border: 0;
+  min-width: 14.5rem;
+  min-height: 2.75rem;
+  height: var(--button-height);
+  padding: 0 1.75rem;
+  background: var(--button-url) center / 100% 100% no-repeat;
+  image-rendering: pixelated;
+  color: #fff;
+  font: 700 1.05rem/1 var(--font-ui);
+  letter-spacing: 0.02em;
+  text-shadow: 0 0.125rem 0 var(--green-deep);
+  cursor: pointer;
+}
+.pixel-button:hover,
+.pixel-button:focus-visible {
+  background-image: var(--button-hover-url, var(--button-url));
+}
+.pixel-button:focus-visible {
+  outline: 0.1875rem solid var(--focus);
+  outline-offset: 0.1875rem;
+}
+.pixel-button:active {
+  transform: translateY(0.125rem);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pixel-button:active {
+    transform: none;
+  }
+}
+
+/* ---- Portada ---- */
+.cover {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  overflow-y: auto;
+  padding: var(--gutter);
+  background: rgb(31 42 31 / 0.62);
+}
+.cover__window {
+  width: min(100%, 45rem);
+  margin: auto; /* centra si cabe y arranca arriba (con scroll) si no */
+}
+.cover__title {
+  margin: 0 0 0.75rem;
+  text-align: center;
+  font: 800 clamp(1.25rem, 5vw, 1.75rem) / 1.2 var(--font-ui);
+  color: var(--brown-deep);
+  overflow-wrap: anywhere;
+}
+/* Letrero de madera detrás del título cuando hay ancho suficiente para no recortarlo. */
+@media (min-width: 640px) {
+  .cover__title {
+    display: grid;
+    place-items: center;
+    aspect-ratio: var(--title-ratio, 3.86);
+    padding: 7% 14%;
+    background: var(--title-url) center / 100% 100% no-repeat;
+    image-rendering: pixelated;
+    font-size: 1.6rem;
+  }
+}
+.cover__course {
+  margin: 0.25rem 0 0.875rem;
+  text-align: center;
+  font: 700 clamp(1.05rem, 4vw, 1.3rem) / 1.3 var(--font-ui);
+  overflow-wrap: anywhere;
+}
+.cover__identity {
+  margin: 0 0 0.875rem;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+  line-height: 1.5;
+}
+.cover__student {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.cover__welcome {
+  margin: 0 auto 1.125rem;
+  max-width: 52ch;
+  text-align: center;
+  font: 1.02rem / 1.6 var(--font-reading);
+}
+.cover__demo {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 0.875rem;
+  padding: 0.125rem 0.75rem;
+  border: 0.125rem solid var(--tan);
+  border-radius: 62.4375rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+.cover__actions {
+  display: flex;
+  justify-content: center;
+}
+
+/* ---- Aviso de proximidad y diálogo ---- */
+.nearby-region {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: var(--gutter);
+  z-index: 6;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+.nearby {
+  margin: 0;
+  max-width: 100%;
+  padding: 0.5rem 1rem;
+  border: 0.1875rem solid var(--brown);
+  border-radius: 0.625rem;
+  background: var(--cream);
+  color: var(--ink);
+  font-weight: 700;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.dialogue-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: flex;
+  overflow-y: auto;
+  padding: var(--gutter);
+  background: rgb(31 42 31 / 0.45);
+}
+.dialogue {
+  width: min(100%, 35rem);
+  margin: auto;
+}
+.dialogue__title {
+  margin: 0 0 0.625rem;
+  font: 800 1.25rem/1.25 var(--font-ui);
+  color: var(--brown-deep);
+  overflow-wrap: anywhere;
+}
+.dialogue__line {
+  margin: 0 0 0.625rem;
+  font: 1.02rem/1.6 var(--font-reading);
+}
+.dialogue__actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.875rem;
+}
+
+/* ---- Cabecera de progreso ---- */
+.hud {
+  position: absolute;
+  top: var(--gutter);
+  left: var(--gutter);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  max-width: calc(100% - 2 * var(--gutter));
+  padding: 0.5rem 1rem 0.5rem 0.625rem;
+  border: 0.1875rem solid var(--brown);
+  border-radius: 0.875rem;
+  background: rgb(255 247 233 / 0.94);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  pointer-events: none;
+}
+.hud__portrait {
+  flex: none;
+  height: 4.25rem;
+  width: auto;
+  image-rendering: pixelated;
+}
+.hud__main {
+  min-width: 0;
+}
+.hud__progress,
+.hud__objective {
+  display: flex;
+  gap: 0.875rem;
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.hud__objective {
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.hud__level {
+  color: var(--green-deep);
+}
+.hud__xp {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.xp-bar {
+  position: relative;
+  width: 13rem;
+  aspect-ratio: var(--bar-ratio, 11);
+  flex: none;
+}
+.xp-bar img {
+  image-rendering: pixelated;
+}
+.xp-bar__frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.xp-bar__fill {
+  position: absolute;
+  left: var(--fill-left);
+  top: var(--fill-top);
+  width: var(--fill-width);
+  clip-path: inset(0 var(--fill-clip, 100%) 0 0);
+}
+.hud__xp-text {
+  font-size: 1rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.hud__warning {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin: 0.375rem 0 0;
+  padding: 0.25rem 0.625rem;
+  border: 0.125rem solid var(--brown);
+  border-radius: 0.5rem;
+  background: var(--cream);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+@media (max-width: 480px) {
+  /* Estrecho: una sola línea por dato y controles compactos, sin cortar ni partir los textos. */
+  .hud {
+    gap: 0.5rem;
+    padding: 0.375rem 0.5rem;
+  }
+  .hud__portrait {
+    display: none;
+  }
+  .hud__progress,
+  .hud__objective {
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+  .xp-bar {
+    width: 6.25rem;
+  }
+  .hud__xp-text {
+    font-size: 0.82rem;
+  }
+  .hud__badges {
+    padding: 0 0.625rem;
+    font-size: 0.9rem;
+  }
+}
+
+.hud__badges {
+  flex: none;
+  min-width: 2.75rem;
+  min-height: 3.25rem;
+  padding: 0 1rem;
+  border: 0.125rem solid var(--brown);
+  border-radius: 0.5rem;
+  background: var(--cream-warm);
+  color: var(--ink);
+  font: 700 1.05rem var(--font-ui);
+  cursor: pointer;
+  pointer-events: auto; /* la cabecera deja pasar los clics al mapa; el botón no */
+}
+.hud__badges:hover {
+  background: #f3dcae;
+}
+.hud__badges:focus-visible {
+  outline: 0.1875rem solid var(--focus);
+  outline-offset: 0.125rem;
+}
+
+/* ---- Botón de música (en la cabecera) ---- */
+.hud__music {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  min-width: 2.75rem;
+  min-height: 3.25rem;
+  padding: 0;
+  border: 0.125rem solid var(--brown);
+  border-radius: 0.5rem;
+  background: var(--cream-warm);
+  color: var(--ink);
+  cursor: pointer;
+  pointer-events: auto;
+}
+.hud__music svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+.hud__music[data-music="off"] {
+  color: var(--ink-soft);
+}
+.hud__music:hover {
+  background: #f3dcae;
+}
+.hud__music:focus-visible {
+  outline: 0.1875rem solid var(--focus);
+  outline-offset: 0.125rem;
+}
+@media (max-width: 480px) {
+  /* Estrecho: no cabe en la fila de la cabecera; cuelga justo debajo, en su esquina derecha. */
+  .hud__music {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0.375rem;
+    width: 2.75rem;
+    min-height: 2.75rem;
+  }
+}
+
+/* ---- Cabecera en pantallas estrechas: va después de las reglas base de los botones para poder sobrescribirlas ---- */
+@media (max-width: 480px) {
+  .hud__badges {
+    min-height: 2.75rem;
+    padding: 0 0.625rem;
+    font-size: 0.9rem;
+  }
+}
+@media (max-width: 360px) {
+  .hud__progress,
+  .hud__objective {
+    gap: 0.375rem;
+    font-size: 0.78rem;
+  }
+  .xp-bar {
+    width: 4.5rem;
+  }
+  .hud__xp-text {
+    font-size: 0.75rem;
+  }
+  .hud__badges {
+    padding: 0 0.5rem;
+    font-size: 0.8rem;
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "frames": {
+    "frame-00": {
+      "frame": {
+        "x": 160,
+        "y": 377,
+        "w": 46,
+        "h": 45
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 109,
+        "y": 112,
+        "w": 46,
+        "h": 45
+      },
+      "sourceSize": {
+        "w": 265,
+        "h": 270
+      }
+    },
+    "frame-01": {
+      "frame": {
+        "x": 491,
+        "y": 346,
+        "w": 105,
+        "h": 105
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 80,
+        "y": 82,
+        "w": 105,
+        "h": 105
+      },
+      "sourceSize": {
+        "w": 265,
+        "h": 270
+      }
+    },
+    "frame-02": {
+      "frame": {
+        "x": 826,
+        "y": 318,
+        "w": 158,
+        "h": 159
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 53,
+        "y": 55,
+        "w": 158,
+        "h": 159
+      },
+      "sourceSize": {
+        "w": 265,
+        "h": 270
+      }
+    },
+    "frame-03": {
+      "frame": {
+        "x": 1127,
+        "y": 268,
+        "w": 249,
+        "h": 254
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 8,
+        "y": 8,
+        "w": 249,
+        "h": 254
+      },
+      "sourceSize": {
+        "w": 265,
+        "h": 270
+      }
+    },
+    "frame-04": {
+      "frame": {
+        "x": 117,
+        "y": 699,
+        "w": 147,
+        "h": 151
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 59,
+        "y": 59,
+        "w": 147,
+        "h": 151
+      },
+      "sourceSize": {
+        "w": 265,
+        "h": 270
+      }
+    },
+    "frame-05": {
+      "frame": {
+        "x": 491,
+        "y": 724,
+        "w": 105,
+        "h": 106
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 80,
+        "y": 82,
+        "w": 105,
+        "h": 106
+      },
+      "sourceSize": {
+        "w": 265,
+        "h": 270
+      }
+    },
+    "frame-06": {
+      "frame": {
+        "x": 883,
+        "y": 755,
+        "w": 46,
+        "h": 45
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 109,
+        "y": 112,
+        "w": 46,
+        "h": 45
+      },
+      "sourceSize": {
+        "w": 265,
+        "h": 270
+      }
+    },
+    "frame-07": {
+      "frame": {
+        "x": 1246,
+        "y": 767,
+        "w": 24,
+        "h": 22
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 120,
+        "y": 124,
+        "w": 24,
+        "h": 22
+      },
+      "sourceSize": {
+        "w": 265,
+        "h": 270
+      }
+    }
+  },
+  "meta": {
+    "app": "Bitacora landscape extras",
+    "version": "1.0",
+    "image": "gold-sparkle.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1448,
+      "h": 1086
+    },
+    "scale": "1"
+  }
+}

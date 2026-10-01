@@ -1,0 +1,174 @@
+{
+  "frames": {
+    "frame-00": {
+      "frame": {
+        "x": 22,
+        "y": 255,
+        "w": 317,
+        "h": 134
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 22,
+        "y": 255,
+        "w": 317,
+        "h": 134
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 543
+      }
+    },
+    "frame-01": {
+      "frame": {
+        "x": 387,
+        "y": 255,
+        "w": 315,
+        "h": 134
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 25,
+        "y": 255,
+        "w": 315,
+        "h": 134
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 543
+      }
+    },
+    "frame-02": {
+      "frame": {
+        "x": 748,
+        "y": 255,
+        "w": 316,
+        "h": 134
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 24,
+        "y": 255,
+        "w": 316,
+        "h": 134
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 543
+      }
+    },
+    "frame-03": {
+      "frame": {
+        "x": 1115,
+        "y": 255,
+        "w": 311,
+        "h": 142
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 29,
+        "y": 255,
+        "w": 311,
+        "h": 142
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 543
+      }
+    },
+    "frame-04": {
+      "frame": {
+        "x": 26,
+        "y": 741,
+        "w": 313,
+        "h": 136
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 26,
+        "y": 198,
+        "w": 313,
+        "h": 136
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 543
+      }
+    },
+    "frame-05": {
+      "frame": {
+        "x": 388,
+        "y": 740,
+        "w": 314,
+        "h": 137
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 26,
+        "y": 197,
+        "w": 314,
+        "h": 137
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 543
+      }
+    },
+    "frame-06": {
+      "frame": {
+        "x": 752,
+        "y": 740,
+        "w": 312,
+        "h": 132
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 28,
+        "y": 197,
+        "w": 312,
+        "h": 132
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 543
+      }
+    },
+    "frame-07": {
+      "frame": {
+        "x": 1111,
+        "y": 740,
+        "w": 315,
+        "h": 132
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 25,
+        "y": 197,
+        "w": 315,
+        "h": 132
+      },
+      "sourceSize": {
+        "w": 362,
+        "h": 543
+      }
+    }
+  },
+  "meta": {
+    "version": "1.0",
+    "image": "water-ripples.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1448,
+      "h": 1086
+    },
+    "scale": "1"
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "frames": {
+    "frame-00": {
+      "frame": {
+        "x": 15,
+        "y": 287,
+        "w": 342,
+        "h": 135
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 8,
+        "y": 11,
+        "w": 342,
+        "h": 135
+      },
+      "sourceSize": {
+        "w": 358,
+        "h": 157
+      }
+    },
+    "frame-01": {
+      "frame": {
+        "x": 381,
+        "y": 287,
+        "w": 332,
+        "h": 136
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 10,
+        "w": 332,
+        "h": 136
+      },
+      "sourceSize": {
+        "w": 358,
+        "h": 157
+      }
+    },
+    "frame-02": {
+      "frame": {
+        "x": 738,
+        "y": 287,
+        "w": 332,
+        "h": 138
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 9,
+        "w": 332,
+        "h": 138
+      },
+      "sourceSize": {
+        "w": 358,
+        "h": 157
+      }
+    },
+    "frame-03": {
+      "frame": {
+        "x": 1095,
+        "y": 287,
+        "w": 338,
+        "h": 134
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 10,
+        "y": 11,
+        "w": 338,
+        "h": 134
+      },
+      "sourceSize": {
+        "w": 358,
+        "h": 157
+      }
+    },
+    "frame-04": {
+      "frame": {
+        "x": 24,
+        "y": 653,
+        "w": 333,
+        "h": 141
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 8,
+        "w": 333,
+        "h": 141
+      },
+      "sourceSize": {
+        "w": 358,
+        "h": 157
+      }
+    },
+    "frame-05": {
+      "frame": {
+        "x": 383,
+        "y": 654,
+        "w": 330,
+        "h": 139
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 14,
+        "y": 9,
+        "w": 330,
+        "h": 139
+      },
+      "sourceSize": {
+        "w": 358,
+        "h": 157
+      }
+    },
+    "frame-06": {
+      "frame": {
+        "x": 738,
+        "y": 654,
+        "w": 332,
+        "h": 134
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 11,
+        "w": 332,
+        "h": 134
+      },
+      "sourceSize": {
+        "w": 358,
+        "h": 157
+      }
+    },
+    "frame-07": {
+      "frame": {
+        "x": 1091,
+        "y": 654,
+        "w": 336,
+        "h": 134
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 11,
+        "y": 11,
+        "w": 336,
+        "h": 134
+      },
+      "sourceSize": {
+        "w": 358,
+        "h": 157
+      }
+    }
+  },
+  "meta": {
+    "app": "Bitacora landscape extras",
+    "version": "1.0",
+    "image": "tree-fairy-lights.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1448,
+      "h": 1086
+    },
+    "scale": "1"
+  }
+}

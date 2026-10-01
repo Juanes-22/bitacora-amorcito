@@ -1,0 +1,655 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bitacora.local/schemas/bitacora.schema.json",
+  "title": "Configuración de la bitácora (bitacora.json)",
+  "description": "Valida la forma. Las referencias cruzadas (IDs, assets, portales, accesibilidad del recorrido) las comprueba validateBitacora. Las claves de los registros son los IDs estables.",
+  "type": "object",
+  "required": [
+    "schemaVersion", "contentSetId", "configRevision", "mode", "project", "route",
+    "placements", "maps", "learnings", "badges", "dialogues", "ui", "gameplay", "audio"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "contentSetId": { "$ref": "#/$defs/id" },
+    "configRevision": { "type": "string", "minLength": 1 },
+    "mode": { "enum": ["demo", "final"] },
+    "editorNotes": { "type": "string" },
+    "project": { "$ref": "#/$defs/project" },
+    "route": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+    "placements": { "$ref": "#/$defs/registry-of-placement" },
+    "maps": { "$ref": "#/$defs/registry-of-mapZone" },
+    "learnings": { "$ref": "#/$defs/registry-of-learning" },
+    "badges": { "$ref": "#/$defs/registry-of-badge" },
+    "dialogues": { "$ref": "#/$defs/registry-of-dialogue" },
+    "ui": { "$ref": "#/$defs/ui" },
+    "gameplay": { "$ref": "#/$defs/gameplay" },
+    "audio": { "$ref": "#/$defs/audio" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "assetId": { "type": "string", "pattern": "^[a-z0-9]+(\\.[a-z0-9-]+)+$" },
+    "point": {
+      "type": "object",
+      "required": ["x", "y"],
+      "properties": { "x": { "type": "number" }, "y": { "type": "number" } },
+      "additionalProperties": false
+    },
+    "normalizedPoint": {
+      "type": "object",
+      "required": ["x", "y"],
+      "properties": {
+        "x": { "type": "number", "minimum": 0, "maximum": 1 },
+        "y": { "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "registry-of-placement": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/id" },
+      "additionalProperties": { "$ref": "#/$defs/placement" }
+    },
+    "registry-of-mapZone": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/id" },
+      "additionalProperties": { "$ref": "#/$defs/mapZone" }
+    },
+    "registry-of-learning": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/id" },
+      "additionalProperties": { "$ref": "#/$defs/learning" }
+    },
+    "registry-of-badge": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/id" },
+      "additionalProperties": { "$ref": "#/$defs/badge" }
+    },
+    "registry-of-dialogue": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/id" },
+      "additionalProperties": { "$ref": "#/$defs/dialogue" }
+    },
+
+    "contentBlock": {
+      "type": "object",
+      "oneOf": [
+        { "$ref": "#/$defs/block-paragraph" },
+        { "$ref": "#/$defs/block-heading" },
+        { "$ref": "#/$defs/block-image" },
+        { "$ref": "#/$defs/block-quote" },
+        { "$ref": "#/$defs/block-reference" }
+      ],
+      "discriminator": { "propertyName": "type" }
+    },
+    "block-paragraph": {
+      "type": "object",
+      "required": ["type", "text"],
+      "properties": { "type": { "const": "paragraph" }, "text": { "type": "string", "minLength": 1 } },
+      "additionalProperties": false
+    },
+    "block-heading": {
+      "type": "object",
+      "required": ["type", "text"],
+      "properties": { "type": { "const": "heading" }, "text": { "type": "string", "minLength": 1 } },
+      "additionalProperties": false
+    },
+    "block-image": {
+      "type": "object",
+      "required": ["type", "assetId", "alt"],
+      "properties": {
+        "type": { "const": "image" },
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "alt": { "type": "string", "minLength": 1 },
+        "caption": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "block-quote": {
+      "type": "object",
+      "required": ["type", "text"],
+      "properties": {
+        "type": { "const": "quote" },
+        "text": { "type": "string", "minLength": 1 },
+        "source": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "block-reference": {
+      "type": "object",
+      "required": ["type", "label"],
+      "properties": {
+        "type": { "const": "reference" },
+        "label": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+
+    "project": {
+      "type": "object",
+      "required": [
+        "title", "studentName", "university", "program", "semester", "courseName",
+        "teacherName", "welcomeText", "finalReflection"
+      ],
+      "properties": {
+        "title": { "type": "string", "minLength": 1 },
+        "studentName": { "type": "string", "minLength": 1 },
+        "university": { "type": "string", "minLength": 1 },
+        "program": { "type": "string", "minLength": 1 },
+        "semester": { "type": "string", "minLength": 1 },
+        "courseName": { "type": "string", "minLength": 1 },
+        "teacherName": { "type": ["string", "null"] },
+        "welcomeText": { "type": "string", "minLength": 1 },
+        "finalReflection": { "type": "array", "items": { "$ref": "#/$defs/contentBlock" } }
+      },
+      "additionalProperties": false
+    },
+
+    "placement": {
+      "type": "object",
+      "required": ["zoneId", "position", "interactionOffset", "interactionRadius"],
+      "properties": {
+        "zoneId": { "$ref": "#/$defs/id" },
+        "position": { "$ref": "#/$defs/point" },
+        "interactionOffset": { "$ref": "#/$defs/point" },
+        "interactionRadius": { "type": "number", "exclusiveMinimum": 0 },
+        "signAssetId": { "$ref": "#/$defs/assetId" },
+        "decorationAssetId": { "$ref": "#/$defs/assetId" },
+        "decorationOffset": { "$ref": "#/$defs/point" }
+      },
+      "additionalProperties": false
+    },
+
+    "obstacle": {
+      "type": "object",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["type", "x", "y", "width", "height"],
+          "properties": {
+            "type": { "const": "rect" },
+            "x": { "type": "number" },
+            "y": { "type": "number" },
+            "width": { "type": "number", "exclusiveMinimum": 0 },
+            "height": { "type": "number", "exclusiveMinimum": 0 }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["type", "x", "y", "radius"],
+          "properties": {
+            "type": { "const": "circle" },
+            "x": { "type": "number" },
+            "y": { "type": "number" },
+            "radius": { "type": "number", "exclusiveMinimum": 0 }
+          },
+          "additionalProperties": false
+        }
+      ],
+      "discriminator": { "propertyName": "type" }
+    },
+    "depth": {
+      "type": "object",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["mode", "value"],
+          "properties": { "mode": { "const": "fixed" }, "value": { "type": "number" } },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["mode", "offset"],
+          "properties": { "mode": { "const": "y" }, "offset": { "type": "number" } },
+          "additionalProperties": false
+        }
+      ],
+      "discriminator": { "propertyName": "mode" }
+    },
+    "mapLayer": {
+      "type": "object",
+      "required": ["assetId", "depth"],
+      "properties": {
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "depth": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "decoration": {
+      "type": "object",
+      "required": ["assetId", "position", "origin", "scale", "depth"],
+      "properties": {
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "position": { "$ref": "#/$defs/point" },
+        "origin": { "$ref": "#/$defs/normalizedPoint" },
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "depth": { "$ref": "#/$defs/depth" }
+      },
+      "additionalProperties": false
+    },
+    "rect": {
+      "type": "object",
+      "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "width": { "type": "number", "exclusiveMinimum": 0 },
+        "height": { "type": "number", "exclusiveMinimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "ambientEffect": {
+      "type": "object",
+      "oneOf": [
+        { "$ref": "#/$defs/ambient-animation" },
+        { "$ref": "#/$defs/ambient-sway" },
+        { "$ref": "#/$defs/ambient-drift" },
+        { "$ref": "#/$defs/ambient-particles" },
+        { "$ref": "#/$defs/ambient-glow" },
+        { "$ref": "#/$defs/ambient-swim" }
+      ],
+      "discriminator": { "propertyName": "type" }
+    },
+    "ambient-animation": {
+      "type": "object",
+      "required": ["type", "assetId", "position", "depth"],
+      "properties": {
+        "type": { "const": "animation" },
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "position": { "$ref": "#/$defs/point" },
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "flipX": { "type": "boolean" },
+        "alpha": { "type": "number", "minimum": 0, "maximum": 1 },
+        "depth": { "$ref": "#/$defs/depth" }
+      },
+      "additionalProperties": false
+    },
+    "ambient-sway": {
+      "type": "object",
+      "required": ["type", "assetId", "position", "depth"],
+      "properties": {
+        "type": { "const": "sway" },
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "position": { "$ref": "#/$defs/point" },
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "depth": { "$ref": "#/$defs/depth" }
+      },
+      "additionalProperties": false
+    },
+    "ambient-drift": {
+      "type": "object",
+      "required": ["type", "assetId", "position", "depth"],
+      "properties": {
+        "type": { "const": "drift" },
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "position": { "$ref": "#/$defs/point" },
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "depth": { "$ref": "#/$defs/depth" }
+      },
+      "additionalProperties": false
+    },
+    "ambient-particles": {
+      "type": "object",
+      "required": ["type", "assetId", "area", "frequencyMs", "depth"],
+      "properties": {
+        "type": { "const": "particles" },
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "area": { "$ref": "#/$defs/rect" },
+        "frequencyMs": { "type": "number", "minimum": 50 },
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "depth": { "$ref": "#/$defs/depth" }
+      },
+      "additionalProperties": false
+    },
+    "ambient-glow": {
+      "type": "object",
+      "required": ["type", "assetId", "position", "depth"],
+      "properties": {
+        "type": { "const": "glow" },
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "position": { "$ref": "#/$defs/point" },
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "alpha": { "type": "number", "minimum": 0, "maximum": 1 },
+        "depth": { "$ref": "#/$defs/depth" }
+      },
+      "additionalProperties": false
+    },
+    "ambient-swim": {
+      "type": "object",
+      "required": ["type", "assetId", "path", "depth"],
+      "properties": {
+        "type": { "const": "swim" },
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "path": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/point" } },
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "speedFactor": { "type": "number", "exclusiveMinimum": 0 },
+        "depth": { "$ref": "#/$defs/depth" }
+      },
+      "additionalProperties": false
+    },
+    "audio": {
+      "type": "object",
+      "required": ["music"],
+      "properties": {
+        "music": {
+          "type": "object",
+          "required": ["active", "tracks", "rotation", "volume", "crossfadeMs"],
+          "properties": {
+            "active": { "type": "boolean" },
+            "tracks": { "type": "array", "items": { "$ref": "#/$defs/assetId" } },
+            "rotation": { "enum": ["sequential", "shuffle"] },
+            "volume": { "type": "number", "minimum": 0, "maximum": 1 },
+            "crossfadeMs": { "type": "number", "minimum": 0 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "portal": {
+      "type": "object",
+      "required": ["label", "interaction", "targetZoneId", "targetSpawnId"],
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "interaction": {
+          "type": "object",
+          "required": ["x", "y", "radius"],
+          "properties": {
+            "x": { "type": "number" },
+            "y": { "type": "number" },
+            "radius": { "type": "number", "exclusiveMinimum": 0 }
+          },
+          "additionalProperties": false
+        },
+        "targetZoneId": { "$ref": "#/$defs/id" },
+        "targetSpawnId": { "$ref": "#/$defs/id" }
+      },
+      "additionalProperties": false
+    },
+    "mapZone": {
+      "type": "object",
+      "required": ["label", "width", "height", "layers", "initialSpawnId", "spawns", "obstacles", "decorations", "ambient", "portals"],
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "width": { "type": "number", "exclusiveMinimum": 0 },
+        "height": { "type": "number", "exclusiveMinimum": 0 },
+        "layers": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/mapLayer" } },
+        "initialSpawnId": { "$ref": "#/$defs/id" },
+        "spawns": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "$ref": "#/$defs/id" },
+          "additionalProperties": { "$ref": "#/$defs/point" }
+        },
+        "obstacles": { "type": "array", "items": { "$ref": "#/$defs/obstacle" } },
+        "decorations": { "type": "array", "items": { "$ref": "#/$defs/decoration" } },
+        "ambient": { "type": "array", "items": { "$ref": "#/$defs/ambientEffect" } },
+        "portals": {
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/id" },
+          "additionalProperties": { "$ref": "#/$defs/portal" }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "learning": {
+      "type": "object",
+      "required": ["title", "topic", "editorialStatus", "contentRevision", "badgeId", "sections"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1 },
+        "topic": { "type": "string", "minLength": 1 },
+        "editorialStatus": { "enum": ["demo", "draft", "ready"] },
+        "contentRevision": { "type": "integer", "minimum": 1 },
+        "badgeId": { "$ref": "#/$defs/id" },
+        "sections": {
+          "type": "object",
+          "required": ["lived", "learning", "reflection", "classroom"],
+          "properties": {
+            "lived": { "$ref": "#/$defs/blocks" },
+            "learning": { "$ref": "#/$defs/blocks" },
+            "reflection": { "$ref": "#/$defs/blocks" },
+            "classroom": { "$ref": "#/$defs/blocks" }
+          },
+          "additionalProperties": false
+        },
+        "dialogueOverrides": { "$ref": "#/$defs/dialogueIds" }
+      },
+      "additionalProperties": false
+    },
+    "blocks": { "type": "array", "items": { "$ref": "#/$defs/contentBlock" } },
+    "dialogueIds": {
+      "type": "object",
+      "properties": {
+        "open": { "$ref": "#/$defs/id" },
+        "locked": { "$ref": "#/$defs/id" },
+        "completed": { "$ref": "#/$defs/id" },
+        "reward": { "$ref": "#/$defs/id" }
+      },
+      "additionalProperties": false
+    },
+
+    "badge": {
+      "type": "object",
+      "required": ["title", "description", "assetId", "xp"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "xp": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "dialogue": {
+      "type": "object",
+      "required": ["lines"],
+      "properties": {
+        "lines": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["speaker", "text"],
+            "properties": {
+              "speaker": { "enum": ["vanessa", "narrator"] },
+              "text": { "type": "string", "minLength": 1 },
+              "portraitAssetId": { "$ref": "#/$defs/assetId" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "ui": {
+      "type": "object",
+      "required": ["tabs", "labels", "assets", "defaultDialogueIds"],
+      "properties": {
+        "tabs": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "required": ["id", "label", "required"],
+            "properties": {
+              "id": { "enum": ["lived", "learning", "reflection", "classroom"] },
+              "label": { "type": "string", "minLength": 1 },
+              "required": { "type": "boolean" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "labels": {
+          "type": "object",
+          "required": [
+            "explore", "markRead", "claimBadge", "close", "index", "reset", "continueRoute",
+            "startRoute", "pending", "demo", "previous", "next", "progressTemplate", "stationTitleTemplate",
+            "semester", "teacher", "sectionRead", "sectionUnread", "badgeEarned", "remainingTemplate", "rewardTitle", "xpTemplate", "levelTemplate", "objectiveTemplate", "finishedLabel", "emptyRouteLabel", "mapLabel",
+            "badges", "notEarned", "earnedOnTemplate", "badgeCountTemplate", "completionTitle", "finalReflectionTitle", "finalReflectionPending", "resetConfirmTitle", "resetConfirmText", "resetConfirm", "cancel", "preparationTemplate",
+            "musicMute", "musicUnmute"
+          ],
+          "properties": {
+            "explore": { "type": "string", "minLength": 1 },
+            "markRead": { "type": "string", "minLength": 1 },
+            "claimBadge": { "type": "string", "minLength": 1 },
+            "close": { "type": "string", "minLength": 1 },
+            "index": { "type": "string", "minLength": 1 },
+            "reset": { "type": "string", "minLength": 1 },
+            "continueRoute": { "type": "string", "minLength": 1 },
+            "startRoute": { "type": "string", "minLength": 1 },
+            "pending": { "type": "string", "minLength": 1 },
+            "demo": { "type": "string", "minLength": 1 },
+            "previous": { "type": "string", "minLength": 1 },
+            "next": { "type": "string", "minLength": 1 },
+            "progressTemplate": { "type": "string", "minLength": 1 },
+            "stationTitleTemplate": { "type": "string", "minLength": 1 },
+            "semester": { "type": "string", "minLength": 1 },
+            "teacher": { "type": "string", "minLength": 1 },
+            "sectionRead": { "type": "string", "minLength": 1 },
+            "sectionUnread": { "type": "string", "minLength": 1 },
+            "badgeEarned": { "type": "string", "minLength": 1 },
+            "remainingTemplate": { "type": "string", "minLength": 1 },
+            "rewardTitle": { "type": "string", "minLength": 1 },
+            "xpTemplate": { "type": "string", "minLength": 1 },
+            "levelTemplate": { "type": "string", "minLength": 1 },
+            "objectiveTemplate": { "type": "string", "minLength": 1 },
+            "finishedLabel": { "type": "string", "minLength": 1 },
+            "emptyRouteLabel": { "type": "string", "minLength": 1 },
+            "mapLabel": { "type": "string", "minLength": 1 },
+            "badges": { "type": "string", "minLength": 1 },
+            "notEarned": { "type": "string", "minLength": 1 },
+            "earnedOnTemplate": { "type": "string", "minLength": 1 },
+            "badgeCountTemplate": { "type": "string", "minLength": 1 },
+            "completionTitle": { "type": "string", "minLength": 1 },
+            "finalReflectionTitle": { "type": "string", "minLength": 1 },
+            "finalReflectionPending": { "type": "string", "minLength": 1 },
+            "resetConfirmTitle": { "type": "string", "minLength": 1 },
+            "resetConfirmText": { "type": "string", "minLength": 1 },
+            "resetConfirm": { "type": "string", "minLength": 1 },
+            "cancel": { "type": "string", "minLength": 1 },
+            "preparationTemplate": { "type": "string", "minLength": 1 },
+            "musicMute": { "type": "string", "minLength": 1 },
+            "musicUnmute": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false
+        },
+        "assets": {
+          "type": "object",
+          "required": ["window", "button", "stationSign", "titleSign", "portrait", "xpBar", "glow"],
+          "properties": {
+            "window": { "$ref": "#/$defs/assetId" },
+            "button": { "$ref": "#/$defs/assetId" },
+            "buttonHover": { "$ref": "#/$defs/assetId" },
+            "stationSign": { "$ref": "#/$defs/assetId" },
+            "titleSign": { "$ref": "#/$defs/assetId" },
+            "portrait": { "$ref": "#/$defs/assetId" },
+            "xpBar": { "$ref": "#/$defs/assetId" },
+            "xpStar": { "$ref": "#/$defs/assetId" },
+            "openBook": { "$ref": "#/$defs/assetId" },
+            "lockIcon": { "$ref": "#/$defs/assetId" },
+            "glow": { "$ref": "#/$defs/assetId" }
+          },
+          "additionalProperties": false
+        },
+        "defaultDialogueIds": {
+          "type": "object",
+          "required": ["open", "locked", "completed", "reward"],
+          "properties": {
+            "open": { "$ref": "#/$defs/id" },
+            "locked": { "$ref": "#/$defs/id" },
+            "completed": { "$ref": "#/$defs/id" },
+            "reward": { "$ref": "#/$defs/id" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "actor": {
+      "type": "object",
+      "required": ["assetId", "origin", "scale", "animations"],
+      "properties": {
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "origin": { "$ref": "#/$defs/normalizedPoint" },
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "animations": {
+          "type": "object",
+          "properties": {
+            "idle": { "type": "string", "minLength": 1 },
+            "walkUp": { "type": "string", "minLength": 1 },
+            "walkDown": { "type": "string", "minLength": 1 },
+            "walkLeft": { "type": "string", "minLength": 1 },
+            "walkRight": { "type": "string", "minLength": 1 },
+            "celebrate": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "gameplay": {
+      "type": "object",
+      "required": ["progressionMode", "zoneTravel", "start", "playerSpeed", "cameraZoom", "camera", "signScale", "player", "companion"],
+      "properties": {
+        "progressionMode": { "const": "sequential" },
+        "zoneTravel": { "const": "free" },
+        "start": {
+          "type": "object",
+          "required": ["zoneId", "spawnId"],
+          "properties": { "zoneId": { "$ref": "#/$defs/id" }, "spawnId": { "$ref": "#/$defs/id" } },
+          "additionalProperties": false
+        },
+        "playerSpeed": { "type": "number", "exclusiveMinimum": 0 },
+        "cameraZoom": { "type": "number", "exclusiveMinimum": 0 },
+        "camera": {
+          "type": "object",
+          "required": ["fit", "maxZoom", "minPlayerHeight"],
+          "properties": {
+            "fit": { "enum": ["cover", "fixed"] },
+            "maxZoom": { "type": "number", "exclusiveMinimum": 0 },
+            "minPlayerHeight": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
+          },
+          "additionalProperties": false
+        },
+        "signScale": { "type": "number", "exclusiveMinimum": 0 },
+        "player": {
+          "type": "object",
+          "required": ["assetId", "origin", "scale", "animations", "body"],
+          "properties": {
+            "assetId": { "$ref": "#/$defs/assetId" },
+            "origin": { "$ref": "#/$defs/normalizedPoint" },
+            "scale": { "type": "number", "exclusiveMinimum": 0 },
+            "animations": { "$ref": "#/$defs/actor/properties/animations" },
+            "body": {
+              "type": "object",
+              "required": ["width", "height", "offset"],
+              "properties": {
+                "width": { "type": "number", "exclusiveMinimum": 0 },
+                "height": { "type": "number", "exclusiveMinimum": 0 },
+                "offset": { "$ref": "#/$defs/point" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "companion": {
+          "type": "object",
+          "required": ["mode", "followDistance"],
+          "properties": {
+            "mode": { "enum": ["separate", "included"] },
+            "actor": { "$ref": "#/$defs/actor" },
+            "followDistance": { "type": "number", "minimum": 0 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

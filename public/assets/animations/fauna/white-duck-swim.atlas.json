@@ -1,0 +1,175 @@
+{
+  "frames": {
+    "frame-00": {
+      "frame": {
+        "x": 24,
+        "y": 303,
+        "w": 307,
+        "h": 227
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 9,
+        "y": 34,
+        "w": 307,
+        "h": 227
+      },
+      "sourceSize": {
+        "w": 326,
+        "h": 269
+      }
+    },
+    "frame-01": {
+      "frame": {
+        "x": 383,
+        "y": 288,
+        "w": 310,
+        "h": 248
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 8,
+        "y": 13,
+        "w": 310,
+        "h": 248
+      },
+      "sourceSize": {
+        "w": 326,
+        "h": 269
+      }
+    },
+    "frame-02": {
+      "frame": {
+        "x": 746,
+        "y": 283,
+        "w": 310,
+        "h": 253
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 8,
+        "y": 8,
+        "w": 310,
+        "h": 253
+      },
+      "sourceSize": {
+        "w": 326,
+        "h": 269
+      }
+    },
+    "frame-03": {
+      "frame": {
+        "x": 1111,
+        "y": 290,
+        "w": 306,
+        "h": 242
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 10,
+        "y": 19,
+        "w": 306,
+        "h": 242
+      },
+      "sourceSize": {
+        "w": 326,
+        "h": 269
+      }
+    },
+    "frame-04": {
+      "frame": {
+        "x": 30,
+        "y": 710,
+        "w": 301,
+        "h": 241
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 20,
+        "w": 301,
+        "h": 241
+      },
+      "sourceSize": {
+        "w": 326,
+        "h": 269
+      }
+    },
+    "frame-05": {
+      "frame": {
+        "x": 398,
+        "y": 710,
+        "w": 303,
+        "h": 233
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 11,
+        "y": 28,
+        "w": 303,
+        "h": 233
+      },
+      "sourceSize": {
+        "w": 326,
+        "h": 269
+      }
+    },
+    "frame-06": {
+      "frame": {
+        "x": 758,
+        "y": 718,
+        "w": 298,
+        "h": 227
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 14,
+        "y": 34,
+        "w": 298,
+        "h": 227
+      },
+      "sourceSize": {
+        "w": 326,
+        "h": 269
+      }
+    },
+    "frame-07": {
+      "frame": {
+        "x": 1111,
+        "y": 717,
+        "w": 305,
+        "h": 226
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 10,
+        "y": 35,
+        "w": 305,
+        "h": 226
+      },
+      "sourceSize": {
+        "w": 326,
+        "h": 269
+      }
+    }
+  },
+  "meta": {
+    "app": "Bitacora landscape extras",
+    "version": "1.0",
+    "image": "white-duck-swim.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1448,
+      "h": 1086
+    },
+    "scale": "1"
+  }
+}

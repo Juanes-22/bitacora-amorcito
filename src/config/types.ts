@@ -1,0 +1,293 @@
+// Tipos de los dos contratos externos. Se contrastan con bitacora.schema.json y
+// assets.schema.json en src/tests/config.test.ts: no sustituyen a la validación en runtime.
+
+export type AppMode = "demo" | "final";
+export type SectionId = "lived" | "learning" | "reflection" | "classroom";
+export type DialogueEvent = "open" | "locked" | "completed" | "reward";
+export type Point = { x: number; y: number };
+
+export type ContentBlock =
+  | { type: "paragraph"; text: string }
+  | { type: "heading"; text: string }
+  | { type: "image"; assetId: string; alt: string; caption?: string }
+  | { type: "quote"; text: string; source?: string }
+  | { type: "reference"; label: string; url?: string };
+
+export interface ProjectConfig {
+  title: string;
+  studentName: string;
+  university: string;
+  program: string;
+  semester: string;
+  courseName: string;
+  teacherName: string | null;
+  welcomeText: string;
+  finalReflection: ContentBlock[];
+}
+
+export interface Learning {
+  title: string;
+  topic: string;
+  editorialStatus: "demo" | "draft" | "ready";
+  contentRevision: number;
+  badgeId: string;
+  sections: Record<SectionId, ContentBlock[]>;
+  dialogueOverrides?: Partial<Record<DialogueEvent, string>>;
+}
+
+export interface Badge {
+  title: string;
+  description: string;
+  assetId: string;
+  xp: number;
+}
+
+export interface Dialogue {
+  lines: Array<{ speaker: "vanessa" | "narrator"; text: string; portraitAssetId?: string }>;
+}
+
+export interface Placement {
+  zoneId: string;
+  position: Point;
+  interactionOffset: Point;
+  interactionRadius: number;
+  signAssetId?: string;
+  decorationAssetId?: string;
+  decorationOffset?: Point;
+}
+
+export type Obstacle =
+  | { type: "rect"; x: number; y: number; width: number; height: number }
+  | { type: "circle"; x: number; y: number; radius: number };
+
+export interface Decoration {
+  assetId: string;
+  position: Point;
+  origin: Point;
+  scale: number;
+  depth: { mode: "fixed"; value: number } | { mode: "y"; offset: number };
+}
+
+/** Capa de fondo elegida explícitamente (SPEC 3.1); `depth` fija su orden de dibujo. */
+export interface MapLayer {
+  assetId: string;
+  depth: number;
+}
+
+export interface Portal {
+  label: string;
+  interaction: Point & { radius: number };
+  targetZoneId: string;
+  targetSpawnId: string;
+}
+
+export type Rect = { x: number; y: number; width: number; height: number };
+export type AmbientDepth = { mode: "fixed"; value: number } | { mode: "y"; offset: number };
+
+/**
+ * Animación ambiental (SPEC 3.2). `scale` multiplica la `recommendedScale` del asset (por defecto 1); el origen, los
+ * fotogramas y el movimiento salen de la metadata del manifiesto, no se repiten aquí.
+ */
+export type AmbientEffect =
+  | { type: "animation"; assetId: string; position: Point; scale?: number; flipX?: boolean; alpha?: number; depth: AmbientDepth }
+  | { type: "sway"; assetId: string; position: Point; scale?: number; depth: AmbientDepth }
+  | { type: "drift"; assetId: string; position: Point; scale?: number; depth: AmbientDepth }
+  | { type: "particles"; assetId: string; area: Rect; frequencyMs: number; scale?: number; depth: AmbientDepth }
+  | { type: "glow"; assetId: string; position: Point; scale?: number; alpha?: number; depth: AmbientDepth }
+  | { type: "swim"; assetId: string; path: Point[]; scale?: number; speedFactor?: number; depth: AmbientDepth };
+
+export interface MapZone {
+  label: string;
+  width: number;
+  height: number;
+  layers: MapLayer[];
+  initialSpawnId: string;
+  spawns: Record<string, Point>;
+  obstacles: Obstacle[];
+  decorations: Decoration[];
+  /** Animaciones del paisaje (puede estar vacío). */
+  ambient: AmbientEffect[];
+  portals: Record<string, Portal>;
+}
+
+export type AnimationName = "idle" | "walkUp" | "walkDown" | "walkLeft" | "walkRight" | "celebrate";
+
+export interface ActorSpec {
+  assetId: string;
+  origin: Point;
+  scale: number;
+  animations: Partial<Record<AnimationName, string>>;
+}
+
+export interface UiConfig {
+  tabs: Array<{ id: SectionId; label: string; required: boolean }>;
+  labels: {
+    explore: string; markRead: string; claimBadge: string; close: string;
+    index: string; reset: string; continueRoute: string; startRoute: string;
+    pending: string; demo: string; previous: string; next: string;
+    progressTemplate: string; stationTitleTemplate: string;
+    semester: string; teacher: string; sectionRead: string; sectionUnread: string; badgeEarned: string;
+    remainingTemplate: string; rewardTitle: string; xpTemplate: string; levelTemplate: string;
+    objectiveTemplate: string; finishedLabel: string; emptyRouteLabel: string; mapLabel: string;
+    badges: string; notEarned: string; earnedOnTemplate: string; badgeCountTemplate: string; completionTitle: string;
+    finalReflectionTitle: string; finalReflectionPending: string; resetConfirmTitle: string; resetConfirmText: string;
+    resetConfirm: string; cancel: string; preparationTemplate: string;
+    musicMute: string; musicUnmute: string;
+  };
+  assets: {
+    window: string; button: string; buttonHover?: string; stationSign: string;
+    titleSign: string; portrait: string; xpBar: string; xpStar?: string;
+    openBook?: string; lockIcon?: string; glow: string;
+  };
+  defaultDialogueIds: Record<DialogueEvent, string>;
+}
+
+export interface GameplayConfig {
+  progressionMode: "sequential";
+  zoneTravel: "free";
+  start: { zoneId: string; spawnId: string };
+  playerSpeed: number;
+  /** Zoom base (mínimo). */
+  cameraZoom: number;
+  camera: { fit: "cover" | "fixed"; maxZoom: number; minPlayerHeight: number };
+  /** Escala en el mundo de las señales de estación (y de los textos que las acompañan). */
+  signScale: number;
+  player: ActorSpec & { body: { width: number; height: number; offset: Point } };
+  companion: { mode: "separate" | "included"; actor?: ActorSpec; followDistance: number };
+}
+
+/** Música de fondo (SPEC 6.4): qué pistas, en qué orden y cómo suenan. Las rutas viven en assets.json. */
+export interface AudioConfig {
+  music: {
+    active: boolean;
+    tracks: string[];
+    rotation: "sequential" | "shuffle";
+    volume: number;
+    crossfadeMs: number;
+  };
+}
+
+export interface BitacoraConfig {
+  $schema?: string;
+  schemaVersion: 1;
+  contentSetId: string;
+  configRevision: string;
+  mode: AppMode;
+  editorNotes?: string;
+  project: ProjectConfig;
+  route: string[];
+  placements: Record<string, Placement>;
+  maps: Record<string, MapZone>;
+  learnings: Record<string, Learning>;
+  badges: Record<string, Badge>;
+  dialogues: Record<string, Dialogue>;
+  ui: UiConfig;
+  gameplay: GameplayConfig;
+  audio: AudioConfig;
+}
+
+// ---- assets.json real ----------------------------------------------------
+
+/** Sugerencia de movimiento del kit de animaciones (SPEC 3.2): la lógica la interpreta, no se pasa tal cual a Phaser. */
+export type AssetMotion =
+  | { type: "sway"; angleDegrees?: { from: number; to: number }; offsetXPx?: { from: number; to: number }; durationMs: number; yoyo?: boolean; repeat?: number; ease?: string }
+  | { type: "drift"; direction: "left" | "right"; speedPxPerSecond: number; wrapAtMapEdge?: boolean }
+  | { type: "pulse"; alphaMin: number; alphaMax: number; durationMs: number }
+  | { type: "swim"; speedPxPerSecond: number }
+  | { type: "particle"; lifespanMs: number; lifespanMaxMs?: number; speedX: { min: number; max: number }; speedY: { min: number; max: number }; gravityY?: number };
+
+/** Atribución de una pista. `verified: false` impide la entrega final: no se supone ninguna licencia (SPEC 6.4). */
+export interface MusicCredit {
+  title: string;
+  artist: string;
+  license: string;
+  licenseUrl?: string;
+  sourceUrl?: string;
+  attribution?: string;
+  verified: boolean;
+}
+
+export interface AssetEntry {
+  path: string;
+  type: string;
+  format?: string;
+  category: string;
+  label: string;
+  kind: string;
+  width?: number;
+  height?: number;
+  hasAlphaChannel?: boolean;
+  transparent?: boolean;
+  sizeBytes?: number;
+  sha256?: string;
+  originalPath?: string;
+  zone?: string;
+  layer?: string;
+  variant?: string;
+  state?: string;
+  text?: string;
+  exampleFraction?: number;
+  nineSlice?: { top: number; right: number; bottom: number; left: number };
+  placement?: { relativeTo: string; x: number; y: number };
+  poseCount?: number;
+  visualLayout?: { columns: number; rows: number };
+  rowDirections?: string[];
+  requiresFrameDefinition?: boolean;
+  // Kit de animaciones del paisaje (SPEC 3.2)
+  atlasPath?: string;
+  frameCount?: number;
+  sourceFrameSize?: { width: number; height: number };
+  layout?: { columns: number; rows: number; order: string };
+  animation?: { frameNames: string[]; frameRate: number; repeat: number };
+  motion?: AssetMotion;
+  origin?: { x: number; y: number };
+  recommendedScale?: number;
+  recommendedContentHeightPx?: number;
+  contentBounds?: { x: number; y: number; width: number; height: number };
+  filter?: string;
+  /** Mezcla y opacidad base de las luces y partículas (piezas adicionales, SPEC 3.2). */
+  blendMode?: "NORMAL" | "ADD";
+  opacity?: number;
+  /** Hacia dónde mira el dibujo; `flipForLeft` indica que se voltea para mirar a la izquierda. */
+  facing?: "left" | "right";
+  flipForLeft?: boolean;
+  /** Pistas de música (SPEC 6.4). */
+  durationSeconds?: number;
+  credit?: MusicCredit;
+  /** Metadata futura: se conserva sin interpretarla. */
+  [key: string]: unknown;
+}
+
+export interface SourceDocument {
+  path: string;
+  originalPath?: string;
+  sizeBytes?: number;
+  sha256?: string;
+  [key: string]: unknown;
+}
+
+export interface AssetManifest {
+  version: number;
+  project: string;
+  basePath: string;
+  pathConvention: string;
+  assetCount: number;
+  categoryCounts: Record<string, number>;
+  notes?: string[];
+  assets: Record<string, AssetEntry>;
+  sourceDocuments?: SourceDocument[];
+  [key: string]: unknown;
+}
+
+// ---- validación ------------------------------------------------------------
+
+/** `path` usa notación con puntos, p. ej. `placements.apr-c.decorationAssetId`. */
+export interface ConfigIssue {
+  path: string;
+  message: string;
+}
+
+export type ValidationResult<T> = { ok: true; value: T } | { ok: false; issues: ConfigIssue[] };
+
+/** Definiciones de frames validadas contra la imagen real (SPEC 3.1). Aún no existen. */
+export type FrameDefinitions = Record<string, { animations: readonly string[] }>;

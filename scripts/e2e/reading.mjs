@@ -96,7 +96,7 @@ try {
   {
     const t = await open();
     await t.start();
-    await t.page.evaluate(() => { window.__g0 = window.__PHASER_GAME__; window.__c0 = document.querySelector("canvas"); });
+    await t.page.evaluate(() => { window.__g0 = window.__PHASER_GAME__; window.__c0 = document.querySelector("canvas:not(.hud__portrait canvas)"); });
     await openStation1(t);
     await t.page.click("text=Siguiente");
     await t.page.click("text=Marcar sección como leída"); // «Lo vivido»
@@ -122,7 +122,7 @@ try {
     await t.page.waitForTimeout(500);
     await t.page.keyboard.press("Enter");
     await t.page.waitForTimeout(500);
-    const same = await t.page.evaluate(() => ({ game: window.__g0 === window.__PHASER_GAME__, canvas: window.__c0 === document.querySelector("canvas") && document.querySelectorAll("canvas").length === 1 }));
+    const same = await t.page.evaluate(() => ({ game: window.__g0 === window.__PHASER_GAME__, canvas: window.__c0 === document.querySelector("canvas:not(.hud__portrait canvas)") && document.querySelectorAll("canvas:not(.hud__portrait canvas)").length === 1 }));
     check("I3 abrir lecturas y ganar una insignia no reinicia el motor: misma instancia y mismo canvas (AC-15)", same.game && same.canvas, JSON.stringify(same));
     await t.close();
 

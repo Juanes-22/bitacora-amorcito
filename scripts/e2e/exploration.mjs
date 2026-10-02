@@ -12,7 +12,7 @@ try {
     await t.start();
     const info = await t.page.evaluate(() => {
       const g = window.__PHASER_GAME__;
-      return { canvases: document.querySelectorAll("canvas").length, active: g.scene.isActive("ExplorationScene"), keys: g.textures.getTextureKeys().filter((k) => k.startsWith("background.")), size: [g.scale.width, g.scale.height] };
+      return { canvases: document.querySelectorAll("canvas:not(.hud__portrait canvas)").length, active: g.scene.isActive("ExplorationScene"), keys: g.textures.getTextureKeys().filter((k) => k.startsWith("background.")), size: [g.scale.width, g.scale.height] };
     });
     check("A1 un solo canvas y la escena activa", info.canvases === 1 && info.active);
     check("A2 solo se cargan las capas elegidas de la zona y los fondos ambientales (no todas las variantes)", JSON.stringify(info.keys.sort()) === JSON.stringify([...new Set([...configJson.maps["zona-a"].layers.map((l) => l.assetId), ...configJson.maps["zona-a"].ambient.map((a) => a.assetId).filter((id) => id.startsWith("background."))])].sort()), info.keys.join(","));
@@ -106,7 +106,7 @@ try {
     }
     const expected = [["zona-a", "zona-b", 130, 470], ["zona-b", "zona-a", 1330, 450]];
     check("D1 portales de ida y regreso al punto de aparición configurado", trips.every((t2, i) => JSON.stringify(t2) === JSON.stringify(expected[i % 2])), JSON.stringify(trips));
-    const post = await t.page.evaluate(() => ({ canvases: document.querySelectorAll("canvas").length, listeners: window.__BITACORA_BRIDGE__.listenerCount(), reasons: [...window.__BITACORA_BRIDGE__.controlReasons] }));
+    const post = await t.page.evaluate(() => ({ canvases: document.querySelectorAll("canvas:not(.hud__portrait canvas)").length, listeners: window.__BITACORA_BRIDGE__.listenerCount(), reasons: [...window.__BITACORA_BRIDGE__.controlReasons] }));
     check("D2 seis cambios de zona no multiplican canvas ni listeners ni dejan bloqueos", post.canvases === 1 && post.listeners === l0 && post.reasons.length === 0, JSON.stringify({ ...post, l0 }));
     check("D3 viajar no desbloquea nada (la zona B sigue bloqueada, numerada 4–6)", firstTripStates.length === 3 && firstTripStates.every((s) => s.state === "locked") && firstTripStates.map((s) => s.number).join() === "4,5,6", JSON.stringify(firstTripStates.map((s) => [s.id, s.number, s.state])));
 
@@ -135,7 +135,7 @@ try {
   {
     const invalid = await open({ edit: (c) => { c.placements["apr-a"].position = { x: 600, y: 700 }; }, waitFor: "[role=alert]" });
     const msg = await invalid.page.locator("[role=alert]").innerText();
-    check("F0 una estación colocada dentro de un obstáculo no construye un mundo parcial y dice cuál es el error (AC-29)", msg.includes("placements.apr-a.interactionOffset") && (await invalid.page.locator("canvas").count()) === 0, msg);
+    check("F0 una estación colocada dentro de un obstáculo no construye un mundo parcial y dice cuál es el error (AC-29)", msg.includes("placements.apr-a.interactionOffset") && (await invalid.page.locator("canvas:not(.hud__portrait canvas)").count()) === 0, msg);
     await invalid.close();
 
     const moved = await open({ edit: (c) => { c.placements["apr-a"].position = { x: 1330, y: 420 }; } });

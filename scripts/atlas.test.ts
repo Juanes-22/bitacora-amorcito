@@ -27,6 +27,7 @@ const IDLE_IDS = ["character.vanessa-jerry.idle-anim.look", "character.vanessa-j
 const TRICKS_IDS = ["character.vanessa-jerry.idle-anim.fetch", "character.vanessa-jerry.idle-anim.tricks"];
 const TOOLBAR_IDS = ["decoration.learning-corner", "station.item.open-book", "ui.button.audio.default", "ui.button.badges.default", "ui.button.journal.default", "ui.button.paw.default", "ui.button.settings.default"];
 const STATION_FX_IDS = ["effect.player-glow.next-station", "effect.xp-star.complete", "ui.panel.player-status.default"];
+const AVATAR_IDS = ["character.vanessa-jerry.avatar", "character.vanessa-jerry.avatar.animations"];
 const MUSIC_IDS = ["audio.music.beyond-the-clouds", "audio.music.enchanted-festival", "audio.music.little-town-orchestral"];
 const ATLAS_IDS = [
   "animation.water.ripples", "animation.water.waterfall", "animation.water.foam-splash",
@@ -47,11 +48,11 @@ const issues = (id: string, mutate?: (atlas: any, entry: AssetEntry) => void) =>
 };
 
 describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)", () => {
-  it("el manifiesto con los dos kits y la música es válido: 90 entradas y recuentos coherentes", () => {
+  it("el manifiesto con los dos kits y la música es válido: 92 entradas y recuentos coherentes", () => {
     const r = validateAssetManifest(manifest);
     expect(r.ok ? "" : JSON.stringify(r.ok ? [] : r.issues)).toBe("");
-    expect(manifest.assetCount).toBe(90);
-    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, characters: 12, decorations: 12, effects: 17, stations: 8, ui: 19 });
+    expect(manifest.assetCount).toBe(92);
+    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, characters: 14, decorations: 12, effects: 17, stations: 8, ui: 19 });
   });
 
   it("las 45 entradas originales siguen en su sitio y con sus campos (el kit solo se añadió)", () => {
@@ -66,7 +67,8 @@ describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)
     expect(ids.slice(75, 78).sort()).toEqual(IDLE_IDS);
     expect(ids.slice(78, 80).sort()).toEqual(TRICKS_IDS);
     expect(ids.slice(80, 87).sort()).toEqual(TOOLBAR_IDS);
-    expect(ids.slice(87).sort()).toEqual(STATION_FX_IDS);
+    expect(ids.slice(87, 90).sort()).toEqual(STATION_FX_IDS);
+    expect(ids.slice(90).sort()).toEqual(AVATAR_IDS);
   });
 
   it("el kit conserva su metadata (origen, escala recomendada, animación y movimiento) sin duplicarla en otro sitio", () => {
@@ -83,7 +85,7 @@ describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)
     expect(r.warnings).toEqual([]);
   });
 
-  it("los dieciséis atlas son válidos contra su imagen real", () => {
+  it("los diecisiete atlas son válidos contra su imagen real", () => {
     expect(checkAtlases(manifest, manifestPath)).toEqual([]);
   });
 
@@ -92,6 +94,38 @@ describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)
     expect(Object.keys(atlas.frames)).toHaveLength(8);
     expect(entry.animation?.frameNames).toEqual(Object.keys(atlas.frames));
     expect(issues(id)).toEqual([]);
+  });
+});
+
+describe("avatar animado de la cabecera (SPEC 14, AC-71)", () => {
+  const sheet = () => manifest.assets["character.vanessa-jerry.avatar.animations"];
+
+  it("el avatar estático es un retrato con sus límites de contenido y la hoja, un avatar-sheet de 8 fotogramas de 386 × 386", () => {
+    expect(manifest.assets["character.vanessa-jerry.avatar"]).toMatchObject({ kind: "portrait", category: "characters", width: 1254, height: 1254, contentBounds: { x: 86, y: 62, width: 1109, height: 1162 } });
+    expect(sheet()).toMatchObject({ kind: "avatar-sheet", category: "characters", width: 1774, height: 887, frameCount: 8, sourceFrameSize: { width: 386, height: 386 } });
+  });
+
+  it("tiene una animación de reposo y una feliz, con una duración en ms por fotograma", () => {
+    const anims = sheet().avatarAnimations!;
+    expect(anims.map((a) => a.state)).toEqual(["idle", "happy"]);
+    expect(anims[0]).toMatchObject({ frameNames: ["idle-00", "idle-01", "idle-02", "idle-03"], durationsMs: [1800, 300, 120, 500], repeat: -1 });
+    expect(anims[1]).toMatchObject({ frameNames: ["happy-00", "happy-01", "happy-02", "happy-03"], durationsMs: [350, 250, 250, 350], repeat: -1 });
+  });
+
+  it("el atlas es válido contra su imagen y no hay avisos de archivos", () => {
+    expect(issues("character.vanessa-jerry.avatar.animations")).toEqual([]);
+    expect(checkAssetFiles(manifest, manifestPath).warnings).toEqual([]);
+  });
+
+  it("el validador rechaza una hoja sin el estado feliz o con duraciones que no cuadran", () => {
+    const check = (mutate: (e: AssetEntry) => void) => {
+      const m = structuredClone(manifest);
+      mutate(m.assets["character.vanessa-jerry.avatar.animations"]);
+      const r = validateAssetManifest(m);
+      return r.ok ? [] : r.issues.map((i) => i.message);
+    };
+    expect(check((e) => { e.avatarAnimations = e.avatarAnimations!.slice(0, 1); })).toEqual(expect.arrayContaining([expect.stringContaining("«happy»")]));
+    expect(check((e) => { e.avatarAnimations![1].durationsMs = [350, 250]; })).toEqual(expect.arrayContaining([expect.stringContaining("duraciones")]));
   });
 });
 

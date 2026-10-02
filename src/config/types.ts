@@ -156,17 +156,18 @@ export interface UiConfig {
     musicMute: string; musicUnmute: string;
     stateLocked: string; stateAvailable: string; stateCompleted: string;
     tapExplore: string; tapTravel: string;
-    controlsLabel: string; moveUp: string; moveDown: string; moveLeft: string; moveRight: string;
-    controlsUseDpad: string; controlsUseTap: string; jerryAction: string;
+    jerryAction: string;
   };
   assets: {
     window: string; button: string; buttonHover?: string; stationSign: string;
     titleSign: string; portrait: string; xpBar: string; xpStar?: string;
     openBook?: string; lockIcon?: string; glow: string;
     /** Botones de la cabecera (SPEC 7): arte con su marco; el nombre accesible sale de `ui.labels`. */
-    badgesButton: string; listButton: string; controlsButton: string; musicButton: string; jerryButton: string;
+    badgesButton: string; listButton: string; musicButton: string; jerryButton: string;
     /** Efectos animados de las estaciones y panel de la cabecera (opcionales: sin ellos se usan el brillo y el fondo sencillos). */
     xpStarEffect?: string; nextStationGlow?: string; statusPanel?: string;
+    /** Avatar animado de la cabecera (reposo y alegría al completar una estación); sin él se usa `portrait`, estático. */
+    avatarAnimations?: string;
   };
   defaultDialogueIds: Record<DialogueEvent, string>;
 }
@@ -181,8 +182,6 @@ export interface GameplayConfig {
   camera: { fit: "cover" | "fixed"; maxZoom: number; minPlayerHeight: number };
   /** Escala en el mundo de las señales de estación (y de los textos que las acompañan). */
   signScale: number;
-  /** Controles táctiles de partida: `tap` (tocar para caminar) o `dpad` (cruceta y «Explorar»). El visitante puede cambiarlos. */
-  touchControls: "tap" | "dpad";
   player: ActorSpec & {
     /** Animaciones de reposo; sin ellas se queda la pose quieta de la hoja de caminar. */
     idle?: IdleConfig; body: { width: number; height: number; offset: Point } };
@@ -237,6 +236,15 @@ export interface FrameAdjust {
 }
 
 /** Una animación de una hoja de reposo; `direction` es la del kit (`front` = de frente, `back` = de espaldas). */
+/** Animación del avatar de la cabecera: fotogramas con su duración en ms; `state` es lo que la interfaz pide (reposo o alegría). */
+export interface AvatarAnimation {
+  key: string;
+  state: "idle" | "happy";
+  frameNames: string[];
+  durationsMs: number[];
+  repeat: number;
+}
+
 export interface IdleAnimation {
   key: string;
   direction?: "front" | "left" | "right" | "back";
@@ -291,6 +299,8 @@ export interface AssetEntry {
   animation?: { frameNames: string[]; frameRate: number; repeat: number };
   /** Hojas de reposo (`kind` «idle-sheet»): varias animaciones por hoja, una por dirección. */
   animations?: IdleAnimation[];
+  /** Hoja del avatar de la cabecera (`kind` «avatar-sheet»): reposo y alegría, con la duración de cada fotograma. */
+  avatarAnimations?: AvatarAnimation[];
   anchor?: string;
   /** Altura de Vanessa en la hoja de referencia (px); las hojas con `frameAdjust` la normalizan fotograma a fotograma. */
   referenceHeightPx?: number;

@@ -54,6 +54,6 @@ describe("IconButton (botones de la cabecera con el arte del catálogo)", () => 
 
   it("los cinco botones de la cabecera salen de ui.assets y existen en el catálogo como botones", () => {
     const a = config.ui.assets;
-    for (const id of [a.badgesButton, a.listButton, a.controlsButton, a.musicButton, a.jerryButton]) expect(registry.get(id).kind).toBe("button");
+    for (const id of [a.badgesButton, a.listButton, a.musicButton, a.jerryButton]) expect(registry.get(id).kind).toBe("button");
   });
 });

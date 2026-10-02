@@ -32,7 +32,7 @@ const at = (issues: ConfigIssue[], path: string) => issues.filter((i) => i.path 
 
 describe("assets.json real", () => {
   it("es válido y conserva sus entradas originales sin migrar", () => {
-    expect(Object.keys(realManifest.assets)).toHaveLength(90);
+    expect(Object.keys(realManifest.assets)).toHaveLength(92);
     expect(realManifest.assets["ui.panel.cream.nine-slice"].nineSlice).toEqual({ top: 32, right: 32, bottom: 32, left: 32 });
     expect(realManifest.assets["character.vanessa-jerry.walk.poses-v4"].requiresFrameDefinition).toBe(true);
     expect(realManifest).not.toHaveProperty("animations");
@@ -392,14 +392,6 @@ describe("bitacora.json: animaciones del paisaje (SPEC 3.2)", () => {
     expect(at(issuesOf(withFx(...many.slice(0, 60))), "maps.zona-a.ambient")).toHaveLength(0);
   });
 
-  it("gameplay.touchControls solo admite «tap» o «dpad» y es obligatorio", () => {
-    expect(issuesOf((c) => { c.gameplay.touchControls = "dpad"; })).toEqual([]);
-    expect(issuesOf((c) => { (c.gameplay as { touchControls: string }).touchControls = "joystick"; }).length).toBeGreaterThan(0);
-    const c = makeConfig() as unknown as { gameplay: Record<string, unknown> };
-    delete c.gameplay.touchControls;
-    expect(validateBitacora(c, realManifest).ok).toBe(false);
-  });
-
   it("el esquema exige al menos dos puntos en la trayectoria y un alpha entre 0 y 1", () => {
     expect(issuesOf(withFx({ ...swim, path: [{ x: 1, y: 1 }] } as never)).length).toBeGreaterThan(0);
     expect(issuesOf(withFx({ ...glow, alpha: 2 } as never)).length).toBeGreaterThan(0);
@@ -584,22 +576,23 @@ describe("bitacora.json: efectos de las estaciones y panel de la cabecera (AC-68
   const ui = (edit: (a: BitacoraConfig["ui"]["assets"]) => void) => (c: BitacoraConfig) => edit(c.ui.assets);
 
   it("son opcionales: sin ellos el fixture sigue siendo válido", () => {
-    expect(issuesOf(ui((a) => { delete a.xpStarEffect; delete a.nextStationGlow; delete a.statusPanel; }))).toEqual([]);
+    expect(issuesOf(ui((a) => { delete a.xpStarEffect; delete a.nextStationGlow; delete a.statusPanel; delete a.avatarAnimations; }))).toEqual([]);
   });
 
   it("con los assets del catálogo son válidos", () => {
-    expect(issuesOf(ui((a) => { a.xpStarEffect = "effect.xp-star.complete"; a.nextStationGlow = "effect.player-glow.next-station"; a.statusPanel = "ui.panel.player-status.default"; }))).toEqual([]);
+    expect(issuesOf(ui((a) => { a.xpStarEffect = "effect.xp-star.complete"; a.nextStationGlow = "effect.player-glow.next-station"; a.statusPanel = "ui.panel.player-status.default"; a.avatarAnimations = "character.vanessa-jerry.avatar.animations"; }))).toEqual([]);
   });
 
   it("rechazan un asset inexistente o de otro tipo, con su ruta", () => {
     expect(at(issuesOf(ui((a) => { a.xpStarEffect = "effect.xp-star.no-existe"; })), "ui.assets.xpStarEffect")[0]?.message).toContain("no-existe");
     expect(at(issuesOf(ui((a) => { a.nextStationGlow = "ui.panel.player-status.default"; })), "ui.assets.nextStationGlow")[0]?.message).toContain("animation-sheet");
     expect(at(issuesOf(ui((a) => { a.statusPanel = "effect.xp-star.complete"; })), "ui.assets.statusPanel")[0]?.message).toContain("panel");
+    expect(at(issuesOf(ui((a) => { a.avatarAnimations = "character.vanessa-jerry.avatar"; })), "ui.assets.avatarAnimations")[0]?.message).toContain("avatar-sheet");
   });
 
   it("el bitacora.json real los referencia", () => {
     const a = (bitacoraJson as unknown as BitacoraConfig).ui.assets;
-    expect([a.xpStarEffect, a.nextStationGlow, a.statusPanel]).toEqual(["effect.xp-star.complete", "effect.player-glow.next-station", "ui.panel.player-status.default"]);
+    expect([a.xpStarEffect, a.nextStationGlow, a.statusPanel, a.avatarAnimations, a.portrait]).toEqual(["effect.xp-star.complete", "effect.player-glow.next-station", "ui.panel.player-status.default", "character.vanessa-jerry.avatar.animations", "character.vanessa-jerry.avatar"]);
   });
 });
 

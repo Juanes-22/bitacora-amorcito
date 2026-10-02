@@ -86,6 +86,24 @@ export function validateAssetManifest(data: unknown): ValidationResult<AssetMani
         issues.push({ path: `${at}.animations`, message: `las animaciones usan ${names.size} fotogramas distintos y frameCount es ${a.frameCount}` });
       }
     }
+    if (a.kind === "avatar-sheet") {
+      if (!a.atlasPath) issues.push({ path: `${at}.atlasPath`, message: "la hoja del avatar necesita su atlas" });
+      if (!a.sourceFrameSize) issues.push({ path: `${at}.sourceFrameSize`, message: "la hoja del avatar necesita sourceFrameSize (el lienzo lógico común)" });
+      const states = (a.avatarAnimations ?? []).map((x) => x.state);
+      for (const needed of ["idle", "happy"]) {
+        if (!states.includes(needed as "idle")) issues.push({ path: `${at}.avatarAnimations`, message: `falta la animación del estado «${needed}»` });
+      }
+      if (new Set(states).size !== states.length) issues.push({ path: `${at}.avatarAnimations`, message: "cada estado puede tener una sola animación" });
+      for (const x of a.avatarAnimations ?? []) {
+        if (x.durationsMs.length !== x.frameNames.length) {
+          issues.push({ path: `${at}.avatarAnimations`, message: `«${x.key}»: hay ${x.durationsMs.length} duraciones y ${x.frameNames.length} fotogramas` });
+        }
+      }
+      const used = new Set((a.avatarAnimations ?? []).flatMap((x) => x.frameNames));
+      if (a.frameCount !== undefined && used.size !== a.frameCount) {
+        issues.push({ path: `${at}.avatarAnimations`, message: `las animaciones usan ${used.size} fotogramas distintos y frameCount es ${a.frameCount}` });
+      }
+    }
     if (a.kind === "particle" && a.motion?.type !== "particle") {
       issues.push({ path: `${at}.motion`, message: "una partícula necesita motion de tipo «particle»" });
     }

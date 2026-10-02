@@ -3,6 +3,8 @@ import { useBitacora } from "../../app/BitacoraProvider";
 import { useProgress } from "../../app/ProgressProvider";
 import { stationNumber } from "../../domain/progression";
 import { renderTemplate } from "../../domain/templates";
+import type { GameBridge } from "../../game/bridge/GameBridge";
+import { AvatarPortrait } from "./AvatarPortrait";
 import { IconButton } from "./IconButton";
 
 /**
@@ -10,7 +12,7 @@ import { IconButton } from "./IconButton";
  * Todo se deriva de `route`, `badges` y el progreso; ningún total está escrito en el componente.
  * La barra usa el marco y recorta el relleno según la metadata `placement` del manifiesto.
  */
-export function ProgressHUD({ onOpenBadges, tools }: { onOpenBadges?: () => void; tools?: ReactNode }) {
+export function ProgressHUD({ onOpenBadges, tools, bridge }: { onOpenBadges?: () => void; tools?: ReactNode; bridge?: GameBridge }) {
   const { config, assets } = useBitacora();
   const { summary, persisting } = useProgress();
   const { labels, assets: ui } = config.ui;
@@ -43,7 +45,7 @@ export function ProgressHUD({ onOpenBadges, tools }: { onOpenBadges?: () => void
 
   return (
     <section className={`hud${panelStyle ? " hud--panel" : ""}`} style={panelStyle} aria-label={config.project.title}>
-      <img className="hud__portrait" src={assets.url(ui.portrait)} alt="" />
+      <AvatarPortrait bridge={bridge} />
       <div className="hud__main">
         <p className="hud__progress">
           <span>{renderTemplate(labels.progressTemplate, { completedCount: summary.completedCount, totalCount: summary.totalCount })}</span>

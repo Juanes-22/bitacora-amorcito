@@ -6,6 +6,7 @@ const { open, check, finish } = await harness();
 const L = configJson.ui.labels;
 const GLOW = configJson.ui.assets.nextStationGlow;
 const XP = configJson.ui.assets.xpStarEffect;
+const STATIC_STAR = configJson.ui.assets.xpStar;
 const KEY = `bitacora:progress:v3:${configJson.contentSetId}:demo`;
 const DONE = { contentRevision: 1, readSectionIds: ["lived", "learning", "reflection", "classroom"], completedAt: "2026-09-30T10:00:00.000Z" };
 const saved = (completed) => ({
@@ -52,6 +53,8 @@ try {
     const loop = new Set();
     for (let i = 0; i < 25; i++) { const s = (await sprites(t, XP))[0]; if (s) loop.add(s.frame); await t.page.waitForTimeout(80); }
     check("AC-69: cargar con una estación completada la muestra con su estrella ya titilando (sin entrada), y solo a esa", star.length === 1 && star[0].visible && star[0].playing && Math.abs(star[0].x - station("apr-a").x) < 1 && star[0].y < station("apr-a").y, JSON.stringify(star));
+    const staticStars = await t.page.evaluate((key) => window.__PHASER_GAME__.scene.getScene("ExplorationScene").children.list.filter((o) => o.texture?.key === key && o.visible).length, STATIC_STAR);
+    check("AC-69: al cargar no se ve a la vez la estrella estática (no se duplica)", staticStars === 0, String(staticStars));
     check("AC-69: la estrella titila en bucle con los fotogramas xp-003..xp-005 (nunca vuelve al principio)", loop.size >= 2 && [...loop].every((f) => ["xp-003", "xp-004", "xp-005"].includes(f)), JSON.stringify([...loop]));
     await t.close();
   }
@@ -128,7 +131,7 @@ try {
     const t = await open({ seed: saved([]), blockUrl: "**/player-glow-next.png" });
     await t.page.locator(".pixel-button").dispatchEvent("click"); // el aviso de recurso cubre la portada
     await t.page.waitForTimeout(700);
-    check("si el aro animado no carga, la estación conserva su brillo estático y el juego sigue", (await sprites(t, GLOW)).length === 0 && (await t.page.locator("canvas").count()) === 1 && /player-glow-next|effect\.player-glow\.next-station/.test(await t.page.locator(".asset-alert").innerText()));
+    check("si el aro animado no carga, la estación conserva su brillo estático y el juego sigue", (await sprites(t, GLOW)).length === 0 && (await t.page.locator("canvas:not(.hud__portrait canvas)").count()) === 1 && /player-glow-next|effect\.player-glow\.next-station/.test(await t.page.locator(".asset-alert").innerText()));
     await t.close();
   }
 

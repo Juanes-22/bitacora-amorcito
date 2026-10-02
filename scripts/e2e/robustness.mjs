@@ -31,7 +31,7 @@ try {
     const t = await open({ ...options, ...failed, seed });
     const text = await errorText(t);
     check(`AC-29: ${name} → error con el elemento afectado`, pattern.test(text), text.slice(0, 200).replace(/\n/g, " "));
-    check("   sin canvas ni mundo parcial, con «Reintentar»", (await t.page.locator("canvas").count()) === 0 && (await t.page.getByRole("button", { name: "Reintentar" }).count()) === 1);
+    check("   sin canvas ni mundo parcial, con «Reintentar»", (await t.page.locator("canvas:not(.hud__portrait canvas)").count()) === 0 && (await t.page.getByRole("button", { name: "Reintentar" }).count()) === 1);
     check("   el avance guardado no se ha modificado", (await t.stored())[KEY] === SAVED);
     check("   sin excepciones sin capturar", t.errors.filter((e) => e.startsWith("pageerror")).length === 0, t.errors.join(" | "));
     await t.close();
@@ -53,7 +53,7 @@ try {
     await t.start();
     const alertText = await t.page.locator(".asset-alert").innerText();
     check("AC-20: un path roto da un aviso con el ID del asset y la ruta resuelta", /background\.zone-01\.terrain/.test(alertText) && /no-existe\.png/.test(alertText), alertText.replace(/\n/g, " "));
-    check("AC-20: el mundo sigue vivo con las demás capas y el avance no se pierde", (await t.page.locator("canvas").count()) === 1 && JSON.parse((await t.stored())[KEY]).entries["apr-a"].completedAt === "2026-09-30T10:00:00.000Z");
+    check("AC-20: el mundo sigue vivo con las demás capas y el avance no se pierde", (await t.page.locator("canvas:not(.hud__portrait canvas)").count()) === 1 && JSON.parse((await t.stored())[KEY]).entries["apr-a"].completedAt === "2026-09-30T10:00:00.000Z");
     await t.page.getByRole("button", { name: L.index }).click();
     await t.page.waitForTimeout(300);
     check("AC-20: la lista accesible sigue disponible y refleja el avance guardado", (await t.page.locator(".learning-list__state").first().innerText()) === L.stateCompleted);
@@ -62,7 +62,7 @@ try {
   {
     const t = await open({ seed, blockUrl: "**/station-sign-wooden*.png" });
     await t.start();
-    check("AC-20: un archivo ausente (404) de otro asset no tira la aplicación", (await t.page.locator("canvas").count()) === 1);
+    check("AC-20: un archivo ausente (404) de otro asset no tira la aplicación", (await t.page.locator("canvas:not(.hud__portrait canvas)").count()) === 1);
     await t.close();
   }
 
@@ -74,7 +74,7 @@ try {
     };
     const t = await open({ init });
     await t.start();
-    check("AC-09: con el almacenamiento bloqueado la aplicación arranca y avisa de que el avance no se guarda", (await t.page.locator("canvas").count()) === 1 && /no se está guardando/i.test(await t.page.locator(".hud").innerText()));
+    check("AC-09: con el almacenamiento bloqueado la aplicación arranca y avisa de que el avance no se guarda", (await t.page.locator("canvas:not(.hud__portrait canvas)").count()) === 1 && /no se está guardando/i.test(await t.page.locator(".hud").innerText()));
     await t.place(330, 990);
     await t.page.waitForTimeout(250);
     await t.page.keyboard.press("Enter");
@@ -89,13 +89,13 @@ try {
   {
     const t = await open({ seed: { [KEY]: "{esto no es json" } });
     await t.start();
-    check("AC-09: un guardado corrupto no rompe la aplicación: se empieza de cero", (await t.page.locator("canvas").count()) === 1 && /0 de 6/.test(await t.page.locator(".hud").innerText()));
+    check("AC-09: un guardado corrupto no rompe la aplicación: se empieza de cero", (await t.page.locator("canvas:not(.hud__portrait canvas)").count()) === 1 && /0 de 6/.test(await t.page.locator(".hud").innerText()));
     await t.close();
   }
   {
     const t = await open({ seed: { [KEY]: JSON.stringify({ schemaVersion: 3, contentSetId: "otra-bitacora", mode: "demo", currentZoneId: "zona-a", player: { x: 1, y: 1 }, checkpoints: {}, entries: {} }) } });
     await t.start();
-    check("AC-09: un guardado de otro contenido no se aplica", (await t.page.locator("canvas").count()) === 1 && /0 de 6/.test(await t.page.locator(".hud").innerText()));
+    check("AC-09: un guardado de otro contenido no se aplica", (await t.page.locator("canvas:not(.hud__portrait canvas)").count()) === 1 && /0 de 6/.test(await t.page.locator(".hud").innerText()));
     await t.close();
   }
   {

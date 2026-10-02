@@ -491,7 +491,7 @@
             "startRoute", "pending", "demo", "previous", "next", "progressTemplate", "stationTitleTemplate",
             "semester", "teacher", "sectionRead", "sectionUnread", "badgeEarned", "remainingTemplate", "rewardTitle", "xpTemplate", "levelTemplate", "objectiveTemplate", "finishedLabel", "emptyRouteLabel", "mapLabel",
             "badges", "notEarned", "earnedOnTemplate", "badgeCountTemplate", "completionTitle", "finalReflectionTitle", "finalReflectionPending", "resetConfirmTitle", "resetConfirmText", "resetConfirm", "cancel", "preparationTemplate",
-            "musicMute", "musicUnmute", "stateLocked", "stateAvailable", "stateCompleted", "tapExplore", "tapTravel", "controlsLabel", "moveUp", "moveDown", "moveLeft", "moveRight", "controlsUseDpad", "controlsUseTap", "jerryAction"
+            "musicMute", "musicUnmute", "stateLocked", "stateAvailable", "stateCompleted", "tapExplore", "tapTravel", "jerryAction"
           ],
           "properties": {
             "explore": { "type": "string", "minLength": 1 },
@@ -540,20 +540,13 @@
             "stateCompleted": { "type": "string", "minLength": 1 },
             "tapExplore": { "type": "string", "minLength": 1 },
             "tapTravel": { "type": "string", "minLength": 1 },
-            "controlsLabel": { "type": "string", "minLength": 1 },
-            "moveUp": { "type": "string", "minLength": 1 },
-            "moveDown": { "type": "string", "minLength": 1 },
-            "moveLeft": { "type": "string", "minLength": 1 },
-            "moveRight": { "type": "string", "minLength": 1 },
-            "controlsUseDpad": { "type": "string", "minLength": 1 },
-            "controlsUseTap": { "type": "string", "minLength": 1 },
             "jerryAction": { "type": "string", "minLength": 1 }
           },
           "additionalProperties": false
         },
         "assets": {
           "type": "object",
-          "required": ["window", "button", "stationSign", "titleSign", "portrait", "xpBar", "glow", "badgesButton", "listButton", "controlsButton", "musicButton", "jerryButton"],
+          "required": ["window", "button", "stationSign", "titleSign", "portrait", "xpBar", "glow", "badgesButton", "listButton", "musicButton", "jerryButton"],
           "properties": {
             "window": { "$ref": "#/$defs/assetId" },
             "button": { "$ref": "#/$defs/assetId" },
@@ -568,12 +561,12 @@
             "glow": { "$ref": "#/$defs/assetId" },
             "badgesButton": { "$ref": "#/$defs/assetId" },
             "listButton": { "$ref": "#/$defs/assetId" },
-            "controlsButton": { "$ref": "#/$defs/assetId" },
             "musicButton": { "$ref": "#/$defs/assetId" },
             "jerryButton": { "$ref": "#/$defs/assetId" },
             "xpStarEffect": { "$ref": "#/$defs/assetId" },
             "nextStationGlow": { "$ref": "#/$defs/assetId" },
-            "statusPanel": { "$ref": "#/$defs/assetId" }
+            "statusPanel": { "$ref": "#/$defs/assetId" },
+            "avatarAnimations": { "$ref": "#/$defs/assetId" }
           },
           "additionalProperties": false
         },
@@ -616,7 +609,7 @@
     },
     "gameplay": {
       "type": "object",
-      "required": ["progressionMode", "zoneTravel", "start", "playerSpeed", "cameraZoom", "camera", "signScale", "touchControls", "player", "companion"],
+      "required": ["progressionMode", "zoneTravel", "start", "playerSpeed", "cameraZoom", "camera", "signScale", "player", "companion"],
       "properties": {
         "progressionMode": { "const": "sequential" },
         "zoneTravel": { "const": "free" },
@@ -639,7 +632,6 @@
           "additionalProperties": false
         },
         "signScale": { "type": "number", "exclusiveMinimum": 0 },
-        "touchControls": { "enum": ["tap", "dpad"] },
         "player": {
           "type": "object",
           "required": ["assetId", "origin", "scale", "animations", "body"],

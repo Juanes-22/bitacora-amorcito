@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import type { Point } from "../../config/types";
-import type { AppSnapshot, AssetFailure, ControlsMode } from "../bridge/events";
+import type { AppSnapshot, AssetFailure } from "../bridge/events";
 import { Player } from "../entities/Player";
 import { getDeps, type GameDeps } from "../createGame";
 import { setupCamera } from "../systems/CameraController";
@@ -36,7 +36,6 @@ export class ExplorationScene extends Phaser.Scene {
   private player?: Player;
   private input2?: InputController;
   private tap?: TapNavigation;
-  private controlsMode: ControlsMode = "tap";
   private interaction?: InteractionSystem;
   private cleanups: Array<() => void> = [];
   private failures: AssetFailure[] = [];
@@ -101,18 +100,13 @@ export class ExplorationScene extends Phaser.Scene {
       position: () => this.player?.position ?? start,
       nearest: (feet) => this.interaction?.nearest(feet) ?? null,
       requestInteract: () => this.input2?.requestInteract(),
-      enabled: () => this.controlsMode === "tap" && !!this.input2 && !this.scene.isPaused() && !this.interaction?.hasPending,
+      enabled: () => !!this.input2 && !this.scene.isPaused() && !this.interaction?.hasPending,
       reducedMotion,
     });
     if (debugEnabled()) this.cleanups.push(setupDebugOverlay(this, this.world, this.player));
 
-    this.controlsMode = bridge.controlsMode;
     // Receptores antes de avisar: los eventos son avisos; la instantánea retenida es la verdad (SPEC 11.5).
     this.cleanups.push(
-      bridge.on("app:controls-mode", ({ mode }) => {
-        this.controlsMode = mode;
-        this.tap?.cancel(); // al cambiar de modo se detiene cualquier recorrido por toque
-      }),
       bridge.on("app:sync", (snapshot) => this.applySnapshot(snapshot)),
       bridge.on("app:celebrate", ({ effectId, learningId }) => {
         // Cada efecto se consume una sola vez (también ante emisiones duplicadas o comprobaciones de desarrollo).

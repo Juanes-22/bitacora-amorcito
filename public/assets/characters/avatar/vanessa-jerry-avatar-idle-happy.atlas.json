@@ -1,0 +1,173 @@
+{
+  "frames": {
+    "idle-00": {
+      "frame": {
+        "x": 38,
+        "y": 72,
+        "w": 367,
+        "h": 327
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 6,
+        "y": 23,
+        "w": 367,
+        "h": 327
+      },
+      "sourceSize": {
+        "w": 386,
+        "h": 386
+      }
+    },
+    "idle-01": {
+      "frame": {
+        "x": 483,
+        "y": 72,
+        "w": 378,
+        "h": 327
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 4,
+        "y": 23,
+        "w": 378,
+        "h": 327
+      },
+      "sourceSize": {
+        "w": 386,
+        "h": 386
+      }
+    },
+    "idle-02": {
+      "frame": {
+        "x": 925,
+        "y": 72,
+        "w": 371,
+        "h": 327
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 7,
+        "y": 23,
+        "w": 371,
+        "h": 327
+      },
+      "sourceSize": {
+        "w": 386,
+        "h": 386
+      }
+    },
+    "idle-03": {
+      "frame": {
+        "x": 1369,
+        "y": 72,
+        "w": 365,
+        "h": 327
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 7,
+        "y": 23,
+        "w": 365,
+        "h": 327
+      },
+      "sourceSize": {
+        "w": 386,
+        "h": 386
+      }
+    },
+    "happy-00": {
+      "frame": {
+        "x": 38,
+        "y": 495,
+        "w": 370,
+        "h": 327
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 5,
+        "y": 23,
+        "w": 370,
+        "h": 327
+      },
+      "sourceSize": {
+        "w": 386,
+        "h": 386
+      }
+    },
+    "happy-01": {
+      "frame": {
+        "x": 481,
+        "y": 494,
+        "w": 372,
+        "h": 328
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 6,
+        "y": 22,
+        "w": 372,
+        "h": 328
+      },
+      "sourceSize": {
+        "w": 386,
+        "h": 386
+      }
+    },
+    "happy-02": {
+      "frame": {
+        "x": 919,
+        "y": 495,
+        "w": 373,
+        "h": 327
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 6,
+        "y": 23,
+        "w": 373,
+        "h": 327
+      },
+      "sourceSize": {
+        "w": 386,
+        "h": 386
+      }
+    },
+    "happy-03": {
+      "frame": {
+        "x": 1364,
+        "y": 495,
+        "w": 370,
+        "h": 328
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 8,
+        "y": 22,
+        "w": 370,
+        "h": 328
+      },
+      "sourceSize": {
+        "w": 386,
+        "h": 386
+      }
+    }
+  },
+  "meta": {
+    "image": "vanessa-jerry-avatar-idle-happy.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1774,
+      "h": 887
+    },
+    "scale": "1"
+  }
+}

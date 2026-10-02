@@ -7,7 +7,7 @@ import { REF_SIGN_SCALE } from "../systems/worldScale";
 
 /** Escalas de los efectos de las estaciones respecto del factor de la señal (se ajustaron a la vista sobre el mapa). */
 const GLOW_SCALE = 0.3;
-const XP_SCALE = 0.12;
+const XP_SCALE = 0.09;
 
 export interface StationAssets {
   sign: string;
@@ -117,8 +117,6 @@ export class Station {
     this.sign.setTint(state === "locked" ? 0xb8b8b8 : 0xffffff);
     this.label.setAlpha(state === "locked" ? 0.55 : 1);
     this.lock?.setVisible(state === "locked");
-    // La estrella de XP animada sustituye a la estática en cuanto está en pantalla; sin ella (o si su hoja no cargó), la de siempre.
-    this.done?.setVisible(state === "completed" && !this.hasAnimatedStar());
     if (state !== "completed") {
       this.star?.destroy();
       this.star = undefined;
@@ -128,6 +126,8 @@ export class Station {
     } else if (!this.star && this.effects?.xpStar && this.scene.textures.exists(this.effects.xpStar)) {
       this.waitingForCelebration = true; // recién completada: la estrella entrará cuando se cierre la recompensa
     }
+    // La estrella de XP animada sustituye a la estática en cuanto está (o va a estar) en pantalla; sin ella, o si su hoja no cargó, la de siempre.
+    this.done?.setVisible(state === "completed" && !this.hasAnimatedStar());
     this.glow?.setAlpha(state === "available" ? 0.85 : 0);
     this.glowFx?.setVisible(state === "available");
   }

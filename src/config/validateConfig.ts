@@ -31,8 +31,8 @@ const KINDS = {
     window: ["panel"], button: ["button"], buttonHover: ["button"], stationSign: ["station-sign"],
     titleSign: ["title-sign"], portrait: ["portrait"], xpBar: ["progress-frame"],
     xpStar: ["icon"], openBook: ["icon"], lockIcon: ["station-item", "icon"], glow: ["glow"],
-    xpStarEffect: ["animation-sheet"], nextStationGlow: ["animation-sheet"], statusPanel: ["panel"],
-    badgesButton: ["button"], listButton: ["button"], controlsButton: ["button"], musicButton: ["button"], jerryButton: ["button"],
+    xpStarEffect: ["animation-sheet"], nextStationGlow: ["animation-sheet"], statusPanel: ["panel"], avatarAnimations: ["avatar-sheet"],
+    badgesButton: ["button"], listButton: ["button"], musicButton: ["button"], jerryButton: ["button"],
   } as Record<string, string[]>,
 };
 

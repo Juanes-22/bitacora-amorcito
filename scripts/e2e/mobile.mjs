@@ -4,7 +4,6 @@ import { configJson, harness } from "./helpers.mjs";
 
 const { open, check, finish, browser } = await harness();
 const L = configJson.ui.labels;
-const SPEED = configJson.gameplay.playerSpeed;
 const KEY = `bitacora:progress:v3:${configJson.contentSetId}:demo`;
 
 /** Contexto táctil: puntero grueso, como un teléfono. */
@@ -12,14 +11,6 @@ const touchCtx = async (width, height, opts = {}) => {
   const context = await browser.newContext({ viewport: { width, height }, hasTouch: true, isMobile: true, ...(opts.reducedMotion ? { reducedMotion: "reduce" } : {}) });
   return open({ viewport: { width, height }, context, edit: opts.edit });
 };
-/** Evento de puntero sintético sobre un control (un dedo identificado por `id`). */
-const finger = (t, selector, type, id) =>
-  t.page.evaluate(([sel, type, id]) => {
-    const el = document.querySelector(sel);
-    const r = el.getBoundingClientRect();
-    el.dispatchEvent(new PointerEvent(type, { pointerId: id, bubbles: true, cancelable: true, clientX: r.x + r.width / 2, clientY: r.y + r.height / 2, pointerType: "touch", isPrimary: id === 1 }));
-  }, [selector, type, id]);
-const ARROW = (d) => `.touch__arrow--${d}`;
 /** Coordenadas del mundo → píxeles de la ventana (el canvas ocupa toda la ventana). */
 const toScreen = (t, wx, wy) =>
   t.page.evaluate(([wx, wy]) => { const c = window.__PHASER_GAME__.scene.getScene("ExplorationScene").cameras.main; return { x: (wx - c.worldView.x) * c.zoom, y: (wy - c.worldView.y) * c.zoom }; }, [wx, wy]);
@@ -198,137 +189,14 @@ try {
     await t.close();
   }
 
-  // ---- Modo cruceta: se elige en el juego y se recuerda (SPEC 6.1; AC-03, AC-04) --------------------------------
+  // ---- Solo se camina tocando: no hay cruceta ni botón para cambiar de modo (SPEC 6.1; AC-03) -----------------
   {
     const t = await touchCtx(390, 844);
     await t.start();
-    const toggle = t.page.getByRole("button", { name: L.controlsUseDpad });
-    const tbox = await toggle.boundingBox();
-    check("el botón para cambiar de modo está en las herramientas, con etiqueta textual y ≥ 44 px", tbox && tbox.width >= 43.5 && tbox.height >= 43.5, JSON.stringify(tbox));
-    await toggle.click();
-    await t.page.waitForTimeout(300);
-    check("al pasar a la cruceta el botón ofrece volver a «Tocar para caminar»", (await t.page.getByRole("button", { name: L.controlsUseTap }).count()) === 1 && (await t.page.locator(".touch").count()) === 1);
-    check("la preferencia se guarda aparte del progreso", JSON.parse((await t.stored())["bitacora:preferences:v1"]).touchControls === "dpad");
-    check("tras usar el botón con ratón o toque, el foco vuelve al mapa", await t.page.evaluate(() => document.activeElement?.classList.contains("game-host")));
-    await t.place(...OPEN_SPOT);
-    await t.page.waitForTimeout(300);
-    const still = (await t.scene()).pos;
-    await tap(t, 200, 1030);
-    await t.page.waitForTimeout(900);
-    check("en modo cruceta tocar el mapa NO mueve a Vanessa", JSON.stringify((await t.scene()).pos) === JSON.stringify(still) && (await markers(t)).ring === null);
-    const box = async (sel) => t.page.locator(sel).boundingBox();
-    const boxes = await Promise.all([ARROW("up"), ARROW("down"), ARROW("left"), ARROW("right"), ".touch__explore"].map(box));
-    check("AC-03: en un móvil se ven la cruceta de cuatro direcciones y «Explorar», todos ≥ 44 px", boxes.every((b) => b && b.width >= 43.5 && b.height >= 43.5), JSON.stringify(boxes));
-    check("AC-03: los controles táctiles tienen nombre textual y están en una región con etiqueta", (await t.page.getByRole("region", { name: L.controlsLabel }).count()) === 1 && (await t.page.getByRole("button", { name: L.moveLeft }).count()) === 1);
-    check("la cruceta no tapa la cabecera ni las herramientas", await t.page.evaluate(() => {
-      const hud = document.querySelector(".hud").getBoundingClientRect();
-      const tools = document.querySelector(".hud__tools").getBoundingClientRect();
-      const pad = document.querySelector(".touch__pad").getBoundingClientRect();
-      return pad.top > hud.bottom && pad.top > tools.bottom;
-    }));
-
-    const x0 = (await t.scene()).pos.x;
-    await finger(t, ARROW("right"), "pointerdown", 1);
-    await t.page.waitForTimeout(500);
-    const moving = await t.scene();
-    await finger(t, ARROW("right"), "pointerup", 1);
-    await t.page.waitForTimeout(150);
-    check("AC-03: mantener «derecha» mueve a Vanessa por el mismo controlador que el teclado", moving.pos.x > x0 + 30 && Math.abs(moving.vel[0] - SPEED) < 1, JSON.stringify({ x0, moving }));
-    check("AC-03: al levantar el dedo se detiene (sin velocidad residual)", (await speedOf(t)) === 0);
-
-    await t.place(...OPEN_SPOT);
-    await finger(t, ARROW("right"), "pointerdown", 1);
-    await finger(t, ARROW("up"), "pointerdown", 2);
-    await t.page.waitForTimeout(400);
-    const diagonal = await speedOf(t);
-    await finger(t, ARROW("right"), "pointerup", 1);
-    await finger(t, ARROW("up"), "pointerup", 2);
-    await t.page.waitForTimeout(150);
-    check(`AC-03: dos direcciones a la vez no son más rápidas (${diagonal.toFixed(1)} ≤ ${SPEED})`, diagonal > 0 && diagonal <= SPEED + 0.5, String(diagonal));
-
-    await t.place(...OPEN_SPOT);
-    await finger(t, ARROW("left"), "pointerdown", 1);
-    await t.page.waitForTimeout(250);
-    await finger(t, ARROW("left"), "pointercancel", 1);
-    await t.page.waitForTimeout(150);
-    check("pointercancel suelta la dirección (sin entradas atascadas)", (await speedOf(t)) === 0);
-
-    await finger(t, ARROW("left"), "pointerdown", 1);
-    await t.page.waitForTimeout(250);
-    await t.page.evaluate(() => { Object.defineProperty(document, "visibilityState", { configurable: true, get: () => "hidden" }); document.dispatchEvent(new Event("visibilitychange")); });
-    await t.page.waitForTimeout(250);
-    const hidden = await speedOf(t);
-    await t.page.evaluate(() => { Object.defineProperty(document, "visibilityState", { configurable: true, get: () => "visible" }); document.dispatchEvent(new Event("visibilitychange")); });
-    await t.page.waitForTimeout(250);
-    check("al ocultarse la pestaña con un dedo apoyado se suelta todo y no reanuda solo", hidden === 0 && (await speedOf(t)) === 0, String(hidden));
-
-    // Una dirección mantenida y «Explorar» con otro dedo
-    await t.place(...nearStation("apr-a"));
-    await t.page.waitForTimeout(250);
-    await finger(t, ARROW("down"), "pointerdown", 1);
-    await finger(t, ".touch__explore", "pointerdown", 2);
-    await t.page.waitForTimeout(500);
-    check("AC-04: «Explorar» con otro dedo abre el aprendizaje mientras se mantiene una dirección", (await dialogs(t)) === 1 && (await t.page.locator(".touch").count()) === 0, `${await dialogs(t)} diálogos`);
-    check("AC-17: al abrir la lectura el mapa se detiene y no queda velocidad", (await speedOf(t)) === 0 && (await reasons(t)).includes("reading"));
-    await finger(t, ".touch__explore", "pointerup", 2).catch(() => undefined);
-    await t.page.keyboard.press("Escape");
-    await t.page.waitForTimeout(400);
-    const pos = (await t.scene()).pos;
-    await t.page.waitForTimeout(400);
-    check("AC-10: al cerrar la lectura vuelven los controles y Vanessa no se mueve sola (el dedo ya no existe)", (await t.page.locator(".touch").count()) === 1 && (await speedOf(t)) === 0 && Math.hypot((await t.scene()).pos.x - pos.x, (await t.scene()).pos.y - pos.y) === 0);
-
-    // «Explorar» con un toque real
-    await t.place(...nearStation("apr-a"));
-    await t.page.waitForTimeout(300);
-    const e = await t.page.locator(".touch__explore").boundingBox();
-    await t.page.touchscreen.tap(e.x + e.width / 2, e.y + e.height / 2);
-    await t.page.waitForTimeout(500);
-    check("AC-04: un toque real en «Explorar» abre el aprendizaje cercano", (await dialogs(t)) === 1);
-    await t.page.keyboard.press("Escape");
-    await t.page.waitForTimeout(300);
-    const axeTouch = await t.axe();
-    check("axe-core: cabecera, herramientas y cruceta táctil sin violaciones de accesibilidad", axeTouch.length === 0, axeTouch.join(" | "));
-    await t.page.locator(".hud__list").click();
-    await t.page.waitForTimeout(300);
-    const axeList = await t.axe();
-    check("axe-core: la lista accesible no tiene violaciones", axeList.length === 0, axeList.join(" | "));
-    check("en modo cruceta el aviso invita a pulsar «Explorar», no a tocar la estación", await (async () => { await t.page.keyboard.press("Escape"); await t.page.waitForTimeout(300); await t.place(...nearStation("apr-a")); await t.page.waitForTimeout(400); const x = await t.page.locator(".nearby-region").innerText(); return /Explorar/.test(x) && !/Toca la estación/.test(x); })());
-    const axePad = await t.axe();
-    check("axe-core: la cruceta táctil no tiene violaciones", axePad.length === 0, axePad.join(" | "));
-
-    // Recordado: al recargar sigue en cruceta; y se puede volver a tocar para caminar
-    await t.page.reload();
-    await t.page.waitForSelector(".pixel-button");
-    await t.start();
-    check("la elección se recuerda al recargar (sigue la cruceta)", (await t.page.locator(".touch").count()) === 1 && (await t.page.getByRole("button", { name: L.controlsUseTap }).count()) === 1);
-    await t.page.getByRole("button", { name: L.controlsUseTap }).click();
-    await t.page.waitForTimeout(300);
-    check("al volver a «Tocar para caminar» desaparece la cruceta", (await t.page.locator(".touch").count()) === 0);
-    await t.place(...OPEN_SPOT);
-    await t.page.waitForTimeout(300);
-    await tap(t, 200, 1030);
-    await waitStopped(t);
-    const back = (await t.scene()).pos;
-    check("y el toque vuelve a llevar a Vanessa al destino", Math.hypot(back.x - 200, back.y - 1030) < 6, JSON.stringify(back));
-    check("sin errores de consola", t.errors.length === 0, t.errors.join(" | "));
+    check("AC-03: no hay botón para cambiar el modo de control ni cruceta ni «Explorar»", (await t.page.locator(".hud__controls, .touch, .touch__explore").count()) === 0 && (await t.page.getByRole("button", { name: /cruceta|Tocar para caminar/i }).count()) === 0);
+    check("y no queda ninguna preferencia de controles guardada", JSON.parse((await t.stored())["bitacora:preferences:v1"] ?? "{}").touchControls === undefined);
     await t.close();
   }
-
-  // ---- La configuración decide el modo de partida ------------------------------------------------------------
-  {
-    const t = await touchCtx(390, 844, { edit: (c) => { c.gameplay.touchControls = "dpad"; } });
-    await t.start();
-    check("con gameplay.touchControls = «dpad» se parte de la cruceta", (await t.page.locator(".touch").count()) === 1 && (await t.page.getByRole("button", { name: L.controlsUseTap }).count()) === 1);
-    await t.close();
-    const u = await touchCtx(390, 844, { edit: (c) => { c.gameplay.touchControls = "dpad"; } });
-    await u.page.evaluate(() => localStorage.setItem("bitacora:preferences:v1", JSON.stringify({ musicMuted: false, touchControls: "tap" })));
-    await u.page.reload();
-    await u.page.waitForSelector(".pixel-button");
-    await u.start();
-    check("la elección del visitante manda sobre la configuración", (await u.page.locator(".touch").count()) === 0);
-    await u.close();
-  }
-
 
   // ---- Con ratón en escritorio, tocar el mapa no mueve a Vanessa (se usa el teclado) -----------------------
   {
@@ -545,7 +413,7 @@ try {
       await t.page.keyboard.press("Escape");
       await t.page.waitForTimeout(60);
     }
-    const post = await t.page.evaluate(() => ({ canvases: document.querySelectorAll("canvas").length, listeners: window.__BITACORA_BRIDGE__.listenerCount(), reasons: [...window.__BITACORA_BRIDGE__.controlReasons], dialogs: document.querySelectorAll("[role=dialog]").length }));
+    const post = await t.page.evaluate(() => ({ canvases: document.querySelectorAll("canvas:not(.hud__portrait canvas)").length, listeners: window.__BITACORA_BRIDGE__.listenerCount(), reasons: [...window.__BITACORA_BRIDGE__.controlReasons], dialogs: document.querySelectorAll("[role=dialog]").length }));
     check("AC-15/18: diez ciclos lista → lectura → lista → mapa no multiplican canvas ni listeners ni dejan bloqueos", post.canvases === 1 && post.listeners === l0 && post.reasons.length === 0 && post.dialogs === 0, JSON.stringify({ ...post, l0 }));
     const stored = (await t.stored())[KEY];
     check("abrir y cerrar no concede nada ni cambia el avance", !stored || JSON.parse(stored).entries["apr-a"].completedAt === undefined);

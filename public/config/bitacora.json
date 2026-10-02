@@ -1594,13 +1594,6 @@
       "stateCompleted": "Completado",
       "tapExplore": "Toca la estación para explorar",
       "tapTravel": "Toca el portal para viajar",
-      "controlsLabel": "Controles de movimiento",
-      "moveUp": "Mover hacia arriba",
-      "moveDown": "Mover hacia abajo",
-      "moveLeft": "Mover hacia la izquierda",
-      "moveRight": "Mover hacia la derecha",
-      "controlsUseDpad": "Usar cruceta",
-      "controlsUseTap": "Tocar para caminar",
       "jerryAction": "Jugar con Jerry"
     },
     "assets": {
@@ -1609,7 +1602,7 @@
       "buttonHover": "ui.button.green.hover",
       "stationSign": "station.sign.wooden",
       "titleSign": "ui.title.blank",
-      "portrait": "character.vanessa-jerry.portrait.xp",
+      "portrait": "character.vanessa-jerry.avatar",
       "xpBar": "ui.progress.xp.frame",
       "xpStar": "ui.icon.xp-star",
       "openBook": "ui.icon.open-book",
@@ -1617,12 +1610,12 @@
       "glow": "effect.player.glow",
       "badgesButton": "ui.button.badges.default",
       "listButton": "ui.button.journal.default",
-      "controlsButton": "ui.button.settings.default",
       "musicButton": "ui.button.audio.default",
       "jerryButton": "ui.button.paw.default",
       "xpStarEffect": "effect.xp-star.complete",
       "nextStationGlow": "effect.player-glow.next-station",
-      "statusPanel": "ui.panel.player-status.default"
+      "statusPanel": "ui.panel.player-status.default",
+      "avatarAnimations": "character.vanessa-jerry.avatar.animations"
     },
     "defaultDialogueIds": {"open": "abrir", "locked": "bloqueado", "completed": "completado", "reward": "recompensa"}
   },
@@ -1634,7 +1627,6 @@
     "cameraZoom": 1,
     "camera": {"fit": "cover", "maxZoom": 3, "minPlayerHeight": 0.12},
     "signScale": 0.26,
-    "touchControls": "tap",
     "player": {
       "assetId": "character.vanessa-jerry.walk.poses-v4",
       "origin": {"x": 0.5, "y": 1},

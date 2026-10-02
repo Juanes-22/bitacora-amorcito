@@ -26,6 +26,7 @@ const FLORA_IDS = [
 const IDLE_IDS = ["character.vanessa-jerry.idle-anim.look", "character.vanessa-jerry.idle-anim.play", "character.vanessa-jerry.idle-anim.rest"];
 const TRICKS_IDS = ["character.vanessa-jerry.idle-anim.fetch", "character.vanessa-jerry.idle-anim.tricks"];
 const TOOLBAR_IDS = ["decoration.learning-corner", "station.item.open-book", "ui.button.audio.default", "ui.button.badges.default", "ui.button.journal.default", "ui.button.paw.default", "ui.button.settings.default"];
+const STATION_FX_IDS = ["effect.player-glow.next-station", "effect.xp-star.complete", "ui.panel.player-status.default"];
 const MUSIC_IDS = ["audio.music.beyond-the-clouds", "audio.music.enchanted-festival", "audio.music.little-town-orchestral"];
 const ATLAS_IDS = [
   "animation.water.ripples", "animation.water.waterfall", "animation.water.foam-splash",
@@ -46,11 +47,11 @@ const issues = (id: string, mutate?: (atlas: any, entry: AssetEntry) => void) =>
 };
 
 describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)", () => {
-  it("el manifiesto con los dos kits y la música es válido: 87 entradas y recuentos coherentes", () => {
+  it("el manifiesto con los dos kits y la música es válido: 90 entradas y recuentos coherentes", () => {
     const r = validateAssetManifest(manifest);
     expect(r.ok ? "" : JSON.stringify(r.ok ? [] : r.issues)).toBe("");
-    expect(manifest.assetCount).toBe(87);
-    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, characters: 12, decorations: 12, effects: 15, stations: 8, ui: 18 });
+    expect(manifest.assetCount).toBe(90);
+    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, characters: 12, decorations: 12, effects: 17, stations: 8, ui: 19 });
   });
 
   it("las 45 entradas originales siguen en su sitio y con sus campos (el kit solo se añadió)", () => {
@@ -64,7 +65,8 @@ describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)
     expect(ids.slice(69, 75).sort()).toEqual(FLORA_IDS);
     expect(ids.slice(75, 78).sort()).toEqual(IDLE_IDS);
     expect(ids.slice(78, 80).sort()).toEqual(TRICKS_IDS);
-    expect(ids.slice(80).sort()).toEqual(TOOLBAR_IDS);
+    expect(ids.slice(80, 87).sort()).toEqual(TOOLBAR_IDS);
+    expect(ids.slice(87).sort()).toEqual(STATION_FX_IDS);
   });
 
   it("el kit conserva su metadata (origen, escala recomendada, animación y movimiento) sin duplicarla en otro sitio", () => {
@@ -149,6 +151,47 @@ describe("flores y arbustos animados (SPEC 3.2; AC-55)", () => {
     expect(manifest.assets["animation.flora.round-bush"].animation!.frameRate).toBe(4);
     expect(manifest.assets["animation.flora.flowering-bush"].animation!.frameRate).toBe(4);
     expect(manifest.assets["animation.flora.daisies"].animation!.frameRate).toBe(6);
+  });
+});
+
+describe("estrella de XP, aro de la próxima estación y panel de la cabecera (SPEC 4.3 y 14; AC-68 a AC-70)", () => {
+  const glow = "effect.player-glow.next-station", xp = "effect.xp-star.complete", panel = "ui.panel.player-status.default";
+
+  it.each([glow, xp])("%s: hoja de 8 fotogramas de 512 × 640 en 4 × 2, validada contra su imagen", (id) => {
+    const { atlas, entry } = load(id);
+    expect(entry).toMatchObject({ kind: "animation-sheet", category: "effects", width: 2048, height: 1280, frameCount: 8, sourceFrameSize: { width: 512, height: 640 }, recommendedScale: 0.5 });
+    expect(Object.keys(atlas.frames)).toHaveLength(8);
+    expect(entry.animation!.frameNames).toEqual(Object.keys(atlas.frames));
+    expect(issues(id)).toEqual([]);
+    expect(entry.opacityByFrame).toHaveLength(8);
+    expect(entry.opacityByFrame!.every((o) => o > 0 && o <= 1)).toBe(true);
+  });
+
+  it("la hoja de la estrella de XP está a 12 fps (el juego la reutiliza en entrada y bucle); el aro, en bucle a 8 fps", () => {
+    expect(manifest.assets[xp]).toMatchObject({ animation: { frameRate: 12, repeat: 0 }, hideOnComplete: true, origin: { x: 0.5, y: 0.55 } });
+    expect(manifest.assets[glow]).toMatchObject({ animation: { frameRate: 8, repeat: -1 }, hideOnComplete: false, origin: { x: 0.5, y: 0.65 } });
+    expect(manifest.assets[xp].opacityByFrame).toEqual([0.3, 0.75, 1, 1, 1, 0.85, 0.5, 0.15]); // aparece, destella y se desvanece
+  });
+
+  it("el panel: PNG de 2124 × 390 con nueve zonas de 112 px y el contenido libre dentro", () => {
+    const e = manifest.assets[panel];
+    expect(e).toMatchObject({ kind: "panel", category: "ui", width: 2124, height: 390, transparent: true, nineSlice: { top: 112, right: 112, bottom: 112, left: 112 } });
+    expect(e.nineSlice).not.toHaveProperty("units"); // el contrato del manifiesto no lo admite: va en píxeles de la imagen
+    expect((e as { intendedContents?: string[] }).intendedContents).toContain("avatar");
+  });
+
+  it("los archivos existen con su hash y tamaño; los fotogramas sueltos y los APNG del paquete no se copiaron", () => {
+    expect(checkAssetFiles(manifest, manifestPath)).toEqual({ errors: [], warnings: [] });
+  });
+
+  it("el manifiesto rechaza una opacidad por fotograma que no cuadra con el número de fotogramas", () => {
+    const m = structuredClone(manifest);
+    m.assets[glow].opacityByFrame!.pop();
+    const r = validateAssetManifest(m);
+    expect(r.ok ? "" : r.issues.map((i) => i.message).join("|")).toContain("una por fotograma");
+    const n = structuredClone(manifest);
+    n.assets[glow].opacityByFrame![0] = 1.5;
+    expect(validateAssetManifest(n).ok).toBe(false);
   });
 });
 

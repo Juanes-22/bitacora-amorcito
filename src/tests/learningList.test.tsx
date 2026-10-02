@@ -70,13 +70,14 @@ describe("LearningList (AC-11)", () => {
     expect(onOpen).toHaveBeenCalledWith("apr-b");
   });
 
-  it("Escape y los dos botones de cierre cierran", () => {
+  it("tiene un solo botón «Cerrar» (el verde del pie) y Escape también cierra", () => {
     const { onClose } = mount();
+    expect(screen.getAllByRole("button", { name: base.ui.labels.close })).toHaveLength(1);
+    expect(screen.getByRole("button", { name: base.ui.labels.close }).className).toContain("pixel-button");
     fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
     expect(onClose).toHaveBeenCalledTimes(1);
-    fireEvent.click(screen.getAllByRole("button", { name: base.ui.labels.close })[0]);
-    fireEvent.click(screen.getAllByRole("button", { name: base.ui.labels.close })[1]);
-    expect(onClose).toHaveBeenCalledTimes(3);
+    fireEvent.click(screen.getByRole("button", { name: base.ui.labels.close }));
+    expect(onClose).toHaveBeenCalledTimes(2);
   });
 
   it("con la ruta vacía muestra el mensaje y ninguna fila", () => {

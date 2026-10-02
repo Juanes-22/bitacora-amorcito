@@ -3,16 +3,16 @@
   "project": "Bitácora Amorcito",
   "basePath": ".",
   "pathConvention": "Paths are relative to the directory containing this assets.json.",
-  "assetCount": 87,
+  "assetCount": 90,
   "categoryCounts": {
     "audio": 3,
     "backgrounds": 17,
     "characters": 12,
     "decorations": 12,
-    "effects": 15,
+    "effects": 17,
     "references": 2,
     "stations": 8,
-    "ui": 18
+    "ui": 19
   },
   "assets": {
     "background.complete.garden": {
@@ -2873,6 +2873,168 @@
       },
       "state": "default",
       "ariaLabel": "Ver insignias"
+    },
+    "effect.xp-star.complete": {
+      "path": "effects/xp-star-complete.png",
+      "type": "image",
+      "format": "png",
+      "category": "effects",
+      "label": "Estrella XP: estación completada",
+      "kind": "animation-sheet",
+      "width": 2048,
+      "height": 1280,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1359332,
+      "sha256": "e97499d225d93f79aaa2fac952e85df34ccff3263955c80578ecc93d2c0e53a0",
+      "originalPath": "bitacora-animaciones-xp-glow/generated_images/exec-e1e7ad07-4de0-41c4-abbb-30ae9efde115.png",
+      "atlasPath": "effects/xp-star-complete.atlas.json",
+      "frameCount": 8,
+      "sourceFrameSize": {
+        "width": 512,
+        "height": 640
+      },
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "animation": {
+        "frameNames": [
+          "xp-000",
+          "xp-001",
+          "xp-002",
+          "xp-003",
+          "xp-004",
+          "xp-005",
+          "xp-006",
+          "xp-007"
+        ],
+        "frameRate": 12,
+        "repeat": 0
+      },
+      "origin": {
+        "x": 0.5,
+        "y": 0.55
+      },
+      "recommendedScale": 0.5,
+      "recommendedDisplayWidth": 256,
+      "opacityByFrame": [
+        0.3,
+        0.75,
+        1,
+        1,
+        1,
+        0.85,
+        0.5,
+        0.15
+      ],
+      "hideOnComplete": true
+    },
+    "effect.player-glow.next-station": {
+      "path": "effects/player-glow-next.png",
+      "type": "image",
+      "format": "png",
+      "category": "effects",
+      "label": "Player glow: próxima estación",
+      "kind": "animation-sheet",
+      "width": 2048,
+      "height": 1280,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1452982,
+      "sha256": "90c7bd4bc034503d2d0e285f0440ce58e6af7aa69e4a18db9d78fa41131bbc38",
+      "originalPath": "bitacora-animaciones-xp-glow/generated_images/exec-dcc60558-e237-40cf-b5c8-a2fa88232739.png",
+      "atlasPath": "effects/player-glow-next.atlas.json",
+      "frameCount": 8,
+      "sourceFrameSize": {
+        "width": 512,
+        "height": 640
+      },
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row-major"
+      },
+      "animation": {
+        "frameNames": [
+          "glow-000",
+          "glow-001",
+          "glow-002",
+          "glow-003",
+          "glow-004",
+          "glow-005",
+          "glow-006",
+          "glow-007"
+        ],
+        "frameRate": 8,
+        "repeat": -1
+      },
+      "origin": {
+        "x": 0.5,
+        "y": 0.65
+      },
+      "recommendedScale": 0.5,
+      "recommendedDisplayWidth": 256,
+      "opacityByFrame": [
+        0.78,
+        0.85,
+        0.92,
+        1,
+        1,
+        0.93,
+        0.85,
+        0.79
+      ],
+      "hideOnComplete": false
+    },
+    "ui.panel.player-status.default": {
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de avatar, progreso XP e insignias",
+      "kind": "panel",
+      "state": "default",
+      "width": 2124,
+      "height": 390,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "requiresFrameDefinition": false,
+      "sizeBytes": 491064,
+      "sha256": "d1b2a64f54fb713872805533a307c2c5ad25372b8479a2a66b55486f961880bb",
+      "contentBounds": {
+        "x": 14,
+        "y": 14,
+        "width": 2094,
+        "height": 362,
+        "alphaThreshold": 128
+      },
+      "contentInsets": {
+        "top": 112,
+        "right": 112,
+        "bottom": 112,
+        "left": 112,
+        "units": "source-pixels"
+      },
+      "recommendedDisplaySize": {
+        "width": 1160,
+        "height": 196
+      },
+      "intendedContents": [
+        "avatar",
+        "learning-progress",
+        "xp-progress",
+        "next-learning",
+        "badges-button"
+      ],
+      "path": "ui/panels/player-status-panel.png",
+      "originalPath": "bitacora-ui-panel-avatar-xp/generated_images/exec-06dda9da-fd34-4675-a5bc-eea608e29556.png",
+      "nineSlice": {
+        "top": 112,
+        "right": 112,
+        "bottom": 112,
+        "left": 112
+      }
     }
   },
   "sourceDocuments": [
@@ -3013,6 +3175,30 @@
       "originalPath": "vanessa-jerry-tricks-fetch-v2/scale-correction.json",
       "sizeBytes": 4660,
       "sha256": "50ba027f363db6be54a1f69d8833e29b8099860af7045d45d9d14e8a424759a8"
+    },
+    {
+      "path": "docs/source/xp-glow/readme.md",
+      "originalPath": "bitacora-animaciones-xp-glow/README.md",
+      "sizeBytes": 4557,
+      "sha256": "39ba93b3b7da90ac9fe7f7c9ced315a293b61155cc80f8cd8ec564067211ac63"
+    },
+    {
+      "path": "docs/source/xp-glow/prompts.md",
+      "originalPath": "bitacora-animaciones-xp-glow/PROMPTS.md",
+      "sizeBytes": 5362,
+      "sha256": "4c62ed2a5e94999d50868a9052056e7ce77e008805a96d68ed91edb76cc5d2cd"
+    },
+    {
+      "path": "docs/source/panel-estado/readme.md",
+      "originalPath": "bitacora-ui-panel-avatar-xp/README.md",
+      "sizeBytes": 2428,
+      "sha256": "5017facd13773d13e4d41aac2bf75749a778cd8ef494f05cd12f92b9c525fa70"
+    },
+    {
+      "path": "docs/source/panel-estado/prompts.md",
+      "originalPath": "bitacora-ui-panel-avatar-xp/PROMPTS.md",
+      "sizeBytes": 2544,
+      "sha256": "72f7d83a5b214350effcc36b3eb4758c9dca09a8bbe21c19fef392b04dd21229"
     }
   ],
   "notes": [
@@ -3023,6 +3209,7 @@
     "Añadidas tres hojas de reposo de Vanessa y Jerry (kind «idle-sheet», con atlas): ver docs/source/idle/. Las entradas anteriores no se modificaron.",
     "Añadidas las hojas de trucos de Jerry y de búsqueda del peluche (kind «idle-sheet», con atlas): ver docs/source/tricks/. Las entradas anteriores no se modificaron.",
     "Sustituida la hoja de trucos de Jerry por la v2 (altura de Vanessa corregida con escala y origen por fotograma, `frameAdjust`): ver docs/source/tricks-v2/. La hoja de buscar el peluche no cambió.",
-    "Añadidos los botones de la cabecera (bitácora, ajustes, audio, patita, insignias) y dos assets sueltos (libro abierto, rincón de aprendizaje): ver README del paquete bitacora-assets-senalados-v2. Las entradas anteriores no se modificaron."
+    "Añadidos los botones de la cabecera (bitácora, ajustes, audio, patita, insignias) y dos assets sueltos (libro abierto, rincón de aprendizaje): ver README del paquete bitacora-assets-senalados-v2. Las entradas anteriores no se modificaron.",
+    "Añadidas las animaciones de la estrella de XP y del aro de la próxima estación (hojas con atlas, `opacityByFrame`) y el panel de nueve zonas de la cabecera: ver docs/source/xp-glow y docs/source/panel-estado. Las entradas anteriores no se modificaron."
   ]
 }

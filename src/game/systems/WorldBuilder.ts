@@ -72,6 +72,7 @@ export function buildWorld(
         glow: config.ui.assets.glow,
         lockIcon: config.ui.assets.lockIcon,
         doneIcon: config.ui.assets.xpStar,
+        effects: { assets, nextGlow: config.ui.assets.nextStationGlow, xpStar: config.ui.assets.xpStarEffect },
       },
       config.gameplay.signScale,
       reducedMotion,

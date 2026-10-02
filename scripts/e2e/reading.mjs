@@ -50,6 +50,7 @@ try {
     await t.page.dblclick("text=Recoger insignia y continuar");
     await t.page.waitForTimeout(500);
     const reward = await dialog.innerText();
+    check("A9b la recompensa tiene un solo «Cerrar», el verde del pie", (await dialog.getByRole("button", { name: "Cerrar" }).count()) === 1 && (await dialog.locator(".reading__header button").count()) === 0);
     check("A9 un doble clic concede una sola insignia y muestra la recompensa (sin cerrarla)", reward.includes("¡Aprendizaje recorrido!") && reward.includes("Semilla de descubrimiento") && reward.includes("100 / 600 XP · Nivel 1") && (await t.page.locator("[role=dialog]").count()) === 1);
     const stored = JSON.parse((await t.stored())[KEY()]);
     check("A10 se guardó una sola finalización con fecha, sin totales ni XP", Object.values(stored.entries).filter((e) => e.completedAt).length === 1 && /^\d{4}-\d\d-\d\dT/.test(stored.entries["apr-a"].completedAt) && !/xp|total|level|nextLearning/i.test(JSON.stringify(stored)));

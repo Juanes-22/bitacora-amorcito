@@ -30,7 +30,6 @@ export function BadgeCollection({ completion, onClose, onReset }: Props) {
     <Modal labelledBy="collection-title" onEscape={onClose}>
       <div className="reading__header">
         <h2 id="collection-title" className="reading__title">{title}</h2>
-        <button type="button" className="reading__close" onClick={onClose} data-autofocus>{labels.close}</button>
       </div>
       <div className="reading__body">
         <p className="collection__count">
@@ -77,7 +76,7 @@ export function BadgeCollection({ completion, onClose, onReset }: Props) {
         ) : null}
       </div>
       <div className="reading__footer">
-        <PixelButton onClick={onClose}>{labels.close}</PixelButton>
+        <PixelButton data-autofocus onClick={onClose}>{labels.close}</PixelButton>
         <button type="button" className="reading__close collection__reset" onClick={onReset}>{labels.reset}</button>
       </div>
     </Modal>

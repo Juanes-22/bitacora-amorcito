@@ -1,13 +1,21 @@
 import Phaser from "phaser";
 import type { StationState } from "../../domain/progression";
 import type { Placement, Point } from "../../config/types";
+import type { AssetRegistry } from "../../config/assetRegistry";
+import { createNextStationGlow, createXpStar } from "../systems/stationEffects";
 import { REF_SIGN_SCALE } from "../systems/worldScale";
+
+/** Escalas de los efectos de las estaciones respecto del factor de la señal (se ajustaron a la vista sobre el mapa). */
+const GLOW_SCALE = 0.3;
+const XP_SCALE = 0.12;
 
 export interface StationAssets {
   sign: string;
   glow?: string;
   lockIcon?: string;
   doneIcon?: string;
+  /** Efectos animados (SPEC 4.3): el aro de la próxima estación y la estrella de XP al completarla. */
+  effects?: { assets: AssetRegistry; nextGlow?: string; xpStar?: string };
 }
 
 /**
@@ -20,6 +28,8 @@ export class Station {
   private readonly sign: Phaser.GameObjects.Image;
   private readonly label: Phaser.GameObjects.Text;
   private readonly glow?: Phaser.GameObjects.Image;
+  private glowFx?: Phaser.GameObjects.Sprite | null;
+  private star?: Phaser.GameObjects.Sprite | null;
   private readonly lock?: Phaser.GameObjects.Image;
   private readonly done?: Phaser.GameObjects.Image;
   private state: StationState | null = null;
@@ -27,6 +37,10 @@ export class Station {
   private readonly scene: Phaser.Scene;
   private readonly base: Point;
   private readonly k: number;
+  private readonly effects?: StationAssets["effects"];
+  private readonly reducedMotion: boolean;
+  /** Se completó en esta sesión y la estrella entrará con la celebración (mientras tanto no se ve la estática). */
+  private waitingForCelebration = false;
 
   constructor(
     scene: Phaser.Scene,
@@ -41,6 +55,8 @@ export class Station {
     const k = signScale / REF_SIGN_SCALE; // los textos e iconos crecen con la señal
     const { x, y } = placement.position;
     this.scene = scene;
+    this.effects = assets.effects;
+    this.reducedMotion = reducedMotion;
     this.base = { x, y };
     this.k = k;
     this.interaction = {
@@ -50,7 +66,12 @@ export class Station {
     };
     const depth = y;
 
-    if (assets.glow) {
+    // El aro animado de «próxima estación» sustituye al brillo estático; si su hoja no carga, vale el brillo de siempre.
+    if (assets.effects?.nextGlow) {
+      this.glowFx = createNextStationGlow(scene, assets.effects.assets, assets.effects.nextGlow, x, y + 14 * k, depth - 1, GLOW_SCALE * k, reducedMotion);
+      this.glowFx?.setVisible(false);
+    }
+    if (assets.glow && !this.glowFx) {
       this.glow = scene.add.image(x, y - 6 * k, assets.glow).setScale(0.55 * k).setDepth(depth - 1).setAlpha(0).setBlendMode(Phaser.BlendModes.ADD);
       if (!reducedMotion) {
         scene.tweens.add({ targets: this.glow, scaleX: 0.62 * k, scaleY: 0.62 * k, duration: 1100, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
@@ -67,15 +88,48 @@ export class Station {
     if (assets.doneIcon) this.done = scene.add.image(x + this.sign.displayWidth * 0.36, y - h * 0.9, assets.doneIcon).setScale(0.2 * k).setDepth(depth + 1).setVisible(false);
   }
 
+  /**
+   * La estrella de XP entra sobre la señal al completar la estación (la dispara la celebración, nunca al cargar) y se queda
+   * animada. Si la estación no está completada o ya la tiene, no hace nada.
+   */
+  playXpReward(): void {
+    if (this.state !== "completed" || this.star) return;
+    this.waitingForCelebration = false;
+    this.showStar(true);
+    this.done?.setVisible(!this.hasAnimatedStar());
+  }
+
+  private hasAnimatedStar(): boolean {
+    return !!this.star || this.waitingForCelebration;
+  }
+
+  private showStar(entrance: boolean): void {
+    const fx = this.effects;
+    if (!fx?.xpStar) return;
+    this.star = createXpStar(this.scene, fx.assets, fx.xpStar, this.base.x, this.base.y - this.sign.displayHeight * 1.1, this.base.y + 5000, XP_SCALE * this.k, this.reducedMotion, entrance);
+  }
+
   /** Solo pinta; la decisión de desbloqueo es del dominio (SPEC 11.1). */
   setState(state: StationState): void {
     if (state === this.state) return;
+    const previous = this.state;
     this.state = state;
     this.sign.setTint(state === "locked" ? 0xb8b8b8 : 0xffffff);
     this.label.setAlpha(state === "locked" ? 0.55 : 1);
     this.lock?.setVisible(state === "locked");
-    this.done?.setVisible(state === "completed");
+    // La estrella de XP animada sustituye a la estática en cuanto está en pantalla; sin ella (o si su hoja no cargó), la de siempre.
+    this.done?.setVisible(state === "completed" && !this.hasAnimatedStar());
+    if (state !== "completed") {
+      this.star?.destroy();
+      this.star = undefined;
+      this.waitingForCelebration = false;
+    } else if (!this.star && previous === null) {
+      this.showStar(false); // partida cargada con la estación ya completada: titila desde el principio, sin entrada
+    } else if (!this.star && this.effects?.xpStar && this.scene.textures.exists(this.effects.xpStar)) {
+      this.waitingForCelebration = true; // recién completada: la estrella entrará cuando se cierre la recompensa
+    }
     this.glow?.setAlpha(state === "available" ? 0.85 : 0);
+    this.glowFx?.setVisible(state === "available");
   }
 
   /** Identifica un aprendizaje activo sin aprobar (modo final) con una etiqueta; `null` la quita. */
@@ -100,6 +154,8 @@ export class Station {
   }
 
   destroy(): void {
+    this.glowFx?.destroy();
+    this.star?.destroy();
     [this.sign, this.label, this.glow, this.lock, this.done, this.pendingTag].forEach((o) => o?.destroy());
   }
 }

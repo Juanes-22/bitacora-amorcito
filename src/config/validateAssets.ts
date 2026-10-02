@@ -62,6 +62,12 @@ export function validateAssetManifest(data: unknown): ValidationResult<AssetMani
       }
       if (!a.origin || !a.recommendedScale) issues.push({ path: at, message: "una hoja animada necesita origin y recommendedScale" });
     }
+    if (a.opacityByFrame) {
+      const frames = a.animation?.frameNames.length ?? a.frameCount;
+      if (frames !== undefined && a.opacityByFrame.length !== frames) {
+        issues.push({ path: `${at}.opacityByFrame`, message: `hay ${a.opacityByFrame.length} opacidades y ${frames} fotogramas: debe haber una por fotograma` });
+      }
+    }
     if (a.kind === "idle-sheet") {
       if (!a.atlasPath) issues.push({ path: `${at}.atlasPath`, message: "una hoja de reposo necesita su atlas" });
       if (!a.animations?.length) issues.push({ path: `${at}.animations`, message: "una hoja de reposo necesita animations (clave, fotogramas, velocidad)" });

@@ -1,0 +1,175 @@
+{
+  "frames": {
+    "glow-000": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 640
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 640
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 640
+      }
+    },
+    "glow-001": {
+      "frame": {
+        "x": 512,
+        "y": 0,
+        "w": 512,
+        "h": 640
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 640
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 640
+      }
+    },
+    "glow-002": {
+      "frame": {
+        "x": 1024,
+        "y": 0,
+        "w": 512,
+        "h": 640
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 640
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 640
+      }
+    },
+    "glow-003": {
+      "frame": {
+        "x": 1536,
+        "y": 0,
+        "w": 512,
+        "h": 640
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 640
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 640
+      }
+    },
+    "glow-004": {
+      "frame": {
+        "x": 0,
+        "y": 640,
+        "w": 512,
+        "h": 640
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 640
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 640
+      }
+    },
+    "glow-005": {
+      "frame": {
+        "x": 512,
+        "y": 640,
+        "w": 512,
+        "h": 640
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 640
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 640
+      }
+    },
+    "glow-006": {
+      "frame": {
+        "x": 1024,
+        "y": 640,
+        "w": 512,
+        "h": 640
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 640
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 640
+      }
+    },
+    "glow-007": {
+      "frame": {
+        "x": 1536,
+        "y": 640,
+        "w": 512,
+        "h": 640
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 640
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 640
+      }
+    }
+  },
+  "meta": {
+    "app": "Bitácora Amorcito",
+    "version": "1",
+    "image": "player-glow-next.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 2048,
+      "h": 1280
+    },
+    "scale": "1"
+  }
+}

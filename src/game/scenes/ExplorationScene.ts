@@ -119,6 +119,7 @@ export class ExplorationScene extends Phaser.Scene {
         if (this.deps.celebrated.has(effectId) || !this.player) return;
         this.deps.celebrated.add(effectId);
         playCelebration(this, this.deps.config, this.player, learningId, this.deps.reducedMotion);
+        this.world?.stations.get(learningId)?.playXpReward(); // la estrella de XP sale sobre la estación completada
       }),
       bridge.on("app:zone-change", ({ zoneId, spawnId: target }) => {
         if (this.scene.isPaused()) this.scene.resume();

@@ -165,6 +165,8 @@ export interface UiConfig {
     openBook?: string; lockIcon?: string; glow: string;
     /** Botones de la cabecera (SPEC 7): arte con su marco; el nombre accesible sale de `ui.labels`. */
     badgesButton: string; listButton: string; controlsButton: string; musicButton: string; jerryButton: string;
+    /** Efectos animados de las estaciones y panel de la cabecera (opcionales: sin ellos se usan el brillo y el fondo sencillos). */
+    xpStarEffect?: string; nextStationGlow?: string; statusPanel?: string;
   };
   defaultDialogueIds: Record<DialogueEvent, string>;
 }
@@ -292,6 +294,10 @@ export interface AssetEntry {
   anchor?: string;
   /** Altura de Vanessa en la hoja de referencia (px); las hojas con `frameAdjust` la normalizan fotograma a fotograma. */
   referenceHeightPx?: number;
+  /** Opacidad de cada fotograma de una hoja de efecto (0..1): el pulso o el desvanecimiento del efecto. */
+  opacityByFrame?: number[];
+  /** Efecto de una sola vez: se retira al terminar. */
+  hideOnComplete?: boolean;
   /** Corrección visual por fotograma (SPEC 6.2): factor de escala y origen (los pies, respecto del recorte). */
   frameAdjust?: FrameAdjust[];
   motion?: AssetMotion;

@@ -62,9 +62,13 @@ export function LearningDialog({ reading, actions }: { reading: ReadingState; ac
   const header = (
     <div className="reading__header">
       <h2 id={`${ID}-title`} className="reading__title">{title}</h2>
-      <button type="button" className="reading__close" onClick={actions.close} data-autofocus={reading.kind === "message" ? "" : undefined}>
-        {labels.close}
-      </button>
+      {/* Un solo «Cerrar»: el verde del pie cuando lo hay (mensaje y recompensa); en la apertura y la lectura, donde el pie
+          lo ocupa la acción principal, el de la cabecera. */}
+      {reading.kind === "intro" || reading.kind === "reading" ? (
+        <button type="button" className="reading__close" onClick={actions.close}>
+          {labels.close}
+        </button>
+      ) : null}
     </div>
   );
 
@@ -72,10 +76,15 @@ export function LearningDialog({ reading, actions }: { reading: ReadingState; ac
   if (reading.kind === "message") {
     const lines = reading.event === "pending" ? [{ speaker: "narrator" as const, text: labels.pending }] : dialogueLines(config, state, reading.learningId, "locked");
     body = (
-      <div className="reading__body">
-        <Lines lines={lines} />
-        {config.mode === "demo" ? <p className="reading__demo">{labels.demo}</p> : null}
-      </div>
+      <>
+        <div className="reading__body">
+          <Lines lines={lines} />
+          {config.mode === "demo" ? <p className="reading__demo">{labels.demo}</p> : null}
+        </div>
+        <div className="reading__footer">
+          <PixelButton data-autofocus onClick={actions.close}>{labels.close}</PixelButton>
+        </div>
+      </>
     );
   } else if (reading.kind === "intro") {
     body = (

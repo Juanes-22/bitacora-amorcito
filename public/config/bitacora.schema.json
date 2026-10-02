@@ -570,7 +570,10 @@
             "listButton": { "$ref": "#/$defs/assetId" },
             "controlsButton": { "$ref": "#/$defs/assetId" },
             "musicButton": { "$ref": "#/$defs/assetId" },
-            "jerryButton": { "$ref": "#/$defs/assetId" }
+            "jerryButton": { "$ref": "#/$defs/assetId" },
+            "xpStarEffect": { "$ref": "#/$defs/assetId" },
+            "nextStationGlow": { "$ref": "#/$defs/assetId" },
+            "statusPanel": { "$ref": "#/$defs/assetId" }
           },
           "additionalProperties": false
         },

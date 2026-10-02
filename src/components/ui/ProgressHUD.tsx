@@ -29,6 +29,9 @@ export function ProgressHUD({ onOpenBadges, tools }: { onOpenBadges?: () => void
       } as CSSProperties)
     : undefined;
 
+  // Panel de nueve zonas del catálogo (SPEC 14): el PNG aporta marco y fondo y el contenido se monta encima.
+  const panelStyle = ui.statusPanel ? ({ "--panel-url": `url("${assets.url(ui.statusPanel)}")`, "--panel-slice": String(assets.get(ui.statusPanel).nineSlice?.top ?? 112) } as CSSProperties) : undefined;
+
   const objective =
     summary.totalCount === 0
       ? labels.emptyRouteLabel
@@ -39,7 +42,7 @@ export function ProgressHUD({ onOpenBadges, tools }: { onOpenBadges?: () => void
         : renderTemplate(labels.objectiveTemplate, { number: stationNumber(config.route, summary.nextLearningId as string) });
 
   return (
-    <section className="hud" aria-label={config.project.title}>
+    <section className={`hud${panelStyle ? " hud--panel" : ""}`} style={panelStyle} aria-label={config.project.title}>
       <img className="hud__portrait" src={assets.url(ui.portrait)} alt="" />
       <div className="hud__main">
         <p className="hud__progress">

@@ -27,7 +27,6 @@ export function LearningList({ onOpen, onClose }: Props) {
     <Modal labelledBy="list-title" onEscape={onClose}>
       <div className="reading__header">
         <h2 id="list-title" className="reading__title">{labels.index}</h2>
-        <button type="button" className="reading__close" onClick={onClose}>{labels.close}</button>
       </div>
       <div className="reading__body">
         {config.route.length === 0 ? <p className="reading__line">{labels.emptyRouteLabel}</p> : null}

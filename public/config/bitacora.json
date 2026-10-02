@@ -1619,7 +1619,10 @@
       "listButton": "ui.button.journal.default",
       "controlsButton": "ui.button.settings.default",
       "musicButton": "ui.button.audio.default",
-      "jerryButton": "ui.button.paw.default"
+      "jerryButton": "ui.button.paw.default",
+      "xpStarEffect": "effect.xp-star.complete",
+      "nextStationGlow": "effect.player-glow.next-station",
+      "statusPanel": "ui.panel.player-status.default"
     },
     "defaultDialogueIds": {"open": "abrir", "locked": "bloqueado", "completed": "completado", "reward": "recompensa"}
   },

@@ -91,7 +91,7 @@ try {
     // Tocar la estación estando junto a ella equivale a «Explorar»
     await t.place(...nearStation("apr-a"));
     await tap(t, 230, 1045); // un toque real sobre el suelo: el aviso se adapta al dedo
-    await t.page.waitForTimeout(500);
+    await waitStopped(t); // el recorrido por toque debe haber terminado antes de recolocar a Vanessa
     await t.place(...nearStation("apr-a"));
     await t.page.waitForTimeout(400);
     check("AC-04: junto a la estación el aviso dice qué tocar", /Toca la estación para explorar/.test(await t.page.locator(".nearby-region").innerText()), await t.page.locator(".nearby-region").innerText());
@@ -388,7 +388,7 @@ try {
         if (s < 3) await t.page.getByRole("tab").nth(s + 1).click();
       }
       await t.page.click("text=Recoger insignia y continuar");
-      await t.page.waitForTimeout(200);
+      await t.page.waitForTimeout(800); // la recompensa ignora «Cerrar» un instante (clics duplicados, Enter mantenido)
       await t.page.click("[role=dialog] >> text=Cerrar");
       await t.page.waitForTimeout(i === configJson.route.length ? 3800 : 500);
     }
@@ -491,6 +491,43 @@ try {
       check(`${name}: sin errores de consola`, t.errors.length === 0, t.errors.join(" | "));
       await t.close();
     }
+  }
+
+  // ---- Un solo «Cerrar» por ventana, sin recuadro en el foco y herramientas centradas (interfaz) ---------------------
+  {
+    const t = await open({ viewport: { width: 1280, height: 720 } });
+    const outline = await t.page.evaluate(() => { const b = document.querySelector(".cover .pixel-button"); b.focus(); const s = getComputedStyle(b); return { outline: s.outlineStyle, filter: s.filter }; });
+    check("la pantalla de bienvenida no dibuja un recuadro alrededor del botón verde (el foco es un halo)", outline.outline === "none" && /drop-shadow/.test(outline.filter), JSON.stringify(outline));
+    await t.start();
+    const closeButtons = () => t.page.locator("[role=dialog] button", { hasText: new RegExp(`^${L.close}$`) });
+    await t.page.getByRole("button", { name: L.index }).click();
+    await t.page.waitForTimeout(250);
+    check("la lista tiene un solo «Cerrar», el verde del pie", (await closeButtons().count()) === 1 && (await closeButtons().first().getAttribute("class")).includes("pixel-button"));
+    await t.page.getByRole("button", { name: new RegExp(`${L.explore}: Aprendizaje 2:`) }).click();
+    await t.page.waitForTimeout(250);
+    check("un mensaje (estación bloqueada) tiene un solo «Cerrar», el verde, con el foco", (await closeButtons().count()) === 1 && (await t.page.evaluate(() => document.activeElement?.classList.contains("pixel-button"))));
+    await t.page.keyboard.press("Escape");
+    await t.page.keyboard.press("Escape");
+    await t.page.waitForTimeout(250);
+    await t.page.getByRole("button", { name: L.badges }).click();
+    await t.page.waitForTimeout(250);
+    check("la colección de insignias tiene un solo «Cerrar», el verde, con el foco", (await closeButtons().count()) === 1 && (await t.page.evaluate(() => document.activeElement?.classList.contains("pixel-button"))));
+    await t.page.keyboard.press("Escape");
+    await t.page.waitForTimeout(250);
+    await t.place(...nearStation("apr-a"));
+    await t.page.waitForTimeout(300);
+    await t.page.keyboard.press("Enter");
+    await t.page.waitForTimeout(300);
+    check("la apertura de un aprendizaje conserva su «Cerrar» de la cabecera (el pie lo ocupa «Siguiente»)", (await closeButtons().count()) === 1 && (await t.page.locator("[role=dialog] .reading__header button").count()) === 1);
+    await t.page.keyboard.press("Escape");
+    await t.page.waitForTimeout(300);
+    const centers = await t.page.evaluate(() => {
+      const mid = (el) => { const r = el.getBoundingClientRect(); return r.top + r.height / 2; };
+      const hud = document.querySelector(".hud");
+      return { hud: mid(hud), tools: [...document.querySelectorAll(".hud__tools > *")].filter((b) => b.offsetParent).map(mid), badges: mid(document.querySelector(".hud__badges")) };
+    });
+    check("los botones de la cabecera quedan alineados verticalmente en el centro de la cabecera", centers.tools.length >= 3 && centers.tools.every((c) => Math.abs(c - centers.hud) < 2) && Math.abs(centers.badges - centers.hud) < 2, JSON.stringify(centers));
+    await t.close();
   }
 
   // ---- Ciclos repetidos: sin canvas ni listeners duplicados (AC-15, AC-18) -------------------------------

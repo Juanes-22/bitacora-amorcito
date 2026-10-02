@@ -17,8 +17,8 @@ export function zoneAssetIds(config: BitacoraConfig, zoneId: string): string[] {
     ids.add(p.signAssetId ?? config.ui.assets.stationSign);
     if (p.decorationAssetId) ids.add(p.decorationAssetId);
   }
-  const { glow, lockIcon, xpStar } = config.ui.assets;
-  [glow, lockIcon, xpStar].forEach((a) => a && ids.add(a));
+  const { glow, lockIcon, xpStar, xpStarEffect, nextStationGlow } = config.ui.assets;
+  [glow, lockIcon, xpStar, xpStarEffect, nextStationGlow].forEach((a) => a && ids.add(a));
   ids.add(config.gameplay.player.assetId);
   const idle = config.gameplay.player.idle;
   if (idle) [idle.rest, idle.glance, idle.play, idle.tricks?.sheet, idle.fetch?.sheet].forEach((a) => a && ids.add(a));

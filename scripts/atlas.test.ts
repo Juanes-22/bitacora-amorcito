@@ -25,6 +25,7 @@ const FLORA_IDS = [
 ];
 const IDLE_IDS = ["character.vanessa-jerry.idle-anim.look", "character.vanessa-jerry.idle-anim.play", "character.vanessa-jerry.idle-anim.rest"];
 const TRICKS_IDS = ["character.vanessa-jerry.idle-anim.fetch", "character.vanessa-jerry.idle-anim.tricks"];
+const TOOLBAR_IDS = ["decoration.learning-corner", "station.item.open-book", "ui.button.audio.default", "ui.button.badges.default", "ui.button.journal.default", "ui.button.paw.default", "ui.button.settings.default"];
 const MUSIC_IDS = ["audio.music.beyond-the-clouds", "audio.music.enchanted-festival", "audio.music.little-town-orchestral"];
 const ATLAS_IDS = [
   "animation.water.ripples", "animation.water.waterfall", "animation.water.foam-splash",
@@ -45,11 +46,11 @@ const issues = (id: string, mutate?: (atlas: any, entry: AssetEntry) => void) =>
 };
 
 describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)", () => {
-  it("el manifiesto con los dos kits y la música es válido: 80 entradas y recuentos coherentes", () => {
+  it("el manifiesto con los dos kits y la música es válido: 87 entradas y recuentos coherentes", () => {
     const r = validateAssetManifest(manifest);
     expect(r.ok ? "" : JSON.stringify(r.ok ? [] : r.issues)).toBe("");
-    expect(manifest.assetCount).toBe(80);
-    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, characters: 12, decorations: 11, effects: 15 });
+    expect(manifest.assetCount).toBe(87);
+    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, characters: 12, decorations: 12, effects: 15, stations: 8, ui: 18 });
   });
 
   it("las 45 entradas originales siguen en su sitio y con sus campos (el kit solo se añadió)", () => {
@@ -62,7 +63,8 @@ describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)
     expect(ids.slice(66, 69)).toEqual(MUSIC_IDS);
     expect(ids.slice(69, 75).sort()).toEqual(FLORA_IDS);
     expect(ids.slice(75, 78).sort()).toEqual(IDLE_IDS);
-    expect(ids.slice(78).sort()).toEqual(TRICKS_IDS);
+    expect(ids.slice(78, 80).sort()).toEqual(TRICKS_IDS);
+    expect(ids.slice(80).sort()).toEqual(TOOLBAR_IDS);
   });
 
   it("el kit conserva su metadata (origen, escala recomendada, animación y movimiento) sin duplicarla en otro sitio", () => {
@@ -147,6 +149,27 @@ describe("flores y arbustos animados (SPEC 3.2; AC-55)", () => {
     expect(manifest.assets["animation.flora.round-bush"].animation!.frameRate).toBe(4);
     expect(manifest.assets["animation.flora.flowering-bush"].animation!.frameRate).toBe(4);
     expect(manifest.assets["animation.flora.daisies"].animation!.frameRate).toBe(6);
+  });
+});
+
+describe("botones de la cabecera y assets sueltos (paquete bitacora-assets-senalados-v2)", () => {
+  const BUTTONS = ["ui.button.journal.default", "ui.button.settings.default", "ui.button.audio.default", "ui.button.paw.default", "ui.button.badges.default"];
+
+  it.each(BUTTONS)("%s: botón de 1254 × 1254 con transparencia exterior, su marco y su contentBounds", (id) => {
+    const e = manifest.assets[id];
+    expect(e).toMatchObject({ kind: "button", category: "ui", type: "image", width: 1254, height: 1254, transparent: true, hasAlphaChannel: true });
+    expect(e.contentBounds!.alphaThreshold).toBe(128);
+    expect(e.contentBounds!.width).toBeGreaterThan(800);
+    expect(e.contentBounds!.x + e.contentBounds!.width).toBeLessThanOrEqual(1254);
+  });
+
+  it("los siete archivos existen con su hash y tamaño, sin avisos de huérfanos", () => {
+    expect(checkAssetFiles(manifest, manifestPath)).toEqual({ errors: [], warnings: [] });
+  });
+
+  it("se conservan las entradas de los botones verdes anteriores", () => {
+    expect(manifest.assets["ui.button.green.default"].kind).toBe("button");
+    expect(manifest.assets["ui.icon.open-book"]).toBeDefined();
   });
 });
 

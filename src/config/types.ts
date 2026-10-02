@@ -163,6 +163,8 @@ export interface UiConfig {
     window: string; button: string; buttonHover?: string; stationSign: string;
     titleSign: string; portrait: string; xpBar: string; xpStar?: string;
     openBook?: string; lockIcon?: string; glow: string;
+    /** Botones de la cabecera (SPEC 7): arte con su marco; el nombre accesible sale de `ui.labels`. */
+    badgesButton: string; listButton: string; controlsButton: string; musicButton: string; jerryButton: string;
   };
   defaultDialogueIds: Record<DialogueEvent, string>;
 }
@@ -296,7 +298,10 @@ export interface AssetEntry {
   origin?: { x: number; y: number };
   recommendedScale?: number;
   recommendedContentHeightPx?: number;
-  contentBounds?: { x: number; y: number; width: number; height: number };
+  contentBounds?: { x: number; y: number; width: number; height: number; alphaThreshold?: number };
+  /** Ancho orientativo (px) con que se muestra el lienzo completo de un botón, y su nombre accesible sugerido. */
+  recommendedDisplayWidth?: number;
+  ariaLabel?: string;
   filter?: string;
   /** Mezcla y opacidad base de las luces y partículas (piezas adicionales, SPEC 3.2). */
   blendMode?: "NORMAL" | "ADD";

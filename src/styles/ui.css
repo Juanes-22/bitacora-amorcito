@@ -278,72 +278,9 @@
   .hud__xp-text {
     font-size: 0.82rem;
   }
-  .hud__badges {
-    padding: 0 0.625rem;
-    font-size: 0.9rem;
-  }
-}
-
-.hud__badges {
-  flex: none;
-  min-width: 2.75rem;
-  min-height: 3.25rem;
-  padding: 0 1rem;
-  border: 0.125rem solid var(--brown);
-  border-radius: 0.5rem;
-  background: var(--cream-warm);
-  color: var(--ink);
-  font: 700 1.05rem var(--font-ui);
-  cursor: pointer;
-  pointer-events: auto; /* la cabecera deja pasar los clics al mapa; el botón no */
-}
-.hud__badges:hover {
-  background: #f3dcae;
-}
-.hud__badges:focus-visible {
-  outline: 0.1875rem solid var(--focus);
-  outline-offset: 0.125rem;
-}
-
-/* ---- Botón de música (en la cabecera) ---- */
-.hud__music {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 3.25rem;
-  min-width: 2.75rem;
-  min-height: 3.25rem;
-  padding: 0;
-  border: 0.125rem solid var(--brown);
-  border-radius: 0.5rem;
-  background: var(--cream-warm);
-  color: var(--ink);
-  cursor: pointer;
-  pointer-events: auto;
-}
-.hud__music svg {
-  width: 1.6rem;
-  height: 1.6rem;
-}
-.hud__music[data-music="off"] {
-  color: var(--ink-soft);
-}
-.hud__music:hover {
-  background: #f3dcae;
-}
-.hud__music:focus-visible {
-  outline: 0.1875rem solid var(--focus);
-  outline-offset: 0.125rem;
 }
 /* ---- Cabecera en pantallas estrechas: va después de las reglas base de los botones para poder sobrescribirlas ---- */
-@media (max-width: 480px) {
-  .hud__badges {
-    min-height: 2.75rem;
-    padding: 0 0.625rem;
-    font-size: 0.9rem;
-  }
-}
+
 @media (max-width: 360px) {
   .hud__progress,
   .hud__objective {
@@ -356,10 +293,6 @@
   .hud__xp-text {
     font-size: 0.75rem;
   }
-  .hud__badges {
-    padding: 0 0.5rem;
-    font-size: 0.8rem;
-  }
 }
 
 /* ---- Herramientas junto a la cabecera: lista accesible y música ---- */
@@ -370,30 +303,6 @@
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
-}
-.hud__list {
-  flex: none;
-  max-width: 9.5rem;
-  min-height: 3.25rem;
-  padding: 0.25rem 0.75rem;
-  border: 0.125rem solid var(--brown);
-  border-radius: 0.5rem;
-  background: var(--cream-warm);
-  color: var(--ink);
-  font: 700 0.95rem/1.15 var(--font-ui);
-  cursor: pointer;
-  pointer-events: auto;
-}
-.hud__list:hover:not(:disabled) {
-  background: #f3dcae;
-}
-.hud__list:focus-visible {
-  outline: 0.1875rem solid var(--focus);
-  outline-offset: 0.125rem;
-}
-.hud__list:disabled {
-  opacity: 0.6;
-  cursor: default;
 }
 @media (max-width: 960px) {
   /* Sin sitio a la derecha: las herramientas cuelgan justo debajo de la cabecera, en su esquina derecha. */
@@ -407,16 +316,6 @@
     justify-content: flex-start;
     width: max-content;
     max-width: calc(100vw - 2 * var(--gutter));
-  }
-  .hud__list,
-  .hud__music {
-    min-height: 2.75rem;
-  }
-  .hud__list {
-    font-size: 0.85rem;
-  }
-  .hud__music {
-    width: 2.75rem;
   }
 }
 
@@ -581,79 +480,74 @@
   }
 }
 
-/* ---- Botón de modo de controles (solo en pantallas táctiles o estrechas) ---- */
-.hud__controls {
-  display: none;
+/* ---- Botones de icono de la cabecera (arte con su marco; el nombre accesible va en aria-label) ---- */
+.icon-button {
+  --icon-size: 3.25rem;
+  position: relative;
   flex: none;
-  align-items: center;
-  justify-content: center;
-  width: 3.25rem;
-  min-height: 3.25rem;
+  width: var(--icon-size);
+  height: var(--icon-size);
   padding: 0;
-  border: 0.125rem solid var(--brown);
+  border: 0;
   border-radius: 0.5rem;
-  background: var(--cream-warm);
-  color: var(--ink);
+  background: transparent;
+  color: inherit;
   cursor: pointer;
-  pointer-events: auto;
+  pointer-events: auto; /* la cabecera deja pasar los clics al mapa; el botón no */
 }
-.hud__controls svg {
-  width: 1.6rem;
-  height: 1.6rem;
+.icon-button__img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--icon-w, 140%);
+  max-width: none;
+  height: auto;
+  transform: translate(var(--icon-tx, -50%), var(--icon-ty, -50%));
+  image-rendering: pixelated;
+  pointer-events: none;
+  user-select: none;
 }
-.hud__controls:hover {
-  background: #f3dcae;
+.icon-button:hover:not(:disabled) .icon-button__img {
+  filter: brightness(1.07);
 }
-.hud__controls:focus-visible {
+.icon-button:active:not(:disabled) .icon-button__img {
+  transform: translate(var(--icon-tx, -50%), calc(var(--icon-ty, -50%) + 2px));
+}
+.icon-button:focus-visible {
   outline: 0.1875rem solid var(--focus);
   outline-offset: 0.125rem;
+}
+.icon-button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+/* Música apagada: el icono se apaga y lo cruza una barra (no depende solo del color). */
+.icon-button[data-music="off"] .icon-button__img {
+  filter: grayscale(0.75) brightness(0.96);
+}
+.icon-button__slash {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 78%;
+  height: 0.3125rem;
+  border: 0.125rem solid var(--ink);
+  border-radius: 0.125rem;
+  background: #c4452d;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  pointer-events: none;
+}
+/* El cambio de modo de controles solo tiene sentido con el dedo o en pantallas estrechas. */
+.hud__controls {
+  display: none;
 }
 @media (pointer: coarse), (max-width: 640px) {
   .hud__controls {
-    display: inline-flex;
+    display: block;
   }
 }
 @media (max-width: 960px) {
-  .hud__controls {
-    width: 2.75rem;
-    min-height: 2.75rem;
-  }
-}
-
-/* ---- Botón «Jugar con Jerry» (en las herramientas de la cabecera) ---- */
-.hud__jerry {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 3.25rem;
-  min-height: 3.25rem;
-  padding: 0;
-  border: 0.125rem solid var(--brown);
-  border-radius: 0.5rem;
-  background: var(--cream-warm);
-  color: var(--ink);
-  cursor: pointer;
-  pointer-events: auto;
-}
-.hud__jerry svg {
-  width: 1.6rem;
-  height: 1.6rem;
-}
-.hud__jerry:hover:not(:disabled) {
-  background: #f3dcae;
-}
-.hud__jerry:focus-visible {
-  outline: 0.1875rem solid var(--focus);
-  outline-offset: 0.125rem;
-}
-.hud__jerry:disabled {
-  opacity: 0.6;
-  cursor: default;
-}
-@media (max-width: 960px) {
-  .hud__jerry {
-    width: 2.75rem;
-    min-height: 2.75rem;
+  .icon-button {
+    --icon-size: 2.75rem;
   }
 }

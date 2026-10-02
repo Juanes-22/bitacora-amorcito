@@ -6,6 +6,7 @@ import { BadgeCollection } from "../components/ui/BadgeCollection";
 import { ConfirmDialog } from "../components/ui/ConfirmDialog";
 import { LearningList } from "../components/ui/LearningList";
 import { ControlsModeToggle } from "../components/ui/ControlsModeToggle";
+import { IconButton } from "../components/ui/IconButton";
 import { JerryActionButton } from "../components/ui/JerryActionButton";
 import { MusicToggle } from "../components/ui/MusicToggle";
 import { TouchControls } from "../components/ui/TouchControls";
@@ -112,9 +113,7 @@ function Loaded({ config, assets }: { config: BitacoraConfig; assets: AssetRegis
   const hint: PromptHint = !touchMode ? "key" : controlsMode === "tap" ? "tap" : "button";
   const tools = (
     <>
-      <button type="button" className="hud__list" onClick={overlayActions.openList} disabled={modalOpen}>
-        {config.ui.labels.index}
-      </button>
+      <IconButton assetId={config.ui.assets.listButton} label={config.ui.labels.index} className="hud__list" onClick={overlayActions.openList} disabled={modalOpen} />
       <JerryActionButton bridge={bridge} disabled={modalOpen} />
       <ControlsModeToggle mode={controlsMode} onToggle={toggleControls} />
       {music ? <MusicToggle player={music} onPointerUse={() => { if (!modalOpen) hostRef.current?.focus(); }} /> : null}

@@ -32,7 +32,7 @@ const at = (issues: ConfigIssue[], path: string) => issues.filter((i) => i.path 
 
 describe("assets.json real", () => {
   it("es válido y conserva sus entradas originales sin migrar", () => {
-    expect(Object.keys(realManifest.assets)).toHaveLength(80);
+    expect(Object.keys(realManifest.assets)).toHaveLength(87);
     expect(realManifest.assets["ui.panel.cream.nine-slice"].nineSlice).toEqual({ top: 32, right: 32, bottom: 32, left: 32 });
     expect(realManifest.assets["character.vanessa-jerry.walk.poses-v4"].requiresFrameDefinition).toBe(true);
     expect(realManifest).not.toHaveProperty("animations");

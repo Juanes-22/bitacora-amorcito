@@ -1614,7 +1614,12 @@
       "xpStar": "ui.icon.xp-star",
       "openBook": "ui.icon.open-book",
       "lockIcon": "station.item.padlock",
-      "glow": "effect.player.glow"
+      "glow": "effect.player.glow",
+      "badgesButton": "ui.button.badges.default",
+      "listButton": "ui.button.journal.default",
+      "controlsButton": "ui.button.settings.default",
+      "musicButton": "ui.button.audio.default",
+      "jerryButton": "ui.button.paw.default"
     },
     "defaultDialogueIds": {"open": "abrir", "locked": "bloqueado", "completed": "completado", "reward": "recompensa"}
   },

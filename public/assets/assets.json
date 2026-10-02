@@ -3,16 +3,16 @@
   "project": "Bitácora Amorcito",
   "basePath": ".",
   "pathConvention": "Paths are relative to the directory containing this assets.json.",
-  "assetCount": 80,
+  "assetCount": 87,
   "categoryCounts": {
     "audio": 3,
     "backgrounds": 17,
     "characters": 12,
-    "decorations": 11,
+    "decorations": 12,
     "effects": 15,
     "references": 2,
-    "stations": 7,
-    "ui": 13
+    "stations": 8,
+    "ui": 18
   },
   "assets": {
     "background.complete.garden": {
@@ -2695,6 +2695,184 @@
           "repeatDelay": 0
         }
       ]
+    },
+    "ui.button.journal.default": {
+      "path": "ui/buttons/journal-button.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Botón de bitácora con cuaderno",
+      "kind": "button",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "requiresFrameDefinition": false,
+      "sizeBytes": 553978,
+      "sha256": "3b99133eb707db379beb14200d5f574183e0ffb34f5b81a0191dfd43f4d9fb20",
+      "originalPath": "bitacora-assets-senalados-v2/generated_images/exec-814802be-7ca4-49da-9376-63f1b8c8c06d.png",
+      "recommendedDisplayWidth": 96,
+      "contentBounds": {
+        "x": 185,
+        "y": 212,
+        "width": 885,
+        "height": 853,
+        "alphaThreshold": 128
+      },
+      "state": "default",
+      "ariaLabel": "Abrir bitácora"
+    },
+    "ui.button.settings.default": {
+      "path": "ui/buttons/settings-button.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Botón de ajustes con engranaje",
+      "kind": "button",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "requiresFrameDefinition": false,
+      "sizeBytes": 595251,
+      "sha256": "4d8a3f8910a46dca7de072533f41f20a998da054490791fed0b6433b49d341e3",
+      "originalPath": "bitacora-assets-senalados-v2/generated_images/exec-f14506f7-9286-44af-b4b0-0710aeb1a72c.png",
+      "recommendedDisplayWidth": 96,
+      "contentBounds": {
+        "x": 175,
+        "y": 204,
+        "width": 904,
+        "height": 870,
+        "alphaThreshold": 128
+      },
+      "state": "default",
+      "ariaLabel": "Abrir ajustes"
+    },
+    "station.item.open-book": {
+      "path": "stations/items/open-book.png",
+      "type": "image",
+      "format": "png",
+      "category": "stations",
+      "label": "Libro abierto del mapa",
+      "kind": "station-item",
+      "width": 1536,
+      "height": 1024,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "requiresFrameDefinition": false,
+      "sizeBytes": 1144675,
+      "sha256": "5591ff0e51a78096b1db1b636f059c941e15a7c6557f14f7c24f528b1b82c7e1",
+      "originalPath": "bitacora-assets-senalados-v2/generated_images/exec-e7304269-532f-4885-a816-11b748e0ac1b.png",
+      "recommendedDisplayWidth": 192,
+      "contentBounds": {
+        "x": 128,
+        "y": 198,
+        "width": 1326,
+        "height": 729,
+        "alphaThreshold": 128
+      }
+    },
+    "decoration.learning-corner": {
+      "path": "decorations/learning-corner.png",
+      "type": "image",
+      "format": "png",
+      "category": "decorations",
+      "label": "Libros con lápices y planta",
+      "kind": "decoration",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "requiresFrameDefinition": false,
+      "sizeBytes": 603755,
+      "sha256": "fe1e3fa31e7b04670905e1259136eb301e6a8fdb68b037a71870b0da1484f6f8",
+      "originalPath": "bitacora-assets-senalados-v2/generated_images/exec-eebaa26f-0e27-40cd-a0ed-e78ebbc3918a.png",
+      "recommendedDisplayWidth": 224,
+      "contentBounds": {
+        "x": 185,
+        "y": 183,
+        "width": 923,
+        "height": 964,
+        "alphaThreshold": 128
+      }
+    },
+    "ui.button.audio.default": {
+      "path": "ui/buttons/audio-button.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Botón de audio",
+      "kind": "button",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "requiresFrameDefinition": false,
+      "sizeBytes": 625971,
+      "sha256": "5cf737d5d79f0aa903365780e4427baa3b53213814d092d45e5d16af95771b5f",
+      "originalPath": "bitacora-assets-senalados-v2/generated_images/exec-b77d705f-db07-4b5c-9093-f6bfc9c71a83.png",
+      "recommendedDisplayWidth": 96,
+      "contentBounds": {
+        "x": 174,
+        "y": 204,
+        "width": 906,
+        "height": 871,
+        "alphaThreshold": 128
+      },
+      "state": "default",
+      "ariaLabel": "Audio"
+    },
+    "ui.button.paw.default": {
+      "path": "ui/buttons/paw-button.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Botón de patita",
+      "kind": "button",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "requiresFrameDefinition": false,
+      "sizeBytes": 627991,
+      "sha256": "7667668ffacf4e40080cafc12815d3a061162aa649c4ead29b29ec6a7721269b",
+      "originalPath": "bitacora-assets-senalados-v2/generated_images/exec-685e0c20-bbaa-44ff-a5b6-1f2f23de1ae8.png",
+      "recommendedDisplayWidth": 96,
+      "contentBounds": {
+        "x": 174,
+        "y": 203,
+        "width": 906,
+        "height": 872,
+        "alphaThreshold": 128
+      },
+      "state": "default",
+      "ariaLabel": "Jerry"
+    },
+    "ui.button.badges.default": {
+      "path": "ui/buttons/badges-button.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Botón de insignias",
+      "kind": "button",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "requiresFrameDefinition": false,
+      "sizeBytes": 653673,
+      "sha256": "2f287fa7cdbdcef43c2c88dda3032ea98064cbb22e00eec3240ceaa2fa96842c",
+      "originalPath": "bitacora-assets-senalados-v2/generated_images/exec-46416936-abdc-4393-9971-e52730d44e3d.png",
+      "recommendedDisplayWidth": 96,
+      "contentBounds": {
+        "x": 174,
+        "y": 204,
+        "width": 906,
+        "height": 871,
+        "alphaThreshold": 128
+      },
+      "state": "default",
+      "ariaLabel": "Ver insignias"
     }
   },
   "sourceDocuments": [
@@ -2844,6 +3022,7 @@
     "Añadido el kit de flores y arbustos animados (6 imágenes, 6 atlas): ver docs/source/flora/. Las entradas anteriores no se modificaron.",
     "Añadidas tres hojas de reposo de Vanessa y Jerry (kind «idle-sheet», con atlas): ver docs/source/idle/. Las entradas anteriores no se modificaron.",
     "Añadidas las hojas de trucos de Jerry y de búsqueda del peluche (kind «idle-sheet», con atlas): ver docs/source/tricks/. Las entradas anteriores no se modificaron.",
-    "Sustituida la hoja de trucos de Jerry por la v2 (altura de Vanessa corregida con escala y origen por fotograma, `frameAdjust`): ver docs/source/tricks-v2/. La hoja de buscar el peluche no cambió."
+    "Sustituida la hoja de trucos de Jerry por la v2 (altura de Vanessa corregida con escala y origen por fotograma, `frameAdjust`): ver docs/source/tricks-v2/. La hoja de buscar el peluche no cambió.",
+    "Añadidos los botones de la cabecera (bitácora, ajustes, audio, patita, insignias) y dos assets sueltos (libro abierto, rincón de aprendizaje): ver README del paquete bitacora-assets-senalados-v2. Las entradas anteriores no se modificaron."
   ]
 }

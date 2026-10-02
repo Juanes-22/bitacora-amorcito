@@ -174,7 +174,7 @@ try {
     await t.page.click("[role=dialog] >> text=Cerrar");
     await t.page.waitForTimeout(300);
     await t.page.keyboard.press("Tab"); // del mapa a la cabecera
-    await t.page.click("button:has-text('Insignias')");
+    await t.page.getByRole("button", { name: "Insignias" }).click();
     await t.page.waitForTimeout(300);
     const collection = await t.axe();
     check("Z6 colección de insignias sin violaciones", collection.length === 0, collection.join(" | "));

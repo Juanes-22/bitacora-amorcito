@@ -75,13 +75,23 @@ describe("MusicToggle (AC-51)", () => {
     const button = screen.getByRole("button", { name: "Silenciar música" });
     expect(button.tagName).toBe("BUTTON");
     expect(button.getAttribute("type")).toBe("button");
-    expect(button.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
+    expect(button.querySelector("img")?.getAttribute("alt")).toBe("");
+    expect(button.querySelector("img")?.getAttribute("aria-hidden")).toBe("true");
     fireEvent.click(button);
     expect(player.getState().muted).toBe(true);
     expect(screen.getByRole("button", { name: "Activar música" })).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Activar música" }));
     expect(player.getState().muted).toBe(false);
     expect(screen.getByRole("button", { name: "Silenciar música" })).toBeTruthy();
+  });
+
+  it("apagada, el botón lleva una barra que lo cruza (no depende solo del color) y encendida no", () => {
+    const player = playerWith(false);
+    const { container } = renderToggle(player);
+    expect(container.querySelector(".icon-button__slash")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Silenciar música" }));
+    expect(container.querySelector(".icon-button__slash")?.getAttribute("aria-hidden")).toBe("true");
+    expect(screen.getByRole("button", { name: "Activar música" }).getAttribute("data-music")).toBe("off");
   });
 
   it("si la música empieza silenciada ofrece activarla", () => {

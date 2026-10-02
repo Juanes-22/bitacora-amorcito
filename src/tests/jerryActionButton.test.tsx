@@ -22,7 +22,8 @@ describe("JerryActionButton", () => {
     mount(bridge);
     const button = screen.getByRole("button", { name: "Jugar con Jerry (P)" });
     expect(button.getAttribute("aria-keyshortcuts")).toBe("P");
-    expect(button.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
+    expect(button.querySelector("img")?.getAttribute("alt")).toBe("");
+    expect(button.querySelector("img")?.getAttribute("aria-hidden")).toBe("true");
     fireEvent.click(button);
     expect(seen).toHaveBeenCalledTimes(1);
   });

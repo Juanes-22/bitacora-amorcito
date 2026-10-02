@@ -23,12 +23,13 @@ describe("ControlsModeToggle", () => {
     expect(screen.getByRole("button", { name: L.controlsUseTap })).toBeTruthy();
   });
 
-  it("es un botón con icono decorativo y avisa al pulsarse", () => {
+  it("es un botón con el arte del engranaje (decorativo) y avisa al pulsarse", () => {
     const onToggle = vi.fn();
     wrap(<ControlsModeToggle mode="tap" onToggle={onToggle} />);
     const button = screen.getByRole("button", { name: L.controlsUseDpad });
     expect(button.getAttribute("type")).toBe("button");
-    expect(button.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
+    expect(button.querySelector("img")?.getAttribute("alt")).toBe("");
+    expect(button.querySelector("img")?.getAttribute("aria-hidden")).toBe("true");
     fireEvent.click(button);
     expect(onToggle).toHaveBeenCalledTimes(1);
   });

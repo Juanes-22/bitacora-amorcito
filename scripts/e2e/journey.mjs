@@ -91,7 +91,7 @@ try {
     check("J11 todas las estaciones de la zona quedan completadas", (await t.stations()).every((s) => s.state === "completed"));
 
     // colección desde la cabecera, y reinicio con confirmación
-    await t.page.click("button:has-text('Insignias')");
+    await t.page.getByRole("button", { name: "Insignias" }).click();
     await t.page.waitForTimeout(300);
     check("J12 «Insignias» abre la colección y pausa el mapa", (await t.page.locator("[role=dialog]").innerText()).includes("6 de 6 insignias") && (await t.scene()).paused);
     await t.page.click("text=Reiniciar recorrido");
@@ -221,7 +221,7 @@ try {
     await t.watch();
     await t.page.waitForTimeout(800);
     check("N1 con la ruta vacía no hay estaciones y la cabecera dice «Contenido por definir» (0 de 0)", (await t.stations()).length === 0 && (await hud(t)).includes("Contenido por definir") && (await hud(t)).includes("0 de 0 aprendizajes") && !(await hud(t)).includes("Recorrido completado"));
-    await t.page.click("button:has-text('Insignias')");
+    await t.page.getByRole("button", { name: "Insignias" }).click();
     await t.page.waitForTimeout(300);
     const dlg = await t.page.locator("[role=dialog]").innerText();
     check("N2 la colección lo explica y no presenta un cierre ni reflexión final", dlg.includes("Contenido por definir") && !dlg.includes("¡Recorrido completo!") && !dlg.includes("Reflexión final"));

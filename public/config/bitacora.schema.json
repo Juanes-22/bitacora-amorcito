@@ -553,7 +553,7 @@
         },
         "assets": {
           "type": "object",
-          "required": ["window", "button", "stationSign", "titleSign", "portrait", "xpBar", "glow"],
+          "required": ["window", "button", "stationSign", "titleSign", "portrait", "xpBar", "glow", "badgesButton", "listButton", "controlsButton", "musicButton", "jerryButton"],
           "properties": {
             "window": { "$ref": "#/$defs/assetId" },
             "button": { "$ref": "#/$defs/assetId" },
@@ -565,7 +565,12 @@
             "xpStar": { "$ref": "#/$defs/assetId" },
             "openBook": { "$ref": "#/$defs/assetId" },
             "lockIcon": { "$ref": "#/$defs/assetId" },
-            "glow": { "$ref": "#/$defs/assetId" }
+            "glow": { "$ref": "#/$defs/assetId" },
+            "badgesButton": { "$ref": "#/$defs/assetId" },
+            "listButton": { "$ref": "#/$defs/assetId" },
+            "controlsButton": { "$ref": "#/$defs/assetId" },
+            "musicButton": { "$ref": "#/$defs/assetId" },
+            "jerryButton": { "$ref": "#/$defs/assetId" }
           },
           "additionalProperties": false
         },

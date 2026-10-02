@@ -3,6 +3,7 @@ import { useBitacora } from "../../app/BitacoraProvider";
 import { useProgress } from "../../app/ProgressProvider";
 import { stationNumber } from "../../domain/progression";
 import { renderTemplate } from "../../domain/templates";
+import { IconButton } from "./IconButton";
 
 /**
  * Cabecera compacta: retrato, progreso directo («3 de 6 aprendizajes»), XP, nivel y el objetivo actual.
@@ -55,9 +56,7 @@ export function ProgressHUD({ onOpenBadges, tools }: { onOpenBadges?: () => void
         <p className="hud__objective">{objective}</p>
       </div>
       {onOpenBadges ? (
-        <button type="button" className="hud__badges" onClick={onOpenBadges}>
-          {labels.badges}
-        </button>
+        <IconButton assetId={ui.badgesButton} label={labels.badges} className="hud__badges" onClick={onOpenBadges} />
       ) : null}
       {tools ? <div className="hud__tools">{tools}</div> : null}
       {!persisting ? <p className="hud__warning" role="status">El avance no se está guardando en este navegador.</p> : null}

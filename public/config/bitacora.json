@@ -20,38 +20,38 @@
   "placements": {
     "apr-a": {
       "zoneId": "zona-a",
-      "position": {"x": 330, "y": 960},
-      "interactionOffset": {"x": 0, "y": 30},
+      "position": {"x": 344, "y": 1040},
+      "interactionOffset": {"x": 0, "y": 26},
       "interactionRadius": 70
     },
     "apr-b": {
       "zoneId": "zona-a",
-      "position": {"x": 410, "y": 605},
-      "interactionOffset": {"x": 0, "y": 30},
+      "position": {"x": 400, "y": 604},
+      "interactionOffset": {"x": 0, "y": 26},
       "interactionRadius": 70
     },
     "apr-c": {
       "zoneId": "zona-a",
-      "position": {"x": 475, "y": 340},
-      "interactionOffset": {"x": 0, "y": 30},
+      "position": {"x": 452, "y": 396},
+      "interactionOffset": {"x": 0, "y": 18},
       "interactionRadius": 70
     },
     "apr-d": {
       "zoneId": "zona-b",
-      "position": {"x": 315, "y": 575},
-      "interactionOffset": {"x": 0, "y": 30},
+      "position": {"x": 216, "y": 616},
+      "interactionOffset": {"x": 0, "y": 18},
       "interactionRadius": 70
     },
     "apr-e": {
       "zoneId": "zona-b",
-      "position": {"x": 955, "y": 540},
-      "interactionOffset": {"x": 0, "y": 30},
+      "position": {"x": 640, "y": 826},
+      "interactionOffset": {"x": 0, "y": 18},
       "interactionRadius": 70
     },
     "apr-f": {
       "zoneId": "zona-b",
-      "position": {"x": 1180, "y": 695},
-      "interactionOffset": {"x": 0, "y": 30},
+      "position": {"x": 1236, "y": 668},
+      "interactionOffset": {"x": 0, "y": 25},
       "interactionRadius": 70
     }
   },
@@ -708,7 +708,7 @@
       ],
       "portals": {
         "a-b": {
-          "label": "Camino a la zona del pabellón",
+          "label": "Zona del pabellón",
           "interaction": {"x": 1405, "y": 430, "radius": 60},
           "targetZoneId": "zona-b",
           "targetSpawnId": "desde-a"
@@ -1253,7 +1253,7 @@
       ],
       "portals": {
         "b-a": {
-          "label": "Camino a la pradera del cerezo",
+          "label": "Pradera del cerezo",
           "interaction": {"x": 45, "y": 430, "radius": 60},
           "targetZoneId": "zona-a",
           "targetSpawnId": "desde-b"
@@ -1265,6 +1265,7 @@
     "apr-a": {
       "title": "Aprender con los sentidos: plantas, semillas y saberes",
       "topic": "Plantas, semillas y saberes",
+      "signTitle": "Semillas y saberes",
       "editorialStatus": "draft",
       "contentRevision": 1,
       "badgeId": "semilla-de-descubrimiento",
@@ -1314,6 +1315,7 @@
     "apr-b": {
       "title": "Tema por definir",
       "topic": "Tema por definir",
+      "signTitle": "Tema por definir",
       "editorialStatus": "demo",
       "contentRevision": 1,
       "badgeId": "insignia-demo-b",
@@ -1347,6 +1349,7 @@
     "apr-c": {
       "title": "Tema por definir",
       "topic": "Tema por definir",
+      "signTitle": "Tema por definir",
       "editorialStatus": "demo",
       "contentRevision": 1,
       "badgeId": "insignia-demo-c",
@@ -1380,6 +1383,7 @@
     "apr-d": {
       "title": "Tema por definir",
       "topic": "Tema por definir",
+      "signTitle": "Tema por definir",
       "editorialStatus": "demo",
       "contentRevision": 1,
       "badgeId": "insignia-demo-d",
@@ -1413,6 +1417,7 @@
     "apr-e": {
       "title": "Tema por definir",
       "topic": "Tema por definir",
+      "signTitle": "Tema por definir",
       "editorialStatus": "demo",
       "contentRevision": 1,
       "badgeId": "insignia-demo-e",
@@ -1446,6 +1451,7 @@
     "apr-f": {
       "title": "Tema por definir",
       "topic": "Tema por definir",
+      "signTitle": "Tema por definir",
       "editorialStatus": "demo",
       "contentRevision": 1,
       "badgeId": "insignia-demo-f",
@@ -1571,8 +1577,6 @@
       "rewardTitle": "¡Aprendizaje recorrido!",
       "xpTemplate": "{xp} / {maxXp} XP",
       "levelTemplate": "Nivel {level}",
-      "objectiveTemplate": "Continúa en Aprendizaje {number}",
-      "finishedLabel": "Recorrido completado",
       "emptyRouteLabel": "Contenido por definir",
       "mapLabel": "Mapa de la bitácora",
       "badges": "Insignias",
@@ -1594,13 +1598,18 @@
       "stateCompleted": "Completado",
       "tapExplore": "Toca la estación para explorar",
       "tapTravel": "Toca el portal para viajar",
-      "jerryAction": "Jugar con Jerry"
+      "jerryAction": "Jugar con Jerry",
+      "playerName": "Vanessa",
+      "nextBadge": "Siguiente",
+      "captionJournal": "Bitácora",
+      "captionJerry": "Jerry",
+      "captionSound": "Sonido"
     },
     "assets": {
       "window": "ui.panel.cream.nine-slice",
       "button": "ui.button.green.default",
       "buttonHover": "ui.button.green.hover",
-      "stationSign": "station.sign.wooden",
+      "stationSign": "station.sign.board",
       "titleSign": "ui.title.blank",
       "portrait": "character.vanessa-jerry.avatar",
       "xpBar": "ui.progress.xp.frame",
@@ -1609,12 +1618,16 @@
       "lockIcon": "station.item.padlock",
       "glow": "effect.player.glow",
       "badgesButton": "ui.button.badges.default",
-      "listButton": "ui.button.journal.default",
-      "musicButton": "ui.button.audio.default",
-      "jerryButton": "ui.button.paw.default",
+      "listButton": "ui.button.journal.labeled",
+      "musicButton": "ui.button.sound-on.labeled",
+      "musicMutedButton": "ui.button.sound-off.labeled",
+      "jerryButton": "ui.button.jerry.labeled",
       "xpStarEffect": "effect.xp-star.complete",
-      "nextStationGlow": "effect.player-glow.next-station",
+      "nextStationGlow": "effect.station-glow.pulse",
       "statusPanel": "ui.panel.player-status.default",
+      "completedBadge": "ui.badge.completed-pill",
+      "exitSign": "map.sign.exit-right",
+      "stationSparkle": "animation.light.gold-sparkle",
       "avatarAnimations": "character.vanessa-jerry.avatar.animations"
     },
     "defaultDialogueIds": {"open": "abrir", "locked": "bloqueado", "completed": "completado", "reward": "recompensa"}
@@ -1626,7 +1639,7 @@
     "playerSpeed": 150,
     "cameraZoom": 1,
     "camera": {"fit": "cover", "maxZoom": 3, "minPlayerHeight": 0.12},
-    "signScale": 0.26,
+    "signScale": 0.46,
     "player": {
       "assetId": "character.vanessa-jerry.walk.poses-v4",
       "origin": {"x": 0.5, "y": 1},
@@ -1650,6 +1663,7 @@
         "fetch": {"sheet": "character.vanessa-jerry.idle-anim.fetch", "holdMs": 2200},
         "actionKey": "P"
       },
+      "shadow": {"alpha": 0.4, "widthFactor": 1.4, "aspect": 0.36},
       "body": {"width": 42, "height": 25, "offset": {"x": -21, "y": -25}}
     },
     "companion": {"mode": "included", "followDistance": 0}

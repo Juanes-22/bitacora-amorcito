@@ -1,6 +1,6 @@
 // E2E de encuadre, escala del mundo e interfaz proporcional (SPEC 6.3 y 14; AC-37, AC-38, AC-39) en un navegador real.
 // Uso: npm run test:e2e
-import { configJson, harness } from "./helpers.mjs";
+import { configJson, harness, SPOT_A, stationSpot } from "./helpers.mjs";
 
 const { open, check, finish } = await harness();
 
@@ -17,7 +17,7 @@ try {
   for (const [name, w, h] of SIZES) {
     const t = await open({ viewport: { width: w, height: h } });
     await t.start();
-    await t.place(330, 990);
+    await t.place(...SPOT_A);
     await t.page.waitForTimeout(500);
     const m = await t.page.evaluate(() => {
       const g = window.__PHASER_GAME__; const s = g.scene.getScene("ExplorationScene"); const c = s.cameras.main;
@@ -55,7 +55,7 @@ try {
   {
     const t = await open({ viewport: { width: 1280, height: 720 } });
     await t.start();
-    await t.place(330, 990);
+    await t.place(...SPOT_A);
     const before = (await t.scene()).pos;
     await t.page.setViewportSize({ width: 2560, height: 1440 });
     await t.page.waitForTimeout(600);
@@ -75,7 +75,7 @@ try {
     const metrics = [];
     for (const t of [small, big]) {
       await t.start();
-      await t.place(330, 990);
+      await t.place(...SPOT_A);
       await t.page.waitForTimeout(300);
       await t.page.keyboard.press("Enter");
       await t.page.waitForTimeout(300);

@@ -1,6 +1,6 @@
 // E2E de recorridos completos, variantes editoriales solo con JSON, modo final y reinicio (SPEC 4, 5, 10, 12, 13).
 // Uso: npm run test:e2e
-import { configJson, harness } from "./helpers.mjs";
+import { configJson, harness, SPOT_A, stationSpot } from "./helpers.mjs";
 
 const { open, check, finish, browser } = await harness();
 
@@ -87,7 +87,7 @@ try {
     check("J9 se guardaron seis finalizaciones y ningún total ni XP", Object.values(stored.entries).filter((e) => e.completedAt).length === 6 && !/xp|total|level|nextLearning/i.test(JSON.stringify(stored)));
     await t.page.keyboard.press("Escape");
     await t.page.waitForTimeout(400);
-    check("J10 cerrada la ventana, la cabecera dice «Recorrido completado» y el mapa se reanuda", (await hud(t)).includes("Recorrido completado") && !(await t.scene()).paused && (await t.page.evaluate(() => document.activeElement?.classList.contains("game-host"))));
+    check("J10 cerrada la ventana, la cabecera dice «6 de 6 aprendizajes» y el mapa se reanuda", (await hud(t)).includes("6 de 6 aprendizajes") && !(await t.scene()).paused && (await t.page.evaluate(() => document.activeElement?.classList.contains("game-host"))));
     check("J11 todas las estaciones de la zona quedan completadas", (await t.stations()).every((s) => s.state === "completed"));
 
     // colección desde la cabecera, y reinicio con confirmación
@@ -158,7 +158,7 @@ try {
     await archived.start();
     const stations = await archived.stations();
     check("L1 archivar apr-b la retira del mapa, de los totales (1 de 5, 100 / 500 XP) y de los requisitos (apr-c queda disponible)", JSON.stringify(stations.map((s) => [s.id, s.number, s.state])) === JSON.stringify([["apr-a", 1, "completed"], ["apr-c", 2, "available"]]) && (await hud(archived)).includes("1 de 5 aprendizajes") && (await hud(archived)).includes("100 / 500 XP"), JSON.stringify(stations));
-    await archived.place(330, 990);
+    await archived.place(...SPOT_A);
     await archived.hold(["ArrowUp"], 400); // genera un guardado con la configuración archivada
     await archived.page.waitForTimeout(1700);
     await archived.page.close();
@@ -171,7 +171,7 @@ try {
     const reordered = await open({ seed: saved({ entries: { "apr-a": DONE } }), edit: (c) => { c.route = ["apr-b", "apr-a", "apr-c", "apr-d", "apr-e", "apr-f"]; } });
     await reordered.start();
     const r = (await reordered.stations()).sort((x, y) => x.number - y.number).map((s) => [s.id, s.number, s.state]);
-    check("L3 reordenar route con progreso: lo completado se conserva por ID y los pendientes se recalculan", JSON.stringify(r) === JSON.stringify([["apr-b", 1, "available"], ["apr-a", 2, "completed"], ["apr-c", 3, "locked"]]) && (await hud(reordered)).includes("Continúa en Aprendizaje 1"), JSON.stringify(r));
+    check("L3 reordenar route con progreso: lo completado se conserva por ID y los pendientes se recalculan", JSON.stringify(r) === JSON.stringify([["apr-b", 1, "available"], ["apr-a", 2, "completed"], ["apr-c", 3, "locked"]]), JSON.stringify(r));
     await reordered.close();
 
     const revised = await open({ seed: saved({ entries: { "apr-a": DONE, "apr-b": DONE } }), edit: (c) => { c.learnings["apr-a"].contentRevision = 2; } });
@@ -206,7 +206,7 @@ try {
     const approved = (c) => { c.mode = "final"; for (const id of c.route) c.learnings[id].editorialStatus = "ready"; };
     const ok = await open({ edit: approved, seed: saved({ entries: { "apr-a": DONE }, mode: "demo" }) });
     await ok.start();
-    check("M5 con todo aprobado el modo final se recorre normalmente y NO hereda el progreso de demostración (0 de 6, sin «preparación»)", (await hud(ok)).includes("0 de 6 aprendizajes") && !(await hud(ok)).includes("preparación") && (await hud(ok)).includes("Continúa en Aprendizaje 1"));
+    check("M5 con todo aprobado el modo final se recorre normalmente y NO hereda el progreso de demostración (0 de 6, sin «preparación»)", (await hud(ok)).includes("0 de 6 aprendizajes") && !(await hud(ok)).includes("preparación"));
     await goToStation(ok, withEdit(approved), "apr-a");
     await readAndClaim(ok);
     const keys = Object.keys(await ok.stored());
@@ -220,7 +220,7 @@ try {
     await t.start();
     await t.watch();
     await t.page.waitForTimeout(800);
-    check("N1 con la ruta vacía no hay estaciones y la cabecera dice «Contenido por definir» (0 de 0)", (await t.stations()).length === 0 && (await hud(t)).includes("Contenido por definir") && (await hud(t)).includes("0 de 0 aprendizajes") && !(await hud(t)).includes("Recorrido completado"));
+    check("N1 con la ruta vacía no hay estaciones y la cabecera dice «0 de 0 aprendizajes»", (await t.stations()).length === 0 && (await hud(t)).includes("0 de 0 aprendizajes"));
     await t.page.getByRole("button", { name: "Insignias" }).click();
     await t.page.waitForTimeout(300);
     const dlg = await t.page.locator("[role=dialog]").innerText();

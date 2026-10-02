@@ -1,6 +1,6 @@
 // E2E de robustez (SPEC 12.3, 13; AC-09, AC-20, AC-29): configuración o manifiesto rotos, assets que no cargan y
 // almacenamiento no disponible, siempre sin perder el avance guardado. Uso: npm run test:e2e
-import { configJson, harness } from "./helpers.mjs";
+import { configJson, harness, SPOT_A, stationSpot } from "./helpers.mjs";
 
 const { open, check, finish } = await harness();
 const L = configJson.ui.labels;
@@ -75,7 +75,7 @@ try {
     const t = await open({ init });
     await t.start();
     check("AC-09: con el almacenamiento bloqueado la aplicación arranca y avisa de que el avance no se guarda", (await t.page.locator("canvas:not(.hud__portrait canvas)").count()) === 1 && /no se está guardando/i.test(await t.page.locator(".hud").innerText()));
-    await t.place(330, 990);
+    await t.place(...SPOT_A);
     await t.page.waitForTimeout(250);
     await t.page.keyboard.press("Enter");
     await t.page.waitForTimeout(300);
@@ -103,7 +103,7 @@ try {
     const init = () => { Storage.prototype.setItem = () => { throw new DOMException("cuota", "QuotaExceededError"); }; };
     const t = await open({ init });
     await t.start();
-    await t.place(330, 990);
+    await t.place(...SPOT_A);
     await t.page.waitForTimeout(250);
     await t.page.keyboard.press("Enter");
     await t.page.waitForTimeout(300);

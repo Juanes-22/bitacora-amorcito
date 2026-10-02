@@ -3,6 +3,7 @@ import type { GameplayConfig, Point } from "../../config/types";
 import type { Direction } from "../bridge/events";
 import { findAnimation } from "../../assets/frameDefinitions";
 import type { AssetRegistry } from "../../config/assetRegistry";
+import { GroundShadow } from "../systems/GroundShadow";
 import { IdleBehavior } from "../systems/IdleBehavior";
 import { animKey, ensureSheet, restFrameOf } from "../systems/sheets";
 import { REF_PLAYER_SCALE } from "../systems/worldScale";
@@ -28,6 +29,7 @@ export class Player {
   private readonly center: Point; // desplazamiento del centro del cuerpo respecto de los pies
   private facing: Direction = "down";
   private idle?: IdleBehavior;
+  private shadow?: GroundShadow;
   private walking = false;
   private celebrating = false;
   /** Desplazamiento vertical visual de la celebración (un efecto, no una mecánica: el cuerpo no se mueve). */
@@ -48,6 +50,7 @@ export class Player {
       const behavior = new IdleBehavior(scene, this.sprite, spec.idle, idle.assets, idle.reducedMotion, spec.scale);
       if (behavior.available) this.idle = behavior;
     }
+    if (spec.shadow) this.shadow = new GroundShadow(scene, this.sprite, spec.shadow);
     if (this.hasSheet) this.rest();
     else this.sprite.setOrigin(spec.origin.x, spec.origin.y); // sin frames: imagen estática con su origen
     this.syncSprite();
@@ -173,10 +176,12 @@ export class Player {
     const { x, y } = this.position;
     this.sprite.setPosition(x, y + this.hop.y);
     this.sprite.setDepth(y); // orden por la altura de los pies
+    this.shadow?.update(this.hop.y);
   }
 
   destroy(): void {
     this.idle?.destroy();
+    this.shadow?.destroy();
     this.sprite.destroy();
     this.feet.destroy();
   }

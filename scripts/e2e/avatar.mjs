@@ -106,13 +106,13 @@ try {
     await t.start();
     await t.page.waitForTimeout(400);
     const r = await t.page.evaluate(() => {
-      const hud = document.querySelector(".hud").getBoundingClientRect();
+      const hud = document.querySelector(".hud__panel").getBoundingClientRect();
       const p = document.querySelector(".hud__portrait");
       const pr = p.getBoundingClientRect();
       const text = document.querySelector(".hud__main").getBoundingClientRect();
       return { shown: getComputedStyle(p).display !== "none", inside: pr.left >= hud.left && pr.right <= hud.right && pr.top >= hud.top && pr.bottom <= hud.bottom, overlapsText: pr.width > 0 && pr.right > text.left + 1, scroll: document.documentElement.scrollWidth > innerWidth };
     });
-    check(`AC-71: a ${w}×${h} el avatar cabe en la cabecera sin pisar el texto${w <= 480 ? " (en estrecho se oculta, como antes)" : ""}`, !r.scroll && (w <= 480 ? !r.shown : r.shown && r.inside && !r.overlapsText), JSON.stringify(r));
+    check(`AC-71: a ${w}×${h} el avatar se ve, cabe en el panel y no pisa el texto`, !r.scroll && r.shown && r.inside && !r.overlapsText, JSON.stringify(r));
     await t.close();
   }
 } finally {

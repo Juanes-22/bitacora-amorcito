@@ -1,7 +1,7 @@
 // Prueba de extremo a extremo de la exploración en un navegador real (Playwright + servidor de Vite).
 // Uso: npm run test:e2e   (instalar el navegador una vez: npx playwright install chromium)
 // Comprueba movimiento, colisiones, proximidad, apertura, pausa, foco, portales, escala y edición por JSON.
-import { configJson, dist, harness } from "./helpers.mjs";
+import { configJson, dist, harness, SPOT_A, stationSpot } from "./helpers.mjs";
 
 const { open, check, finish } = await harness();
 
@@ -28,7 +28,7 @@ try {
     await t.start();
     await t.watch();
 
-    await t.place(330, 990); await t.page.waitForTimeout(150);
+    await t.place(...SPOT_A); await t.page.waitForTimeout(150);
     const diag = await t.hold(["ArrowUp", "ArrowRight"], 200);
     check("B1 la diagonal no es más rápida (|v| = playerSpeed)", Math.abs(Math.hypot(...diag.m.vel) - configJson.gameplay.playerSpeed) < 0.5, `${Math.hypot(...diag.m.vel)}`);
     await t.place(200, 1030);
@@ -40,7 +40,7 @@ try {
     });
     check("B2 el cuerpo nunca entra en un obstáculo ni sale del mundo", col.hits === 0 && col.inWorld, JSON.stringify(col));
     const frames = new Set();
-    await t.place(330, 990); await t.page.keyboard.down("ArrowUp");
+    await t.place(...SPOT_A); await t.page.keyboard.down("ArrowUp");
     for (let i = 0; i < 10; i++) { await t.page.waitForTimeout(80); frames.add((await t.scene()).frame); }
     await t.page.keyboard.up("ArrowUp"); await t.page.waitForTimeout(150);
     const rest = (await t.scene()).frame;
@@ -69,7 +69,7 @@ try {
     check("B5 volver de una pestaña oculta no atraviesa obstáculos ni saca al personaje del mundo", back.hits === 0 && back.inWorld, JSON.stringify(back));
 
     // proximidad, apertura y pausa
-    await t.place(330, 990); await t.page.waitForTimeout(250);
+    await t.place(...SPOT_A); await t.page.waitForTimeout(250);
     check("C1 el aviso muestra la estación cercana", (await t.page.locator(".nearby").innerText()).startsWith("Aprendizaje 1:"));
     await t.log();
     await t.page.keyboard.press("Enter"); await t.page.waitForTimeout(300);
@@ -86,7 +86,7 @@ try {
     await t.page.waitForTimeout(200); await t.page.keyboard.up("Enter");
     check("C5 Enter mantenido genera una sola solicitud", (await t.log()).filter((e) => e[0] === "game:learning-open-request").length === 1);
     await t.page.keyboard.press("Escape"); await t.page.waitForTimeout(250);
-    await t.place(410, 635); await t.page.waitForTimeout(250); await t.log();
+    await t.place(...stationSpot("apr-b")); await t.page.waitForTimeout(250); await t.log();
     await t.page.keyboard.press("Enter"); await t.page.waitForTimeout(300);
     const locked = await t.log();
     check("C6 una estación bloqueada se deniega, libera el bloqueo y no abre contenido", locked.some((e) => e[0] === "app:request-resolved" && e[1].accepted === false) && (await t.page.locator("[role=dialog]").innerText()).includes("Primero recorre"));
@@ -112,8 +112,8 @@ try {
 
     // foco, pérdida de foco y escala
     await t.page.evaluate(() => document.querySelector(".game-host").focus());
-    await t.place(330, 990); await t.page.evaluate(() => window.__PHASER_GAME__.scene.getScene("ExplorationScene").scene.restart({ zoneId: "zona-a" })); await t.page.waitForTimeout(500);
-    await t.page.evaluate(() => document.querySelector(".game-host").focus()); await t.place(330, 990);
+    await t.place(...SPOT_A); await t.page.evaluate(() => window.__PHASER_GAME__.scene.getScene("ExplorationScene").scene.restart({ zoneId: "zona-a" })); await t.page.waitForTimeout(500);
+    await t.page.evaluate(() => document.querySelector(".game-host").focus()); await t.place(...SPOT_A);
     await t.page.evaluate(() => document.activeElement.blur());
     const f0 = await t.scene(); await t.page.keyboard.down("ArrowUp"); await t.page.waitForTimeout(250); await t.page.keyboard.up("ArrowUp");
     check("E1 sin foco en el mapa las flechas no mueven", dist(f0.pos, (await t.scene()).pos) === 0);
@@ -122,7 +122,7 @@ try {
     await t.page.evaluate(() => document.activeElement.blur()); await t.page.waitForTimeout(200);
     check("E2 perder el foco con una flecha pulsada no deja velocidad", (await t.scene()).vel.every((v) => v === 0));
     await t.page.keyboard.up("ArrowUp");
-    await t.page.evaluate(() => document.querySelector(".game-host").focus()); await t.place(330, 990);
+    await t.page.evaluate(() => document.querySelector(".game-host").focus()); await t.place(...SPOT_A);
     const r0 = (await t.scene()).pos;
     await t.page.setViewportSize({ width: 390, height: 844 }); await t.page.waitForTimeout(500);
     const r1 = await t.page.evaluate(() => { const s = window.__PHASER_GAME__.scene.getScene("ExplorationScene"); const c = s.cameras.main; const sp = s.player.sprite; return { pos: s.player.position, x: (sp.x - c.worldView.x) * c.zoom, y: (sp.y - c.worldView.y) * c.zoom, w: c.width, h: c.height }; });
@@ -141,7 +141,7 @@ try {
     const moved = await open({ edit: (c) => { c.placements["apr-a"].position = { x: 1330, y: 420 }; } });
     await moved.start();
     const a = (await moved.stations()).find((s) => s.id === "apr-a");
-    check("F1 mover una estación en placements mueve su punto de interacción y no cambia número ni orden", a.interaction.x === 1330 && a.interaction.y === 450 && a.number === 1, JSON.stringify(a));
+    check("F1 mover una estación en placements mueve su punto de interacción y no cambia número ni orden", a.interaction.x === 1330 && a.interaction.y === 420 + configJson.placements["apr-a"].interactionOffset.y && a.number === 1, JSON.stringify(a));
     await moved.close();
 
     const crossZone = await open({ edit: (c) => { c.placements["apr-c"].zoneId = "zona-b"; c.placements["apr-c"].position = { x: 955, y: 540 }; } });

@@ -12,7 +12,6 @@ export const LABEL_TEMPLATE_VARIABLES = {
   remainingTemplate: ["remaining"],
   xpTemplate: ["xp", "maxXp"],
   levelTemplate: ["level"],
-  objectiveTemplate: ["number"],
   earnedOnTemplate: ["date"],
   badgeCountTemplate: ["completedCount", "totalCount"],
   preparationTemplate: ["pending"],

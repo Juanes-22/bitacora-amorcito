@@ -36,7 +36,7 @@ try {
     const alphas = new Set();
     const frames = new Set();
     for (let i = 0; i < 25; i++) { const s = (await sprites(t, GLOW)).find((x) => x.visible); alphas.add(s.alpha.toFixed(2)); frames.add(s.frame); await t.page.waitForTimeout(60); }
-    check("AC-68: sus fotogramas cambian y su opacidad late con la del manifiesto (entre 0,78 y 1)", frames.size >= 4 && alphas.size >= 3 && [...alphas].every((v) => +v >= 0.77 && +v <= 1.001), JSON.stringify({ frames: [...frames], alphas: [...alphas] }));
+    check("AC-68: sus fotogramas cambian y su opacidad es la del manifiesto (0,72 en todos)", frames.size >= 4 && alphas.size === 1 && [...alphas][0] === "0.72", JSON.stringify({ frames: [...frames], alphas: [...alphas] }));
     check("al cargar, sin nada completado, no hay ninguna estrella de XP", (await sprites(t, XP)).length === 0);
     check("sin errores de consola", t.errors.length === 0, t.errors.join(" | "));
     await t.close();
@@ -126,12 +126,46 @@ try {
     await t.close();
   }
 
+  // ---- Destellos (sparkles) alrededor del brillo de la próxima estación -----------------------------------------------
+  const sparkles = (t) =>
+    t.page.evaluate(() => window.__PHASER_GAME__.scene.getScene("ExplorationScene").children.list
+      .filter((o) => o.name === "station-sparkle")
+      .map((o) => ({ visible: o.visible, playing: o.anims.isPlaying, x: o.x, y: o.y, w: o.displayWidth })));
+  {
+    const t = await open({ seed: saved([]) });
+    await t.start();
+    const seen = [];
+    for (let i = 0; i < 40; i++) { seen.push(...(await sparkles(t)).filter((s) => s.visible)); await t.page.waitForTimeout(100); }
+    const a = station("apr-a");
+    check("AC-68: la próxima estación tiene destellos que aparecen y se apagan alrededor de su brillo", seen.length >= 3 && seen.every((s) => Math.abs(s.x - a.x) < 140 && s.y < a.y + 30 && s.y > a.y - 200), JSON.stringify({ n: seen.length, first: seen[0] }));
+    check("AC-68: son pequeños (el fotograma, con su margen transparente, no pasa de 56 px)", seen.every((s) => s.w < 56), JSON.stringify(seen.map((s) => Math.round(s.w))));
+    const total = (await sparkles(t)).length;
+    const zoneStations = configJson.route.filter((id) => configJson.placements[id].zoneId === "zona-a").length;
+    check("AC-68: cada estación de la zona tiene sus cinco destellos y solo la próxima los muestra (los vistos están todos junto a la 1)", total === 5 * zoneStations, String(total));
+    await t.close();
+  }
+  {
+    const t = await open({ seed: saved(configJson.route) });
+    await t.start();
+    let visible = 0;
+    for (let i = 0; i < 15; i++) { visible += (await sparkles(t)).filter((s) => s.visible).length; await t.page.waitForTimeout(100); }
+    check("AC-68: con todo completado no queda ningún destello visible", visible === 0, String(visible));
+    await t.close();
+  }
+  {
+    const t = await open({ seed: saved([]), reducedMotion: true });
+    await t.start();
+    await t.page.waitForTimeout(600);
+    check("AC-68: con movimiento reducido no hay destellos", (await sparkles(t)).length === 0);
+    await t.close();
+  }
+
   // ---- Una hoja que no carga: se conserva el brillo de siempre y el juego sigue -------------------------------
   {
-    const t = await open({ seed: saved([]), blockUrl: "**/player-glow-next.png" });
+    const t = await open({ seed: saved([]), blockUrl: "**/station-glow-sheet.png" });
     await t.page.locator(".pixel-button").dispatchEvent("click"); // el aviso de recurso cubre la portada
     await t.page.waitForTimeout(700);
-    check("si el aro animado no carga, la estación conserva su brillo estático y el juego sigue", (await sprites(t, GLOW)).length === 0 && (await t.page.locator("canvas:not(.hud__portrait canvas)").count()) === 1 && /player-glow-next|effect\.player-glow\.next-station/.test(await t.page.locator(".asset-alert").innerText()));
+    check("si el aro animado no carga, la estación conserva su brillo estático y el juego sigue", (await sprites(t, GLOW)).length === 0 && (await t.page.locator("canvas:not(.hud__portrait canvas)").count()) === 1 && /station-glow-sheet|effect\.station-glow\.pulse/.test(await t.page.locator(".asset-alert").innerText()));
     await t.close();
   }
 
@@ -139,7 +173,7 @@ try {
   {
     const t = await open({ viewport: { width: 1280, height: 720 } });
     await t.start();
-    const panel = await t.page.evaluate(() => { const s = getComputedStyle(document.querySelector(".hud")); return { image: s.borderImageSource, slice: s.borderImageSlice, bg: s.backgroundColor, rendering: s.imageRendering }; });
+    const panel = await t.page.evaluate(() => { const s = getComputedStyle(document.querySelector(".hud__panel")); return { image: s.borderImageSource, slice: s.borderImageSlice, bg: s.backgroundColor, rendering: s.imageRendering }; });
     check("AC-70: la cabecera usa el panel de nueve zonas del catálogo (PNG con esquinas sin estirar)", /player-status-panel\.png/.test(panel.image) && /112/.test(panel.slice) && panel.bg === "rgba(0, 0, 0, 0)" && panel.rendering === "pixelated", JSON.stringify(panel));
     const sizes = [[1280, 720], [768, 1024], [390, 844], [320, 568], [844, 390]];
     for (const [w, h] of sizes) {
@@ -148,11 +182,13 @@ try {
       const fit = await t.page.evaluate(() => {
         const r = (sel) => [...document.querySelectorAll(sel)].map((e) => e.getBoundingClientRect());
         const inside = (rs) => rs.every((b) => b.left >= -0.5 && b.top >= -0.5 && b.right <= innerWidth + 0.5 && b.bottom <= innerHeight + 0.5);
-        const hud = r(".hud")[0], badges = r(".hud__badges")[0];
+        const hud = r(".hud__panel")[0], badges = r(".hud__badges")[0];
         const text = document.querySelector(".hud__main").getBoundingClientRect();
-        return { hud: inside([hud]), tools: inside(r(".hud__tools > *")), hscroll: document.documentElement.scrollWidth > innerWidth, textClear: text.right <= badges.left + 1, textFits: document.querySelector(".hud__main").scrollWidth <= document.querySelector(".hud__main").clientWidth + 1 };
+        const tools = r(".hud__tools")[0];
+        const narrow = innerWidth <= 700; // apilado: panel arriba y herramientas abajo; si no, panel a la izquierda y herramientas a la derecha
+        return { hud: inside([hud]), tools: inside(r(".hud__tools > *")), apart: narrow ? hud.bottom <= tools.top : hud.right <= tools.left || hud.bottom <= tools.top, compact: hud.width <= 28 * parseFloat(getComputedStyle(document.documentElement).fontSize), hscroll: document.documentElement.scrollWidth > innerWidth, textClear: text.right <= badges.left + 1, textFits: document.querySelector(".hud__main").scrollWidth <= document.querySelector(".hud__main").clientWidth + 1 };
       });
-      check(`AC-70: con el panel, a ${w}×${h} la cabecera y sus herramientas caben, sin scroll, y el texto no pisa el botón de insignias`, fit.hud && fit.tools && !fit.hscroll && fit.textClear && fit.textFits, JSON.stringify(fit));
+      check(`AC-70: con el panel, a ${w}×${h} la cabecera y sus herramientas caben, sin scroll, y el texto no pisa el botón de insignias`, fit.hud && fit.tools && fit.apart && fit.compact && !fit.hscroll && fit.textClear && fit.textFits, JSON.stringify(fit));
     }
     check("sin errores de consola", t.errors.length === 0, t.errors.join(" | "));
     await t.close();

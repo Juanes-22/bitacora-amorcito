@@ -298,7 +298,7 @@ describe("LearningDialog", () => {
 });
 
 describe("ProgressHUD", () => {
-  it("muestra el progreso, la XP y el siguiente objetivo derivados de route y badges", () => {
+  it("muestra el nombre, el nivel, la XP y el progreso derivados de route y badges, y ya no el siguiente objetivo", () => {
     const store = makeStore(base);
     ALL.forEach((s) => store.markSection("apr-a", s));
     store.claimBadge("apr-a");
@@ -307,7 +307,9 @@ describe("ProgressHUD", () => {
     expect(text).toContain("1 de 6 aprendizajes");
     expect(text).toContain("100 / 600 XP");
     expect(text).toContain("Nivel 1");
-    expect(text).toContain("Continúa en Aprendizaje 2");
+    expect(text).toContain("Vanessa");
+    expect(text).not.toContain("Continúa en Aprendizaje");
+    expect(document.querySelector(".hud__sign, .hud__objective")).toBeNull();
   });
 
   it("la barra recorta el relleno según la fracción y usa la metadata de posición del manifiesto", () => {
@@ -322,25 +324,25 @@ describe("ProgressHUD", () => {
     expect(parseFloat(bar.style.getPropertyValue("--fill-top"))).toBeCloseTo((20 / 80) * 100, 3);
   });
 
-  it("sin progreso la barra está vacía; con ruta vacía o terminada cambia el objetivo", () => {
+  it("sin progreso la barra está vacía y con una ruta vacía el total es cero", () => {
     const { container } = wrap(base, makeStore(base), <ProgressHUD />);
     expect(parseFloat((container.querySelector(".xp-bar") as HTMLElement).style.getPropertyValue("--fill-clip"))).toBe(100);
     cleanup();
     const empty = structuredClone(base);
     empty.route = [];
     wrap(empty, makeStore(empty), <ProgressHUD />);
-    expect(screen.getByRole("region", { name: "Mi bitácora — Un recorrido de aprendizajes" }).textContent).toContain("Contenido por definir");
     expect(screen.getByRole("region", { name: "Mi bitácora — Un recorrido de aprendizajes" }).textContent).toContain("0 de 0 aprendizajes");
   });
 
-  it("al terminar toda la ruta anuncia que el recorrido está completo", () => {
+  it("al terminar toda la ruta la barra queda llena y el progreso es completo", () => {
     const small = structuredClone(base);
     small.route = ["apr-a"];
     const store = makeStore(small);
     ALL.forEach((s) => store.markSection("apr-a", s));
     store.claimBadge("apr-a");
-    wrap(small, store, <ProgressHUD />);
-    expect(screen.getByRole("region", { name: "Mi bitácora — Un recorrido de aprendizajes" }).textContent).toContain("Recorrido completado");
+    const { container } = wrap(small, store, <ProgressHUD />);
+    expect(screen.getByRole("region", { name: "Mi bitácora — Un recorrido de aprendizajes" }).textContent).toContain("1 de 1 aprendizajes");
+    expect(parseFloat((container.querySelector(".xp-bar") as HTMLElement).style.getPropertyValue("--fill-clip"))).toBe(0);
   });
 
   it("avisa discretamente si el almacenamiento no está disponible y el avance puede perderse", () => {

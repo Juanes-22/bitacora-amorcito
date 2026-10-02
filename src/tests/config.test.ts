@@ -32,7 +32,7 @@ const at = (issues: ConfigIssue[], path: string) => issues.filter((i) => i.path 
 
 describe("assets.json real", () => {
   it("es válido y conserva sus entradas originales sin migrar", () => {
-    expect(Object.keys(realManifest.assets)).toHaveLength(92);
+    expect(Object.keys(realManifest.assets)).toHaveLength(100);
     expect(realManifest.assets["ui.panel.cream.nine-slice"].nineSlice).toEqual({ top: 32, right: 32, bottom: 32, left: 32 });
     expect(realManifest.assets["character.vanessa-jerry.walk.poses-v4"].requiresFrameDefinition).toBe(true);
     expect(realManifest).not.toHaveProperty("animations");
@@ -592,7 +592,53 @@ describe("bitacora.json: efectos de las estaciones y panel de la cabecera (AC-68
 
   it("el bitacora.json real los referencia", () => {
     const a = (bitacoraJson as unknown as BitacoraConfig).ui.assets;
-    expect([a.xpStarEffect, a.nextStationGlow, a.statusPanel, a.avatarAnimations, a.portrait]).toEqual(["effect.xp-star.complete", "effect.player-glow.next-station", "ui.panel.player-status.default", "character.vanessa-jerry.avatar.animations", "character.vanessa-jerry.avatar"]);
+    expect([a.xpStarEffect, a.nextStationGlow, a.statusPanel, a.avatarAnimations, a.portrait]).toEqual(["effect.xp-star.complete", "effect.station-glow.pulse", "ui.panel.player-status.default", "character.vanessa-jerry.avatar.animations", "character.vanessa-jerry.avatar"]);
   });
 });
 
+
+describe("bitacora.json: identidad de las estaciones, assets de interfaz y sombras (AC-72, AC-73)", () => {
+  const real = bitacoraJson as unknown as BitacoraConfig;
+  const ui = (edit: (a: BitacoraConfig["ui"]["assets"]) => void) => (c: BitacoraConfig) => edit(c.ui.assets);
+
+  it("cada aprendizaje de la ruta lleva un título corto de letrero (hasta 40 caracteres) y el letrero trae las zonas de texto", () => {
+    for (const id of real.route) {
+      const l = real.learnings[id];
+      expect(l.signTitle?.length, id).toBeGreaterThan(0);
+      expect(l.signTitle!.length, id).toBeLessThanOrEqual(40);
+    }
+    expect(real.learnings["apr-a"].signTitle).toBe("Semillas y saberes");
+    expect(realManifest.assets[real.ui.assets.stationSign].labelZones).toHaveProperty("title");
+  });
+
+  it("el título es opcional y el esquema rechaza uno vacío o de más de 40 caracteres", () => {
+    expect(issuesOf((c) => { delete c.learnings["apr-a"].signTitle; })).toEqual([]);
+    expect(issuesOf((c) => { c.learnings["apr-a"].signTitle = ""; }).length).toBeGreaterThan(0);
+    expect(issuesOf((c) => { c.learnings["apr-a"].signTitle = "x".repeat(41); }).length).toBeGreaterThan(0);
+  });
+
+  it("el bitacora.json real referencia los assets del paquete de interfaz", () => {
+    const a = real.ui.assets;
+    expect([a.stationSign, a.listButton, a.jerryButton, a.musicButton, a.musicMutedButton, a.completedBadge, a.exitSign, a.stationSparkle, a.nextStationGlow]).toEqual([
+      "station.sign.board", "ui.button.journal.labeled", "ui.button.jerry.labeled", "ui.button.sound-on.labeled", "ui.button.sound-off.labeled",
+      "ui.badge.completed-pill", "map.sign.exit-right", "animation.light.gold-sparkle", "effect.station-glow.pulse",
+    ]);
+  });
+
+  it("los assets opcionales de interfaz deben existir y ser del kind que se espera", () => {
+    expect(issuesOf(ui((a) => { delete a.musicMutedButton; delete a.completedBadge; delete a.exitSign; delete a.stationSparkle; }))).toEqual([]);
+    expect(at(issuesOf(ui((a) => { a.exitSign = "map.sign.no-existe"; })), "ui.assets.exitSign")).toHaveLength(1);
+    expect(at(issuesOf(ui((a) => { a.completedBadge = "ui.button.journal.labeled"; })), "ui.assets.completedBadge")[0]?.message).toContain("status-pill");
+    expect(at(issuesOf(ui((a) => { a.musicMutedButton = "ui.badge.completed-pill"; })), "ui.assets.musicMutedButton")[0]?.message).toContain("button");
+    expect(at(issuesOf(ui((a) => { a.stationSparkle = "ui.badge.completed-pill"; })), "ui.assets.stationSparkle")[0]?.message).toContain("animation-sheet");
+    expect(issuesOf(ui((a) => { a.stationSparkle = "animation.light.gold-sparkle"; }))).toEqual([]);
+  });
+
+  it("la sombra de Vanessa y Jerry es opcional y admite opacidad, ancho y proporción válidos", () => {
+    expect(real.gameplay.player.shadow).toMatchObject({ alpha: 0.4 });
+    expect(issuesOf((c) => { delete c.gameplay.player.shadow; })).toEqual([]);
+    expect(issuesOf((c) => { c.gameplay.player.shadow = { alpha: 0.4, widthFactor: 1.4, aspect: 0.36 }; })).toEqual([]);
+    expect(issuesOf((c) => { c.gameplay.player.shadow = { alpha: 0, widthFactor: 1.4, aspect: 0.36 }; }).length).toBeGreaterThan(0);
+    expect(issuesOf((c) => { c.gameplay.player.shadow = { alpha: 0.4, widthFactor: 1.4, aspect: 2 }; }).length).toBeGreaterThan(0);
+  });
+});

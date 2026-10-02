@@ -72,7 +72,15 @@ export function buildWorld(
         glow: config.ui.assets.glow,
         lockIcon: config.ui.assets.lockIcon,
         doneIcon: config.ui.assets.xpStar,
-        effects: { assets, nextGlow: config.ui.assets.nextStationGlow, xpStar: config.ui.assets.xpStarEffect },
+        // Título y número sobre el letrero, y el estado debajo; un letrero sin `labelZones` conserva solo el número.
+        identity: {
+          assets,
+          title: config.learnings[id].signTitle ?? config.learnings[id].title,
+          completedLabel: config.ui.labels.stateCompleted,
+          nextLabel: config.ui.labels.nextBadge,
+          completedBadge: config.ui.assets.completedBadge,
+        },
+        effects: { assets, nextGlow: config.ui.assets.nextStationGlow, xpStar: config.ui.assets.xpStarEffect, sparkle: config.ui.assets.stationSparkle },
       },
       config.gameplay.signScale,
       reducedMotion,
@@ -83,7 +91,7 @@ export function buildWorld(
 
   const portals = Object.entries(zone.portals).map(([portalId, portal], i) => {
     targets.push({ target: { kind: "portal", id: portalId }, ...portal.interaction, order: config.route.length + i });
-    return new ZonePortal(scene, portalId, portal, zone.width, signFactor(config), reducedMotion);
+    return new ZonePortal(scene, portalId, portal, zone.width, signFactor(config), reducedMotion, config.ui.assets.exitSign ? { assets, assetId: config.ui.assets.exitSign, scale: config.gameplay.signScale } : undefined);
   });
   void assets; // las URLs ya se resolvieron al cargar las texturas con las mismas claves
 

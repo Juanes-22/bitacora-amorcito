@@ -1,16 +1,18 @@
 import type { CSSProperties, ReactNode } from "react";
 import { useBitacora } from "../../app/BitacoraProvider";
 import { useProgress } from "../../app/ProgressProvider";
-import { stationNumber } from "../../domain/progression";
 import { renderTemplate } from "../../domain/templates";
 import type { GameBridge } from "../../game/bridge/GameBridge";
 import { AvatarPortrait } from "./AvatarPortrait";
 import { IconButton } from "./IconButton";
 
 /**
- * Cabecera compacta: retrato, progreso directo («3 de 6 aprendizajes»), XP, nivel y el objetivo actual.
- * Todo se deriva de `route`, `badges` y el progreso; ningún total está escrito en el componente.
- * La barra usa el marco y recorta el relleno según la metadata `placement` del manifiesto.
+ * Cabecera compacta (SPEC 14): el panel con el avatar —nombre y nivel, barra de XP con su valor y «1 de 6 aprendizajes»—, la
+ * insignia de la colección y las herramientas. Lo que sigue lo dice el letrero de la estación («Siguiente»), no la cabecera;
+ * solo el aviso de que el recorrido está en preparación (modo final con aprendizajes sin aprobar) sigue aquí. Todo se deriva de `route`, `badges` y el progreso;
+ * ningún total está escrito en el componente. En pantallas anchas flota sobre el mapa; en las estrechas se apila por
+ * encima y por debajo de él (la disposición es de CSS). La barra usa el marco y recorta el relleno según la metadata
+ * `placement` del manifiesto.
  */
 export function ProgressHUD({ onOpenBadges, tools, bridge }: { onOpenBadges?: () => void; tools?: ReactNode; bridge?: GameBridge }) {
   const { config, assets } = useBitacora();
@@ -34,37 +36,34 @@ export function ProgressHUD({ onOpenBadges, tools, bridge }: { onOpenBadges?: ()
   // Panel de nueve zonas del catálogo (SPEC 14): el PNG aporta marco y fondo y el contenido se monta encima.
   const panelStyle = ui.statusPanel ? ({ "--panel-url": `url("${assets.url(ui.statusPanel)}")`, "--panel-slice": String(assets.get(ui.statusPanel).nineSlice?.top ?? 112) } as CSSProperties) : undefined;
 
-  const objective =
-    summary.totalCount === 0
-      ? labels.emptyRouteLabel
-      : summary.inPreparation
-        ? renderTemplate(labels.preparationTemplate, { pending: summary.pendingCount })
-        : summary.finished
-        ? labels.finishedLabel
-        : renderTemplate(labels.objectiveTemplate, { number: stationNumber(config.route, summary.nextLearningId as string) });
+  const notice = summary.totalCount > 0 && summary.inPreparation ? renderTemplate(labels.preparationTemplate, { pending: summary.pendingCount }) : null;
+  const xpText = renderTemplate(labels.xpTemplate, { xp: summary.xp, maxXp: summary.maxXp });
 
   return (
-    <section className={`hud${panelStyle ? " hud--panel" : ""}`} style={panelStyle} aria-label={config.project.title}>
-      <AvatarPortrait bridge={bridge} />
-      <div className="hud__main">
-        <p className="hud__progress">
-          <span>{renderTemplate(labels.progressTemplate, { completedCount: summary.completedCount, totalCount: summary.totalCount })}</span>
-          <span className="hud__level">{renderTemplate(labels.levelTemplate, { level: summary.level })}</span>
-        </p>
-        <div className="hud__xp">
-          <div className="xp-bar" style={barStyle} role="img" aria-label={renderTemplate(labels.xpTemplate, { xp: summary.xp, maxXp: summary.maxXp })}>
-            <img className="xp-bar__frame" src={assets.url(frameId)} alt="" />
-            {fill ? <img className="xp-bar__fill" src={assets.url(fill[0])} alt="" /> : null}
+    <section className="hud" aria-label={config.project.title}>
+      <div className="hud__stack">
+      <div className="hud__panel hud--panel" style={panelStyle}>
+        <AvatarPortrait bridge={bridge} />
+        <div className="hud__main">
+          <p className="hud__name">
+            <span>{labels.playerName}</span>
+            <span className="hud__level">{renderTemplate(labels.levelTemplate, { level: summary.level })}</span>
+          </p>
+          <div className="hud__xp">
+            <div className="xp-bar" style={barStyle} role="img" aria-label={xpText}>
+              <img className="xp-bar__frame" src={assets.url(frameId)} alt="" />
+              {fill ? <img className="xp-bar__fill" src={assets.url(fill[0])} alt="" /> : null}
+            </div>
+            <span className="hud__xp-text">{xpText}</span>
           </div>
-          <span className="hud__xp-text">{renderTemplate(labels.xpTemplate, { xp: summary.xp, maxXp: summary.maxXp })}</span>
+          <p className="hud__progress">{renderTemplate(labels.progressTemplate, { completedCount: summary.completedCount, totalCount: summary.totalCount })}</p>
         </div>
-        <p className="hud__objective">{objective}</p>
+        {onOpenBadges ? <IconButton assetId={ui.badgesButton} label={labels.badges} className="hud__badges" onClick={onOpenBadges} /> : null}
       </div>
-      {onOpenBadges ? (
-        <IconButton assetId={ui.badgesButton} label={labels.badges} className="hud__badges" onClick={onOpenBadges} />
-      ) : null}
-      {tools ? <div className="hud__tools">{tools}</div> : null}
+      {notice ? <p className="hud__objective" role="status">{notice}</p> : null}
       {!persisting ? <p className="hud__warning" role="status">El avance no se está guardando en este navegador.</p> : null}
+      </div>
+      {tools ? <div className="hud__tools">{tools}</div> : null}
     </section>
   );
 }

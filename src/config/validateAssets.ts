@@ -68,6 +68,14 @@ export function validateAssetManifest(data: unknown): ValidationResult<AssetMani
         issues.push({ path: `${at}.opacityByFrame`, message: `hay ${a.opacityByFrame.length} opacidades y ${frames} fotogramas: debe haber una por fotograma` });
       }
     }
+    // Zonas de texto y anclajes sobre la imagen: deben caber dentro de ella.
+    for (const [name, z] of Object.entries(a.labelZones ?? {})) {
+      if (a.width !== undefined && z.x + z.width > a.width) issues.push({ path: `${at}.labelZones.${name}`, message: "la zona de texto se sale de la imagen por la derecha" });
+      if (a.height !== undefined && z.y + z.height > a.height) issues.push({ path: `${at}.labelZones.${name}`, message: "la zona de texto se sale de la imagen por abajo" });
+    }
+    for (const [name, p] of Object.entries(a.attachments ?? {})) {
+      if (a.width !== undefined && (p.x - p.width / 2 < 0 || p.x + p.width / 2 > a.width)) issues.push({ path: `${at}.attachments.${name}`, message: "el ancla se sale de la imagen a lo ancho" });
+    }
     if (a.kind === "idle-sheet") {
       if (!a.atlasPath) issues.push({ path: `${at}.atlasPath`, message: "una hoja de reposo necesita su atlas" });
       if (!a.animations?.length) issues.push({ path: `${at}.animations`, message: "una hoja de reposo necesita animations (clave, fotogramas, velocidad)" });

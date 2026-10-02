@@ -85,12 +85,15 @@ describe("MusicToggle (AC-51)", () => {
     expect(screen.getByRole("button", { name: "Silenciar música" })).toBeTruthy();
   });
 
-  it("apagada, el botón lleva una barra que lo cruza (no depende solo del color) y encendida no", () => {
+  it("apagada, el botón cambia a la imagen de sonido silenciado (no depende solo del color) y encendida usa la de sonido activado", () => {
     const player = playerWith(false);
     const { container } = renderToggle(player);
-    expect(container.querySelector(".icon-button__slash")).toBeNull();
+    const src = () => container.querySelector(".icon-button__img")?.getAttribute("src") ?? "";
+    expect(src()).toMatch(/button-sound-on\.png$/);
+    expect(container.querySelector(".icon-button__caption")?.textContent).toBe("Sonido");
     fireEvent.click(screen.getByRole("button", { name: "Silenciar música" }));
-    expect(container.querySelector(".icon-button__slash")?.getAttribute("aria-hidden")).toBe("true");
+    expect(src()).toMatch(/button-sound-off\.png$/);
+    expect(container.querySelector(".icon-button__slash")).toBeNull(); // la imagen ya trae el altavoz tachado
     expect(screen.getByRole("button", { name: "Activar música" }).getAttribute("data-music")).toBe("off");
   });
 

@@ -402,6 +402,7 @@
       "properties": {
         "title": { "type": "string", "minLength": 1 },
         "topic": { "type": "string", "minLength": 1 },
+        "signTitle": { "type": "string", "minLength": 1, "maxLength": 40 },
         "editorialStatus": { "enum": ["demo", "draft", "ready"] },
         "contentRevision": { "type": "integer", "minimum": 1 },
         "badgeId": { "$ref": "#/$defs/id" },
@@ -489,9 +490,9 @@
           "required": [
             "explore", "markRead", "claimBadge", "close", "index", "reset", "continueRoute",
             "startRoute", "pending", "demo", "previous", "next", "progressTemplate", "stationTitleTemplate",
-            "semester", "teacher", "sectionRead", "sectionUnread", "badgeEarned", "remainingTemplate", "rewardTitle", "xpTemplate", "levelTemplate", "objectiveTemplate", "finishedLabel", "emptyRouteLabel", "mapLabel",
+            "semester", "teacher", "sectionRead", "sectionUnread", "badgeEarned", "remainingTemplate", "rewardTitle", "xpTemplate", "levelTemplate", "emptyRouteLabel", "mapLabel",
             "badges", "notEarned", "earnedOnTemplate", "badgeCountTemplate", "completionTitle", "finalReflectionTitle", "finalReflectionPending", "resetConfirmTitle", "resetConfirmText", "resetConfirm", "cancel", "preparationTemplate",
-            "musicMute", "musicUnmute", "stateLocked", "stateAvailable", "stateCompleted", "tapExplore", "tapTravel", "jerryAction"
+            "musicMute", "musicUnmute", "stateLocked", "stateAvailable", "stateCompleted", "tapExplore", "tapTravel", "jerryAction", "playerName", "nextBadge", "captionJournal", "captionJerry", "captionSound"
           ],
           "properties": {
             "explore": { "type": "string", "minLength": 1 },
@@ -516,10 +517,8 @@
             "remainingTemplate": { "type": "string", "minLength": 1 },
             "rewardTitle": { "type": "string", "minLength": 1 },
             "xpTemplate": { "type": "string", "minLength": 1 },
-            "levelTemplate": { "type": "string", "minLength": 1 },
-            "objectiveTemplate": { "type": "string", "minLength": 1 },
-            "finishedLabel": { "type": "string", "minLength": 1 },
             "emptyRouteLabel": { "type": "string", "minLength": 1 },
+            "levelTemplate": { "type": "string", "minLength": 1 },
             "mapLabel": { "type": "string", "minLength": 1 },
             "badges": { "type": "string", "minLength": 1 },
             "notEarned": { "type": "string", "minLength": 1 },
@@ -540,7 +539,12 @@
             "stateCompleted": { "type": "string", "minLength": 1 },
             "tapExplore": { "type": "string", "minLength": 1 },
             "tapTravel": { "type": "string", "minLength": 1 },
-            "jerryAction": { "type": "string", "minLength": 1 }
+            "jerryAction": { "type": "string", "minLength": 1 },
+            "playerName": { "type": "string", "minLength": 1 },
+            "nextBadge": { "type": "string", "minLength": 1 },
+            "captionJournal": { "type": "string", "minLength": 1 },
+            "captionJerry": { "type": "string", "minLength": 1 },
+            "captionSound": { "type": "string", "minLength": 1 }
           },
           "additionalProperties": false
         },
@@ -566,6 +570,10 @@
             "xpStarEffect": { "$ref": "#/$defs/assetId" },
             "nextStationGlow": { "$ref": "#/$defs/assetId" },
             "statusPanel": { "$ref": "#/$defs/assetId" },
+            "musicMutedButton": { "$ref": "#/$defs/assetId" },
+            "completedBadge": { "$ref": "#/$defs/assetId" },
+            "exitSign": { "$ref": "#/$defs/assetId" },
+            "stationSparkle": { "$ref": "#/$defs/assetId" },
             "avatarAnimations": { "$ref": "#/$defs/assetId" }
           },
           "additionalProperties": false
@@ -640,6 +648,16 @@
             "origin": { "$ref": "#/$defs/normalizedPoint" },
             "scale": { "type": "number", "exclusiveMinimum": 0 },
             "animations": { "$ref": "#/$defs/actor/properties/animations" },
+            "shadow": {
+              "type": "object",
+              "required": ["alpha", "widthFactor", "aspect"],
+              "properties": {
+                "alpha": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+                "widthFactor": { "type": "number", "exclusiveMinimum": 0, "maximum": 3 },
+                "aspect": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
+              },
+              "additionalProperties": false
+            },
             "idle": {
               "type": "object",
               "required": ["rest", "glance", "play", "glanceAfterMs", "playAfterMs", "gestureCooldownMs"],

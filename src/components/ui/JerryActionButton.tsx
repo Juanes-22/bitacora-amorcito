@@ -17,6 +17,7 @@ export function JerryActionButton({ bridge, disabled }: { bridge: GameBridge; di
     <IconButton
       assetId={config.ui.assets.jerryButton}
       label={label}
+      caption={config.ui.labels.captionJerry}
       className="hud__jerry"
       aria-keyshortcuts={idle.actionKey}
       disabled={disabled}

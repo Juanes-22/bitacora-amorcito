@@ -329,14 +329,16 @@ describe("cabecera y portada en modo final", () => {
     wrap(c, makeStore(c), <ProgressHUD />);
     const hud = screen.getByRole("region", { name: c.project.title });
     expect(hud.textContent).toContain("Recorrido en preparación: faltan 6 por aprobar");
-    expect(hud.textContent).not.toContain("Continúa en Aprendizaje");
   });
 
-  it("con todo aprobado vuelve el objetivo normal", () => {
+  it("con todo aprobado desaparece el aviso y la cabecera no dice qué sigue (lo dice el letrero de la estación)", () => {
     const c = finalConfig();
     for (const id of c.route) c.learnings[id].editorialStatus = "ready";
     wrap(c, makeStore(c), <ProgressHUD />);
-    expect(screen.getByRole("region", { name: c.project.title }).textContent).toContain("Continúa en Aprendizaje 1");
+    const text = screen.getByRole("region", { name: c.project.title }).textContent;
+    expect(text).not.toContain("en preparación");
+    expect(text).not.toContain("Continúa en Aprendizaje");
+    expect(document.querySelector(".hud__objective")).toBeNull();
   });
 
   it("el botón «Insignias» solo existe si hay una acción y la dispara", () => {

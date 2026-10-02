@@ -3,16 +3,16 @@
   "project": "Bitácora Amorcito",
   "basePath": ".",
   "pathConvention": "Paths are relative to the directory containing this assets.json.",
-  "assetCount": 92,
+  "assetCount": 100,
   "categoryCounts": {
     "audio": 3,
     "backgrounds": 17,
     "characters": 14,
     "decorations": 12,
-    "effects": 17,
+    "effects": 18,
     "references": 2,
-    "stations": 8,
-    "ui": 19
+    "stations": 10,
+    "ui": 24
   },
   "assets": {
     "background.complete.garden": {
@@ -3123,6 +3123,370 @@
           "repeat": -1
         }
       ]
+    },
+    "station.sign.board": {
+      "path": "stations/signs/station-board-sign.png",
+      "type": "image",
+      "format": "png",
+      "category": "stations",
+      "label": "Letrero de estación con círculo para el número y placa para el título",
+      "kind": "station-sign",
+      "width": 384,
+      "height": 320,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 115956,
+      "sha256": "2dbe42790bf96916b6568354d8ce3b21eadf617dddefca3b6cd6191d80bb27c7",
+      "originalPath": "bitacora-ui-assets/map/signs/station-sign.png",
+      "origin": {
+        "x": 0.5,
+        "y": 0.95
+      },
+      "recommendedDisplay": {
+        "width": 256,
+        "height": 213
+      },
+      "labelZones": {
+        "number": {
+          "x": 160,
+          "y": 52,
+          "width": 64,
+          "height": 64,
+          "align": "center",
+          "color": "#4b2b18",
+          "fontSize": 44,
+          "fontWeight": 700,
+          "maxLines": 1
+        },
+        "title": {
+          "x": 43,
+          "y": 137,
+          "width": 298,
+          "height": 54,
+          "align": "center",
+          "color": "#4b2b18",
+          "fontSize": 26,
+          "fontWeight": 700,
+          "maxLines": 2
+        }
+      },
+      "attachments": {
+        "completed": {
+          "x": 192,
+          "y": 218,
+          "width": 230,
+          "height": 72
+        }
+      },
+      "hitArea": {
+        "x": 20,
+        "y": 28,
+        "width": 344,
+        "height": 192
+      }
+    },
+    "map.sign.exit-right": {
+      "path": "stations/signs/map-exit-right.png",
+      "type": "image",
+      "format": "png",
+      "category": "stations",
+      "label": "Señal de cambio de mapa hacia la derecha",
+      "kind": "exit-sign",
+      "width": 384,
+      "height": 176,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 47530,
+      "sha256": "5d9c345d7bfbe3ad621a26320ff6c7e8a620f67b5ab403dd1655e151a070060f",
+      "originalPath": "bitacora-ui-assets/map/signs/map-exit-right.png",
+      "origin": {
+        "x": 0.69,
+        "y": 0.95
+      },
+      "recommendedDisplay": {
+        "width": 256,
+        "height": 117
+      },
+      "labelZones": {
+        "destination": {
+          "x": 31,
+          "y": 48,
+          "width": 249,
+          "height": 40,
+          "align": "center",
+          "color": "#4b2b18",
+          "fontSize": 25,
+          "fontWeight": 700,
+          "maxLines": 1
+        }
+      },
+      "hitArea": {
+        "x": 8,
+        "y": 22,
+        "width": 368,
+        "height": 98
+      },
+      "direction": "right"
+    },
+    "ui.badge.completed-pill": {
+      "path": "ui/badges/completed-pill.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Insignia «Completado» con check y espacio para la etiqueta",
+      "kind": "status-pill",
+      "width": 256,
+      "height": 80,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 18269,
+      "sha256": "797159d91dbc508ed589e9de6fe4cd0b4bdb5c7804e397d627cfbe4c0ff25e04",
+      "originalPath": "bitacora-ui-assets/ui/badges/completed.png",
+      "origin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "recommendedDisplay": {
+        "width": 160,
+        "height": 50
+      },
+      "labelZones": {
+        "label": {
+          "x": 78,
+          "y": 23,
+          "width": 154,
+          "height": 32,
+          "align": "center",
+          "color": "#184c2a",
+          "fontSize": 24,
+          "fontWeight": 700,
+          "maxLines": 1
+        }
+      }
+    },
+    "ui.button.journal.labeled": {
+      "path": "ui/buttons/labeled/button-bitacora.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Botón Bitácora con espacio para la etiqueta",
+      "kind": "button",
+      "width": 256,
+      "height": 256,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 62580,
+      "sha256": "09f07a62bbe484350fcdd47e47788ade34225bbf36010c104c0179c1186fb3b1",
+      "originalPath": "bitacora-ui-assets/ui/buttons/button-bitacora.png",
+      "origin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "recommendedDisplay": {
+        "width": 112,
+        "height": 112
+      },
+      "labelZones": {
+        "label": {
+          "x": 40,
+          "y": 182,
+          "width": 176,
+          "height": 34,
+          "align": "center",
+          "color": "#4b2b18",
+          "fontSize": 32,
+          "fontWeight": 700,
+          "maxLines": 1
+        }
+      },
+      "hitArea": {
+        "x": 8,
+        "y": 8,
+        "width": 240,
+        "height": 240
+      }
+    },
+    "ui.button.jerry.labeled": {
+      "path": "ui/buttons/labeled/button-jerry.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Botón Jerry con espacio para la etiqueta",
+      "kind": "button",
+      "width": 256,
+      "height": 256,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 66601,
+      "sha256": "e573e35b0ad5fe288ebe64357341fab2555112d8a0d2fe7ed9f750802fd3e2a8",
+      "originalPath": "bitacora-ui-assets/ui/buttons/button-jerry.png",
+      "origin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "recommendedDisplay": {
+        "width": 112,
+        "height": 112
+      },
+      "labelZones": {
+        "label": {
+          "x": 40,
+          "y": 182,
+          "width": 176,
+          "height": 34,
+          "align": "center",
+          "color": "#4b2b18",
+          "fontSize": 32,
+          "fontWeight": 700,
+          "maxLines": 1
+        }
+      },
+      "hitArea": {
+        "x": 8,
+        "y": 8,
+        "width": 240,
+        "height": 240
+      }
+    },
+    "ui.button.sound-on.labeled": {
+      "path": "ui/buttons/labeled/button-sound-on.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Botón Sonido activado con espacio para la etiqueta",
+      "kind": "button",
+      "width": 256,
+      "height": 256,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 61953,
+      "sha256": "0826d88d94b090d52d7b4c43e633024566381a7d0fa67d9bcdda54ed288e63bd",
+      "originalPath": "bitacora-ui-assets/ui/buttons/button-sound-on.png",
+      "origin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "recommendedDisplay": {
+        "width": 112,
+        "height": 112
+      },
+      "labelZones": {
+        "label": {
+          "x": 40,
+          "y": 182,
+          "width": 176,
+          "height": 34,
+          "align": "center",
+          "color": "#4b2b18",
+          "fontSize": 32,
+          "fontWeight": 700,
+          "maxLines": 1
+        }
+      },
+      "hitArea": {
+        "x": 8,
+        "y": 8,
+        "width": 240,
+        "height": 240
+      }
+    },
+    "ui.button.sound-off.labeled": {
+      "path": "ui/buttons/labeled/button-sound-off.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Botón Sonido silenciado con espacio para la etiqueta",
+      "kind": "button",
+      "width": 256,
+      "height": 256,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 64547,
+      "sha256": "3499fc9378c961d4e1eb506eecba24f16c8e181757767515af7f8e46266ccd3b",
+      "originalPath": "bitacora-ui-assets/ui/buttons/button-sound-off.png",
+      "origin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "recommendedDisplay": {
+        "width": 112,
+        "height": 112
+      },
+      "labelZones": {
+        "label": {
+          "x": 40,
+          "y": 182,
+          "width": 176,
+          "height": 34,
+          "align": "center",
+          "color": "#4b2b18",
+          "fontSize": 32,
+          "fontWeight": 700,
+          "maxLines": 1
+        }
+      },
+      "hitArea": {
+        "x": 8,
+        "y": 8,
+        "width": 240,
+        "height": 240
+      }
+    },
+    "effect.station-glow.pulse": {
+      "path": "effects/station-glow/station-glow-sheet.png",
+      "type": "image",
+      "format": "png",
+      "category": "effects",
+      "label": "Brillo animado de la próxima estación (8 fotogramas, sin partículas)",
+      "kind": "animation-sheet",
+      "width": 1024,
+      "height": 256,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 192630,
+      "sha256": "5e838a8118a4f8f52bb252f5db42eca248e80dd32a69c1ba5a5bd1c36ea87d0d",
+      "originalPath": "bitacora-ui-assets/effects/station-glow/station-glow-sheet.png",
+      "atlasPath": "effects/station-glow/station-glow-sheet.atlas.json",
+      "frameCount": 8,
+      "sourceFrameSize": {
+        "width": 256,
+        "height": 128
+      },
+      "layout": {
+        "columns": 4,
+        "rows": 2,
+        "order": "row"
+      },
+      "animation": {
+        "frameNames": [
+          "glow-00",
+          "glow-01",
+          "glow-02",
+          "glow-03",
+          "glow-04",
+          "glow-05",
+          "glow-06",
+          "glow-07"
+        ],
+        "frameRate": 8,
+        "repeat": -1
+      },
+      "origin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "recommendedScale": 0.625,
+      "recommendedDisplayWidth": 160,
+      "opacityByFrame": [
+        0.72,
+        0.72,
+        0.72,
+        0.72,
+        0.72,
+        0.72,
+        0.72,
+        0.72
+      ]
     }
   },
   "sourceDocuments": [
@@ -3299,6 +3663,24 @@
       "originalPath": "vanessa-jerry-avatar-idle-happy/generation-prompts.json",
       "sizeBytes": 24950,
       "sha256": "1ab33b9992fc8d705daa72c6dbc81043955fb7c1db56734ee3c3689b94e4bd7a"
+    },
+    {
+      "path": "docs/source/ui-assets/readme.md",
+      "originalPath": "bitacora-ui-assets/README.md",
+      "sizeBytes": 3723,
+      "sha256": "a47d84fea6e6976933e6280394487401165579c94f050463fb1b0310ba61fd07"
+    },
+    {
+      "path": "docs/source/ui-assets/generation-prompts.md",
+      "originalPath": "bitacora-ui-assets/generation-prompts.md",
+      "sizeBytes": 15397,
+      "sha256": "420fd383551d5909085338c8bec0922dc98f28b75e697999c2cef7424193b920"
+    },
+    {
+      "path": "docs/source/ui-assets/export-info.json",
+      "originalPath": "bitacora-ui-assets/export-info.json",
+      "sizeBytes": 4948,
+      "sha256": "82ef577c360b3a33e8f8288e545302513e41cfc015e4d5d3d5f4384ccd16f11a"
     }
   ],
   "notes": [
@@ -3311,6 +3693,7 @@
     "Sustituida la hoja de trucos de Jerry por la v2 (altura de Vanessa corregida con escala y origen por fotograma, `frameAdjust`): ver docs/source/tricks-v2/. La hoja de buscar el peluche no cambió.",
     "Añadidos los botones de la cabecera (bitácora, ajustes, audio, patita, insignias) y dos assets sueltos (libro abierto, rincón de aprendizaje): ver README del paquete bitacora-assets-senalados-v2. Las entradas anteriores no se modificaron.",
     "Añadidas las animaciones de la estrella de XP y del aro de la próxima estación (hojas con atlas, `opacityByFrame`) y el panel de nueve zonas de la cabecera: ver docs/source/xp-glow y docs/source/panel-estado. Las entradas anteriores no se modificaron.",
-    "Añadido el avatar de Vanessa con Jerry (estático y hoja de reposo y alegría, `avatar-sheet`) para el retrato de la cabecera: ver docs/source/avatar. Las entradas anteriores no se modificaron."
+    "Añadido el avatar de Vanessa con Jerry (estático y hoja de reposo y alegría, `avatar-sheet`) para el retrato de la cabecera: ver docs/source/avatar. Las entradas anteriores no se modificaron.",
+    "Añadidos los assets del paquete bitacora-ui-assets (letrero de estación, señal de cambio de mapa, insignia «Completado», botones con etiqueta y brillo de la próxima estación): ver docs/source/ui-assets. Los textos no vienen en los PNG: `labelZones` y `attachments` dicen dónde ponerlos. Las entradas anteriores no se modificaron."
   ]
 }

@@ -1,0 +1,366 @@
+{
+  "station": {
+    "inputSize": [
+      1536,
+      1024
+    ],
+    "crop": [
+      136,
+      39,
+      1399,
+      980
+    ],
+    "outputSize": [
+      384,
+      320
+    ],
+    "contentSize": [
+      368,
+      274
+    ],
+    "offset": [
+      8,
+      23
+    ],
+    "resampling": "nearest"
+  },
+  "completed": {
+    "inputSize": [
+      2172,
+      724
+    ],
+    "crop": [
+      171,
+      100,
+      1986,
+      611
+    ],
+    "outputSize": [
+      256,
+      80
+    ],
+    "contentSize": [
+      248,
+      70
+    ],
+    "offset": [
+      4,
+      5
+    ],
+    "resampling": "nearest"
+  },
+  "bitacora": {
+    "inputSize": [
+      1254,
+      1254
+    ],
+    "crop": [
+      240,
+      241,
+      1014,
+      1010
+    ],
+    "outputSize": [
+      256,
+      256
+    ],
+    "contentSize": [
+      240,
+      238
+    ],
+    "offset": [
+      8,
+      9
+    ],
+    "resampling": "nearest"
+  },
+  "jerry": {
+    "inputSize": [
+      1254,
+      1254
+    ],
+    "crop": [
+      192,
+      207,
+      1061,
+      1055
+    ],
+    "outputSize": [
+      256,
+      256
+    ],
+    "contentSize": [
+      240,
+      234
+    ],
+    "offset": [
+      8,
+      11
+    ],
+    "resampling": "nearest"
+  },
+  "sound_on": {
+    "inputSize": [
+      1254,
+      1254
+    ],
+    "crop": [
+      97,
+      121,
+      1157,
+      1133
+    ],
+    "outputSize": [
+      256,
+      256
+    ],
+    "contentSize": [
+      240,
+      229
+    ],
+    "offset": [
+      8,
+      13
+    ],
+    "resampling": "nearest"
+  },
+  "sound_off": {
+    "inputSize": [
+      1254,
+      1254
+    ],
+    "crop": [
+      246,
+      238,
+      1008,
+      1016
+    ],
+    "outputSize": [
+      256,
+      256
+    ],
+    "contentSize": [
+      235,
+      240
+    ],
+    "offset": [
+      10,
+      8
+    ],
+    "resampling": "nearest"
+  },
+  "navigation": {
+    "inputSize": [
+      1774,
+      887
+    ],
+    "crop": [
+      203,
+      140,
+      1645,
+      785
+    ],
+    "outputSize": [
+      384,
+      176
+    ],
+    "contentSize": [
+      358,
+      160
+    ],
+    "offset": [
+      13,
+      8
+    ],
+    "resampling": "nearest"
+  },
+  "glow": {
+    "inputSize": [
+      1774,
+      887
+    ],
+    "sourceGrid": {
+      "columns": 4,
+      "rows": 2
+    },
+    "outputSize": [
+      1024,
+      256
+    ],
+    "frameSize": [
+      256,
+      128
+    ],
+    "resampling": "nearest",
+    "frameExports": [
+      {
+        "frame": 0,
+        "sourceCell": [
+          0,
+          0,
+          444,
+          444
+        ],
+        "coreBoundsInCell": [
+          95,
+          223,
+          351,
+          296
+        ],
+        "cropInCell": [
+          3,
+          150,
+          443,
+          370
+        ]
+      },
+      {
+        "frame": 1,
+        "sourceCell": [
+          444,
+          0,
+          887,
+          444
+        ],
+        "coreBoundsInCell": [
+          83,
+          217,
+          366,
+          302
+        ],
+        "cropInCell": [
+          4,
+          150,
+          444,
+          370
+        ]
+      },
+      {
+        "frame": 2,
+        "sourceCell": [
+          887,
+          0,
+          1330,
+          444
+        ],
+        "coreBoundsInCell": [
+          73,
+          212,
+          374,
+          306
+        ],
+        "cropInCell": [
+          4,
+          149,
+          444,
+          369
+        ]
+      },
+      {
+        "frame": 3,
+        "sourceCell": [
+          1330,
+          0,
+          1774,
+          444
+        ],
+        "coreBoundsInCell": [
+          64,
+          209,
+          385,
+          307
+        ],
+        "cropInCell": [
+          4,
+          148,
+          444,
+          368
+        ]
+      },
+      {
+        "frame": 4,
+        "sourceCell": [
+          0,
+          444,
+          444,
+          887
+        ],
+        "coreBoundsInCell": [
+          64,
+          204,
+          384,
+          301
+        ],
+        "cropInCell": [
+          4,
+          142,
+          444,
+          362
+        ]
+      },
+      {
+        "frame": 5,
+        "sourceCell": [
+          444,
+          444,
+          887,
+          887
+        ],
+        "coreBoundsInCell": [
+          72,
+          209,
+          375,
+          300
+        ],
+        "cropInCell": [
+          4,
+          144,
+          444,
+          364
+        ]
+      },
+      {
+        "frame": 6,
+        "sourceCell": [
+          887,
+          444,
+          1330,
+          887
+        ],
+        "coreBoundsInCell": [
+          82,
+          215,
+          364,
+          297
+        ],
+        "cropInCell": [
+          3,
+          146,
+          443,
+          366
+        ]
+      },
+      {
+        "frame": 7,
+        "sourceCell": [
+          1330,
+          444,
+          1774,
+          887
+        ],
+        "coreBoundsInCell": [
+          97,
+          219,
+          350,
+          292
+        ],
+        "cropInCell": [
+          4,
+          146,
+          444,
+          366
+        ]
+      }
+    ]
+  }
+}

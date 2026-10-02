@@ -6,7 +6,7 @@ import type { BitacoraConfig } from "../../config/types";
  * la misma proporción, para que los textos y marcas no queden pequeños junto a un dibujo mayor (SPEC 6.3).
  */
 export const REF_PLAYER_SCALE = 0.24;
-export const REF_SIGN_SCALE = 0.16;
+export const REF_SIGN_SCALE = 0.2167; // con el letrero de 384 px de ancho (antes 0,16 con el de 520 px)
 
 /** Factor aplicado a los elementos que acompañan a las señales y portales. */
 export const signFactor = (config: BitacoraConfig): number => config.gameplay.signScale / REF_SIGN_SCALE;

@@ -8,6 +8,13 @@ import { createServer } from "vite";
 export const configJson = JSON.parse(readFileSync("public/config/bitacora.json", "utf8"));
 const AXE = readFileSync(createRequire(import.meta.url).resolve("axe-core/axe.min.js"), "utf8");
 
+/** El punto de interacción de una estación (su posición más su desplazamiento): dónde se está «junto a ella». */
+export const stationSpot = (id) => {
+  const pl = configJson.placements[id];
+  return [pl.position.x + pl.interactionOffset.x, pl.position.y + pl.interactionOffset.y];
+};
+export const SPOT_A = stationSpot("apr-a");
+
 export const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 
 export async function harness() {

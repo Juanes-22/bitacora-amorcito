@@ -1,7 +1,7 @@
 // E2E del paisaje vivo (SPEC 3.2; AC-41, AC-42, AC-43, AC-46) en un navegador real.
 // Uso: npm run test:e2e
 import { readFileSync } from "node:fs";
-import { configJson, harness } from "./helpers.mjs";
+import { configJson, harness, SPOT_A, stationSpot } from "./helpers.mjs";
 
 const { open, check, finish } = await harness();
 const manifest = JSON.parse(readFileSync("public/assets/assets.json", "utf8"));
@@ -14,7 +14,7 @@ const DUCKS = Object.keys(manifest.assets).filter((id) => id.startsWith("animati
 const snapshot = (page) => page.evaluate(({ kit, clouds, ducks }) => {
   const s = window.__PHASER_GAME__.scene.getScene("ExplorationScene");
   const list = s.children.list;
-  const sprites = list.filter((o) => o.type === "Sprite" && kit.includes(o.texture.key));
+  const sprites = list.filter((o) => o.type === "Sprite" && o.name !== "station-sparkle" && kit.includes(o.texture.key)); // los destellos de las estaciones comparten hoja con el paisaje, pero son de la estación
   const emitters = list.filter((o) => o.type === "ParticleEmitter");
   return {
     zone: s.zoneId, children: list.length,
@@ -77,7 +77,7 @@ try {
     check(`AC-43: con todo el ambiente activo la mediana es ≥ 50 fps (${fps.median.toFixed(1)} fps, p10 ${fps.p10.toFixed(1)})`, fps.median >= 50, JSON.stringify(fps));
 
     // ---- Ciclo de vida: ir y volver entre zonas no deja nada residual -----------------------------------
-    await t.place(330, 990);
+    await t.place(...SPOT_A);
     const base = await snapshot(t.page);
     const trips = [];
     for (let i = 0; i < 8; i++) {

@@ -1,6 +1,6 @@
 // E2E de lectura, recompensa, persistencia y casos límite (SPEC 7, 8, 9 y 13) en un navegador real.
 // Uso: npm run test:e2e
-import { configJson, dist, harness } from "./helpers.mjs";
+import { configJson, dist, harness, SPOT_A, stationSpot } from "./helpers.mjs";
 
 const { open, check, finish } = await harness();
 
@@ -15,7 +15,7 @@ const saved = ({ entries = {}, zone = "zona-a", player = { x: 200, y: 1030 }, mo
 });
 const sectionText = (id, section) => configJson.learnings[id].sections[section][0].text;
 const hud = (t) => t.page.locator(".hud").innerText().then((x) => x.replace(/\s+/g, " "));
-const openStation1 = async (t) => { await t.place(330, 990); await t.page.waitForTimeout(250); await t.page.keyboard.press("Enter"); await t.page.waitForTimeout(350); };
+const openStation1 = async (t) => { await t.place(...SPOT_A); await t.page.waitForTimeout(250); await t.page.keyboard.press("Enter"); await t.page.waitForTimeout(350); };
 
 try {
   // ---- A. Flujo principal: abrir → leer → marcar → recoger → celebrar → recargar --------------------------
@@ -65,7 +65,7 @@ try {
     check("A13 el foco vuelve al mapa", await t.page.evaluate(() => document.activeElement?.classList.contains("game-host")));
     await t.page.waitForTimeout(2800);
     check("A14 la celebración termina y Vanessa vuelve a su reposo de frente", !(await t.page.evaluate(() => window.__PHASER_GAME__.scene.getScene("ExplorationScene").player.isCelebrating)) && /^front-0[0-2]$/.test((await t.scene()).frame));
-    check("A15 la cabecera muestra el progreso, la XP y el siguiente objetivo derivados", (await hud(t)).includes("1 de 6 aprendizajes") && (await hud(t)).includes("100 / 600 XP") && (await hud(t)).includes("Continúa en Aprendizaje 2"));
+    check("A15 la cabecera muestra el nombre, el nivel, el progreso y la XP derivados (y no el siguiente objetivo)", (await hud(t)).includes("Vanessa") && (await hud(t)).includes("Nivel 1") && (await hud(t)).includes("1 de 6 aprendizajes") && (await hud(t)).includes("100 / 600 XP") && !(await hud(t)).includes("Continúa en Aprendizaje"));
     check("A16 la estación 1 queda completada y la 2 disponible", JSON.stringify((await t.stations()).map((s) => [s.id, s.state])) === JSON.stringify([["apr-a", "completed"], ["apr-b", "available"], ["apr-c", "locked"]]));
 
     // relectura
@@ -154,7 +154,7 @@ try {
     const t = await open();
     check("Z1 portada sin violaciones de accesibilidad", (await t.axe()).length === 0, (await t.axe()).join(" | "));
     await t.start();
-    await t.place(330, 990);
+    await t.place(...SPOT_A);
     await t.page.waitForTimeout(300);
     const map = await t.axe();
     check("Z2 mapa con cabecera y aviso de proximidad sin violaciones", map.length === 0, map.join(" | "));

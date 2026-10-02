@@ -28,6 +28,7 @@ const TRICKS_IDS = ["character.vanessa-jerry.idle-anim.fetch", "character.vaness
 const TOOLBAR_IDS = ["decoration.learning-corner", "station.item.open-book", "ui.button.audio.default", "ui.button.badges.default", "ui.button.journal.default", "ui.button.paw.default", "ui.button.settings.default"];
 const STATION_FX_IDS = ["effect.player-glow.next-station", "effect.xp-star.complete", "ui.panel.player-status.default"];
 const AVATAR_IDS = ["character.vanessa-jerry.avatar", "character.vanessa-jerry.avatar.animations"];
+const UI_V2_IDS = ["effect.station-glow.pulse", "map.sign.exit-right", "station.sign.board", "ui.badge.completed-pill", "ui.button.jerry.labeled", "ui.button.journal.labeled", "ui.button.sound-off.labeled", "ui.button.sound-on.labeled"];
 const MUSIC_IDS = ["audio.music.beyond-the-clouds", "audio.music.enchanted-festival", "audio.music.little-town-orchestral"];
 const ATLAS_IDS = [
   "animation.water.ripples", "animation.water.waterfall", "animation.water.foam-splash",
@@ -48,11 +49,11 @@ const issues = (id: string, mutate?: (atlas: any, entry: AssetEntry) => void) =>
 };
 
 describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)", () => {
-  it("el manifiesto con los dos kits y la música es válido: 92 entradas y recuentos coherentes", () => {
+  it("el manifiesto con los dos kits y la música es válido: 100 entradas y recuentos coherentes", () => {
     const r = validateAssetManifest(manifest);
     expect(r.ok ? "" : JSON.stringify(r.ok ? [] : r.issues)).toBe("");
-    expect(manifest.assetCount).toBe(92);
-    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, characters: 14, decorations: 12, effects: 17, stations: 8, ui: 19 });
+    expect(manifest.assetCount).toBe(100);
+    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, characters: 14, decorations: 12, effects: 18, stations: 10, ui: 24 });
   });
 
   it("las 45 entradas originales siguen en su sitio y con sus campos (el kit solo se añadió)", () => {
@@ -68,7 +69,8 @@ describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)
     expect(ids.slice(78, 80).sort()).toEqual(TRICKS_IDS);
     expect(ids.slice(80, 87).sort()).toEqual(TOOLBAR_IDS);
     expect(ids.slice(87, 90).sort()).toEqual(STATION_FX_IDS);
-    expect(ids.slice(90).sort()).toEqual(AVATAR_IDS);
+    expect(ids.slice(90, 92).sort()).toEqual(AVATAR_IDS);
+    expect(ids.slice(92).sort()).toEqual(UI_V2_IDS);
   });
 
   it("el kit conserva su metadata (origen, escala recomendada, animación y movimiento) sin duplicarla en otro sitio", () => {
@@ -94,6 +96,54 @@ describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)
     expect(Object.keys(atlas.frames)).toHaveLength(8);
     expect(entry.animation?.frameNames).toEqual(Object.keys(atlas.frames));
     expect(issues(id)).toEqual([]);
+  });
+});
+
+describe("assets de interfaz y estaciones del paquete bitacora-ui-assets (SPEC 4.3 y 14, AC-72)", () => {
+  const e = (id: string) => manifest.assets[id];
+
+  it("el letrero de estación trae las zonas del número y del título y el ancla del estado, dentro de la imagen", () => {
+    const s = e("station.sign.board");
+    expect(s).toMatchObject({ kind: "station-sign", category: "stations", width: 384, height: 320, origin: { x: 0.5, y: 0.95 } });
+    expect(s.labelZones).toMatchObject({ number: { x: 160, y: 52, width: 64, height: 64, maxLines: 1 }, title: { x: 43, y: 137, width: 298, height: 54, maxLines: 2 } });
+    expect(s.attachments?.completed).toEqual({ x: 192, y: 218, width: 230, height: 72 });
+    for (const z of Object.values(s.labelZones!)) {
+      expect(z.x + z.width).toBeLessThanOrEqual(384);
+      expect(z.y + z.height).toBeLessThanOrEqual(320);
+    }
+  });
+
+  it("la señal de cambio de mapa, la insignia «Completado» y los cuatro botones traen su zona de texto", () => {
+    expect(e("map.sign.exit-right")).toMatchObject({ kind: "exit-sign", width: 384, height: 176, direction: "right", origin: { x: 0.69, y: 0.95 } });
+    expect(e("map.sign.exit-right").labelZones?.destination).toMatchObject({ x: 31, y: 48, width: 249, height: 40 });
+    expect(e("ui.badge.completed-pill")).toMatchObject({ kind: "status-pill", width: 256, height: 80 });
+    expect(e("ui.badge.completed-pill").labelZones?.label).toMatchObject({ x: 78, y: 23, width: 154, height: 32, color: "#184c2a" });
+    for (const id of ["ui.button.journal.labeled", "ui.button.jerry.labeled", "ui.button.sound-on.labeled", "ui.button.sound-off.labeled"]) {
+      expect(e(id), id).toMatchObject({ kind: "button", width: 256, height: 256 });
+      expect(e(id).labelZones?.label, id).toMatchObject({ x: 40, y: 182, width: 176, height: 34 });
+    }
+  });
+
+  it("el brillo es una hoja de 8 fotogramas de 256 × 128 a 8 fps en bucle, con opacidad 0,72", () => {
+    expect(e("effect.station-glow.pulse")).toMatchObject({ kind: "animation-sheet", width: 1024, height: 256, frameCount: 8, sourceFrameSize: { width: 256, height: 128 }, animation: { frameRate: 8, repeat: -1 } });
+    expect(e("effect.station-glow.pulse").opacityByFrame).toEqual(Array(8).fill(0.72));
+    expect(issues("effect.station-glow.pulse")).toEqual([]);
+  });
+
+  it("los PNG de las entradas nuevas existen con su tamaño y su transparencia", () => {
+    for (const id of UI_V2_IDS) {
+      const entry = e(id);
+      const png = PNG.sync.read(readFileSync(join(root, entry.path)));
+      expect([png.width, png.height], id).toEqual([entry.width, entry.height]);
+      expect(entry.originalPath, id).toMatch(/^bitacora-ui-assets\//);
+    }
+  });
+
+  it("el validador rechaza una zona de texto que se sale de la imagen", () => {
+    const m = structuredClone(manifest);
+    m.assets["station.sign.board"].labelZones!.title.width = 999;
+    const r = validateAssetManifest(m);
+    expect(r.ok ? [] : r.issues.map((i) => i.message)).toEqual(expect.arrayContaining([expect.stringContaining("se sale")]));
   });
 });
 

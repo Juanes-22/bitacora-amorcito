@@ -21,6 +21,12 @@ body,
   overflow: hidden;
 }
 
+/* El mapa llena toda la aplicación, de esquina a esquina, también en el móvil: la cabecera y las herramientas flotan encima. */
+.stage {
+  position: absolute;
+  inset: 0;
+}
+
 /* Contenedor del canvas: dimensiones explícitas; Phaser (Scale.RESIZE) lo llena. */
 .game-host {
   position: absolute;

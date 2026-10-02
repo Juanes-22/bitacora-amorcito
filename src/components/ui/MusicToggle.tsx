@@ -16,8 +16,9 @@ export function MusicToggle({ player, onPointerUse }: { player: MusicPlayer; onP
   const title = !silent && state.track ? `${label} — ${state.track.title}` : label;
   return (
     <IconButton
-      assetId={config.ui.assets.musicButton}
+      assetId={silent && config.ui.assets.musicMutedButton ? config.ui.assets.musicMutedButton : config.ui.assets.musicButton}
       label={label}
+      caption={config.ui.labels.captionSound}
       hint={title}
       className="hud__music"
       data-music={silent ? "off" : "on"}
@@ -27,7 +28,7 @@ export function MusicToggle({ player, onPointerUse }: { player: MusicPlayer; onP
         if (e.detail > 0) onPointerUse?.();
       }}
     >
-      {silent ? <span className="icon-button__slash" aria-hidden="true" /> : null}
+      {silent && !config.ui.assets.musicMutedButton ? <span className="icon-button__slash" aria-hidden="true" /> : null}
     </IconButton>
   );
 }

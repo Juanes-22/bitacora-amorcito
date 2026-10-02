@@ -103,7 +103,7 @@ function Loaded({ config, assets }: { config: BitacoraConfig; assets: AssetRegis
   const hint: PromptHint = touchMode ? "tap" : "key"; // con el dedo se camina y se explora tocando; con teclado, Enter
   const tools = (
     <>
-      <IconButton assetId={config.ui.assets.listButton} label={config.ui.labels.index} className="hud__list" onClick={overlayActions.openList} disabled={modalOpen} />
+      <IconButton assetId={config.ui.assets.listButton} label={config.ui.labels.index} caption={config.ui.labels.captionJournal} className="hud__list" onClick={overlayActions.openList} disabled={modalOpen} />
       <JerryActionButton bridge={bridge} disabled={modalOpen} />
       {music ? <MusicToggle player={music} onPointerUse={() => { if (!modalOpen) hostRef.current?.focus(); }} /> : null}
     </>
@@ -113,9 +113,11 @@ function Loaded({ config, assets }: { config: BitacoraConfig; assets: AssetRegis
     <BitacoraProvider config={config} assets={assets}>
       <ProgressProvider store={store}>
         <div className="app">
-          <PhaserGame config={config} assets={assets} bridge={bridge} initial={initial} inert={!started || !!reading || !!overlay} hostRef={hostRef} />
+          <main className="stage">
+            <PhaserGame config={config} assets={assets} bridge={bridge} initial={initial} inert={!started || !!reading || !!overlay} hostRef={hostRef} />
+            {started ? <NearbyPrompt target={reading ? null : nearby} hint={hint} /> : null}
+          </main>
           {started ? <ProgressHUD bridge={bridge} onOpenBadges={reading || overlay ? undefined : overlayActions.openCollection} tools={tools} /> : null}
-          {started ? <NearbyPrompt target={reading ? null : nearby} hint={hint} /> : null}
           {reading ? <LearningDialog reading={reading} actions={actions} /> : null}
           {overlay?.kind === "collection" ? (
             <BadgeCollection completion={overlay.completion} onClose={overlayActions.closeOverlay} onReset={overlayActions.askReset} />

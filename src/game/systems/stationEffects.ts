@@ -47,12 +47,14 @@ function place(scene: Phaser.Scene, fx: Fx, x: number, y: number, depth: number,
 
 /**
  * Aro de «próxima estación» (SPEC 4.3): se repite mientras la estación es la siguiente del recorrido. Su pulso de opacidad
- * sale del manifiesto. Con movimiento reducido es un fotograma fijo. Devuelve `null` si la hoja no cargó.
+ * sale del manifiesto. Mide `displayWidth` en el mundo (el ancho del fotograma se ajusta a él). Con movimiento reducido es un
+ * fotograma fijo. Devuelve `null` si la hoja no cargó.
  */
-export function createNextStationGlow(scene: Phaser.Scene, assets: AssetRegistry, assetId: string, x: number, y: number, depth: number, scale: number, reducedMotion: boolean): Phaser.GameObjects.Sprite | null {
+export function createNextStationGlow(scene: Phaser.Scene, assets: AssetRegistry, assetId: string, x: number, y: number, depth: number, displayWidth: number, reducedMotion: boolean): Phaser.GameObjects.Sprite | null {
   const fx = prepare(scene, assets, assetId);
   if (!fx) return null;
-  const sprite = place(scene, fx, x, y, depth, scale);
+  const frameWidth = fx.entry.sourceFrameSize?.width ?? scene.textures.getFrame(assetId, fx.names[0]).width;
+  const sprite = place(scene, fx, x, y, depth, displayWidth / frameWidth);
   if (reducedMotion) {
     sprite.setFrame(fx.names[STILL_FRAME] ?? fx.names[0]).setAlpha(fx.entry.opacityByFrame?.[STILL_FRAME] ?? 1);
   } else {
@@ -94,4 +96,64 @@ export function createXpStar(scene: Phaser.Scene, assets: AssetRegistry, assetId
     sprite.play({ key: loopKey, startFrame: Phaser.Math.Between(0, STAR_LOOP.length - 1) }); // cada estrella en su fase
   }
   return sprite;
+}
+
+/** Un grupo de destellos que centellean alrededor del brillo de la próxima estación. */
+export interface Sparkles {
+  setVisible(visible: boolean): void;
+  destroy(): void;
+}
+
+/** Cuántos destellos hay a la vez y cuánto esperan, al azar, entre un centelleo y el siguiente. */
+/** Nombre de los destellos de las estaciones: los distingue de los efectos del paisaje (que usan la misma hoja). */
+export const SPARKLE_NAME = "station-sparkle";
+const SPARKLE_COUNT = 5;
+const SPARKLE_WAIT_MS = { min: 150, max: 1100 };
+
+/**
+ * Destellos dorados («sparkles») alrededor del brillo de la próxima estación (SPEC 4.3): cada uno aparece en un punto al azar
+ * de la elipse que rodea la señal, centellea una vez (crece y se apaga, con la hoja de destellos del catálogo), espera un
+ * momento y reaparece en otro sitio. Con movimiento reducido no hay destellos (como el resto de las partículas). Devuelve
+ * `null` si la hoja no cargó.
+ */
+export function createStationSparkles(
+  scene: Phaser.Scene, assets: AssetRegistry, assetId: string,
+  cx: number, cy: number, rx: number, ry: number, depth: number, scale: number, reducedMotion: boolean,
+): Sparkles | null {
+  const fx = prepare(scene, assets, assetId);
+  if (!fx || reducedMotion) return null;
+  const key = `${assetId}:sparkle`;
+  if (!scene.anims.exists(key)) {
+    scene.anims.create({ key, frames: fx.names.map((frame) => ({ key: assetId, frame })), frameRate: fx.entry.animation?.frameRate ?? 12, repeat: 0 });
+  }
+  let visible = false;
+  const timers: Phaser.Time.TimerEvent[] = [];
+  const sprites = Array.from({ length: SPARKLE_COUNT }, () =>
+    scene.add.sprite(cx, cy, assetId, fx.names[0]).setName(SPARKLE_NAME).setScale(scale).setDepth(depth).setVisible(false).setAlpha(fx.entry.opacity ?? 1),
+  );
+  const schedule = (sprite: Phaser.GameObjects.Sprite, delay: number) => {
+    timers.push(scene.time.delayedCall(delay, () => {
+      if (!sprite.active) return;
+      if (!visible) return schedule(sprite, 400); // la estación ya no es la próxima: espera sin dibujar
+      const angle = Phaser.Math.FloatBetween(0, Math.PI * 2);
+      const r = Math.sqrt(Phaser.Math.FloatBetween(0.15, 1));
+      sprite.setPosition(cx + Math.cos(angle) * rx * r, cy + Math.sin(angle) * ry * r).setVisible(true).setScale(scale * Phaser.Math.FloatBetween(0.7, 1.15));
+      sprite.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
+        sprite.setVisible(false);
+        schedule(sprite, Phaser.Math.Between(SPARKLE_WAIT_MS.min, SPARKLE_WAIT_MS.max));
+      });
+      sprite.play(key);
+    }));
+  };
+  sprites.forEach((s) => schedule(s, Phaser.Math.Between(0, SPARKLE_WAIT_MS.max)));
+  return {
+    setVisible(v: boolean) {
+      visible = v;
+      if (!v) sprites.forEach((s) => s.setVisible(false));
+    },
+    destroy() {
+      timers.forEach((t) => t.remove(false));
+      sprites.forEach((s) => s.destroy());
+    },
+  };
 }

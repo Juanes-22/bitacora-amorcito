@@ -1,7 +1,7 @@
 // E2E del reposo de Vanessa y Jerry (SPEC 6.2; AC-62, AC-63, AC-64) en un navegador real.
 // Uso: npm run test:e2e
 import { readFileSync } from "node:fs";
-import { configJson, harness } from "./helpers.mjs";
+import { configJson, harness, SPOT_A, stationSpot } from "./helpers.mjs";
 const manifest = JSON.parse(readFileSync("public/assets/assets.json", "utf8"));
 
 const { open, check, finish, browser } = await harness();
@@ -38,7 +38,7 @@ try {
   {
     const t = await open();
     await t.start();
-    await t.place(330, 990);
+    await t.place(...SPOT_A);
     await t.page.waitForTimeout(700);
     const s0 = await sprite(t);
     check("AC-62: al quedarse quieta respira y parpadea (hoja de reposo, de frente, en bucle)", s0.texture === IDLE.rest && s0.anim === A("-front") && s0.playing, JSON.stringify(s0));
@@ -62,7 +62,7 @@ try {
   {
     const t = await open({ edit: FAST });
     await t.start();
-    await t.place(330, 990);
+    await t.place(...SPOT_A);
     // Un paso hacia abajo reinicia la espera (y deja a Vanessa de frente): la secuencia se observa desde el principio.
     await t.page.evaluate(() => document.querySelector(".game-host").focus());
     await t.page.keyboard.down("ArrowDown");
@@ -81,7 +81,7 @@ try {
   {
     const t = await open({ edit: FAST });
     await t.start();
-    await t.place(330, 990);
+    await t.place(...SPOT_A);
     for (let i = 0; i < 60 && (await sprite(t)).anim !== A("-look-front"); i++) await t.page.waitForTimeout(100);
     check("(preparación) llegó la mirada", (await sprite(t)).anim === A("-look-front"));
     await t.page.evaluate(() => document.querySelector(".game-host").focus());
@@ -95,7 +95,7 @@ try {
     check("AC-63: al soltar vuelve al reposo mirando a la derecha y el temporizador empieza de cero", after.anim === A("-right"), JSON.stringify(after));
 
     // Una lectura detiene el mapa; al cerrarla el reposo sigue vivo
-    await t.place(...[330, 990]);
+    await t.place(...SPOT_A);
     await t.page.waitForTimeout(300);
     await t.page.keyboard.press("Enter");
     await t.page.waitForTimeout(500);
@@ -110,7 +110,7 @@ try {
   {
     const t = await open({ edit: FAST });
     await t.start();
-    await t.place(330, 990);
+    await t.place(...SPOT_A);
     await t.page.evaluate(() => document.querySelector(".game-host").focus());
     await t.page.keyboard.down("ArrowLeft");
     await t.page.waitForTimeout(150);
@@ -124,7 +124,7 @@ try {
   {
     const t = await open({ edit: FAST, reducedMotion: true });
     await t.start();
-    await t.place(330, 990);
+    await t.place(...SPOT_A);
     const seen = await watch(t, 3500);
     const s = await sprite(t);
     check("AC-64: con prefers-reduced-motion queda el primer fotograma del reposo, sin animación", s.texture === IDLE.rest && s.frame === "front-00" && !s.playing && seen.length === 0, JSON.stringify({ s, seen }));
@@ -157,19 +157,19 @@ try {
   {
     const t = await open({ blockUrl: "**/vanessa-jerry-idle-look.png" });
     await t.start();
-    await t.place(330, 990);
+    await t.place(...SPOT_A);
     await t.page.waitForTimeout(600);
     const s = await sprite(t);
     check("si falta una hoja de reposo se conserva la pose quieta de la hoja de caminar", s.texture === WALK, JSON.stringify(s));
     const { m } = await t.hold(["ArrowRight"], 300);
-    check("y el juego sigue funcionando (Vanessa se mueve)", m.pos.x > 330, JSON.stringify(m.pos));
+    check("y el juego sigue funcionando (Vanessa se mueve)", m.pos.x > SPOT_A[0], JSON.stringify(m.pos));
     await t.close();
   }
   // ---- Jugar con Jerry: la tecla P y el botón alternan buscar el peluche y los trucos (SPEC 6.2; AC-65, AC-66) ----
   {
     const t = await open({ edit: (c) => { c.gameplay.player.idle.fetch.holdMs = 1500; } });
     await t.start();
-    await t.place(330, 990);
+    await t.place(...SPOT_A);
     await t.page.waitForTimeout(500);
     const before = (await t.scene()).pos;
     await focusMap(t);
@@ -221,7 +221,7 @@ try {
     check("AC-65: moverse cancela la acción y se camina de inmediato", walking.texture === WALK, JSON.stringify(walking));
 
     // Con una ventana abierta la tecla no hace nada, ni al cerrarla
-    await t.place(330, 990);
+    await t.place(...SPOT_A);
     await t.page.waitForTimeout(300);
     await t.page.keyboard.press("Enter");
     await t.page.waitForTimeout(400);
@@ -240,7 +240,7 @@ try {
     const button = t.page.getByRole("button", { name: /Jugar con Jerry/ });
     const box = await button.boundingBox();
     check("AC-66: en un móvil hay un botón «Jugar con Jerry (P)» en la cabecera, de ≥ 44 px", !!box && box.width >= 43.5 && box.height >= 43.5, JSON.stringify(box));
-    await t.place(330, 990);
+    await t.place(...SPOT_A);
     await t.page.waitForTimeout(500);
     await button.click();
     await t.page.waitForTimeout(300);
@@ -264,7 +264,7 @@ try {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
     const t = await open({ viewport: { width: 390, height: 844 }, context });
     await t.start();
-    await t.place(330, 990);
+    await t.place(...SPOT_A);
     await t.page.waitForTimeout(300);
     const p = await t.page.evaluate(() => { const c = window.__PHASER_GAME__.scene.getScene("ExplorationScene").cameras.main; return { x: (200 - c.worldView.x) * c.zoom, y: (1030 - c.worldView.y) * c.zoom }; });
     await t.page.touchscreen.tap(p.x, p.y);
@@ -281,7 +281,7 @@ try {
     // Movimiento reducido: sin animación, pero el visitante ve el resultado el tiempo de espera
     const t = await open({ reducedMotion: true, edit: (c) => { c.gameplay.player.idle.fetch.holdMs = 1200; } });
     await t.start();
-    await t.place(330, 990);
+    await t.place(...SPOT_A);
     await t.page.waitForTimeout(400);
     await focusMap(t);
     await t.page.keyboard.press("p");
@@ -305,7 +305,7 @@ try {
     const only = async (edit, expected, label) => {
       const t = await open({ edit });
       await t.start();
-      await t.place(330, 990);
+      await t.place(...SPOT_A);
       await focusMap(t);
       await t.page.waitForTimeout(300);
       await t.page.keyboard.press("p");
@@ -318,7 +318,7 @@ try {
     await only((c) => { delete c.gameplay.player.idle.tricks; }, FETCH, "solo búsqueda configurada");
     const t = await open({ edit: (c) => { delete c.gameplay.player.idle.fetch; delete c.gameplay.player.idle.tricks; } });
     await t.start();
-    await t.place(330, 990);
+    await t.place(...SPOT_A);
     await focusMap(t);
     await t.page.keyboard.press("p");
     await t.page.waitForTimeout(300);
@@ -332,7 +332,7 @@ try {
     // El aviso de recurso que falta cubre la portada: se pulsa «Comenzar» sin pasar por el aviso.
     await t.page.locator(".pixel-button").dispatchEvent("click");
     await t.page.waitForTimeout(700);
-    await t.place(330, 990);
+    await t.place(...SPOT_A);
     await t.page.waitForTimeout(400);
     await focusMap(t);
     await t.page.keyboard.press("p");

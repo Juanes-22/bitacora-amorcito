@@ -28,6 +28,8 @@ export interface ProjectConfig {
 export interface Learning {
   title: string;
   topic: string;
+  /** Título corto que va en el letrero de la estación (cabe en dos líneas); sin él se usa `title`. */
+  signTitle?: string;
   editorialStatus: "demo" | "draft" | "ready";
   contentRevision: number;
   badgeId: string;
@@ -149,14 +151,15 @@ export interface UiConfig {
     progressTemplate: string; stationTitleTemplate: string;
     semester: string; teacher: string; sectionRead: string; sectionUnread: string; badgeEarned: string;
     remainingTemplate: string; rewardTitle: string; xpTemplate: string; levelTemplate: string;
-    objectiveTemplate: string; finishedLabel: string; emptyRouteLabel: string; mapLabel: string;
+    emptyRouteLabel: string; mapLabel: string;
     badges: string; notEarned: string; earnedOnTemplate: string; badgeCountTemplate: string; completionTitle: string;
     finalReflectionTitle: string; finalReflectionPending: string; resetConfirmTitle: string; resetConfirmText: string;
     resetConfirm: string; cancel: string; preparationTemplate: string;
     musicMute: string; musicUnmute: string;
     stateLocked: string; stateAvailable: string; stateCompleted: string;
     tapExplore: string; tapTravel: string;
-    jerryAction: string;
+    jerryAction: string; playerName: string; nextBadge: string;
+    captionJournal: string; captionJerry: string; captionSound: string;
   };
   assets: {
     window: string; button: string; buttonHover?: string; stationSign: string;
@@ -168,6 +171,10 @@ export interface UiConfig {
     xpStarEffect?: string; nextStationGlow?: string; statusPanel?: string;
     /** Avatar animado de la cabecera (reposo y alegría al completar una estación); sin él se usa `portrait`, estático. */
     avatarAnimations?: string;
+    /** Botón de sonido silenciado (si no se da, el de sonido activado se atenúa), insignia «Completado», señal de cambio de mapa (opcionales). */
+    musicMutedButton?: string; completedBadge?: string; exitSign?: string;
+    /** Hoja de destellos que centellean alrededor de la próxima estación (opcional). */
+    stationSparkle?: string;
   };
   defaultDialogueIds: Record<DialogueEvent, string>;
 }
@@ -184,7 +191,9 @@ export interface GameplayConfig {
   signScale: number;
   player: ActorSpec & {
     /** Animaciones de reposo; sin ellas se queda la pose quieta de la hoja de caminar. */
-    idle?: IdleConfig; body: { width: number; height: number; offset: Point } };
+    idle?: IdleConfig; body: { width: number; height: number; offset: Point };
+    /** Sombra suave bajo cada «pie» de la hoja (Vanessa, Jerry): opacidad, ancho respecto del pie y alto respecto del ancho. Sin ella no hay sombra. */
+    shadow?: { alpha: number; widthFactor: number; aspect: number } };
   companion: { mode: "separate" | "included"; actor?: ActorSpec; followDistance: number };
 }
 
@@ -245,6 +254,11 @@ export interface AvatarAnimation {
   repeat: number;
 }
 
+export interface LabelZone {
+  x: number; y: number; width: number; height: number;
+  align?: "left" | "center" | "right"; color?: string; fontSize?: number; fontWeight?: number; maxLines?: number;
+}
+
 export interface IdleAnimation {
   key: string;
   direction?: "front" | "left" | "right" | "back";
@@ -302,6 +316,19 @@ export interface AssetEntry {
   /** Hoja del avatar de la cabecera (`kind` «avatar-sheet»): reposo y alegría, con la duración de cada fotograma. */
   avatarAnimations?: AvatarAnimation[];
   anchor?: string;
+  /**
+   * Zonas de texto sobre la imagen (letreros, botones, insignias), en píxeles de la textura desde su esquina superior izquierda:
+   * la imagen no trae el texto dibujado. `x`/`y` es la esquina de la zona.
+   */
+  labelZones?: Record<string, LabelZone>;
+  /** Puntos de anclaje de lo que se pega a la imagen (p. ej. la insignia «Completado» bajo el letrero): `x`/`y` es el centro. */
+  attachments?: Record<string, { x: number; y: number; width: number; height: number }>;
+  /** Zona sensible (píxeles de la textura, esquina superior izquierda). */
+  hitArea?: { x: number; y: number; width: number; height: number };
+  /** Tamaño recomendado en pantalla, en píxeles CSS / del mundo. */
+  recommendedDisplay?: { width: number; height: number };
+  /** Hacia dónde apunta una señal de cambio de mapa. */
+  direction?: "left" | "right";
   /** Altura de Vanessa en la hoja de referencia (px); las hojas con `frameAdjust` la normalizan fotograma a fotograma. */
   referenceHeightPx?: number;
   /** Opacidad de cada fotograma de una hoja de efecto (0..1): el pulso o el desvanecimiento del efecto. */

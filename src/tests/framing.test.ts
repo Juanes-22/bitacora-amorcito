@@ -128,8 +128,8 @@ describe("el personaje mide al menos el 12 % de la altura del canvas en cualquie
 describe("factores de escala del mundo", () => {
   it("las referencias son las del diseño original y los factores son proporcionales", () => {
     expect(REF_PLAYER_SCALE).toBe(0.24);
-    expect(REF_SIGN_SCALE).toBe(0.16);
-    expect(signFactor(config)).toBeCloseTo(config.gameplay.signScale / 0.16, 6);
+    expect(REF_SIGN_SCALE).toBe(0.2167);
+    expect(signFactor(config)).toBeCloseTo(config.gameplay.signScale / 0.2167, 6);
     expect(playerFactor(config)).toBeCloseTo(config.gameplay.player.scale / 0.24, 6);
     expect(signFactor(config)).toBeGreaterThan(1);
   });

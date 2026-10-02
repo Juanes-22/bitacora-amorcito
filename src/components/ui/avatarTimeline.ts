@@ -1,7 +1,7 @@
 import type { AvatarAnimation } from "../../config/types";
 
 /** Cuántas vueltas de la animación feliz se ven cuando se completa una estación antes de volver al reposo. */
-export const HAPPY_CYCLES = 3;
+export const HAPPY_CYCLES = 6;
 
 /** Duración total de una vuelta de la animación (ms). */
 export function cycleMs(anim: Pick<AvatarAnimation, "durationsMs">): number {

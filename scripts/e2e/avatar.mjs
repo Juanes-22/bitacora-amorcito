@@ -7,7 +7,7 @@ const L = configJson.ui.labels;
 const SHEET = configJson.ui.assets.avatarAnimations;
 const sheet = JSON.parse((await import("node:fs")).readFileSync("public/assets/assets.json", "utf8")).assets[SHEET];
 const HAPPY = sheet.avatarAnimations.find((a) => a.state === "happy");
-const HAPPY_MS = 3 * HAPPY.durationsMs.reduce((a, b) => a + b, 0);
+const HAPPY_MS = 6 * HAPPY.durationsMs.reduce((a, b) => a + b, 0);
 
 /** Una huella corta de lo que hay dibujado en el lienzo del avatar. */
 const shot = (t) =>

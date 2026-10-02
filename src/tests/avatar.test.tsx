@@ -30,7 +30,7 @@ describe("línea de tiempo del avatar", () => {
   it("la alegría dura 1,2 s por vuelta y se repite", () => {
     expect(cycleMs(HAPPY)).toBe(1200);
     expect([0, 349, 350, 600, 850, 1199, 1200].map((t) => frameIndexAt(HAPPY, t))).toEqual([0, 0, 1, 2, 3, 3, 0]);
-    expect(HAPPY_CYCLES * cycleMs(HAPPY)).toBe(3600);
+    expect(HAPPY_CYCLES * cycleMs(HAPPY)).toBe(7200);
   });
 
   it("con movimiento reducido: reposo en su primer fotograma y alegría en la sonrisa abierta", () => {

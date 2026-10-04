@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="724" height="543" tilewidth="2" tileheight="2" infinite="0" nextlayerid="6" nextobjectid="1">
+ <imagelayer id="2" name="horizonte">
+  <image source="../../../public/assets/backgrounds/zone-01/horizon-mountains-village.png" width="1448" height="1086"/>
+ </imagelayer>
+ <imagelayer id="3" name="terreno">
+  <image source="../../../public/assets/backgrounds/zone-01/terrain-meadow-river-bridges.png" width="1448" height="1086"/>
+ </imagelayer>
+ <imagelayer id="4" name="medio">
+  <image source="../../../public/assets/backgrounds/zone-01/midground-cherry-tree-v01.png" width="1448" height="1086"/>
+ </imagelayer>
+ <imagelayer id="5" name="primer-plano">
+  <image source="../../../public/assets/backgrounds/zone-01/foreground-oak-foliage-v03.png" width="1448" height="1086"/>
+ </imagelayer>
+</map>

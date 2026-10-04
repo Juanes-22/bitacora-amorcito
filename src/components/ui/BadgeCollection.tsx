@@ -25,6 +25,9 @@ export function BadgeCollection({ completion, onClose, onReset }: Props) {
   const { state, summary } = useProgress();
   const { labels } = config.ui;
   const title = completion ? labels.completionTitle : labels.badges;
+  // Insignias de recorrido (la de Jerry): se obtienen al terminar todo y llevan la fecha del último aprendizaje.
+  const routeBadges = Object.entries(config.badges).filter(([, b]) => b.awardedFor === "route-complete");
+  const finishedAt = config.route.map((id) => state.entries[id]?.completedAt).filter((d): d is string => !!d).sort().at(-1);
 
   return (
     <Modal labelledBy="collection-title" onEscape={onClose}>
@@ -63,6 +66,20 @@ export function BadgeCollection({ completion, onClose, onReset }: Props) {
               </li>
             );
           })}
+          {routeBadges.map(([id, badge]) => (
+            <li key={id} className={`collection__item${summary.finished ? " collection__item--earned" : ""}`} data-route-badge={id}>
+              <img className="collection__img" src={assets.url(badge.assetId)} alt={summary.finished ? badge.title : ""} />
+              <div className="collection__text">
+                <p className="collection__name">{summary.finished ? badge.title : labels.routeBadgeLocked}</p>
+                {summary.finished ? <p className="collection__desc">{badge.description}</p> : null}
+                <p className="collection__status">
+                  {summary.finished
+                    ? `${labels.badgeEarned}${finishedAt ? ` · ${renderTemplate(labels.earnedOnTemplate, { date: formatDate(finishedAt) })}` : ""}`
+                    : labels.notEarned}
+                </p>
+              </div>
+            </li>
+          ))}
         </ul>
         {summary.finished ? (
           <section className="collection__reflection" aria-labelledby="reflection-title">

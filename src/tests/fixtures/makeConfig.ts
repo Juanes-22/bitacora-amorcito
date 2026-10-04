@@ -161,6 +161,7 @@ export function makeConfig(count = 6): BitacoraConfig {
         mapLabel: "Mapa de la bitácora",
         badges: "Insignias",
         notEarned: "Por obtener",
+        routeBadgeLocked: "Insignia de Jerry: al completar el recorrido",
         earnedOnTemplate: "Obtenida el {date}",
         badgeCountTemplate: "{completedCount} de {totalCount} insignias",
         completionTitle: "¡Recorrido completo!",

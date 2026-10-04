@@ -221,8 +221,10 @@ describe("BadgeCollection", () => {
   it("sin progreso lista las insignias del recorrido como «Por obtener» y no muestra la reflexión final", () => {
     show(base, makeStore(base));
     const items = screen.getAllByRole("listitem");
-    expect(items).toHaveLength(6);
+    expect(items).toHaveLength(7); // los seis aprendizajes y la insignia de Jerry (se concede al terminar)
     expect(items.every((li) => li.textContent?.includes("Por obtener"))).toBe(true);
+    expect(items[6].textContent).toContain("Insignia de Jerry: al completar el recorrido");
+    expect(within(items[6]).queryByRole("img")).toBeNull();
     expect(screen.getByRole("dialog").textContent).toContain("0 de 6 insignias · 0 / 600 XP · Nivel 0");
     expect(screen.queryByText("Reflexión final")).toBeNull();
   });
@@ -232,10 +234,10 @@ describe("BadgeCollection", () => {
     complete(store, "apr-a");
     show(base, store);
     const first = screen.getAllByRole("listitem")[0];
-    expect(first.textContent).toContain("Semilla de descubrimiento");
+    expect(first.textContent).toContain("Curiosidad que florece");
     expect(first.textContent).toContain("Insignia obtenida · Obtenida el");
     expect(first.textContent).toMatch(/20\d\d/);
-    expect(within(first).getByRole("img", { name: "Semilla de descubrimiento" })).toBeTruthy();
+    expect(within(first).getByRole("img", { name: "Curiosidad que florece" })).toBeTruthy();
     const second = screen.getAllByRole("listitem")[1];
     expect(second.textContent).toContain("Aprendizaje 2: La plastilina casera");
     expect(within(second).queryByRole("img")).toBeNull(); // alt vacío: decorativa, el texto ya lo dice
@@ -246,9 +248,27 @@ describe("BadgeCollection", () => {
     const config = withRoute(["apr-a", "apr-c"]);
     const store = makeStore(config);
     show(config, store);
-    expect(screen.getAllByRole("listitem")).toHaveLength(2);
+    expect(screen.getAllByRole("listitem")).toHaveLength(3); // dos aprendizajes y la insignia de Jerry
     expect(screen.getByRole("dialog").textContent).toContain("0 de 2 insignias · 0 / 200 XP");
     expect(screen.getByRole("dialog").textContent).not.toContain("Aprendizaje 6");
+  });
+
+  it("la insignia de Jerry se obtiene al terminar todo el recorrido: con fecha, sin sumar XP ni contar en «n de m»", () => {
+    const config = withRoute(["apr-a", "apr-c"]);
+    const store = makeStore(config);
+    complete(store, "apr-a");
+    show(config, store);
+    const jerry = () => document.querySelector("[data-route-badge]") as HTMLElement;
+    expect(jerry().textContent).toContain("Insignia de Jerry: al completar el recorrido");
+    expect(jerry().textContent).toContain("Por obtener");
+    cleanup();
+    complete(store, "apr-c");
+    show(config, store);
+    expect(jerry().textContent).toContain("Compañero de aventuras");
+    expect(jerry().textContent).toContain("Celebrar a Jerry");
+    expect(jerry().textContent).toMatch(/Insignia obtenida · Obtenida el .*20\d\d/);
+    expect(within(jerry()).getByRole("img", { name: "Compañero de aventuras" })).toBeTruthy();
+    expect(screen.getByRole("dialog").textContent).toContain("2 de 2 insignias · 200 / 200 XP"); // Jerry no cuenta ni suma
   });
 
   it("al terminar el recorrido muestra el espacio de la reflexión final: un aviso mientras la autora no la aporte", () => {

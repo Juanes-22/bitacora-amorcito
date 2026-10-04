@@ -3,7 +3,7 @@
   "project": "Bitácora Amorcito",
   "basePath": ".",
   "pathConvention": "Paths are relative to the directory containing this assets.json.",
-  "assetCount": 106,
+  "assetCount": 113,
   "categoryCounts": {
     "audio": 3,
     "backgrounds": 17,
@@ -12,7 +12,7 @@
     "effects": 18,
     "references": 2,
     "stations": 10,
-    "ui": 24
+    "ui": 31
   },
   "assets": {
     "background.complete.garden": {
@@ -4027,6 +4027,188 @@
           "repeat": -1
         }
       ]
+    },
+    "ui.badge.plantas-semillas": {
+      "path": "ui/badges/badge-plantas-semillas.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Insignia «Curiosidad que florece»: Girasoles",
+      "kind": "badge",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1130632,
+      "sha256": "67df5760721cc53b5c850b84187dff81555eab0828ab704da273084178392172",
+      "originalPath": "bitacora-insignias/assets/ui/badges/badge-plantas-semillas.png",
+      "contentBounds": {
+        "x": 14,
+        "y": 21,
+        "width": 1226,
+        "height": 1203
+      },
+      "meaning": "Valorar cómo nacen las plantas y despertar curiosidad por la naturaleza.",
+      "recommendedDisplay": {
+        "width": 64,
+        "height": 64
+      }
+    },
+    "ui.badge.plastilina-casera": {
+      "path": "ui/badges/badge-plastilina-casera.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Insignia «Crear juntas»: Manos modelando plastilina",
+      "kind": "badge",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1116878,
+      "sha256": "fe24f188b120037fb5d45b51286286e623205013839dc5faf008cd344275a8d7",
+      "originalPath": "bitacora-insignias/assets/ui/badges/badge-plastilina-casera.png",
+      "contentBounds": {
+        "x": 12,
+        "y": 16,
+        "width": 1229,
+        "height": 1222
+      },
+      "meaning": "Crear con materiales sencillos, tener paciencia y ayudarse entre compañeras.",
+      "recommendedDisplay": {
+        "width": 64,
+        "height": 64
+      }
+    },
+    "ui.badge.museo-taxidermia": {
+      "path": "ui/badges/badge-museo-taxidermia.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Insignia «Mirar de cerca»: Lupa con diente de tiburón",
+      "kind": "badge",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1095587,
+      "sha256": "d6c524bb78d30f7469b9fbc2f7cffde7bbdd03e4dcadff8336269babdca3fb5d",
+      "originalPath": "bitacora-insignias/assets/ui/badges/badge-museo-taxidermia.png",
+      "contentBounds": {
+        "x": 14,
+        "y": 14,
+        "width": 1226,
+        "height": 1223
+      },
+      "meaning": "Observar detalles de los animales, hacer preguntas y sorprenderse en el museo.",
+      "recommendedDisplay": {
+        "width": 64,
+        "height": 64
+      }
+    },
+    "ui.badge.pinguinos-adaptacion": {
+      "path": "ui/badges/badge-pinguinos-adaptacion.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Insignia «Cuidar la vida»: Pingüino protegiendo su huevo",
+      "kind": "badge",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1092384,
+      "sha256": "260bedc35f54af4f5168adbf1ec81ed51d4ee7cf5aefc9f1ad83801559123aa2",
+      "originalPath": "bitacora-insignias/assets/ui/badges/badge-pinguinos-adaptacion.png",
+      "contentBounds": {
+        "x": 12,
+        "y": 17,
+        "width": 1232,
+        "height": 1219
+      },
+      "meaning": "Reconocer las formas de adaptación y el cuidado de la cría.",
+      "recommendedDisplay": {
+        "width": 64,
+        "height": 64
+      }
+    },
+    "ui.badge.tierra-movimientos": {
+      "path": "ui/badges/badge-tierra-movimientos.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Insignia «Imaginar para comprender»: Telescopio, luna y estrellas",
+      "kind": "badge",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1116576,
+      "sha256": "78687f13161ba45badf67de69f9d66519ce5652cad2ad1ffd689cb708055cc0e",
+      "originalPath": "bitacora-insignias/assets/ui/badges/badge-tierra-movimientos.png",
+      "contentBounds": {
+        "x": 0,
+        "y": 11,
+        "width": 1253,
+        "height": 1243
+      },
+      "meaning": "Usar la imaginación y objetos sencillos para comprender fenómenos que no podemos ver completos.",
+      "recommendedDisplay": {
+        "width": 64,
+        "height": 64
+      }
+    },
+    "ui.badge.plantas-origen": {
+      "path": "ui/badges/badge-plantas-origen.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Insignia «Detenerse a descubrir»: Hoja bajo una lupa",
+      "kind": "badge",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1143651,
+      "sha256": "4734ce52ee145c7549425416ee8dcb7bb1bc87e3b7315d843b7c1eaa333080b2",
+      "originalPath": "bitacora-insignias/assets/ui/badges/badge-plantas-origen.png",
+      "contentBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1245,
+        "height": 1240
+      },
+      "meaning": "Mirar con atención las plantas cercanas, notar diferencias y despertar nuevas preguntas.",
+      "recommendedDisplay": {
+        "width": 64,
+        "height": 64
+      }
+    },
+    "ui.badge.jerry": {
+      "path": "ui/badges/badge-jerry.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Insignia «Compañero de aventuras»: Jerry con un corazón",
+      "kind": "badge",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1063751,
+      "sha256": "199ff51da4d445b472464a35517fa73c556d832c2c70f64ef06a9fbb8d5967f8",
+      "originalPath": "bitacora-insignias/assets/ui/badges/badge-jerry.png",
+      "contentBounds": {
+        "x": 37,
+        "y": 44,
+        "width": 1193,
+        "height": 1163
+      },
+      "meaning": "Celebrar a Jerry como compañero cariñoso de la exploración.",
+      "recommendedDisplay": {
+        "width": 64,
+        "height": 64
+      }
     }
   },
   "sourceDocuments": [
@@ -4233,6 +4415,18 @@
       "originalPath": "bitacora-chickens-animations/generation-prompts.json",
       "sizeBytes": 15608,
       "sha256": "90a70757b379c6b4ed578a994cefc8f17475ad7c2f8a4f529367a7c2355b252a"
+    },
+    {
+      "path": "docs/source/badges/readme.md",
+      "originalPath": "bitacora-insignias/README.md",
+      "sizeBytes": 5594,
+      "sha256": "beeb61e857f7bc5d2872c0000a86d49b7945845c1553f41bd7fc4427169bb83f"
+    },
+    {
+      "path": "docs/source/badges/generation-prompts.json",
+      "originalPath": "bitacora-insignias/generation-prompts.json",
+      "sizeBytes": 19896,
+      "sha256": "d6dd394621de15e43771e9cc32bde6d2564d414c93074516a1093635196fd78b"
     }
   ],
   "notes": [
@@ -4247,6 +4441,7 @@
     "Añadidas las animaciones de la estrella de XP y del aro de la próxima estación (hojas con atlas, `opacityByFrame`) y el panel de nueve zonas de la cabecera: ver docs/source/xp-glow y docs/source/panel-estado. Las entradas anteriores no se modificaron.",
     "Añadido el avatar de Vanessa con Jerry (estático y hoja de reposo y alegría, `avatar-sheet`) para el retrato de la cabecera: ver docs/source/avatar. Las entradas anteriores no se modificaron.",
     "Añadidos los assets del paquete bitacora-ui-assets (letrero de estación, señal de cambio de mapa, insignia «Completado», botones con etiqueta y brillo de la próxima estación): ver docs/source/ui-assets. Los textos no vienen en los PNG: `labelZones` y `attachments` dicen dónde ponerlos. Las entradas anteriores no se modificaron.",
-    "Añadidas cinco gallinas y un pollito animados (hojas con atlas, `critterAnimations`): ver docs/source/chickens. Las entradas anteriores no se modificaron."
+    "Añadidas cinco gallinas y un pollito animados (hojas con atlas, `critterAnimations`): ver docs/source/chickens. Las entradas anteriores no se modificaron.",
+    "Añadidas las siete insignias del paquete bitacora-insignias (seis de aprendizaje y la de Jerry): ver docs/source/badges. Las entradas anteriores no se modificaron."
   ]
 }

@@ -51,7 +51,7 @@ try {
     await t.page.waitForTimeout(500);
     const reward = await dialog.innerText();
     check("A9b la recompensa tiene un solo «Cerrar», el verde del pie", (await dialog.getByRole("button", { name: "Cerrar" }).count()) === 1 && (await dialog.locator(".reading__header button").count()) === 0);
-    check("A9 un doble clic concede una sola insignia y muestra la recompensa (sin cerrarla)", reward.includes("¡Aprendizaje recorrido!") && reward.includes("Semilla de descubrimiento") && reward.includes("100 / 600 XP · Nivel 1") && (await t.page.locator("[role=dialog]").count()) === 1);
+    check("A9 un doble clic concede una sola insignia y muestra la recompensa (sin cerrarla)", reward.includes("¡Aprendizaje recorrido!") && reward.includes("Curiosidad que florece") && reward.includes("100 / 600 XP · Nivel 1") && (await t.page.locator("[role=dialog]").count()) === 1);
     const stored = JSON.parse((await t.stored())[KEY()]);
     check("A10 se guardó una sola finalización con fecha, sin totales ni XP", Object.values(stored.entries).filter((e) => e.completedAt).length === 1 && /^\d{4}-\d\d-\d\dT/.test(stored.entries["apr-a"].completedAt) && !/xp|total|level|nextLearning/i.test(JSON.stringify(stored)));
     check("A11 la celebración aún no se dispara con la ventana abierta", (await t.log()).filter((e) => e[0] === "app:celebrate").length === 0);
@@ -271,8 +271,8 @@ try {
       edit: (c) => {
         c.learnings["apr-a"].sections.learning[0] = { type: "paragraph", text: "Texto editado solo en el JSON." };
         c.ui.labels.markRead = "Ya lo leí";
-        c.badges["semilla-de-descubrimiento"].xp = 250;
-        c.badges["semilla-de-descubrimiento"].title = "Otro nombre";
+        c.badges["curiosidad-que-florece"].xp = 250;
+        c.badges["curiosidad-que-florece"].title = "Otro nombre";
         c.dialogues["abrir"].lines[0].text = "Mensaje de apertura editado.";
       },
     });
@@ -298,7 +298,7 @@ try {
     const inserted = await open({
       seed: saved({ entries: { "apr-a": DONE, "apr-b": DONE } }),
       edit: (c) => {
-        c.learnings["apr-n"] = structuredClone(c.learnings["apr-c"]); c.learnings["apr-n"].badgeId = "insignia-demo-n"; c.badges["insignia-demo-n"] = structuredClone(c.badges["insignia-demo-c"]);
+        c.learnings["apr-n"] = structuredClone(c.learnings["apr-c"]); c.learnings["apr-n"].badgeId = "insignia-demo-n"; c.badges["insignia-demo-n"] = structuredClone(c.badges["mirar-de-cerca"]);
         c.placements["apr-n"] = { zoneId: "zona-a", position: { x: 410, y: 605 }, interactionOffset: { x: 0, y: 30 }, interactionRadius: 70 };
         c.route = ["apr-n", ...c.route];
       },

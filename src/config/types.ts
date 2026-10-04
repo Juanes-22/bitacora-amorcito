@@ -42,6 +42,11 @@ export interface Badge {
   description: string;
   assetId: string;
   xp: number;
+  /**
+   * Una insignia que no pertenece a ningún aprendizaje: se concede al terminar todo el recorrido (la de Jerry, compañero de
+   * aventuras). No suma XP ni cuenta en «n de m insignias».
+   */
+  awardedFor?: "route-complete";
 }
 
 export interface Dialogue {
@@ -163,7 +168,7 @@ export interface UiConfig {
     semester: string; teacher: string; sectionRead: string; sectionUnread: string; badgeEarned: string;
     remainingTemplate: string; rewardTitle: string; xpTemplate: string; levelTemplate: string;
     emptyRouteLabel: string; mapLabel: string;
-    badges: string; notEarned: string; earnedOnTemplate: string; badgeCountTemplate: string; completionTitle: string;
+    badges: string; notEarned: string; routeBadgeLocked: string; earnedOnTemplate: string; badgeCountTemplate: string; completionTitle: string;
     finalReflectionTitle: string; finalReflectionPending: string; resetConfirmTitle: string; resetConfirmText: string;
     resetConfirm: string; cancel: string; preparationTemplate: string;
     musicMute: string; musicUnmute: string;
@@ -345,6 +350,8 @@ export interface AssetEntry {
   labelZones?: Record<string, LabelZone>;
   /** Puntos de anclaje de lo que se pega a la imagen (p. ej. la insignia «Completado» bajo el letrero): `x`/`y` es el centro. */
   attachments?: Record<string, { x: number; y: number; width: number; height: number }>;
+  /** Qué significa el recurso (insignias): texto de referencia del paquete, no se muestra por sí solo. */
+  meaning?: string;
   /** Zona sensible (píxeles de la textura, esquina superior izquierda). */
   hitArea?: { x: number; y: number; width: number; height: number };
   /** Tamaño recomendado en pantalla, en píxeles CSS / del mundo. */

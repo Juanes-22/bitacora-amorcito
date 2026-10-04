@@ -32,7 +32,7 @@ const at = (issues: ConfigIssue[], path: string) => issues.filter((i) => i.path 
 
 describe("assets.json real", () => {
   it("es válido y conserva sus entradas originales sin migrar", () => {
-    expect(Object.keys(realManifest.assets)).toHaveLength(106);
+    expect(Object.keys(realManifest.assets)).toHaveLength(113);
     expect(realManifest.assets["ui.panel.cream.nine-slice"].nineSlice).toEqual({ top: 32, right: 32, bottom: 32, left: 32 });
     expect(realManifest.assets["character.vanessa-jerry.walk.poses-v4"].requiresFrameDefinition).toBe(true);
     expect(realManifest).not.toHaveProperty("animations");
@@ -702,5 +702,40 @@ describe("bitacora.json: gallinas y pollitos (SPEC 3.3, AC-78)", () => {
     expect(at(issuesOf(withCritters(...many.slice(0, 30))), "maps.zona-a.critters")).toHaveLength(0);
     const family = { type: "family", assetId: "fauna.hen.white-fluffy", chickAssetId: "fauna.chick.black", chicks: 8, position: { x: 300, y: 300 }, radius: 20 } as const;
     expect(at(issuesOf(withCritters(...many.slice(0, 22), family)), "maps.zona-a.critters")[0]?.message).toContain("31 animalitos");
+  });
+});
+
+describe("bitacora.json: insignias de los aprendizajes y de Jerry (AC-79)", () => {
+  const real = bitacoraJson as unknown as BitacoraConfig;
+
+  it("cada aprendizaje tiene su insignia distinta con su arte del paquete y 100 XP; la de Jerry se concede al terminar y no suma", () => {
+    const names = real.route.map((id) => real.badges[real.learnings[id].badgeId].title);
+    expect(names).toEqual(["Curiosidad que florece", "Crear juntas", "Mirar de cerca", "Cuidar la vida", "Imaginar para comprender", "Detenerse a descubrir"]);
+    expect(new Set(real.route.map((id) => real.learnings[id].badgeId)).size).toBe(6);
+    for (const id of real.route) {
+      const b = real.badges[real.learnings[id].badgeId];
+      expect(realManifest.assets[b.assetId].kind, id).toBe("badge");
+      expect(b.xp, id).toBe(100);
+      expect(b.awardedFor, id).toBeUndefined();
+    }
+    const jerry = Object.values(real.badges).filter((b) => b.awardedFor === "route-complete");
+    expect(jerry).toHaveLength(1);
+    expect(jerry[0]).toMatchObject({ title: "Compañero de aventuras", assetId: "ui.badge.jerry", xp: 0 });
+  });
+
+  it("una insignia de recorrido debe valer 0 XP y no puede ser la de un aprendizaje", () => {
+    const withJerry = (edit: (b: BitacoraConfig["badges"][string]) => void) => (c: BitacoraConfig) => {
+      c.badges["jerry"] = { title: "Jerry", description: "Compañero.", assetId: "ui.badge.jerry", xp: 0, awardedFor: "route-complete" };
+      edit(c.badges["jerry"]);
+    };
+    expect(issuesOf(withJerry(() => undefined))).toEqual([]);
+    expect(at(issuesOf(withJerry((b) => { b.xp = 50; })), "badges.jerry.xp")).toHaveLength(1);
+    const used = issuesOf((c) => { c.badges["jerry"] = { title: "Jerry", description: "x", assetId: "ui.badge.jerry", xp: 0, awardedFor: "route-complete" }; c.learnings["apr-a"].badgeId = "jerry"; });
+    expect(at(used, "learnings.apr-a.badgeId")[0]?.message).toContain("se concede al terminar el recorrido");
+  });
+
+  it("el esquema solo admite awardedFor «route-complete» y el asset debe ser de kind «badge»", () => {
+    expect(issuesOf((c) => { c.badges["jerry"] = { title: "J", description: "x", assetId: "ui.badge.jerry", xp: 0, awardedFor: "nunca" as never }; }).length).toBeGreaterThan(0);
+    expect(at(issuesOf((c) => { c.badges["jerry"] = { title: "J", description: "x", assetId: "station.sign.board", xp: 0, awardedFor: "route-complete" }; }), "badges.jerry.assetId")[0]?.message).toContain("badge");
   });
 });

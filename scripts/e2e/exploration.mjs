@@ -157,7 +157,7 @@ try {
     await reordered.close();
 
     const seven = await open({ edit: (c) => {
-      c.learnings["apr-g"] = structuredClone(c.learnings["apr-f"]); c.badges["insignia-demo-g"] = structuredClone(c.badges["insignia-demo-f"]); c.learnings["apr-g"].badgeId = "insignia-demo-g";
+      c.learnings["apr-g"] = structuredClone(c.learnings["apr-f"]); c.badges["insignia-demo-g"] = structuredClone(c.badges["detenerse-a-descubrir"]); c.learnings["apr-g"].badgeId = "insignia-demo-g";
       c.placements["apr-g"] = { zoneId: "zona-a", position: { x: 410, y: 605 }, interactionOffset: { x: 0, y: 30 }, interactionRadius: 70 }; c.route.push("apr-g");
     } });
     await seven.start();

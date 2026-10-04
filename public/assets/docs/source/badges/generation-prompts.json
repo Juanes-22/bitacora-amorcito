@@ -1,0 +1,139 @@
+{
+  "schemaVersion": "1.0.0",
+  "packId": "bitacora-insignias",
+  "createdAt": "2026-10-04",
+  "tool": "image_gen.imagegen",
+  "promptLanguage": "en",
+  "notes": [
+    "Se conservan los prompts completos utilizados para producir estas siete insignias.",
+    "Las rutas de referencia están normalizadas al contenido del ZIP; se pasaron como referenced_image_paths.",
+    "Los prompts especifican una retícula lógica aproximada de 64 × 64; los PNG exportados tienen 1254 × 1254 píxeles.",
+    "Los títulos incluidos en los prompts son guía conceptual; no se dibujan sobre las insignias.",
+    "No se registró una semilla ni un modelo específico en la llamada. Una nueva generación puede variar."
+  ],
+  "sourceDocument": "references/bitacora-aprendizajes.md",
+  "prompts": [
+    {
+      "id": "prompt-plantas-semillas",
+      "assetId": "badge-plantas-semillas",
+      "generationMode": "new_asset_with_references",
+      "parameters": {
+        "transparent_background": true
+      },
+      "referenceInputs": [
+        {
+          "inputIndex": 1,
+          "file": "references/active-listening-badge.png",
+          "role": "medallion_style_reference"
+        },
+        {
+          "inputIndex": 2,
+          "file": "references/sunflowers.png",
+          "role": "subject_reference"
+        }
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE standalone transparent pixel-art achievement badge for a cozy educational exploration video game called Bitácora Amorcito. Primary request: create one NEW badge in the same coherent set as the attached active-listening badge. Input image 1 is ONLY a STYLE and MEDAL TEMPLATE reference, not the new subject. Use the same frontal round medallion silhouette, chunky stepped circular embossed rim, upper-left pale pixel highlights, lower-right darker pixel shading, little squared corners and pixelated edge. Match the reference's small, limited-palette retro-game pixel language. Keep the symmetrical small leafy branches curving up around the lower left and lower right of the central symbol, recolored to harmonize with this badge. Replace the ear entirely with the subject specified below. Make the central symbol large and readable at game UI sizes. Low-resolution pixel art drawn on a consistent coarse approximately 64 by 64 pixel logical grid, enlarged cleanly with nearest-neighbor-looking solid square pixel clusters. Flat color clusters, crisp square corners, no anti-aliasing, no blur, no smooth gradients, no noise texture, no vector-style soft edges, no photorealism, no 3D render. Square canvas. Center exactly one medal taking up about 86 percent of the canvas width with an even transparent margin, all elements fully inside the round silhouette. True transparent alpha background OUTSIDE the medal; the inner disc stays opaque. No text, no lettering, no numerals, no labels, no watermark, no extra icons outside the medal, no contact sheet. Treat the learning title and meaning only as conceptual guidance, never print words.\nLearning and reflective meaning: Plantas y semillas · Curiosidad que florece\nNew central subject: Two small golden sunflowers with brown seed centers and green stems, one taller than the other, inspired closely by image 2. Simplify the sunflower bouquet to two flowers and just a few leaves, no extra orange flower. They symbolize noticing where plants begin, valuing germination, and curiosity about nature.\nPalette: green embossed rim as in the original reference, deep forest-green inner disc, golden sunflower petals, warm brown seeds, fresh green leaves"
+    },
+    {
+      "id": "prompt-plastilina-casera",
+      "assetId": "badge-plastilina-casera",
+      "generationMode": "new_asset_with_references",
+      "parameters": {
+        "transparent_background": true
+      },
+      "referenceInputs": [
+        {
+          "inputIndex": 1,
+          "file": "references/active-listening-badge.png",
+          "role": "medallion_style_reference"
+        }
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE standalone transparent pixel-art achievement badge for a cozy educational exploration video game called Bitácora Amorcito. Primary request: create one NEW badge in the same coherent set as the attached active-listening badge. Input image 1 is ONLY a STYLE and MEDAL TEMPLATE reference, not the new subject. Use the same frontal round medallion silhouette, chunky stepped circular embossed rim, upper-left pale pixel highlights, lower-right darker pixel shading, little squared corners and pixelated edge. Match the reference's small, limited-palette retro-game pixel language. Keep the symmetrical small leafy branches curving up around the lower left and lower right of the central symbol, recolored to harmonize with this badge. Replace the ear entirely with the subject specified below. Make the central symbol large and readable at game UI sizes. Low-resolution pixel art drawn on a consistent coarse approximately 64 by 64 pixel logical grid, enlarged cleanly with nearest-neighbor-looking solid square pixel clusters. Flat color clusters, crisp square corners, no anti-aliasing, no blur, no smooth gradients, no noise texture, no vector-style soft edges, no photorealism, no 3D render. Square canvas. Center exactly one medal taking up about 86 percent of the canvas width with an even transparent margin, all elements fully inside the round silhouette. True transparent alpha background OUTSIDE the medal; the inner disc stays opaque. No text, no lettering, no numerals, no labels, no watermark, no extra icons outside the medal, no contact sheet. Treat the learning title and meaning only as conceptual guidance, never print words.\nLearning and reflective meaning: Plastilina casera · Crear juntas\nNew central subject: Two simple small hands entering from lower left and lower right gently shaping ONE large soft lavender-purple ball of modeling clay together. A tiny golden four-point sparkle directly above the clay. An immediately readable symbol of patience, cooperation and hands-on creation. Only two hands, no bodies, no faces, no excessive fingers or ingredients.\nPalette: muted lilac embossed rim, deep plum inner disc, peach hands, lavender modeling clay and tiny golden accent"
+    },
+    {
+      "id": "prompt-museo-taxidermia",
+      "assetId": "badge-museo-taxidermia",
+      "generationMode": "new_asset_with_references",
+      "parameters": {
+        "transparent_background": true
+      },
+      "referenceInputs": [
+        {
+          "inputIndex": 1,
+          "file": "references/active-listening-badge.png",
+          "role": "medallion_style_reference"
+        }
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE standalone transparent pixel-art achievement badge for a cozy educational exploration video game called Bitácora Amorcito. Primary request: create one NEW badge in the same coherent set as the attached active-listening badge. Input image 1 is ONLY a STYLE and MEDAL TEMPLATE reference, not the new subject. Use the same frontal round medallion silhouette, chunky stepped circular embossed rim, upper-left pale pixel highlights, lower-right darker pixel shading, little squared corners and pixelated edge. Match the reference's small, limited-palette retro-game pixel language. Keep the symmetrical small leafy branches curving up around the lower left and lower right of the central symbol, recolored to harmonize with this badge. Replace the ear entirely with the subject specified below. Make the central symbol large and readable at game UI sizes. Low-resolution pixel art drawn on a consistent coarse approximately 64 by 64 pixel logical grid, enlarged cleanly with nearest-neighbor-looking solid square pixel clusters. Flat color clusters, crisp square corners, no anti-aliasing, no blur, no smooth gradients, no noise texture, no vector-style soft edges, no photorealism, no 3D render. Square canvas. Center exactly one medal taking up about 86 percent of the canvas width with an even transparent margin, all elements fully inside the round silhouette. True transparent alpha background OUTSIDE the medal; the inner disc stays opaque. No text, no lettering, no numerals, no labels, no watermark, no extra icons outside the medal, no contact sheet. Treat the learning title and meaning only as conceptual guidance, never print words.\nLearning and reflective meaning: Museo y taxidermia · Mirar de cerca\nNew central subject: A single large cream triangular shark tooth with a warm brown root, viewed through a simple brass magnifying glass angled slightly diagonally. Tooth fills the lens; short handle extends toward lower right without leaving the medal. This symbolizes close observation, curiosity and being surprised by details of museum specimens. Simple and friendly scientific collecting symbol, no gore, no living shark, no skull.\nPalette: muted amber and warm copper embossed rim, dark brown inner disc, ivory tooth, warm gold magnifying glass"
+    },
+    {
+      "id": "prompt-pinguinos-adaptacion",
+      "assetId": "badge-pinguinos-adaptacion",
+      "generationMode": "new_asset_with_references",
+      "parameters": {
+        "transparent_background": true
+      },
+      "referenceInputs": [
+        {
+          "inputIndex": 1,
+          "file": "references/active-listening-badge.png",
+          "role": "medallion_style_reference"
+        }
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE standalone transparent pixel-art achievement badge for a cozy educational exploration video game called Bitácora Amorcito. Primary request: create one NEW badge in the same coherent set as the attached active-listening badge. Input image 1 is ONLY a STYLE and MEDAL TEMPLATE reference, not the new subject. Use the same frontal round medallion silhouette, chunky stepped circular embossed rim, upper-left pale pixel highlights, lower-right darker pixel shading, little squared corners and pixelated edge. Match the reference's small, limited-palette retro-game pixel language. Keep the symmetrical small leafy branches curving up around the lower left and lower right of the central symbol, recolored to harmonize with this badge. Replace the ear entirely with the subject specified below. Make the central symbol large and readable at game UI sizes. Low-resolution pixel art drawn on a consistent coarse approximately 64 by 64 pixel logical grid, enlarged cleanly with nearest-neighbor-looking solid square pixel clusters. Flat color clusters, crisp square corners, no anti-aliasing, no blur, no smooth gradients, no noise texture, no vector-style soft edges, no photorealism, no 3D render. Square canvas. Center exactly one medal taking up about 86 percent of the canvas width with an even transparent margin, all elements fully inside the round silhouette. True transparent alpha background OUTSIDE the medal; the inner disc stays opaque. No text, no lettering, no numerals, no labels, no watermark, no extra icons outside the medal, no contact sheet. Treat the learning title and meaning only as conceptual guidance, never print words.\nLearning and reflective meaning: Pingüinos · Cuidar la vida\nNew central subject: ONE sweet emperor penguin facing front, a black back and head, cream-white belly, tiny soft yellow neck patches. A single small cream egg rests safely ON TOP OF its feet beneath its belly, sheltered by the lower belly flap, clearly not resting on ice or beside the penguin. A tiny warm coral heart above one flipper symbolizes shared care and protecting life. Readable simplified silhouette, egg care is the focal idea.\nPalette: icy blue and soft teal embossed rim, deep blue inner disc, near-black and ivory penguin with a soft golden neck accent and one tiny coral heart"
+    },
+    {
+      "id": "prompt-tierra-movimientos",
+      "assetId": "badge-tierra-movimientos",
+      "generationMode": "new_asset_with_references",
+      "parameters": {
+        "transparent_background": true
+      },
+      "referenceInputs": [
+        {
+          "inputIndex": 1,
+          "file": "references/active-listening-badge.png",
+          "role": "medallion_style_reference"
+        }
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE standalone transparent pixel-art achievement badge for a cozy educational exploration video game called Bitácora Amorcito. Primary request: create one NEW badge in the same coherent set as the attached active-listening badge. Input image 1 is ONLY a STYLE and MEDAL TEMPLATE reference, not the new subject. Use the same frontal round medallion silhouette, chunky stepped circular embossed rim, upper-left pale pixel highlights, lower-right darker pixel shading, little squared corners and pixelated edge. Match the reference's small, limited-palette retro-game pixel language. Keep the symmetrical small leafy branches curving up around the lower left and lower right of the central symbol, recolored to harmonize with this badge. Replace the ear entirely with the subject specified below. Make the central symbol large and readable at game UI sizes. Low-resolution pixel art drawn on a consistent coarse approximately 64 by 64 pixel logical grid, enlarged cleanly with nearest-neighbor-looking solid square pixel clusters. Flat color clusters, crisp square corners, no anti-aliasing, no blur, no smooth gradients, no noise texture, no vector-style soft edges, no photorealism, no 3D render. Square canvas. Center exactly one medal taking up about 86 percent of the canvas width with an even transparent margin, all elements fully inside the round silhouette. True transparent alpha background OUTSIDE the medal; the inner disc stays opaque. No text, no lettering, no numerals, no labels, no watermark, no extra icons outside the medal, no contact sheet. Treat the learning title and meaning only as conceptual guidance, never print words.\nLearning and reflective meaning: La Tierra y sus movimientos · Imaginar para comprender\nNew central subject: One simple brass telescope pointing toward the upper right on a compact tripod, with one small crescent moon and two tiny golden pixel stars above. Telescope is the main symbol: scientific curiosity, imagination and making an unseen phenomenon understandable using simple objects. NOT a globe or planet. Clear uncluttered layout, all objects contained in the inner disc.\nPalette: muted violet embossed rim, deep midnight-purple inner disc, warm golden telescope, pale cream crescent and tiny golden stars"
+    },
+    {
+      "id": "prompt-plantas-origen",
+      "assetId": "badge-plantas-origen",
+      "generationMode": "new_asset_with_references",
+      "parameters": {
+        "transparent_background": true
+      },
+      "referenceInputs": [
+        {
+          "inputIndex": 1,
+          "file": "references/active-listening-badge.png",
+          "role": "medallion_style_reference"
+        }
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE standalone transparent pixel-art achievement badge for a cozy educational exploration video game called Bitácora Amorcito. Primary request: create one NEW badge in the same coherent set as the attached active-listening badge. Input image 1 is ONLY a STYLE and MEDAL TEMPLATE reference, not the new subject. Use the same frontal round medallion silhouette, chunky stepped circular embossed rim, upper-left pale pixel highlights, lower-right darker pixel shading, little squared corners and pixelated edge. Match the reference's small, limited-palette retro-game pixel language. Keep the symmetrical small leafy branches curving up around the lower left and lower right of the central symbol, recolored to harmonize with this badge. Replace the ear entirely with the subject specified below. Make the central symbol large and readable at game UI sizes. Low-resolution pixel art drawn on a consistent coarse approximately 64 by 64 pixel logical grid, enlarged cleanly with nearest-neighbor-looking solid square pixel clusters. Flat color clusters, crisp square corners, no anti-aliasing, no blur, no smooth gradients, no noise texture, no vector-style soft edges, no photorealism, no 3D render. Square canvas. Center exactly one medal taking up about 86 percent of the canvas width with an even transparent margin, all elements fully inside the round silhouette. True transparent alpha background OUTSIDE the medal; the inner disc stays opaque. No text, no lettering, no numerals, no labels, no watermark, no extra icons outside the medal, no contact sheet. Treat the learning title and meaning only as conceptual guidance, never print words.\nLearning and reflective meaning: Plantas: su origen · Detenerse a descubrir\nNew central subject: ONE broad green leaf with three or four simple visible veins, and a warm brass magnifying glass enlarging a portion of the leaf. Lens slightly overlaps the right half of the leaf and handle extends toward lower right. A tiny golden sparkle where the leaf is observed. This symbolizes slowing down, noticing differences in nearby plants and asking questions about nature, drawn from visiting the botanical garden. Distinct from the sunflower badge. No sunflowers, no plant cards, no clutter.\nPalette: muted turquoise embossed rim, deep teal-green inner disc, bright natural green leaf, warm brass magnifying glass"
+    },
+    {
+      "id": "prompt-jerry",
+      "assetId": "badge-jerry",
+      "generationMode": "selected_image_style_transfer",
+      "parameters": {
+        "transparent_background": true
+      },
+      "referenceInputs": [
+        {
+          "inputIndex": 1,
+          "file": "references/jerry-source.png",
+          "role": "exact_selected_edit_source"
+        },
+        {
+          "inputIndex": 2,
+          "file": "references/active-listening-badge.png",
+          "role": "medallion_style_reference"
+        }
+      ],
+      "prompt": "Use case: style-transfer. Asset type: ONE standalone transparent pixel-art achievement badge for the cozy educational video game Bitácora Amorcito. Input image 1 is the EXACT selected edit source: use only JERRY the small white chihuahua on the right of that image as the identity source; do not substitute any other dog. Input image 2 is the medallion STYLE AND SHAPE reference. Reinterpret the selected source as one badge devoted to Jerry, preserving Jerry's white/ivory fur, very large upright triangular ears with pink centers, glossy dark brown eyes, little black nose, happy small pink tongue, and red collar with tiny silver tag. ONLY JERRY appears in the badge; exclude Vanessa and the backpack completely. Show a cute frontal head-and-upper-chest portrait, large enough to be immediately recognizable, both ears fully visible inside the medal, with one very small coral heart near the lower right of the portrait to convey a loving companion. Match the original green active-listening badge's frontal circular medallion silhouette, chunky stepped circular embossed rim, upper-left pale pixel highlights, darker lower-right shading, and small leafy branches around the lower sides. Recolor rim and laurels warm gold and ochre with a dark warm amber-brown opaque inner disc; leave enough contrast for Jerry's pale face. Strict low-resolution pixel art on a coarse approximately 64x64 logical grid enlarged cleanly with solid square pixel clusters, consistent pixel size, sharp stepped edges, a limited cozy color palette, readable in a small game UI. No anti-aliasing, no blur, no smooth gradients, no noise texture, no glossy 3D rendering, no painted fur. Square canvas, exactly one centered medal taking about 86 percent of canvas width with an even transparent margin, nothing cropped. All elements including ears and heart inside the round silhouette. True transparent alpha OUTSIDE the medal, opaque interior. No text, no lettering, no names, no numbers, no labels, no watermark, no sheet of multiple badges."
+    }
+  ]
+}

@@ -206,9 +206,9 @@ describe("LearningDialog", () => {
     fireEvent.click(screen.getByRole("button", { name: "Recoger insignia y continuar" }));
     const dialog = screen.getByRole("dialog");
     expect(within(dialog).getByText("¡Aprendizaje recorrido!")).toBeTruthy();
-    expect((within(dialog).getByRole("img", { name: "Semilla de descubrimiento" }) as HTMLImageElement).src).toContain("/stations/items/sunflowers.png");
+    expect((within(dialog).getByRole("img", { name: "Curiosidad que florece" }) as HTMLImageElement).src).toContain("/ui/badges/badge-plantas-semillas.png");
     expect(dialog.textContent).toContain("100 / 600 XP · Nivel 1");
-    expect(dialog.textContent).toContain("Obtuviste «Semilla de descubrimiento». Llevas 1 de 6.");
+    expect(dialog.textContent).toContain("Obtuviste «Curiosidad que florece». Llevas 1 de 6.");
   });
 
   it("releer una completada muestra «Insignia obtenida», sin botón de recoger ni de marcar", () => {
@@ -216,7 +216,7 @@ describe("LearningDialog", () => {
     ALL.forEach((s) => store.markSection("apr-a", s));
     store.claimBadge("apr-a");
     open(base, { kind: "reading", learningId: "apr-a", active: "lived" }, store);
-    expect(screen.getByText(/Insignia obtenida: Semilla de descubrimiento/)).toBeTruthy();
+    expect(screen.getByText(/Insignia obtenida: Curiosidad que florece/)).toBeTruthy();
     expect(screen.queryByRole("button", { name: "Recoger insignia y continuar" })).toBeNull();
     expect(screen.queryByRole("button", { name: "Marcar sección como leída" })).toBeNull();
     expect(screen.getByRole("status").textContent).toBe("✓ Sección leída");

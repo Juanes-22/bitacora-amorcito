@@ -82,7 +82,7 @@ try {
     await t.page.waitForSelector("[role=dialog]:has-text('¡Recorrido completo!')", { timeout: 6000 });
     const end = await t.page.locator("[role=dialog]").innerText();
     check("J7 al completar la ruta: «6 de 6 insignias · 600 / 600 XP · Nivel 6» y el cierre del recorrido", end.includes("6 de 6 insignias · 600 / 600 XP · Nivel 6") && end.includes("¡Recorrido completo!"), end.replace(/\s+/g, " ").slice(0, 160));
-    check("J8 el cierre lista las seis insignias obtenidas, con fecha, y el espacio de la reflexión final (aviso, sin inventar)", (await t.page.locator(".collection__item--earned").count()) === 6 && end.includes("Obtenida el") && end.includes("Reflexión final") && end.includes("La reflexión final de Vanessa se añadirá aquí"));
+    check("J8 el cierre lista las seis insignias obtenidas y la de Jerry, con fecha, y el espacio de la reflexión final (aviso, sin inventar)", (await t.page.locator(".collection__item--earned").count()) === 7 && (await t.page.locator("[data-route-badge].collection__item--earned").count()) === 1 && end.includes("Obtenida el") && end.includes("Reflexión final") && end.includes("La reflexión final de Vanessa se añadirá aquí"));
     const stored = JSON.parse((await t.stored())[KEY()]);
     check("J9 se guardaron seis finalizaciones y ningún total ni XP", Object.values(stored.entries).filter((e) => e.completedAt).length === 6 && !/xp|total|level|nextLearning/i.test(JSON.stringify(stored)));
     await t.page.keyboard.press("Escape");
@@ -124,7 +124,7 @@ try {
     check("K1 con cinco aprendizajes el mapa de la zona B solo tiene dos estaciones (apr-f archivada no aparece)", JSON.stringify(zoneB.map((s) => s.id)) === JSON.stringify(["apr-d", "apr-e"]), JSON.stringify(zoneB.map((s) => s.id)));
     await t5.page.waitForSelector("[role=dialog]:has-text('¡Recorrido completo!')", { timeout: 6000 });
     const end5 = await t5.page.locator("[role=dialog]").innerText();
-    check("K2 cinco aprendizajes: «5 de 5 insignias · 500 / 500 XP», sin tocar el código", end5.includes("5 de 5 insignias · 500 / 500 XP · Nivel 5") && (await t5.page.locator(".collection__item").count()) === 5);
+    check("K2 cinco aprendizajes: «5 de 5 insignias · 500 / 500 XP», sin tocar el código", end5.includes("5 de 5 insignias · 500 / 500 XP · Nivel 5") && (await t5.page.locator(".collection__item:not([data-route-badge])").count()) === 5);
     const zoneB5 = await t5.page.evaluate(() => window.__PHASER_GAME__.scene.getScene("ExplorationScene").zoneId);
     check("K3 el progreso de cinco no guarda nada de la sexta (archivada, sin avance)", JSON.parse((await t5.stored())[KEY()]).entries["apr-f"]?.completedAt === undefined && zoneB5 === "zona-b");
     await t5.close();
@@ -133,7 +133,7 @@ try {
     const edit7 = (c) => {
       c.learnings["apr-g"] = structuredClone(c.learnings["apr-f"]);
       c.learnings["apr-g"].badgeId = "insignia-demo-g";
-      c.badges["insignia-demo-g"] = structuredClone(c.badges["insignia-demo-f"]);
+      c.badges["insignia-demo-g"] = structuredClone(c.badges["detenerse-a-descubrir"]);
       c.placements["apr-g"] = { zoneId: "zona-a", position: { x: 1330, y: 420 }, interactionOffset: { x: 0, y: 30 }, interactionRadius: 70 };
       c.route.splice(3, 0, "apr-g"); // a, b, c, g, d, e, f
     };
@@ -143,8 +143,8 @@ try {
     await playJourney(t7, seven);
     await t7.page.waitForSelector("[role=dialog]:has-text('¡Recorrido completo!')", { timeout: 6000 });
     const end7 = await t7.page.locator("[role=dialog]").innerText();
-    check("K4 siete aprendizajes con uno insertado en medio y en otra zona: «7 de 7 insignias · 700 / 700 XP»", end7.includes("7 de 7 insignias · 700 / 700 XP · Nivel 7") && (await t7.page.locator(".collection__item").count()) === 7);
-    const order = await t7.page.locator(".collection__item .collection__where").allInnerTexts();
+    check("K4 siete aprendizajes con uno insertado en medio y en otra zona: «7 de 7 insignias · 700 / 700 XP»", end7.includes("7 de 7 insignias · 700 / 700 XP · Nivel 7") && (await t7.page.locator(".collection__item:not([data-route-badge])").count()) === 7);
+    const order = await t7.page.locator(".collection__item:not([data-route-badge]) .collection__where").allInnerTexts();
     check("K5 la numeración sale de route: apr-g es el aprendizaje 4 y los siguientes se renumeran", order[3].startsWith("Aprendizaje 4:") && order.length === 7, order.join(" | "));
     check("K6 sin errores de consola en las variantes", t5.errors.length === 0 && t7.errors.length === 0, [...t5.errors, ...t7.errors].join(" | "));
     await t7.close();
@@ -182,7 +182,7 @@ try {
     check("L5 releer y recoger de nuevo lo revisado cuenta una sola vez: 2 de 6 y 200 / 600 XP (no 300)", (await hud(revised)).includes("2 de 6 aprendizajes") && (await hud(revised)).includes("200 / 600 XP"), await hud(revised));
     await revised.close();
 
-    const badgeChange = await open({ seed: saved({ entries: { "apr-a": DONE } }), edit: (c) => { c.badges["semilla-de-descubrimiento"].xp = 300; c.badges["semilla-de-descubrimiento"].title = "Nombre nuevo"; c.badges["semilla-de-descubrimiento"].assetId = "station.item.books"; } });
+    const badgeChange = await open({ seed: saved({ entries: { "apr-a": DONE } }), edit: (c) => { c.badges["curiosidad-que-florece"].xp = 300; c.badges["curiosidad-que-florece"].title = "Nombre nuevo"; c.badges["curiosidad-que-florece"].assetId = "station.item.books"; } });
     await badgeChange.start();
     await badgeChange.watch();
     await badgeChange.page.waitForTimeout(800);

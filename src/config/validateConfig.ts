@@ -145,7 +145,14 @@ export function validateBitacora(
   }
   checkBlocks("project.finalReflection", c.project.finalReflection);
 
-  for (const [id, b] of Object.entries(c.badges)) checkAsset(`badges.${id}.assetId`, b.assetId, KINDS.badge);
+  for (const [id, b] of Object.entries(c.badges)) {
+    checkAsset(`badges.${id}.assetId`, b.assetId, KINDS.badge);
+    if (b.awardedFor) {
+      if (b.xp !== 0) err(`badges.${id}.xp`, "una insignia que se concede al terminar el recorrido no suma XP: debe ser 0");
+      const user = Object.entries(c.learnings).find(([, l]) => l.badgeId === id);
+      if (user) err(`learnings.${user[0]}.badgeId`, `«${id}» se concede al terminar el recorrido y no puede ser la insignia de un aprendizaje`);
+    }
+  }
 
   for (const [id, d] of Object.entries(c.dialogues)) {
     d.lines.forEach((line, i) => {

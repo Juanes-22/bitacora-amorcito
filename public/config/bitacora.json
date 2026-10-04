@@ -1235,7 +1235,7 @@
       "signTitle": "Plantas y semillas",
       "editorialStatus": "draft",
       "contentRevision": 1,
-      "badgeId": "semilla-de-descubrimiento",
+      "badgeId": "curiosidad-que-florece",
       "sections": {
         "learning": [
           {
@@ -1279,7 +1279,7 @@
       "signTitle": "La plastilina casera",
       "editorialStatus": "draft",
       "contentRevision": 1,
-      "badgeId": "insignia-demo-b",
+      "badgeId": "crear-juntas",
       "sections": {
         "learning": [
           {
@@ -1319,7 +1319,7 @@
       "signTitle": "El museo y la taxidermia",
       "editorialStatus": "draft",
       "contentRevision": 1,
-      "badgeId": "insignia-demo-c",
+      "badgeId": "mirar-de-cerca",
       "sections": {
         "learning": [
           {
@@ -1367,7 +1367,7 @@
       "signTitle": "Los pingüinos y su adaptación",
       "editorialStatus": "draft",
       "contentRevision": 1,
-      "badgeId": "insignia-demo-d",
+      "badgeId": "cuidar-la-vida",
       "sections": {
         "learning": [
           {
@@ -1415,7 +1415,7 @@
       "signTitle": "La Tierra y sus movimientos",
       "editorialStatus": "draft",
       "contentRevision": 1,
-      "badgeId": "insignia-demo-e",
+      "badgeId": "imaginar-para-comprender",
       "sections": {
         "learning": [
           {
@@ -1463,7 +1463,7 @@
       "signTitle": "El origen de las plantas",
       "editorialStatus": "draft",
       "contentRevision": 1,
-      "badgeId": "insignia-demo-f",
+      "badgeId": "detenerse-a-descubrir",
       "sections": {
         "learning": [
           {
@@ -1515,41 +1515,48 @@
     }
   },
   "badges": {
-    "semilla-de-descubrimiento": {
-      "title": "Semilla de descubrimiento",
-      "description": "Insignia provisional por recorrer el primer aprendizaje. Su nombre y diseño están pendientes de revisión.",
-      "assetId": "station.item.sunflowers",
+    "curiosidad-que-florece": {
+      "title": "Curiosidad que florece",
+      "description": "Valorar cómo nacen las plantas y despertar curiosidad por la naturaleza.",
+      "assetId": "ui.badge.plantas-semillas",
       "xp": 100
     },
-    "insignia-demo-b": {
-      "title": "Insignia de demostración",
-      "description": "Insignia provisional; comparte imagen con las demás hasta que se defina su diseño.",
-      "assetId": "ui.badge.active-listening",
+    "crear-juntas": {
+      "title": "Crear juntas",
+      "description": "Crear con materiales sencillos, tener paciencia y ayudarse entre compañeras.",
+      "assetId": "ui.badge.plastilina-casera",
       "xp": 100
     },
-    "insignia-demo-c": {
-      "title": "Insignia de demostración",
-      "description": "Insignia provisional; comparte imagen con las demás hasta que se defina su diseño.",
-      "assetId": "ui.badge.active-listening",
+    "mirar-de-cerca": {
+      "title": "Mirar de cerca",
+      "description": "Observar detalles de los animales, hacer preguntas y sorprenderse en el museo.",
+      "assetId": "ui.badge.museo-taxidermia",
       "xp": 100
     },
-    "insignia-demo-d": {
-      "title": "Insignia de demostración",
-      "description": "Insignia provisional; comparte imagen con las demás hasta que se defina su diseño.",
-      "assetId": "ui.badge.active-listening",
+    "cuidar-la-vida": {
+      "title": "Cuidar la vida",
+      "description": "Reconocer las formas de adaptación y el cuidado de la cría.",
+      "assetId": "ui.badge.pinguinos-adaptacion",
       "xp": 100
     },
-    "insignia-demo-e": {
-      "title": "Insignia de demostración",
-      "description": "Insignia provisional; comparte imagen con las demás hasta que se defina su diseño.",
-      "assetId": "ui.badge.active-listening",
+    "imaginar-para-comprender": {
+      "title": "Imaginar para comprender",
+      "description": "Usar la imaginación y objetos sencillos para comprender fenómenos que no podemos ver completos.",
+      "assetId": "ui.badge.tierra-movimientos",
       "xp": 100
     },
-    "insignia-demo-f": {
-      "title": "Insignia de demostración",
-      "description": "Insignia provisional; comparte imagen con las demás hasta que se defina su diseño.",
-      "assetId": "ui.badge.active-listening",
+    "detenerse-a-descubrir": {
+      "title": "Detenerse a descubrir",
+      "description": "Mirar con atención las plantas cercanas, notar diferencias y despertar nuevas preguntas.",
+      "assetId": "ui.badge.plantas-origen",
       "xp": 100
+    },
+    "jerry-companero-de-aventuras": {
+      "title": "Compañero de aventuras",
+      "description": "Celebrar a Jerry como compañero cariñoso de la exploración.",
+      "assetId": "ui.badge.jerry",
+      "xp": 0,
+      "awardedFor": "route-complete"
     }
   },
   "dialogues": {
@@ -1611,6 +1618,7 @@
       "mapLabel": "Mapa de la bitácora",
       "badges": "Insignias",
       "notEarned": "Por obtener",
+      "routeBadgeLocked": "Insignia de Jerry: al completar el recorrido",
       "earnedOnTemplate": "Obtenida el {date}",
       "badgeCountTemplate": "{completedCount} de {totalCount} insignias",
       "completionTitle": "¡Recorrido completo!",

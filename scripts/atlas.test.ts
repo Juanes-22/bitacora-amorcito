@@ -30,6 +30,7 @@ const STATION_FX_IDS = ["effect.player-glow.next-station", "effect.xp-star.compl
 const AVATAR_IDS = ["character.vanessa-jerry.avatar", "character.vanessa-jerry.avatar.animations"];
 const UI_V2_IDS = ["effect.station-glow.pulse", "map.sign.exit-right", "station.sign.board", "ui.badge.completed-pill", "ui.button.jerry.labeled", "ui.button.journal.labeled", "ui.button.sound-off.labeled", "ui.button.sound-on.labeled"];
 const CHICKEN_IDS = ["fauna.chick.black", "fauna.hen.black-crested", "fauna.hen.brown", "fauna.hen.grey-fluffy", "fauna.hen.white", "fauna.hen.white-fluffy"];
+const BADGE_IDS = ["ui.badge.jerry", "ui.badge.museo-taxidermia", "ui.badge.pinguinos-adaptacion", "ui.badge.plantas-origen", "ui.badge.plantas-semillas", "ui.badge.plastilina-casera", "ui.badge.tierra-movimientos"];
 const MUSIC_IDS = ["audio.music.beyond-the-clouds", "audio.music.enchanted-festival", "audio.music.little-town-orchestral"];
 const ATLAS_IDS = [
   "animation.water.ripples", "animation.water.waterfall", "animation.water.foam-splash",
@@ -50,11 +51,11 @@ const issues = (id: string, mutate?: (atlas: any, entry: AssetEntry) => void) =>
 };
 
 describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)", () => {
-  it("el manifiesto con los dos kits y la música es válido: 106 entradas y recuentos coherentes", () => {
+  it("el manifiesto con los dos kits y la música es válido: 113 entradas y recuentos coherentes", () => {
     const r = validateAssetManifest(manifest);
     expect(r.ok ? "" : JSON.stringify(r.ok ? [] : r.issues)).toBe("");
-    expect(manifest.assetCount).toBe(106);
-    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, characters: 14, decorations: 18, effects: 18, stations: 10, ui: 24 });
+    expect(manifest.assetCount).toBe(113);
+    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, characters: 14, decorations: 18, effects: 18, stations: 10, ui: 31 });
   });
 
   it("las 45 entradas originales siguen en su sitio y con sus campos (el kit solo se añadió)", () => {
@@ -72,7 +73,8 @@ describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)
     expect(ids.slice(87, 90).sort()).toEqual(STATION_FX_IDS);
     expect(ids.slice(90, 92).sort()).toEqual(AVATAR_IDS);
     expect(ids.slice(92, 100).sort()).toEqual(UI_V2_IDS);
-    expect(ids.slice(100).sort()).toEqual(CHICKEN_IDS);
+    expect(ids.slice(100, 106).sort()).toEqual(CHICKEN_IDS);
+    expect(ids.slice(106).sort()).toEqual(BADGE_IDS);
   });
 
   it("el kit conserva su metadata (origen, escala recomendada, animación y movimiento) sin duplicarla en otro sitio", () => {
@@ -146,6 +148,23 @@ describe("assets de interfaz y estaciones del paquete bitacora-ui-assets (SPEC 4
     m.assets["station.sign.board"].labelZones!.title.width = 999;
     const r = validateAssetManifest(m);
     expect(r.ok ? [] : r.issues.map((i) => i.message)).toEqual(expect.arrayContaining([expect.stringContaining("se sale")]));
+  });
+});
+
+describe("insignias de los aprendizajes y de Jerry (SPEC 7, AC-79)", () => {
+  it.each(BADGE_IDS)("%s: insignia de 1254 × 1254 con transparencia, recortes y hash del paquete", (id) => {
+    const e = manifest.assets[id];
+    expect(e).toMatchObject({ kind: "badge", category: "ui", width: 1254, height: 1254, hasAlphaChannel: true, transparent: true, recommendedDisplay: { width: 64, height: 64 } });
+    expect(e.contentBounds!.width).toBeGreaterThan(1000);
+    expect(e.meaning!.length).toBeGreaterThan(20);
+    const png = PNG.sync.read(readFileSync(join(root, e.path)));
+    expect([png.width, png.height]).toEqual([1254, 1254]);
+    expect(png.data[3]).toBe(0); // esquina transparente: solo el medallón es opaco
+  });
+
+  it("los PNG son los originales del paquete (hash) y la insignia de escucha activa anterior sigue intacta", () => {
+    expect(checkAssetFiles(manifest, manifestPath).warnings).toEqual([]);
+    expect(manifest.assets["ui.badge.active-listening"]).toMatchObject({ kind: "badge", width: 320, height: 318 });
   });
 });
 

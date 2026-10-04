@@ -471,7 +471,8 @@
         "title": { "type": "string", "minLength": 1 },
         "description": { "type": "string", "minLength": 1 },
         "assetId": { "$ref": "#/$defs/assetId" },
-        "xp": { "type": "integer", "minimum": 0 }
+        "xp": { "type": "integer", "minimum": 0 },
+        "awardedFor": { "const": "route-complete" }
       },
       "additionalProperties": false
     },
@@ -522,7 +523,7 @@
             "explore", "markRead", "claimBadge", "close", "index", "reset", "continueRoute",
             "startRoute", "pending", "demo", "previous", "next", "progressTemplate", "stationTitleTemplate",
             "semester", "teacher", "sectionRead", "sectionUnread", "badgeEarned", "remainingTemplate", "rewardTitle", "xpTemplate", "levelTemplate", "emptyRouteLabel", "mapLabel",
-            "badges", "notEarned", "earnedOnTemplate", "badgeCountTemplate", "completionTitle", "finalReflectionTitle", "finalReflectionPending", "resetConfirmTitle", "resetConfirmText", "resetConfirm", "cancel", "preparationTemplate",
+            "badges", "notEarned", "routeBadgeLocked", "earnedOnTemplate", "badgeCountTemplate", "completionTitle", "finalReflectionTitle", "finalReflectionPending", "resetConfirmTitle", "resetConfirmText", "resetConfirm", "cancel", "preparationTemplate",
             "musicMute", "musicUnmute", "stateLocked", "stateAvailable", "stateCompleted", "tapExplore", "tapTravel", "jerryAction", "playerName", "nextBadge", "captionJournal", "captionJerry", "captionSound"
           ],
           "properties": {
@@ -553,6 +554,7 @@
             "mapLabel": { "type": "string", "minLength": 1 },
             "badges": { "type": "string", "minLength": 1 },
             "notEarned": { "type": "string", "minLength": 1 },
+            "routeBadgeLocked": { "type": "string", "minLength": 1 },
             "earnedOnTemplate": { "type": "string", "minLength": 1 },
             "badgeCountTemplate": { "type": "string", "minLength": 1 },
             "completionTitle": { "type": "string", "minLength": 1 },

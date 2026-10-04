@@ -11,6 +11,10 @@ export function zoneAssetIds(config: BitacoraConfig, zoneId: string): string[] {
   zone.layers.forEach((l) => ids.add(l.assetId));
   zone.decorations.forEach((d) => ids.add(d.assetId));
   zone.ambient.forEach((fx) => ids.add(fx.assetId));
+  zone.critters?.forEach((k) => {
+    ids.add(k.assetId);
+    if (k.type === "family") ids.add(k.chickAssetId);
+  });
   for (const id of config.route) {
     const p = config.placements[id];
     if (!p || p.zoneId !== zoneId) continue;

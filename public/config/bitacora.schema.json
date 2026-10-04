@@ -240,6 +240,37 @@
       },
       "additionalProperties": false
     },
+    "critter": {
+      "type": "object",
+      "oneOf": [
+        {
+          "required": ["type", "assetId", "position", "radius"],
+          "properties": {
+            "type": { "const": "wander" },
+            "assetId": { "$ref": "#/$defs/assetId" },
+            "position": { "$ref": "#/$defs/point" },
+            "radius": { "type": "number", "minimum": 0, "maximum": 120 },
+            "scale": { "type": "number", "exclusiveMinimum": 0, "maximum": 4 },
+            "flipX": { "type": "boolean" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "required": ["type", "assetId", "chickAssetId", "chicks", "position", "radius"],
+          "properties": {
+            "type": { "const": "family" },
+            "assetId": { "$ref": "#/$defs/assetId" },
+            "chickAssetId": { "$ref": "#/$defs/assetId" },
+            "chicks": { "type": "integer", "minimum": 0, "maximum": 8 },
+            "position": { "$ref": "#/$defs/point" },
+            "radius": { "type": "number", "minimum": 0, "maximum": 120 },
+            "scale": { "type": "number", "exclusiveMinimum": 0, "maximum": 4 },
+            "chickScale": { "type": "number", "exclusiveMinimum": 0, "maximum": 4 }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
     "ambientEffect": {
       "type": "object",
       "oneOf": [
@@ -387,6 +418,7 @@
         "obstacles": { "type": "array", "items": { "$ref": "#/$defs/obstacle" } },
         "decorations": { "type": "array", "items": { "$ref": "#/$defs/decoration" } },
         "ambient": { "type": "array", "items": { "$ref": "#/$defs/ambientEffect" } },
+        "critters": { "type": "array", "items": { "$ref": "#/$defs/critter" } },
         "portals": {
           "type": "object",
           "propertyNames": { "$ref": "#/$defs/id" },

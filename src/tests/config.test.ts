@@ -32,7 +32,7 @@ const at = (issues: ConfigIssue[], path: string) => issues.filter((i) => i.path 
 
 describe("assets.json real", () => {
   it("es válido y conserva sus entradas originales sin migrar", () => {
-    expect(Object.keys(realManifest.assets)).toHaveLength(100);
+    expect(Object.keys(realManifest.assets)).toHaveLength(106);
     expect(realManifest.assets["ui.panel.cream.nine-slice"].nineSlice).toEqual({ top: 32, right: 32, bottom: 32, left: 32 });
     expect(realManifest.assets["character.vanessa-jerry.walk.poses-v4"].requiresFrameDefinition).toBe(true);
     expect(realManifest).not.toHaveProperty("animations");
@@ -640,5 +640,67 @@ describe("bitacora.json: identidad de las estaciones, assets de interfaz y sombr
     expect(issuesOf((c) => { c.gameplay.player.shadow = { alpha: 0.4, widthFactor: 1.4, aspect: 0.36 }; })).toEqual([]);
     expect(issuesOf((c) => { c.gameplay.player.shadow = { alpha: 0, widthFactor: 1.4, aspect: 0.36 }; }).length).toBeGreaterThan(0);
     expect(issuesOf((c) => { c.gameplay.player.shadow = { alpha: 0.4, widthFactor: 1.4, aspect: 2 }; }).length).toBeGreaterThan(0);
+  });
+});
+
+describe("bitacora.json: gallinas y pollitos (SPEC 3.3, AC-78)", () => {
+  const real = bitacoraJson as unknown as BitacoraConfig;
+  const hen = { type: "wander", assetId: "fauna.hen.brown", position: { x: 300, y: 300 }, radius: 20 } as const;
+  const withCritters = (...k: NonNullable<BitacoraConfig["maps"][string]["critters"]>) => (c: BitacoraConfig) => { c.maps["zona-a"].critters = k; };
+
+  it("las zonas del bitacora.json real tienen gallinas, y la familia de la gallina blanca esponjosa está en la zona del pabellón", () => {
+    const a = real.maps["zona-a"].critters ?? [];
+    const b = real.maps["zona-b"].critters ?? [];
+    expect(a.length).toBeGreaterThanOrEqual(8);
+    expect(b.length).toBeGreaterThanOrEqual(5);
+    const family = b.filter((k) => k.type === "family");
+    expect(family).toHaveLength(1);
+    expect(family[0]).toMatchObject({ assetId: "fauna.hen.white-fluffy", chickAssetId: "fauna.chick.black", chicks: 4 });
+    expect(a.some((k) => k.type === "family")).toBe(false);
+    for (const k of [...a, ...b]) expect(realManifest.assets[k.assetId].kind).toBe("critter-sheet");
+  });
+
+  it("ninguna gallina de la configuración real queda bajo un letrero de estación", () => {
+    for (const [zid, zone] of Object.entries(real.maps)) {
+      for (const k of zone.critters ?? []) {
+        for (const [id, p] of Object.entries(real.placements)) {
+          if (p.zoneId !== zid) continue;
+          const under = Math.abs(k.position.x - p.position.x) < 88 + k.radius && k.position.y > p.position.y - 150 && k.position.y < p.position.y - 8;
+          expect(under, `${zid}: gallina en ${JSON.stringify(k.position)} sobre el letrero de ${id}`).toBe(false);
+        }
+      }
+    }
+  });
+
+  it("la configuración es opcional; una gallina válida y una familia válida no dan errores", () => {
+    expect(issuesOf((c) => { delete c.maps["zona-a"].critters; })).toEqual([]);
+    expect(issuesOf(withCritters(hen))).toEqual([]);
+    expect(issuesOf(withCritters({ type: "family", assetId: "fauna.hen.white-fluffy", chickAssetId: "fauna.chick.black", chicks: 4, position: { x: 300, y: 300 }, radius: 20 }))).toEqual([]);
+  });
+
+  it("el asset debe existir y ser una hoja de animalito (critter-sheet), con su ruta", () => {
+    expect(at(issuesOf(withCritters({ ...hen, assetId: "fauna.hen.no-existe" })), "maps.zona-a.critters[0].assetId")).toHaveLength(1);
+    expect(at(issuesOf(withCritters({ ...hen, assetId: "station.sign.board" })), "maps.zona-a.critters[0].assetId")[0]?.message).toContain("critter-sheet");
+    const bad = issuesOf(withCritters({ type: "family", assetId: "fauna.hen.white-fluffy", chickAssetId: "ui.badge.completed-pill", chicks: 2, position: { x: 300, y: 300 }, radius: 20 }));
+    expect(at(bad, "maps.zona-a.critters[0].chickAssetId")[0]?.message).toContain("critter-sheet");
+  });
+
+  it("la posición y el área por la que merodea deben caber en la zona", () => {
+    expect(at(issuesOf(withCritters({ ...hen, position: { x: 99999, y: 10 } })), "maps.zona-a.critters[0].position")).toHaveLength(1);
+    expect(at(issuesOf(withCritters({ ...hen, position: { x: 10, y: 300 }, radius: 40 })), "maps.zona-a.critters[0].radius")).toHaveLength(1);
+  });
+
+  it("el esquema rechaza un radio negativo, demasiados pollitos y un tipo desconocido", () => {
+    expect(issuesOf(withCritters({ ...hen, radius: -1 })).length).toBeGreaterThan(0);
+    expect(issuesOf(withCritters({ type: "family", assetId: "fauna.hen.white-fluffy", chickAssetId: "fauna.chick.black", chicks: 9, position: { x: 300, y: 300 }, radius: 20 })).length).toBeGreaterThan(0);
+    expect(issuesOf(withCritters({ ...hen, type: "dragon" } as never)).length).toBeGreaterThan(0);
+  });
+
+  it("limita los animalitos por zona (presupuesto de rendimiento), contando los pollitos", () => {
+    const many = Array.from({ length: 31 }, (_, i) => ({ ...hen, position: { x: 100 + i * 10, y: 300 } }));
+    expect(at(issuesOf(withCritters(...many)), "maps.zona-a.critters")[0]?.message).toContain("el máximo por zona es 30");
+    expect(at(issuesOf(withCritters(...many.slice(0, 30))), "maps.zona-a.critters")).toHaveLength(0);
+    const family = { type: "family", assetId: "fauna.hen.white-fluffy", chickAssetId: "fauna.chick.black", chicks: 8, position: { x: 300, y: 300 }, radius: 20 } as const;
+    expect(at(issuesOf(withCritters(...many.slice(0, 22), family)), "maps.zona-a.critters")[0]?.message).toContain("31 animalitos");
   });
 });

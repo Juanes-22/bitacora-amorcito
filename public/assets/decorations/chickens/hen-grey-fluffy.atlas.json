@@ -1,0 +1,253 @@
+{
+  "frames": {
+    "idle-00": {
+      "frame": {
+        "x": 37,
+        "y": 26,
+        "w": 286,
+        "h": 325
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 70,
+        "y": 69,
+        "w": 286,
+        "h": 325
+      },
+      "sourceSize": {
+        "w": 448,
+        "h": 448
+      }
+    },
+    "idle-01": {
+      "frame": {
+        "x": 400,
+        "y": 29,
+        "w": 278,
+        "h": 319
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 68,
+        "y": 75,
+        "w": 278,
+        "h": 319
+      },
+      "sourceSize": {
+        "w": 448,
+        "h": 448
+      }
+    },
+    "idle-02": {
+      "frame": {
+        "x": 762,
+        "y": 21,
+        "w": 287,
+        "h": 329
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 64,
+        "y": 65,
+        "w": 287,
+        "h": 329
+      },
+      "sourceSize": {
+        "w": 448,
+        "h": 448
+      }
+    },
+    "idle-03": {
+      "frame": {
+        "x": 1123,
+        "y": 25,
+        "w": 286,
+        "h": 326
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 70,
+        "y": 68,
+        "w": 286,
+        "h": 326
+      },
+      "sourceSize": {
+        "w": 448,
+        "h": 448
+      }
+    },
+    "walk-00": {
+      "frame": {
+        "x": 40,
+        "y": 383,
+        "w": 285,
+        "h": 317
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 82,
+        "y": 77,
+        "w": 285,
+        "h": 317
+      },
+      "sourceSize": {
+        "w": 448,
+        "h": 448
+      }
+    },
+    "walk-01": {
+      "frame": {
+        "x": 402,
+        "y": 379,
+        "w": 289,
+        "h": 321
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 76,
+        "y": 73,
+        "w": 289,
+        "h": 321
+      },
+      "sourceSize": {
+        "w": 448,
+        "h": 448
+      }
+    },
+    "walk-02": {
+      "frame": {
+        "x": 765,
+        "y": 379,
+        "w": 290,
+        "h": 321
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 78,
+        "y": 73,
+        "w": 290,
+        "h": 321
+      },
+      "sourceSize": {
+        "w": 448,
+        "h": 448
+      }
+    },
+    "walk-03": {
+      "frame": {
+        "x": 1123,
+        "y": 381,
+        "w": 289,
+        "h": 319
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 75,
+        "y": 75,
+        "w": 289,
+        "h": 319
+      },
+      "sourceSize": {
+        "w": 448,
+        "h": 448
+      }
+    },
+    "peck-00": {
+      "frame": {
+        "x": 35,
+        "y": 729,
+        "w": 293,
+        "h": 320
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 72,
+        "y": 74,
+        "w": 293,
+        "h": 320
+      },
+      "sourceSize": {
+        "w": 448,
+        "h": 448
+      }
+    },
+    "peck-01": {
+      "frame": {
+        "x": 390,
+        "y": 768,
+        "w": 334,
+        "h": 280
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 68,
+        "y": 114,
+        "w": 334,
+        "h": 280
+      },
+      "sourceSize": {
+        "w": 448,
+        "h": 448
+      }
+    },
+    "peck-02": {
+      "frame": {
+        "x": 768,
+        "y": 773,
+        "w": 326,
+        "h": 278
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 80,
+        "y": 116,
+        "w": 326,
+        "h": 278
+      },
+      "sourceSize": {
+        "w": 448,
+        "h": 448
+      }
+    },
+    "peck-03": {
+      "frame": {
+        "x": 1125,
+        "y": 740,
+        "w": 292,
+        "h": 308
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 76,
+        "y": 86,
+        "w": 292,
+        "h": 308
+      },
+      "sourceSize": {
+        "w": 448,
+        "h": 448
+      }
+    }
+  },
+  "meta": {
+    "image": "hen-grey-fluffy.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1448,
+      "h": 1086
+    },
+    "scale": "1"
+  }
+}

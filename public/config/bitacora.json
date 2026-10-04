@@ -621,13 +621,6 @@
         },
         {
           "type": "animation",
-          "assetId": "animation.flora.flowering-bush",
-          "position": {"x": 1235, "y": 848},
-          "depth": {"mode": "y", "offset": 0},
-          "scale": 1.2
-        },
-        {
-          "type": "animation",
           "assetId": "animation.flora.daisies",
           "position": {"x": 1182, "y": 897},
           "depth": {"mode": "y", "offset": 0},
@@ -652,43 +645,11 @@
         },
         {
           "type": "animation",
-          "assetId": "animation.flora.purple-spikes",
-          "position": {"x": 1285, "y": 856},
-          "depth": {"mode": "y", "offset": 0},
-          "scale": 1.22,
-          "speedFactor": 0.85
-        },
-        {
-          "type": "animation",
           "assetId": "animation.flora.sunflowers",
           "position": {"x": 1160, "y": 872},
           "depth": {"mode": "y", "offset": 0},
           "scale": 1.22,
           "speedFactor": 1.2
-        },
-        {
-          "type": "animation",
-          "assetId": "animation.flora.daisies",
-          "position": {"x": 1310, "y": 825},
-          "depth": {"mode": "y", "offset": 0},
-          "scale": 1.35,
-          "speedFactor": 0.95
-        },
-        {
-          "type": "animation",
-          "assetId": "animation.flora.pink-flowers",
-          "position": {"x": 950, "y": 1060},
-          "depth": {"mode": "y", "offset": 0},
-          "scale": 1.35,
-          "speedFactor": 1.1
-        },
-        {
-          "type": "animation",
-          "assetId": "animation.flora.daisies",
-          "position": {"x": 998, "y": 1054},
-          "depth": {"mode": "y", "offset": 0},
-          "scale": 1.35,
-          "speedFactor": 0.85
         },
         {
           "type": "animation",
@@ -705,6 +666,18 @@
           "depth": {"mode": "y", "offset": 0},
           "scale": 1.2
         }
+      ],
+      "critters": [
+        {"type": "wander", "assetId": "fauna.hen.grey-fluffy", "position": {"x": 640, "y": 430}, "radius": 26, "scale": 1.15},
+        {"type": "wander", "assetId": "fauna.hen.black-crested", "position": {"x": 705, "y": 452}, "radius": 20, "scale": 1.15},
+        {"type": "wander", "assetId": "fauna.hen.white", "position": {"x": 1372, "y": 520}, "radius": 26, "scale": 1.15},
+        {"type": "wander", "assetId": "fauna.hen.brown", "position": {"x": 1250, "y": 852}, "radius": 20, "scale": 1.15},
+        {"type": "wander", "assetId": "fauna.hen.grey-fluffy", "position": {"x": 950, "y": 1030}, "radius": 26, "scale": 1.15},
+        {"type": "wander", "assetId": "fauna.hen.brown", "position": {"x": 505, "y": 940}, "radius": 16, "scale": 1.15},
+        {"type": "wander", "assetId": "fauna.hen.black-crested", "position": {"x": 752, "y": 797}, "radius": 18, "scale": 1.15},
+        {"type": "wander", "assetId": "fauna.hen.white", "position": {"x": 455, "y": 668}, "radius": 10, "scale": 1.15},
+        {"type": "wander", "assetId": "fauna.hen.brown", "position": {"x": 1078, "y": 378}, "radius": 10, "scale": 1.15},
+        {"type": "wander", "assetId": "fauna.hen.black-crested", "position": {"x": 60, "y": 998}, "radius": 10, "scale": 1.15}
       ],
       "portals": {
         "a-b": {
@@ -1182,21 +1155,6 @@
         },
         {
           "type": "animation",
-          "assetId": "animation.flora.round-bush",
-          "position": {"x": 650, "y": 960},
-          "depth": {"mode": "y", "offset": 0},
-          "scale": 1.2
-        },
-        {
-          "type": "animation",
-          "assetId": "animation.flora.daisies",
-          "position": {"x": 680, "y": 1050},
-          "depth": {"mode": "y", "offset": 0},
-          "scale": 1.35,
-          "speedFactor": 1.2
-        },
-        {
-          "type": "animation",
           "assetId": "animation.flora.flowering-bush",
           "position": {"x": 628, "y": 1040},
           "depth": {"mode": "y", "offset": 0},
@@ -1250,6 +1208,15 @@
           "scale": 1.22,
           "speedFactor": 1.2
         }
+      ],
+      "critters": [
+        {"type": "family", "assetId": "fauna.hen.white-fluffy", "chickAssetId": "fauna.chick.black", "chicks": 4, "position": {"x": 1272, "y": 697}, "radius": 16, "scale": 1.15},
+        {"type": "wander", "assetId": "fauna.hen.grey-fluffy", "position": {"x": 700, "y": 935}, "radius": 22, "scale": 1.15},
+        {"type": "wander", "assetId": "fauna.hen.brown", "position": {"x": 730, "y": 1030}, "radius": 28, "scale": 1.15},
+        {"type": "wander", "assetId": "fauna.hen.white", "position": {"x": 765, "y": 862}, "radius": 16, "scale": 1.15},
+        {"type": "wander", "assetId": "fauna.hen.black-crested", "position": {"x": 850, "y": 872}, "radius": 14, "scale": 1.15},
+        {"type": "wander", "assetId": "fauna.hen.white", "position": {"x": 1055, "y": 622}, "radius": 12, "scale": 1.15},
+        {"type": "wander", "assetId": "fauna.hen.brown", "position": {"x": 470, "y": 440}, "radius": 10, "scale": 1.15}
       ],
       "portals": {
         "b-a": {

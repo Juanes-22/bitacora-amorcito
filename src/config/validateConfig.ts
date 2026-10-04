@@ -44,6 +44,8 @@ const AMBIENT_KINDS = {
 } as const;
 /** Presupuesto de efectos por zona (SPEC 3.2, AC-57). */
 export const MAX_AMBIENT_PER_ZONE = 60;
+/** Presupuesto de animalitos por zona (gallinas y pollitos, contados uno a uno). */
+export const MAX_CRITTERS_PER_ZONE = 30;
 const AMBIENT_MOTION = { sway: "sway", drift: "drift", particles: "particle", glow: "pulse", swim: "swim" } as const;
 
 export interface ValidateOptions {
@@ -221,6 +223,20 @@ export function validateBitacora(
         });
       } else if (!inside(zone, fx.position.x, fx.position.y)) {
         err(`${ap}.position`, "queda fuera de las dimensiones de la zona");
+      }
+    });
+
+    const critters = zone.critters ?? [];
+    const critterCount = critters.reduce((n, k) => n + 1 + (k.type === "family" ? k.chicks : 0), 0);
+    if (critterCount > MAX_CRITTERS_PER_ZONE) err(`${at}.critters`, `tiene ${critterCount} animalitos; el máximo por zona es ${MAX_CRITTERS_PER_ZONE} (presupuesto de rendimiento)`);
+    critters.forEach((k, i) => {
+      const kp = `${at}.critters[${i}]`;
+      for (const [field, id] of k.type === "family" ? ([["assetId", k.assetId], ["chickAssetId", k.chickAssetId]] as const) : ([["assetId", k.assetId]] as const)) {
+        checkAsset(`${kp}.${field}`, id, ["critter-sheet"]);
+      }
+      if (!inside(zone, k.position.x, k.position.y)) err(`${kp}.position`, "queda fuera de las dimensiones de la zona");
+      else if (k.position.x - k.radius < 0 || k.position.x + k.radius > zone.width || k.position.y - k.radius < 0 || k.position.y + k.radius > zone.height) {
+        err(`${kp}.radius`, "el área por la que merodea se sale de la zona");
       }
     });
 

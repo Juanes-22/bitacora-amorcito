@@ -98,6 +98,15 @@ export type AmbientEffect =
   | { type: "glow"; assetId: string; position: Point; scale?: number; alpha?: number; depth: AmbientDepth }
   | { type: "swim"; assetId: string; path: Point[]; scale?: number; speedFactor?: number; depth: AmbientDepth };
 
+/**
+ * Un animalito (o una familia) que anda por la zona (SPEC 3.3). Merodea dentro de `radius` alrededor de `position` (las patas):
+ * reposa, picotea y da paseos cortos. `scale` multiplica el tamaño recomendado del asset. Las gallinas no chocan con nada: el
+ * mapa decide dónde caben (pasto despejado) y la configuración lo respeta.
+ */
+export type Critter =
+  | { type: "wander"; assetId: string; position: Point; radius: number; scale?: number; flipX?: boolean }
+  | { type: "family"; assetId: string; chickAssetId: string; chicks: number; position: Point; radius: number; scale?: number; chickScale?: number };
+
 export interface MapZone {
   label: string;
   width: number;
@@ -109,6 +118,8 @@ export interface MapZone {
   decorations: Decoration[];
   /** Animaciones del paisaje (puede estar vacío). */
   ambient: AmbientEffect[];
+  /** Gallinas y pollitos que andan por la zona (opcional, SPEC 3.3). */
+  critters?: Critter[];
   portals: Record<string, Portal>;
 }
 
@@ -254,6 +265,15 @@ export interface AvatarAnimation {
   repeat: number;
 }
 
+/** Animación de una gallina o un pollito: fotogramas con su duración en ms por estado (reposo, caminar, picotear). */
+export interface CritterAnimation {
+  key: string;
+  state: "idle" | "walk" | "peck";
+  frameNames: string[];
+  durationsMs: number[];
+  repeat: number;
+}
+
 export interface LabelZone {
   x: number; y: number; width: number; height: number;
   align?: "left" | "center" | "right"; color?: string; fontSize?: number; fontWeight?: number; maxLines?: number;
@@ -315,6 +335,8 @@ export interface AssetEntry {
   animations?: IdleAnimation[];
   /** Hoja del avatar de la cabecera (`kind` «avatar-sheet»): reposo y alegría, con la duración de cada fotograma. */
   avatarAnimations?: AvatarAnimation[];
+  /** Hoja de un animalito que anda por el mapa (`kind` «critter-sheet»): reposo, caminar y picotear con su duración por fotograma. */
+  critterAnimations?: CritterAnimation[];
   anchor?: string;
   /**
    * Zonas de texto sobre la imagen (letreros, botones, insignias), en píxeles de la textura desde su esquina superior izquierda:

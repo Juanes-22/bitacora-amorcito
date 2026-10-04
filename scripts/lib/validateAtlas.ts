@@ -40,7 +40,7 @@ export function validateAtlasData(
   }
 
   const names = Object.keys(a.frames);
-  const expected = entry.animation?.frameNames ?? [...new Set([...(entry.animations ?? []), ...(entry.avatarAnimations ?? [])].flatMap((x) => x.frameNames))];
+  const expected = entry.animation?.frameNames ?? [...new Set([...(entry.animations ?? []), ...(entry.avatarAnimations ?? []), ...(entry.critterAnimations ?? [])].flatMap((x) => x.frameNames))];
   if (JSON.stringify([...names].sort()) !== JSON.stringify([...expected].sort())) {
     err(".frames", `los nombres del atlas (${names.join(", ")}) no coinciden con los fotogramas de las animaciones (${expected.join(", ")})`);
   }

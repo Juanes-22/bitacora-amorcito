@@ -110,7 +110,7 @@ try {
       const p = scene.player.sprite;
       return {
         sprite: { x: p.x, y: p.y, depth: p.depth },
-        list: scene.children.list.filter((o) => o.texture?.key === "__ground-shadow" && o.visible).map((o) => ({ x: o.x, y: o.y, w: o.displayWidth, h: o.displayHeight, alpha: o.alpha, depth: o.depth })).sort((a, b) => a.x - b.x),
+        list: scene.children.list.filter((o) => o.texture?.key === "__ground-shadow" && o.name !== "critter-shadow" && o.visible).map((o) => ({ x: o.x, y: o.y, w: o.displayWidth, h: o.displayHeight, alpha: o.alpha, depth: o.depth })).sort((a, b) => a.x - b.x),
       };
     });
   {

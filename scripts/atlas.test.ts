@@ -29,6 +29,7 @@ const TOOLBAR_IDS = ["decoration.learning-corner", "station.item.open-book", "ui
 const STATION_FX_IDS = ["effect.player-glow.next-station", "effect.xp-star.complete", "ui.panel.player-status.default"];
 const AVATAR_IDS = ["character.vanessa-jerry.avatar", "character.vanessa-jerry.avatar.animations"];
 const UI_V2_IDS = ["effect.station-glow.pulse", "map.sign.exit-right", "station.sign.board", "ui.badge.completed-pill", "ui.button.jerry.labeled", "ui.button.journal.labeled", "ui.button.sound-off.labeled", "ui.button.sound-on.labeled"];
+const CHICKEN_IDS = ["fauna.chick.black", "fauna.hen.black-crested", "fauna.hen.brown", "fauna.hen.grey-fluffy", "fauna.hen.white", "fauna.hen.white-fluffy"];
 const MUSIC_IDS = ["audio.music.beyond-the-clouds", "audio.music.enchanted-festival", "audio.music.little-town-orchestral"];
 const ATLAS_IDS = [
   "animation.water.ripples", "animation.water.waterfall", "animation.water.foam-splash",
@@ -49,11 +50,11 @@ const issues = (id: string, mutate?: (atlas: any, entry: AssetEntry) => void) =>
 };
 
 describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)", () => {
-  it("el manifiesto con los dos kits y la música es válido: 100 entradas y recuentos coherentes", () => {
+  it("el manifiesto con los dos kits y la música es válido: 106 entradas y recuentos coherentes", () => {
     const r = validateAssetManifest(manifest);
     expect(r.ok ? "" : JSON.stringify(r.ok ? [] : r.issues)).toBe("");
-    expect(manifest.assetCount).toBe(100);
-    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, characters: 14, decorations: 12, effects: 18, stations: 10, ui: 24 });
+    expect(manifest.assetCount).toBe(106);
+    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, characters: 14, decorations: 18, effects: 18, stations: 10, ui: 24 });
   });
 
   it("las 45 entradas originales siguen en su sitio y con sus campos (el kit solo se añadió)", () => {
@@ -70,7 +71,8 @@ describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)
     expect(ids.slice(80, 87).sort()).toEqual(TOOLBAR_IDS);
     expect(ids.slice(87, 90).sort()).toEqual(STATION_FX_IDS);
     expect(ids.slice(90, 92).sort()).toEqual(AVATAR_IDS);
-    expect(ids.slice(92).sort()).toEqual(UI_V2_IDS);
+    expect(ids.slice(92, 100).sort()).toEqual(UI_V2_IDS);
+    expect(ids.slice(100).sort()).toEqual(CHICKEN_IDS);
   });
 
   it("el kit conserva su metadata (origen, escala recomendada, animación y movimiento) sin duplicarla en otro sitio", () => {
@@ -144,6 +146,34 @@ describe("assets de interfaz y estaciones del paquete bitacora-ui-assets (SPEC 4
     m.assets["station.sign.board"].labelZones!.title.width = 999;
     const r = validateAssetManifest(m);
     expect(r.ok ? [] : r.issues.map((i) => i.message)).toEqual(expect.arrayContaining([expect.stringContaining("se sale")]));
+  });
+});
+
+describe("gallinas y pollito animados (SPEC 3.3, AC-78)", () => {
+  it.each(CHICKEN_IDS)("%s: hoja de 12 fotogramas de 448 × 448 con reposo, caminar y picotear, y su atlas es válido", (id) => {
+    const e = manifest.assets[id];
+    expect(e).toMatchObject({ kind: "critter-sheet", category: "decorations", width: 1448, height: 1086, frameCount: 12, sourceFrameSize: { width: 448, height: 448 }, facing: "right", flipForLeft: true });
+    expect(e.critterAnimations!.map((a) => a.state)).toEqual(["idle", "walk", "peck"]);
+    expect(e.critterAnimations![0].durationsMs).toEqual([1200, 450, 130, 600]);
+    expect(e.critterAnimations![1].durationsMs).toEqual([140, 140, 140, 140]);
+    expect(e.critterAnimations![2].durationsMs).toEqual([650, 180, 220, 200]);
+    expect(e.recommendedDisplay).toEqual(id === "fauna.chick.black" ? { width: 24, height: 24 } : { width: 48, height: 48 });
+    expect(issues(id)).toEqual([]);
+  });
+
+  it("los PNG son los originales del paquete (hash) y no hay avisos de archivos", () => {
+    expect(checkAssetFiles(manifest, manifestPath).warnings).toEqual([]);
+  });
+
+  it("el validador rechaza una hoja sin el estado de picotear o con duraciones que no cuadran", () => {
+    const check = (mutate: (e: AssetEntry) => void) => {
+      const m = structuredClone(manifest);
+      mutate(m.assets["fauna.hen.brown"]);
+      const r = validateAssetManifest(m);
+      return r.ok ? [] : r.issues.map((i) => i.message);
+    };
+    expect(check((e) => { e.critterAnimations = e.critterAnimations!.filter((a) => a.state !== "peck"); })).toEqual(expect.arrayContaining([expect.stringContaining("«peck»")]));
+    expect(check((e) => { e.critterAnimations![1].durationsMs = [140, 140]; })).toEqual(expect.arrayContaining([expect.stringContaining("duraciones")]));
   });
 });
 

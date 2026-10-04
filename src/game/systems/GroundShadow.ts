@@ -71,10 +71,11 @@ export interface ShadowStyle {
   aspect: number;
 }
 
-const TEXTURE_KEY = "__ground-shadow";
+export const SHADOW_TEXTURE_KEY = "__ground-shadow";
+const TEXTURE_KEY = SHADOW_TEXTURE_KEY;
 
 /** Una elipse suave (centro oscuro que se difumina hacia el borde), creada una vez por escena con un lienzo. */
-function ensureTexture(scene: Phaser.Scene): void {
+export function ensureTexture(scene: Phaser.Scene): void {
   if (scene.textures.exists(TEXTURE_KEY)) return;
   const tex = scene.textures.createCanvas(TEXTURE_KEY, 64, 32);
   if (!tex) return;

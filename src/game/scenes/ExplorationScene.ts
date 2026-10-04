@@ -7,6 +7,7 @@ import { setupCamera } from "../systems/CameraController";
 import { debugEnabled, setupDebugOverlay } from "../systems/DebugOverlay";
 import { InputController } from "../systems/InputController";
 import { buildAmbient, type Ambient } from "../systems/AmbientBuilder";
+import { buildCritters, type Critters } from "../systems/CritterBuilder";
 import { navigationGrid } from "../../config/reachability";
 import { InteractionSystem } from "../systems/InteractionSystem";
 import { TapNavigation } from "../systems/TapNavigation";
@@ -33,6 +34,7 @@ export class ExplorationScene extends Phaser.Scene {
   private token = 0;
   private world?: World;
   private ambient?: Ambient;
+  private critters?: Critters;
   private player?: Player;
   private input2?: InputController;
   private tap?: TapNavigation;
@@ -84,6 +86,7 @@ export class ExplorationScene extends Phaser.Scene {
 
     this.world = buildWorld(this, config, assets, this.zoneId, reducedMotion);
     this.ambient = buildAmbient(this, config, assets, this.zoneId, reducedMotion);
+    this.critters = buildCritters(this, config, assets, this.zoneId, reducedMotion);
     this.player = new Player(this, config.gameplay.player, start, { assets, reducedMotion });
     this.physics.world.setBounds(0, 0, zone.width, zone.height);
     this.physics.add.collider(this.player.feet, this.world.obstacles);
@@ -201,8 +204,10 @@ export class ExplorationScene extends Phaser.Scene {
     this.input2?.destroy();
     this.player?.destroy();
     this.ambient?.destroy();
+    this.critters?.destroy();
     this.world?.destroy();
     this.ambient = undefined;
+    this.critters = undefined;
     this.interaction = undefined;
     this.tap = undefined;
     this.input2 = undefined;

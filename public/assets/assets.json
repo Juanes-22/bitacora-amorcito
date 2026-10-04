@@ -3,12 +3,12 @@
   "project": "Bitácora Amorcito",
   "basePath": ".",
   "pathConvention": "Paths are relative to the directory containing this assets.json.",
-  "assetCount": 100,
+  "assetCount": 106,
   "categoryCounts": {
     "audio": 3,
     "backgrounds": 17,
     "characters": 14,
-    "decorations": 12,
+    "decorations": 18,
     "effects": 18,
     "references": 2,
     "stations": 10,
@@ -3487,6 +3487,546 @@
         0.72,
         0.72
       ]
+    },
+    "fauna.hen.grey-fluffy": {
+      "path": "decorations/chickens/hen-grey-fluffy.png",
+      "type": "image",
+      "format": "png",
+      "category": "decorations",
+      "label": "Gallina gris esponjosa",
+      "kind": "critter-sheet",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1631404,
+      "sha256": "51a9c4d13ebe2264927e8edbe7fefed3d5f40210b5e4c473e0838128fcb9b646",
+      "originalPath": "bitacora-chickens-animations/decorations/chickens/hen-grey-fluffy.png",
+      "filter": "nearest",
+      "atlasPath": "decorations/chickens/hen-grey-fluffy.atlas.json",
+      "frameCount": 12,
+      "sourceFrameSize": {
+        "width": 448,
+        "height": 448
+      },
+      "layout": {
+        "columns": 4,
+        "rows": 3,
+        "order": "state"
+      },
+      "origin": {
+        "x": 0.5,
+        "y": 0.8794642857142857
+      },
+      "recommendedDisplay": {
+        "width": 48,
+        "height": 48
+      },
+      "facing": "right",
+      "flipForLeft": true,
+      "critterAnimations": [
+        {
+          "key": "hen-grey-fluffy-idle",
+          "state": "idle",
+          "frameNames": [
+            "idle-00",
+            "idle-01",
+            "idle-02",
+            "idle-03"
+          ],
+          "durationsMs": [
+            1200,
+            450,
+            130,
+            600
+          ],
+          "repeat": -1
+        },
+        {
+          "key": "hen-grey-fluffy-walk",
+          "state": "walk",
+          "frameNames": [
+            "walk-00",
+            "walk-01",
+            "walk-02",
+            "walk-03"
+          ],
+          "durationsMs": [
+            140,
+            140,
+            140,
+            140
+          ],
+          "repeat": -1
+        },
+        {
+          "key": "hen-grey-fluffy-peck",
+          "state": "peck",
+          "frameNames": [
+            "peck-00",
+            "peck-01",
+            "peck-02",
+            "peck-03"
+          ],
+          "durationsMs": [
+            650,
+            180,
+            220,
+            200
+          ],
+          "repeat": -1
+        }
+      ]
+    },
+    "fauna.hen.black-crested": {
+      "path": "decorations/chickens/hen-black-crested.png",
+      "type": "image",
+      "format": "png",
+      "category": "decorations",
+      "label": "Gallina negra con copete",
+      "kind": "critter-sheet",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1701052,
+      "sha256": "79fc3b6e6fcc6f41f12580a4bbe4b4b832fd6633974054f3ccb24fe425034b52",
+      "originalPath": "bitacora-chickens-animations/decorations/chickens/hen-black-crested.png",
+      "filter": "nearest",
+      "atlasPath": "decorations/chickens/hen-black-crested.atlas.json",
+      "frameCount": 12,
+      "sourceFrameSize": {
+        "width": 448,
+        "height": 448
+      },
+      "layout": {
+        "columns": 4,
+        "rows": 3,
+        "order": "state"
+      },
+      "origin": {
+        "x": 0.5,
+        "y": 0.8794642857142857
+      },
+      "recommendedDisplay": {
+        "width": 48,
+        "height": 48
+      },
+      "facing": "right",
+      "flipForLeft": true,
+      "critterAnimations": [
+        {
+          "key": "hen-black-crested-idle",
+          "state": "idle",
+          "frameNames": [
+            "idle-00",
+            "idle-01",
+            "idle-02",
+            "idle-03"
+          ],
+          "durationsMs": [
+            1200,
+            450,
+            130,
+            600
+          ],
+          "repeat": -1
+        },
+        {
+          "key": "hen-black-crested-walk",
+          "state": "walk",
+          "frameNames": [
+            "walk-00",
+            "walk-01",
+            "walk-02",
+            "walk-03"
+          ],
+          "durationsMs": [
+            140,
+            140,
+            140,
+            140
+          ],
+          "repeat": -1
+        },
+        {
+          "key": "hen-black-crested-peck",
+          "state": "peck",
+          "frameNames": [
+            "peck-00",
+            "peck-01",
+            "peck-02",
+            "peck-03"
+          ],
+          "durationsMs": [
+            650,
+            180,
+            220,
+            200
+          ],
+          "repeat": -1
+        }
+      ]
+    },
+    "fauna.hen.white": {
+      "path": "decorations/chickens/hen-white.png",
+      "type": "image",
+      "format": "png",
+      "category": "decorations",
+      "label": "Gallina blanca común",
+      "kind": "critter-sheet",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1112167,
+      "sha256": "189a177cdf4ddd6cafb8dea81cfb89447a5ab76f5c41a328c2397d9c1d5e55ff",
+      "originalPath": "bitacora-chickens-animations/decorations/chickens/hen-white.png",
+      "filter": "nearest",
+      "atlasPath": "decorations/chickens/hen-white.atlas.json",
+      "frameCount": 12,
+      "sourceFrameSize": {
+        "width": 448,
+        "height": 448
+      },
+      "layout": {
+        "columns": 4,
+        "rows": 3,
+        "order": "state"
+      },
+      "origin": {
+        "x": 0.5,
+        "y": 0.8794642857142857
+      },
+      "recommendedDisplay": {
+        "width": 48,
+        "height": 48
+      },
+      "facing": "right",
+      "flipForLeft": true,
+      "critterAnimations": [
+        {
+          "key": "hen-white-idle",
+          "state": "idle",
+          "frameNames": [
+            "idle-00",
+            "idle-01",
+            "idle-02",
+            "idle-03"
+          ],
+          "durationsMs": [
+            1200,
+            450,
+            130,
+            600
+          ],
+          "repeat": -1
+        },
+        {
+          "key": "hen-white-walk",
+          "state": "walk",
+          "frameNames": [
+            "walk-00",
+            "walk-01",
+            "walk-02",
+            "walk-03"
+          ],
+          "durationsMs": [
+            140,
+            140,
+            140,
+            140
+          ],
+          "repeat": -1
+        },
+        {
+          "key": "hen-white-peck",
+          "state": "peck",
+          "frameNames": [
+            "peck-00",
+            "peck-01",
+            "peck-02",
+            "peck-03"
+          ],
+          "durationsMs": [
+            650,
+            180,
+            220,
+            200
+          ],
+          "repeat": -1
+        }
+      ]
+    },
+    "fauna.hen.brown": {
+      "path": "decorations/chickens/hen-brown.png",
+      "type": "image",
+      "format": "png",
+      "category": "decorations",
+      "label": "Gallina café común",
+      "kind": "critter-sheet",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1059651,
+      "sha256": "54c703b39679743153b46f4200a61e5e27e628c8822392e5132c13179332e103",
+      "originalPath": "bitacora-chickens-animations/decorations/chickens/hen-brown.png",
+      "filter": "nearest",
+      "atlasPath": "decorations/chickens/hen-brown.atlas.json",
+      "frameCount": 12,
+      "sourceFrameSize": {
+        "width": 448,
+        "height": 448
+      },
+      "layout": {
+        "columns": 4,
+        "rows": 3,
+        "order": "state"
+      },
+      "origin": {
+        "x": 0.5,
+        "y": 0.8794642857142857
+      },
+      "recommendedDisplay": {
+        "width": 48,
+        "height": 48
+      },
+      "facing": "right",
+      "flipForLeft": true,
+      "critterAnimations": [
+        {
+          "key": "hen-brown-idle",
+          "state": "idle",
+          "frameNames": [
+            "idle-00",
+            "idle-01",
+            "idle-02",
+            "idle-03"
+          ],
+          "durationsMs": [
+            1200,
+            450,
+            130,
+            600
+          ],
+          "repeat": -1
+        },
+        {
+          "key": "hen-brown-walk",
+          "state": "walk",
+          "frameNames": [
+            "walk-00",
+            "walk-01",
+            "walk-02",
+            "walk-03"
+          ],
+          "durationsMs": [
+            140,
+            140,
+            140,
+            140
+          ],
+          "repeat": -1
+        },
+        {
+          "key": "hen-brown-peck",
+          "state": "peck",
+          "frameNames": [
+            "peck-00",
+            "peck-01",
+            "peck-02",
+            "peck-03"
+          ],
+          "durationsMs": [
+            650,
+            180,
+            220,
+            200
+          ],
+          "repeat": -1
+        }
+      ]
+    },
+    "fauna.hen.white-fluffy": {
+      "path": "decorations/chickens/hen-white-fluffy.png",
+      "type": "image",
+      "format": "png",
+      "category": "decorations",
+      "label": "Gallina blanca esponjosa",
+      "kind": "critter-sheet",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1913044,
+      "sha256": "3cce2bd03400816bda9204ba7ae61f50c31b843deeba878aa5c8363c7c82ae75",
+      "originalPath": "bitacora-chickens-animations/decorations/chickens/hen-white-fluffy.png",
+      "filter": "nearest",
+      "atlasPath": "decorations/chickens/hen-white-fluffy.atlas.json",
+      "frameCount": 12,
+      "sourceFrameSize": {
+        "width": 448,
+        "height": 448
+      },
+      "layout": {
+        "columns": 4,
+        "rows": 3,
+        "order": "state"
+      },
+      "origin": {
+        "x": 0.5,
+        "y": 0.8794642857142857
+      },
+      "recommendedDisplay": {
+        "width": 48,
+        "height": 48
+      },
+      "facing": "right",
+      "flipForLeft": true,
+      "critterAnimations": [
+        {
+          "key": "hen-white-fluffy-idle",
+          "state": "idle",
+          "frameNames": [
+            "idle-00",
+            "idle-01",
+            "idle-02",
+            "idle-03"
+          ],
+          "durationsMs": [
+            1200,
+            450,
+            130,
+            600
+          ],
+          "repeat": -1
+        },
+        {
+          "key": "hen-white-fluffy-walk",
+          "state": "walk",
+          "frameNames": [
+            "walk-00",
+            "walk-01",
+            "walk-02",
+            "walk-03"
+          ],
+          "durationsMs": [
+            140,
+            140,
+            140,
+            140
+          ],
+          "repeat": -1
+        },
+        {
+          "key": "hen-white-fluffy-peck",
+          "state": "peck",
+          "frameNames": [
+            "peck-00",
+            "peck-01",
+            "peck-02",
+            "peck-03"
+          ],
+          "durationsMs": [
+            650,
+            180,
+            220,
+            200
+          ],
+          "repeat": -1
+        }
+      ]
+    },
+    "fauna.chick.black": {
+      "path": "decorations/chickens/chick-black.png",
+      "type": "image",
+      "format": "png",
+      "category": "decorations",
+      "label": "Pollito negro y gris",
+      "kind": "critter-sheet",
+      "width": 1448,
+      "height": 1086,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 940433,
+      "sha256": "046a5cf65775263ea42c643a8f309960c2e9128cd531b7636b24ab5b01885fae",
+      "originalPath": "bitacora-chickens-animations/decorations/chickens/chick-black.png",
+      "filter": "nearest",
+      "atlasPath": "decorations/chickens/chick-black.atlas.json",
+      "frameCount": 12,
+      "sourceFrameSize": {
+        "width": 448,
+        "height": 448
+      },
+      "layout": {
+        "columns": 4,
+        "rows": 3,
+        "order": "state"
+      },
+      "origin": {
+        "x": 0.5,
+        "y": 0.8794642857142857
+      },
+      "recommendedDisplay": {
+        "width": 24,
+        "height": 24
+      },
+      "facing": "right",
+      "flipForLeft": true,
+      "critterAnimations": [
+        {
+          "key": "chick-black-idle",
+          "state": "idle",
+          "frameNames": [
+            "idle-00",
+            "idle-01",
+            "idle-02",
+            "idle-03"
+          ],
+          "durationsMs": [
+            1200,
+            450,
+            130,
+            600
+          ],
+          "repeat": -1
+        },
+        {
+          "key": "chick-black-walk",
+          "state": "walk",
+          "frameNames": [
+            "walk-00",
+            "walk-01",
+            "walk-02",
+            "walk-03"
+          ],
+          "durationsMs": [
+            140,
+            140,
+            140,
+            140
+          ],
+          "repeat": -1
+        },
+        {
+          "key": "chick-black-peck",
+          "state": "peck",
+          "frameNames": [
+            "peck-00",
+            "peck-01",
+            "peck-02",
+            "peck-03"
+          ],
+          "durationsMs": [
+            650,
+            180,
+            220,
+            200
+          ],
+          "repeat": -1
+        }
+      ]
     }
   },
   "sourceDocuments": [
@@ -3681,6 +4221,18 @@
       "originalPath": "bitacora-ui-assets/export-info.json",
       "sizeBytes": 4948,
       "sha256": "82ef577c360b3a33e8f8288e545302513e41cfc015e4d5d3d5f4384ccd16f11a"
+    },
+    {
+      "path": "docs/source/chickens/readme.md",
+      "originalPath": "bitacora-chickens-animations/README.md",
+      "sizeBytes": 5786,
+      "sha256": "9827a13d5338262f8430e1f3ed016bf15484be47ebd24eac32d29a92979cfad9"
+    },
+    {
+      "path": "docs/source/chickens/generation-prompts.json",
+      "originalPath": "bitacora-chickens-animations/generation-prompts.json",
+      "sizeBytes": 15608,
+      "sha256": "90a70757b379c6b4ed578a994cefc8f17475ad7c2f8a4f529367a7c2355b252a"
     }
   ],
   "notes": [
@@ -3694,6 +4246,7 @@
     "Añadidos los botones de la cabecera (bitácora, ajustes, audio, patita, insignias) y dos assets sueltos (libro abierto, rincón de aprendizaje): ver README del paquete bitacora-assets-senalados-v2. Las entradas anteriores no se modificaron.",
     "Añadidas las animaciones de la estrella de XP y del aro de la próxima estación (hojas con atlas, `opacityByFrame`) y el panel de nueve zonas de la cabecera: ver docs/source/xp-glow y docs/source/panel-estado. Las entradas anteriores no se modificaron.",
     "Añadido el avatar de Vanessa con Jerry (estático y hoja de reposo y alegría, `avatar-sheet`) para el retrato de la cabecera: ver docs/source/avatar. Las entradas anteriores no se modificaron.",
-    "Añadidos los assets del paquete bitacora-ui-assets (letrero de estación, señal de cambio de mapa, insignia «Completado», botones con etiqueta y brillo de la próxima estación): ver docs/source/ui-assets. Los textos no vienen en los PNG: `labelZones` y `attachments` dicen dónde ponerlos. Las entradas anteriores no se modificaron."
+    "Añadidos los assets del paquete bitacora-ui-assets (letrero de estación, señal de cambio de mapa, insignia «Completado», botones con etiqueta y brillo de la próxima estación): ver docs/source/ui-assets. Los textos no vienen en los PNG: `labelZones` y `attachments` dicen dónde ponerlos. Las entradas anteriores no se modificaron.",
+    "Añadidas cinco gallinas y un pollito animados (hojas con atlas, `critterAnimations`): ver docs/source/chickens. Las entradas anteriores no se modificaron."
   ]
 }

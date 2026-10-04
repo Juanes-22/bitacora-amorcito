@@ -6,7 +6,7 @@ import { configJson, harness, SPOT_A, stationSpot } from "./helpers.mjs";
 const { open, check, finish } = await harness();
 const manifest = JSON.parse(readFileSync("public/assets/assets.json", "utf8"));
 // Hojas animadas del paisaje (con atlas; no las de reposo del personaje ni los efectos de las estaciones) y nubes del manifiesto: lo que el motor crea como sprites animados o como nubes a la deriva.
-const KIT = new Set(Object.entries(manifest.assets).filter(([id, a]) => a.atlasPath && a.kind !== "idle-sheet" && ![configJson.ui.assets.nextStationGlow, configJson.ui.assets.xpStarEffect].includes(id)).map(([id]) => id));
+const KIT = new Set(Object.entries(manifest.assets).filter(([id, a]) => a.atlasPath && a.kind !== "idle-sheet" && a.kind !== "critter-sheet" && ![configJson.ui.assets.nextStationGlow, configJson.ui.assets.xpStarEffect].includes(id)).map(([id]) => id));
 const CLOUDS = Object.keys(manifest.assets).filter((id) => id.startsWith("background.sky.cloud"));
 const DUCKS = Object.keys(manifest.assets).filter((id) => id.startsWith("animation.fauna."));
 
@@ -46,7 +46,7 @@ try {
     check(`AC-41/48/49: zona A crea ${want.animation} hojas animadas (con ${want.swim} patos), ${want.sway} balanceos, ${want.glow} luces, ${want.drift} nubes y ${want.particles} emisores`,
       a.animated === want.animation && a.sway >= want.sway + want.glow && a.emitters === want.particles && a.cloudX.length === want.drift && a.ducks.length === want.swim, JSON.stringify(a));
     const flora = configJson.maps["zona-a"].ambient.filter((f) => f.assetId.startsWith("animation.flora."));
-    check(`AC-56: la zona A tiene ${flora.length} flores y arbustos animados, todos reproduciéndose`, a.flora.length === flora.length && flora.length >= 8 && a.flora.every((p) => p.playing), JSON.stringify(a.flora));
+    check(`AC-56: la zona A tiene ${flora.length} flores y arbustos animados, todos reproduciéndose`, a.flora.length === flora.length && flora.length >= 5 && /* se quitaron algunas para dar sitio a las gallinas */ a.flora.every((p) => p.playing), JSON.stringify(a.flora));
     check("AC-56: con fases y velocidades distintas (no se balancean todas a la vez)", new Set(a.flora.map((p) => p.frame)).size >= 3 && new Set(a.flora.map((p) => p.scale)).size >= 3, JSON.stringify(a.flora));
     check("AC-48: el halo y los rayos usan mezcla aditiva", a.additive >= want.glow, `${a.additive} objetos ADD`);
     check("AC-41: todas las hojas animadas están reproduciéndose", a.playing === a.animated, `${a.playing}/${a.animated}`);

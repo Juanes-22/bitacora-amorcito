@@ -21,7 +21,7 @@ import { ProgressStorage, type StorageLike } from "../storage/progressStorage";
 afterEach(cleanup);
 const assets = createAssetRegistry(manifestJson as unknown as AssetManifest, "http://localhost:5173/assets/assets.json");
 const base = bitacoraJson as unknown as BitacoraConfig;
-const ALL: SectionId[] = ["lived", "learning", "reflection", "classroom"];
+const ALL: SectionId[] = ["learning", "reflection", "lived"];
 
 class MemoryStorage implements StorageLike {
   data = new Map<string, string>();
@@ -99,9 +99,9 @@ describe("ContentRenderer (SPEC 7 y 12.7)", () => {
 });
 
 describe("LearningTabs (patrón ARIA)", () => {
-  const tabs = ALL.map((id, i) => ({ id, label: ["Lo vivido", "Aprendizajes", "Reflexión", "En el aula"][i], read: id === "learning" }));
+  const tabs = ALL.map((id, i) => ({ id, label: ["Resumen", "Reflexión", "Lo vivido"][i], read: id === "learning" }));
   const parentKey = vi.fn();
-  const setup = (active: SectionId = "lived") => {
+  const setup = (active: SectionId = "learning") => {
     const onSelect = vi.fn();
     parentKey.mockClear();
     render(
@@ -113,32 +113,32 @@ describe("LearningTabs (patrón ARIA)", () => {
   };
 
   it("expone tablist, tabs con aria-selected, aria-controls y foco itinerante", () => {
-    setup("lived");
+    setup("learning");
     expect(screen.getByRole("tablist")).toBeTruthy();
     const all = screen.getAllByRole("tab");
-    expect(all).toHaveLength(4);
-    expect(all.map((t) => t.getAttribute("aria-selected"))).toEqual(["true", "false", "false", "false"]);
-    expect(all.map((t) => t.tabIndex)).toEqual([0, -1, -1, -1]);
-    expect(all[0].getAttribute("aria-controls")).toBe("t-panel-lived");
+    expect(all).toHaveLength(3);
+    expect(all.map((t) => t.getAttribute("aria-selected"))).toEqual(["true", "false", "false"]);
+    expect(all.map((t) => t.tabIndex)).toEqual([0, -1, -1]);
+    expect(all[0].getAttribute("aria-controls")).toBe("t-panel-learning");
   });
 
   it("las flechas, Inicio y Fin cambian de pestaña y no se propagan (no mueven al personaje)", () => {
-    const onSelect = setup("lived");
+    const onSelect = setup("learning");
     const tablist = screen.getByRole("tablist");
     expect(fireEvent.keyDown(tablist, { key: "ArrowRight" })).toBe(false); // preventDefault
-    expect(onSelect).toHaveBeenLastCalledWith("learning");
+    expect(onSelect).toHaveBeenLastCalledWith("reflection");
     fireEvent.keyDown(tablist, { key: "ArrowLeft" });
-    expect(onSelect).toHaveBeenLastCalledWith("classroom"); // da la vuelta
+    expect(onSelect).toHaveBeenLastCalledWith("lived"); // da la vuelta
     fireEvent.keyDown(tablist, { key: "End" });
-    expect(onSelect).toHaveBeenLastCalledWith("classroom");
-    fireEvent.keyDown(tablist, { key: "Home" });
     expect(onSelect).toHaveBeenLastCalledWith("lived");
+    fireEvent.keyDown(tablist, { key: "Home" });
+    expect(onSelect).toHaveBeenLastCalledWith("learning");
     expect(parentKey).not.toHaveBeenCalled();
   });
 
   it("el estado «leída» se anuncia con texto, no solo con un símbolo", () => {
     setup();
-    const learning = screen.getByRole("tab", { name: /Aprendizajes/ });
+    const learning = screen.getByRole("tab", { name: /Resumen/ });
     expect(learning.textContent).toContain("✓");
     expect(learning.textContent).toContain("Sección leída");
     expect(screen.getByRole("tab", { name: "Lo vivido" }).textContent).not.toContain("✓");
@@ -154,20 +154,20 @@ describe("LearningDialog", () => {
 
   it("modal accesible con título del aprendizaje, cierre visible y foco inicial en «Siguiente»", () => {
     open(base, intro);
-    const dialog = screen.getByRole("dialog", { name: /Aprendizaje 1: Aprender con los sentidos/ });
+    const dialog = screen.getByRole("dialog", { name: /Aprendizaje 1: Las plantas y las semillas/ });
     expect(dialog.getAttribute("aria-modal")).toBe("true");
     expect(within(dialog).getByRole("button", { name: "Cerrar" })).toBeTruthy();
     expect(document.activeElement).toBe(screen.getByRole("button", { name: "Siguiente" }));
     expect(dialog.textContent).toContain("Lee cada sección y márcala como leída");
   });
 
-  it("de la apertura pasa a la lectura con las cuatro pestañas y el foco en la activa", () => {
+  it("de la apertura pasa a la lectura con las tres pestañas y el foco en la activa", () => {
     open(base, intro);
     fireEvent.click(screen.getByRole("button", { name: "Siguiente" }));
-    expect(screen.getAllByRole("tab").map((t) => t.textContent)).toEqual(["Lo vivido", "Aprendizajes", "Reflexión", "En el aula"]);
-    expect(document.activeElement).toBe(screen.getByRole("tab", { name: "Lo vivido" }));
-    expect(screen.getByRole("tabpanel").getAttribute("aria-labelledby")).toBe(screen.getByRole("tab", { name: "Lo vivido" }).id);
-    expect(screen.getByRole("tabpanel").textContent).toContain("Durante una exploración guiada por la maestra");
+    expect(screen.getAllByRole("tab").map((t) => t.textContent)).toEqual(["Resumen", "Reflexión", "Lo vivido"]);
+    expect(document.activeElement).toBe(screen.getByRole("tab", { name: "Resumen" }));
+    expect(screen.getByRole("tabpanel").getAttribute("aria-labelledby")).toBe(screen.getByRole("tab", { name: "Resumen" }).id);
+    expect(screen.getByRole("tabpanel").textContent).toContain("Por medio de una exploración");
   });
 
   it("muestra el estado de cada sección con texto y ofrece «Marcar sección como leída»", () => {
@@ -185,14 +185,14 @@ describe("LearningDialog", () => {
     expect(document.activeElement).toBe(screen.getByRole("tab", { name: /Lo vivido/ }));
   });
 
-  it("«Recoger insignia y continuar» está deshabilitada hasta marcar las cuatro y dice cuántas faltan", () => {
+  it("«Recoger insignia y continuar» está deshabilitada hasta marcar las tres y dice cuántas faltan", () => {
     open(base, { kind: "reading", learningId: "apr-a", active: "lived" });
     const claim = screen.getByRole("button", { name: "Recoger insignia y continuar" }) as HTMLButtonElement;
     expect(claim.disabled).toBe(true);
     expect(claim.getAttribute("aria-describedby")).toBe("reading-remaining");
-    expect(screen.getByText("Faltan 4 por marcar")).toBeTruthy();
+    expect(screen.getByText("Faltan 3 por marcar")).toBeTruthy();
     for (const s of ALL) {
-      fireEvent.click(screen.getByRole("tab", { name: new RegExp(["Lo vivido", "Aprendizajes", "Reflexión", "En el aula"][ALL.indexOf(s)]) }));
+      fireEvent.click(screen.getByRole("tab", { name: new RegExp(["Resumen", "Reflexión", "Lo vivido"][ALL.indexOf(s)]) }));
       fireEvent.click(screen.getByRole("button", { name: "Marcar sección como leída" }));
     }
     expect((screen.getByRole("button", { name: "Recoger insignia y continuar" }) as HTMLButtonElement).disabled).toBe(false);
@@ -225,13 +225,13 @@ describe("LearningDialog", () => {
   it("un aprendizaje bloqueado o pendiente solo muestra su mensaje, sin pestañas ni contenido", () => {
     open(base, { kind: "message", learningId: "apr-b", event: "locked" });
     expect(screen.queryByRole("tablist")).toBeNull();
-    expect(screen.getByRole("dialog").textContent).toContain("Primero recorre «Aprender con los sentidos: plantas, semillas y saberes»");
+    expect(screen.getByRole("dialog").textContent).toContain("Primero recorre «Las plantas y las semillas»");
     cleanup();
     const final = structuredClone(base);
     final.mode = "final";
     open(final, { kind: "message", learningId: "apr-a", event: "pending" });
     expect(screen.getByRole("dialog").textContent).toContain("Pendiente de revisión");
-    expect(screen.queryByText(/Durante una exploración/)).toBeNull();
+    expect(screen.queryByText(/Para mí fue una experiencia muy bonita/)).toBeNull();
   });
 
   it("en la fase de mensaje el foco entra en la ventana (en «Cerrar»): si no, Escape no la cerraría", () => {
@@ -369,12 +369,12 @@ describe("dialogueLines (SPEC 12.7)", () => {
     config.dialogues["propio"] = { lines: [{ speaker: "vanessa", text: "{studentName} aprendió «{learningTitle}» ({completedCount}/{totalCount}) {secreto}" }] };
     config.learnings["apr-a"].dialogueOverrides = { open: "propio" };
     const lines = dialogueLines(config, initialProgress(config), "apr-a", "open");
-    expect(lines).toEqual([{ speaker: "vanessa", text: "Vanessa Estrada aprendió «Aprender con los sentidos: plantas, semillas y saberes» (0/6) {secreto}" }]);
+    expect(lines).toEqual([{ speaker: "vanessa", text: "Vanessa Estrada aprendió «Las plantas y las semillas» (0/6) {secreto}" }]);
     // Los demás aprendizajes siguen usando el diálogo común.
     expect(dialogueLines(config, initialProgress(config), "apr-b", "open")[0].text).toContain("Lee cada sección");
   });
 
   it("el mensaje de bloqueo nombra el aprendizaje pendiente más cercano", () => {
-    expect(dialogueLines(base, initialProgress(base), "apr-c", "locked")[0].text).toContain("«Aprender con los sentidos: plantas, semillas y saberes»");
+    expect(dialogueLines(base, initialProgress(base), "apr-c", "locked")[0].text).toContain("«Las plantas y las semillas»");
   });
 });

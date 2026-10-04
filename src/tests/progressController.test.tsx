@@ -11,7 +11,7 @@ import { ProgressStorage, storageKey, type StorageLike } from "../storage/progre
 
 afterEach(cleanup);
 const base = bitacoraJson as unknown as BitacoraConfig;
-const ALL: SectionId[] = ["lived", "learning", "reflection", "classroom"];
+const ALL: SectionId[] = ["learning", "reflection", "lived"];
 const KEY = (c: BitacoraConfig) => storageKey(c.contentSetId, c.mode);
 
 class MemoryStorage implements StorageLike {
@@ -124,7 +124,7 @@ describe("useProgressController", () => {
   it("continuar abre la primera pestaña, o la última recordada", () => {
     const first = setup();
     toReading(first);
-    expect(first.result.current.reading).toEqual({ kind: "reading", learningId: "apr-a", active: "lived" });
+    expect(first.result.current.reading).toEqual({ kind: "reading", learningId: "apr-a", active: "learning" });
     act(() => first.result.current.actions.selectSection("reflection"));
     act(() => first.result.current.actions.close());
     expect(first.store.getState().entries["apr-a"].lastSectionId).toBe("reflection");
@@ -142,10 +142,10 @@ describe("useProgressController", () => {
     expect(r.store.getState().entries["apr-a"].readSectionIds).toEqual(["learning"]);
   });
 
-  it("sin las cuatro secciones no se concede la insignia", () => {
+  it("sin las tres secciones no se concede la insignia", () => {
     const r = setup();
     toReading(r);
-    ["lived", "learning", "reflection"].forEach((s) => act(() => r.result.current.actions.markRead(s as SectionId)));
+    ["learning", "reflection"].forEach((s) => act(() => r.result.current.actions.markRead(s as SectionId)));
     act(() => r.result.current.actions.claimBadge());
     expect(r.result.current.reading?.kind).toBe("reading");
     expect(log.sync.at(-1)?.stations["apr-b"]).toBe("locked");

@@ -20,7 +20,7 @@ import { ProgressStorage, storageKey, type StorageLike } from "../storage/progre
 afterEach(cleanup);
 const assets = createAssetRegistry(manifestJson as unknown as AssetManifest, "http://localhost:5173/assets/assets.json");
 const base = bitacoraJson as unknown as BitacoraConfig;
-const ALL: SectionId[] = ["lived", "learning", "reflection", "classroom"];
+const ALL: SectionId[] = ["learning", "reflection", "lived"];
 
 class MemoryStorage implements StorageLike {
   data = new Map<string, string>();
@@ -237,7 +237,7 @@ describe("BadgeCollection", () => {
     expect(first.textContent).toMatch(/20\d\d/);
     expect(within(first).getByRole("img", { name: "Semilla de descubrimiento" })).toBeTruthy();
     const second = screen.getAllByRole("listitem")[1];
-    expect(second.textContent).toContain("Aprendizaje 2: Tema por definir");
+    expect(second.textContent).toContain("Aprendizaje 2: La plastilina casera");
     expect(within(second).queryByRole("img")).toBeNull(); // alt vacío: decorativa, el texto ya lo dice
     expect(screen.getByRole("dialog").textContent).toContain("1 de 6 insignias · 100 / 600 XP · Nivel 1");
   });

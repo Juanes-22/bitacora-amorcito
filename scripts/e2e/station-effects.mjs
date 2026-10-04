@@ -8,7 +8,7 @@ const GLOW = configJson.ui.assets.nextStationGlow;
 const XP = configJson.ui.assets.xpStarEffect;
 const STATIC_STAR = configJson.ui.assets.xpStar;
 const KEY = `bitacora:progress:v3:${configJson.contentSetId}:demo`;
-const DONE = { contentRevision: 1, readSectionIds: ["lived", "learning", "reflection", "classroom"], completedAt: "2026-09-30T10:00:00.000Z" };
+const DONE = { contentRevision: 1, readSectionIds: ["learning", "reflection", "lived"], completedAt: "2026-09-30T10:00:00.000Z" };
 const saved = (completed) => ({
   [KEY]: JSON.stringify({
     schemaVersion: 3, contentSetId: configJson.contentSetId, mode: "demo", currentZoneId: "zona-a", player: { x: 200, y: 1030 }, checkpoints: {},
@@ -76,10 +76,10 @@ try {
     await t.page.getByRole("button", { name: new RegExp(`${L.explore}: Aprendizaje 1:`) }).click();
     await t.page.waitForTimeout(250);
     await t.page.click("text=Siguiente");
-    for (let s = 0; s < 4; s++) {
+    for (let s = 0; s < 3; s++) {
       await t.page.click("text=Marcar sección como leída");
       await t.page.waitForTimeout(80);
-      if (s < 3) await t.page.getByRole("tab").nth(s + 1).click();
+      if (s < 2) await t.page.getByRole("tab").nth(s + 1).click();
     }
     await t.page.click("text=Recoger insignia y continuar");
     await t.page.waitForTimeout(700);

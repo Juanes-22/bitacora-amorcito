@@ -60,10 +60,10 @@ try {
     await t.page.getByRole("button", { name: new RegExp(`${L.explore}: Aprendizaje 1:`) }).click();
     await t.page.waitForTimeout(250);
     await t.page.click("text=Siguiente");
-    for (let s = 0; s < 4; s++) {
+    for (let s = 0; s < 3; s++) {
       await t.page.click("text=Marcar sección como leída");
       await t.page.waitForTimeout(80);
-      if (s < 3) await t.page.getByRole("tab").nth(s + 1).click();
+      if (s < 2) await t.page.getByRole("tab").nth(s + 1).click();
     }
     await t.page.click("text=Recoger insignia y continuar");
     await t.page.waitForTimeout(800);

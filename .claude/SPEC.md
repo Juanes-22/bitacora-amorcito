@@ -2,7 +2,7 @@
 
 **Documento:** especificación funcional y técnica; fuente de verdad de los requisitos.  
 **Stack:** React + Vite + TypeScript + Phaser.  
-**Revisión documental:** 19. La revisión 19 incorpora el paquete `bitacora-ui-assets` y rediseña lo que lo usa: el letrero de estación lleva su número en un círculo, el título corto en la placa y el estado debajo («Siguiente», «Completado» o el candado); la señal de cambio de mapa, los botones con etiqueta (Bitácora, Jerry, Sonido), el brillo de la próxima estación con destellos; las estaciones se colocan sobre pasto junto al camino (§4.3, AC-72, AC-75); la cabecera es más compacta, sin el rótulo «Mi bitácora» ni el aviso de lo que sigue, y en el móvil el mapa llena la pantalla con la interfaz encima (§14, AC-74); y Vanessa y Jerry llevan una sombra (§6.2, AC-73). La revisión 18 quita la cruceta y su botón de cambio de modo (en móvil solo se camina tocando; AC-03, AC-60) y sustituye el retrato de la cabecera por el avatar animado de Vanessa y Jerry: reposo y alegría al completar una estación (§14, `kind` «avatar-sheet», AC-71). La revisión 17 añade las animaciones de la estrella de XP y del aro de la próxima estación y el panel de nueve zonas de la cabecera (§4.3, §14, AC-68 a AC-70). La revisión 16 La revisión 16 deja un solo «Cerrar» por ventana, sin recuadro en el foco de los botones verdes, y centra las herramientas con la cabecera (§14). La revisión 15 La revisión 15 sustituye los botones de la cabecera por los iconos del paquete `bitacora-assets-senalados-v2` (§14, AC-67). La revisión 14 La revisión 14 sustituye la hoja de trucos por su versión corregida (Vanessa a la misma altura que al caminar, §6.2). La revisión 13 La revisión 13 añade los trucos de Jerry y la búsqueda del peluche, que el visitante pide con la tecla P o con un botón y se turnan (§6.2, AC-65 y AC-66). La revisión 12 La revisión 12 añade las animaciones de reposo de Vanessa y Jerry (§6.2, `kind` «idle-sheet», AC-62 a AC-64). La revisión 11 sustituye la cruceta por defecto en móvil por «tocar para caminar» (la cruceta pasa a ser un ajuste), con los criterios AC-58 a AC-61 (§6.1). Antes, la 11. La revisión 11 sustituye la cruceta por defecto en móvil por «tocar para caminar» (la cruceta pasa a ser un ajuste), con los criterios AC-58 a AC-61 (§6.1). La revisión 10 añade (c) las flores y arbustos animados fotograma a fotograma (`bitacora-flowers-bushes-animations`; §3.2) y el límite de efectos por zona, con los criterios AC-55 a AC-57. La revisión 9 añade (a) las piezas adicionales del paisaje (`bitacora-landscape-extras`: luces del árbol, patos, nubes y partículas luminosas; §3.2) y (b) la música de fondo con rotación de pistas y control de encendido/apagado (§6.4, §14), con los criterios AC-47 a AC-54. La revisión 8 (a) añade el kit de animaciones del paisaje (§3.2), el encuadre y la escala visual (§6.3, §14) y los criterios AC-37 a AC-46; y (b) alinea el contrato de §12.4 y el puente de §11.5 con lo ya implementado en las fases 1 a 4. El contrato de assets se adapta al `assets.json` real entregado por el usuario. Ese manifiesto existente es autoritativo: conserva sus IDs, `pathConvention`, `path`, categorías, `kind`, dimensiones, transparencia, procedencia y metadatos específicos; no se reemplaza por un esquema inventado.  
+**Revisión documental:** 23. La revisión 23 carga los seis aprendizajes reales de Vanessa en lugar del borrador de plantas y los cinco textos de demostración (§9). La revisión 22. La revisión 22 amplía la zona sensible del cartel del portal para tocarlo o hacer clic (§4.3, AC-77). La revisión 21. La revisión 21 deja tres ventanas por aprendizaje —Resumen, Reflexión y Lo vivido—: se retira «En el aula» y «Aprendizajes» pasa a llamarse «Resumen» (§7, §10, AC-06). La revisión 20. La revisión 20 permite caminar con el ratón en escritorio, con clics sobre el mapa como en los juegos de ratón (§6.1, AC-76). La revisión 19. La revisión 19 incorpora el paquete `bitacora-ui-assets` y rediseña lo que lo usa: el letrero de estación lleva su número en un círculo, el título corto en la placa y el estado debajo («Siguiente», «Completado» o el candado); la señal de cambio de mapa, los botones con etiqueta (Bitácora, Jerry, Sonido), el brillo de la próxima estación con destellos; las estaciones se colocan sobre pasto junto al camino (§4.3, AC-72, AC-75); la cabecera es más compacta, sin el rótulo «Mi bitácora» ni el aviso de lo que sigue, y en el móvil el mapa llena la pantalla con la interfaz encima (§14, AC-74); y Vanessa y Jerry llevan una sombra (§6.2, AC-73). La revisión 18 quita la cruceta y su botón de cambio de modo (en móvil solo se camina tocando; AC-03, AC-60) y sustituye el retrato de la cabecera por el avatar animado de Vanessa y Jerry: reposo y alegría al completar una estación (§14, `kind` «avatar-sheet», AC-71). La revisión 17 añade las animaciones de la estrella de XP y del aro de la próxima estación y el panel de nueve zonas de la cabecera (§4.3, §14, AC-68 a AC-70). La revisión 16 La revisión 16 deja un solo «Cerrar» por ventana, sin recuadro en el foco de los botones verdes, y centra las herramientas con la cabecera (§14). La revisión 15 La revisión 15 sustituye los botones de la cabecera por los iconos del paquete `bitacora-assets-senalados-v2` (§14, AC-67). La revisión 14 La revisión 14 sustituye la hoja de trucos por su versión corregida (Vanessa a la misma altura que al caminar, §6.2). La revisión 13 La revisión 13 añade los trucos de Jerry y la búsqueda del peluche, que el visitante pide con la tecla P o con un botón y se turnan (§6.2, AC-65 y AC-66). La revisión 12 La revisión 12 añade las animaciones de reposo de Vanessa y Jerry (§6.2, `kind` «idle-sheet», AC-62 a AC-64). La revisión 11 sustituye la cruceta por defecto en móvil por «tocar para caminar» (la cruceta pasa a ser un ajuste), con los criterios AC-58 a AC-61 (§6.1). Antes, la 11. La revisión 11 sustituye la cruceta por defecto en móvil por «tocar para caminar» (la cruceta pasa a ser un ajuste), con los criterios AC-58 a AC-61 (§6.1). La revisión 10 añade (c) las flores y arbustos animados fotograma a fotograma (`bitacora-flowers-bushes-animations`; §3.2) y el límite de efectos por zona, con los criterios AC-55 a AC-57. La revisión 9 añade (a) las piezas adicionales del paisaje (`bitacora-landscape-extras`: luces del árbol, patos, nubes y partículas luminosas; §3.2) y (b) la música de fondo con rotación de pistas y control de encendido/apagado (§6.4, §14), con los criterios AC-47 a AC-54. La revisión 8 (a) añade el kit de animaciones del paisaje (§3.2), el encuadre y la escala visual (§6.3, §14) y los criterios AC-37 a AC-46; y (b) alinea el contrato de §12.4 y el puente de §11.5 con lo ya implementado en las fases 1 a 4. El contrato de assets se adapta al `assets.json` real entregado por el usuario. Ese manifiesto existente es autoritativo: conserva sus IDs, `pathConvention`, `path`, categorías, `kind`, dimensiones, transparencia, procedencia y metadatos específicos; no se reemplaza por un esquema inventado.  
 **Estado:** requisitos definidos para implementar; este documento no acredita funcionalidades construidas ni pruebas ejecutadas.
 
 <a id="spec-0"></a>
@@ -306,11 +306,11 @@ Permite volver a las estaciones completadas y revisar sus contenidos en cualquie
 
 En escritorio, las flechas mueven a Vanessa y `Enter` interactúa. `Escape` cierra la lectura desde React.
 
-**Controles táctiles.** En pantallas táctiles (`pointer: coarse`) y estrechas (≤ 640 px) se camina y se explora tocando; no hay cruceta ni botón para cambiar de modo (la revisión 18 la retiró: `gameplay.touchControls`, sus textos y `ui.assets.controlsButton` ya no existen).
+**Controles táctiles y de ratón.** Con el dedo, y en escritorio con el ratón, se camina y se explora tocando o haciendo clic en el mapa (con el ratón valen el botón izquierdo y el derecho —sin el menú del navegador sobre el mapa— y mantener el botón pulsado y arrastrar reorienta el destino; el botón central no hace nada); no hay cruceta ni botón para cambiar de modo (la revisión 18 la retiró: `gameplay.touchControls`, sus textos y `ui.assets.controlsButton` ya no existen).
 
 - **Tocar para caminar.** Un toque en el mapa lleva a Vanessa hasta ese punto por el camino que el mapa permite: la ruta se calcula sobre la misma rejilla de obstáculos que valida la alcanzabilidad (§4.4), de modo que rodea arbustos, vallas y rocas en lugar de chocar con ellos; si se toca una zona no transitable, camina hasta su orilla alcanzable más cercana. Donde se tocó aparece un círculo animado (una onda que se expande y un anillo que late en el destino hasta que llega); con `prefers-reduced-motion` el anillo aparece quieto y sin onda. Arrastrar el dedo reorienta el destino. Cualquier flecha del teclado, una ventana abierta, una solicitud de apertura, un cambio de zona o un nuevo toque cancelan o sustituyen el recorrido. El recorrido entrega un vector al mismo ciclo de movimiento que usan las flechas (§6.2); no hay un segundo sistema de movimiento.
 - **Explorar tocando la estación.** Estando Vanessa junto a una estación o un portal (dentro de su radio de interacción), tocar su señal o su anillo equivale a «Explorar» y sigue exactamente las mismas reglas de secuencia que `Enter` (§8): una estación bloqueada o pendiente solo muestra su mensaje. Si aún no está junto a ella, tocarla lleva a Vanessa a su punto de interacción sin abrirla; un segundo toque la abre. El aviso de proximidad dice «Toca la estación para explorar» (o «Toca el portal para viajar») en lugar de «Enter».
-- En escritorio con ratón se usa el teclado, y hacer clic en el mapa no mueve al personaje.
+- En escritorio el teclado sigue funcionando igual (flechas y Enter, y el aviso de proximidad habla de Enter); además, un clic en el mapa funciona exactamente como un toque: mismo cálculo de ruta, mismo círculo de destino, mismas reglas al hacer clic sobre una estación o un portal. Una ventana abierta bloquea los clics igual que los toques, y cualquier flecha cancela el recorrido.
 
 Habilita las flechas del juego solo cuando el área del mapa tiene el foco o hay un control táctil activo, no hay una ventana modal y la aplicación está visible. Desactiva también la captura preventiva de esas teclas fuera de ese contexto: deshabilitar solo la lógica de movimiento no basta si se sigue impidiendo el comportamiento normal del navegador. `Tab` debe permitir entrar y salir del mapa. [T9]
 
@@ -387,10 +387,11 @@ Conserva exactamente estas pestañas:
 
 | Pestaña | Función |
 |---|---|
-| Lo vivido | Relatar la experiencia, actividad o situación significativa, desde la voz de la estudiante. |
-| Aprendizajes | Explicar qué descubrió, comprendió o conectó con su formación. |
-| Reflexión | Expresar emociones, preguntas, tensiones y relaciones con otros saberes. |
-| En el aula | Proponer cómo llevar ese aprendizaje a la práctica pedagógica, sin afirmar que ya se implementó. |
+| Resumen (`learning`) | Explicar qué descubrió, comprendió o conectó con su formación. Es la primera ventana. |
+| Reflexión (`reflection`) | Expresar emociones, preguntas, tensiones y relaciones con otros saberes. |
+| Lo vivido (`lived`) | Relatar la experiencia, actividad o situación significativa, desde la voz de la estudiante. |
+
+Son **tres** ventanas, en este orden (el de `ui.tabs`). La revisión 21 retiró «En el aula» (`classroom`) y renombró «Aprendizajes» como «Resumen»; un avance guardado con una sección retirada la ignora sin perder lo demás.
 
 Las pestañas son dimensiones del mismo aprendizaje, no estaciones distintas. Se pueden consultar en cualquier orden.
 
@@ -426,9 +427,11 @@ La concesión de la insignia se decide en el dominio compartido, nunca en un col
 
 <a id="spec-9"></a>
 
-## 9. Contenido de ejemplo: plantas y semillas
+## 9. Contenido: los seis aprendizajes
 
-**Todo este apartado es un borrador propuesto a partir del relato suministrado; requiere revisión de la autora.** No lo publiques como contenido final aprobado.
+**Los seis aprendizajes son los textos de Vanessa** (archivo `bitacora-aprendizajes.md`), cargados en `bitacora.json` con las tres ventanas de cada uno (Resumen, Reflexión y Lo vivido) como párrafos de texto plano (sin negritas), tal como los escribió, y con `editorialStatus: "draft"`: son borrador a la espera de su revisión y aprobación, y no se publican como contenido final aprobado hasta que pasen a `ready` (y el modo, a `final`). En orden de `route`: «Las plantas y las semillas», «La plastilina casera», «El museo y la taxidermia», «Pingüinos: cómo se adaptan los seres vivos», «La Tierra y sus movimientos» y «Plantas: su origen»; cada uno lleva además un título corto para el letrero (`signTitle`). Las insignias de los aprendizajes 2 a 6 siguen siendo provisionales.
+
+Lo que sigue en este apartado es el borrador original del primer aprendizaje, conservado como referencia del criterio editorial; ya no es el contenido cargado.
 
 Título provisional: **Aprender con los sentidos: plantas, semillas y saberes**.
 
@@ -440,7 +443,7 @@ Insignia provisional: **Semilla de descubrimiento**. Representación: una semill
 >
 > También recibimos materiales sobre los usos atribuidos a algunas plantas. La actividad despertó mi curiosidad por las experiencias y los conocimientos que las personas construyen alrededor de ellas.
 
-### Aprendizajes
+### Resumen (antes «Aprendizajes»)
 
 > Esta experiencia me llevó a reconocer el lugar que pueden tener los sentidos en mi manera de aprender. Detenerme a oler, observar y prestar atención hizo que algo que antes me resultaba distante se volviera significativo.
 >
@@ -452,19 +455,13 @@ Insignia provisional: **Semilla de descubrimiento**. Representación: una semill
 >
 > Quiero profundizar en esas conexiones y contrastarlas con fuentes, sin dar por sentado que todas esas historias pueden explicarse de la misma manera. Como futura maestra, me interesa aprender a escuchar otros conocimientos y a formular preguntas sobre ellos.
 
-### En el aula
-
-> Como propuesta para una futura experiencia pedagógica, imagino una mesa de exploración con elementos naturales previamente seleccionados para el grupo. Podría invitar a observar, describir y comparar, dando espacio a lo que cada niña o niño quiera expresar.
->
-> También me gustaría incorporar relatos de las familias sobre su relación con las plantas. Esta sería una actividad de exploración y escucha, no una práctica de consumo de plantas ni de aplicación de remedios.
-
 ### Criterio editorial
 
 Conserva la voz personal y diferencia experiencia, interpretación, propuesta pedagógica y afirmación verificable. No conviertas los usos medicinales mencionados en recomendaciones de tratamiento. No presentes como demostrada una conexión histórica entre brujería, burguesía, conquista y saberes de plantas sin fuentes aportadas y revisadas.
 
 No añadas bibliografía ficticia, diagnósticos, detalles de la actividad que no se hayan mencionado ni generalizaciones científicas sin comprobar. La implementación debe permitir añadir las fuentes más adelante.
 
-Para los otros cinco aprendizajes iniciales utiliza «Tema por definir» y textos explícitos de demostración. El prefijo visible «Aprendizaje 2», por ejemplo, se deriva de `route`; no lo incrustes en el título almacenado. No inventes experiencias autobiográficas para completar los espacios.
+El prefijo visible «Aprendizaje 2», por ejemplo, se deriva de `route`; no lo incrustes en el título almacenado. No inventes experiencias autobiográficas para completar los espacios: si se añade un aprendizaje sin texto, usa «Tema por definir» y textos explícitos de demostración.
 
 <a id="spec-10"></a>
 
@@ -761,7 +758,7 @@ Además de la forma, valida con funciones propias:
 - El orden lo define únicamente `route`. No depende del orden de las claves de objetos ni del nombre del ID.
 - Las zonas tienen dimensiones positivas; coordenadas finitas, puntos seguros dentro del mundo y radios positivos. Los obstáculos y puntos de interacción no hacen inaccesible el recorrido.
 - Los portales tienen destinos y puntos de aparición reales; permiten llegar y regresar entre las zonas utilizadas.
-- Las cuatro secciones configuradas existen sin duplicados; en esta versión los IDs son `lived`, `learning`, `reflection`, `classroom`.
+- Las tres secciones configuradas existen sin duplicados; en esta versión los IDs son `learning`, `reflection`, `lived`.
 - Las variables de diálogo están en una lista permitida. Los enlaces de referencias usan protocolos permitidos; nunca evaluar HTML, JavaScript, `eval` o nombres de componentes traídos del JSON.
 - En `assets.json`, `assetCount` debe coincidir con el número real de claves de `assets` y `categoryCounts`, cuando se valide como inventario, debe ser coherente con las categorías observadas.
 - Cada entrada utilizada en runtime debe tener un `path` no vacío, y el archivo resuelto debe existir en desarrollo/build. `originalPath` no se usa para cargar el recurso.
@@ -789,7 +786,7 @@ Los tipos siguientes muestran la separación prevista. Implementa el esquema equ
 
 ```ts
 type AppMode = "demo" | "final";
-type SectionId = "lived" | "learning" | "reflection" | "classroom";
+type SectionId = "learning" | "reflection" | "lived";
 type Point = { x: number; y: number };
 
 type ContentBlock =
@@ -1229,7 +1226,7 @@ Todos los elementos del mundo deben transformarse con la misma cámara. Los cont
 
 Define como objetivo de diseño botones táctiles de al menos 44 × 44 píxeles CSS. Al cambiar tamaño u orientación, conserva la posición lógica del personaje y reajusta la cámara.
 
-Incluye una opción «Ver aprendizajes en lista»: un botón siempre visible junto a la cabecera (a su derecha o justo debajo si no cabe) que abre un diálogo con una lista ordenada de los aprendizajes activos, cada uno con su número, título, estado dicho con texto (bloqueado, disponible o completado) y zona. Al cerrar una lectura abierta desde la lista se vuelve a ella. Permite abrir los aprendizajes disponibles o completados sin precisar el desplazamiento del personaje. Usa exactamente las mismas reglas de secuencia, lectura y recompensa: es una alternativa accesible de navegación, no un atajo para otorgar insignias.
+Incluye una opción «Bitácora de aprendizajes»: un botón siempre visible junto a la cabecera (a su derecha o justo debajo si no cabe) que abre un diálogo con una lista ordenada de los aprendizajes activos, cada uno con su número, título, estado dicho con texto (bloqueado, disponible o completado) y zona. Al cerrar una lectura abierta desde la lista se vuelve a ella. Permite abrir los aprendizajes disponibles o completados sin precisar el desplazamiento del personaje. Usa exactamente las mismas reglas de secuencia, lectura y recompensa: es una alternativa accesible de navegación, no un atajo para otorgar insignias.
 
 Añade foco visible, etiquetas comprensibles y textos alternativos para evidencias. Los adornos deben ignorarse desde tecnologías de asistencia. No dependas únicamente del color para comunicar bloqueos o logros.
 
@@ -1263,7 +1260,7 @@ Comunica `prefers-reduced-motion` también a Phaser para desactivar sacudidas, d
 
 ### 15.1. Resultados exigidos
 
-Estos criterios describen el resultado requerido, no pruebas ya superadas. Los IDs `AC-01` a `AC-75` permiten relacionarlos con las tareas y evidencias de [PLAN.md](PLAN.md). No renumerarlos al actualizar el estado de implementación.
+Estos criterios describen el resultado requerido, no pruebas ya superadas. Los IDs `AC-01` a `AC-77` permiten relacionarlos con las tareas y evidencias de [PLAN.md](PLAN.md). No renumerarlos al actualizar el estado de implementación.
 
 | ID | Prueba | Resultado esperado |
 |---|---|---|
@@ -1272,7 +1269,7 @@ Estos criterios describen el resultado requerido, no pruebas ya superadas. Los I
 | <a id="ac-03"></a>AC-03 | Movimiento | Las flechas del teclado funcionan; sin mayor velocidad diagonal ni salida del terreno permitido. |
 | <a id="ac-04"></a>AC-04 | Interacción | El contenido se abre por acción explícita cerca de una estación o desde la navegación accesible. |
 | <a id="ac-05"></a>AC-05 | Lectura | Abrir o cambiar de pestaña no concede la insignia; cerrar conserva las secciones marcadas. |
-| <a id="ac-06"></a>AC-06 | Recompensa | Marcar las cuatro secciones y confirmar otorga una sola insignia y desbloquea la siguiente. |
+| <a id="ac-06"></a>AC-06 | Recompensa | Marcar las tres secciones y confirmar otorga una sola insignia y desbloquea la siguiente. |
 | <a id="ac-07"></a>AC-07 | Repetición | Doble clic, Enter mantenido o relectura no duplican XP ni recompensas. |
 | <a id="ac-08"></a>AC-08 | Zonas | Portales explícitos de ida y regreso desde el inicio; viajar no desbloquea lecturas. |
 | <a id="ac-09"></a>AC-09 | Persistencia | Recargar recupera avance; datos inválidos o almacenamiento bloqueado no rompen la aplicación. |
@@ -1329,7 +1326,7 @@ Estos criterios describen el resultado requerido, no pruebas ya superadas. Los I
 | <a id="ac-58"></a>AC-58 | Tocar para caminar | En un móvil, por defecto, tocar el mapa lleva a Vanessa al punto tocado rodeando los obstáculos (sin atascarse ni atravesarlos), con un círculo animado en el destino que desaparece al llegar; tocar una zona no transitable lleva a su orilla; arrastrar reorienta; una flecha, una ventana o un cambio de zona cancelan. |
 | <a id="ac-59"></a>AC-59 | Explorar tocando | Junto a una estación o portal, tocarlos equivale a «Explorar» con las mismas reglas de secuencia; lejos de ellos, tocarlos lleva a su punto de interacción sin abrirlos y un segundo toque los abre; el aviso dice qué tocar. |
 | <a id="ac-60"></a>AC-60 | Sin cruceta | En móvil no hay cruceta, botón «Explorar» ni botón para cambiar de modo de control: solo se camina y se explora tocando, y ya no se guarda ninguna preferencia de controles (una antigua se ignora). |
-| <a id="ac-61"></a>AC-61 | Movimiento reducido y escritorio | Con `prefers-reduced-motion` el círculo del destino aparece quieto y sin onda y el toque camina igual; en escritorio con ratón hacer clic en el mapa no mueve a Vanessa y no se muestran controles táctiles. |
+| <a id="ac-61"></a>AC-61 | Movimiento reducido y escritorio | Con `prefers-reduced-motion` el círculo del destino aparece quieto y sin onda y el toque camina igual; en escritorio no se muestran controles táctiles. |
 
 | <a id="ac-62"></a>AC-62 | Reposo animado | Al detenerse se usa la hoja de reposo en la dirección en que miraba (respiración y parpadeo en bucle), a la escala del caminar y con los pies sobre el punto de apoyo, sin saltos entre la pose de caminar y la de reposo; las tres hojas se añaden a `assets.json` sin alterar las existentes y sus atlas validan contra la imagen. |
 | <a id="ac-63"></a>AC-63 | Gestos de reposo | Tras 4,5 s sin entrada Vanessa y Jerry se miran una vez; tras 10 s, de frente, juegan una vez; de lado o de espaldas solo hay mirada; hay una pausa mínima entre gestos, nunca dos animaciones a la vez, y cualquier movimiento los cancela de inmediato y reinicia la espera. |
@@ -1348,6 +1345,8 @@ Estos criterios describen el resultado requerido, no pruebas ya superadas. Los I
 | <a id="ac-73"></a>AC-73 | Sombras | Vanessa y Jerry tienen cada uno una sombra suave bajo los pies (elipses calculadas de los píxeles del fotograma visible) que los acompaña al caminar, en reposo y en los gestos, queda justo debajo del sprite en profundidad, se queda en el suelo cuando Vanessa salta al celebrar y no existe sin `gameplay.player.shadow`. |
 | <a id="ac-74"></a>AC-74 | Cabecera compacta y móvil | La cabecera es el panel (≤ 28 rem), con «Vanessa · Nivel», XP con su valor y «n de m aprendizajes», sin rótulo «Mi bitácora» ni aviso de la siguiente estación; las herramientas con etiqueta van arriba a la derecha; con 700 px o menos el mapa llena la pantalla (canvas a todo el ancho y alto) con el panel arriba a todo lo ancho y las herramientas abajo centradas por encima del mapa, el aviso de proximidad sobre ellas, sin scroll horizontal desde 320 px; el avatar se ve en todos los tamaños. |
 | <a id="ac-75"></a>AC-75 | Estaciones sobre pasto y destellos | Las seis estaciones apoyan en pasto junto al camino y son alcanzables sin ajustar el destino; la próxima estación tiene el brillo animado (opacidad 0,72) y cinco destellos pequeños que centellean alrededor, que no existen con movimiento reducido ni se ven en las demás estaciones. |
+| <a id="ac-76"></a>AC-76 | Clics de ratón | En escritorio, un clic izquierdo o derecho en el mapa pone el círculo del destino y Vanessa camina hasta allí rodeando los obstáculos, llegando a menos de 6 px; el clic derecho no abre el menú del navegador; mantener el botón y arrastrar reorienta el destino; el botón central no mueve; una flecha cancela el recorrido; un clic en la estación estando junto a ella la abre; con una ventana abierta los clics no mueven a Vanessa. |
+| <a id="ac-77"></a>AC-77 | Zona sensible del portal | Para viajar con un toque o un clic basta tocar el cartel del portal entero (también su esquina más alejada del punto de interacción) o hasta 36 px a su alrededor, estando Vanessa junto a él; más lejos, el toque solo camina. |
 
 <a id="spec-15-2"></a>
 

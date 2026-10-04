@@ -198,18 +198,104 @@ try {
     await t.close();
   }
 
-  // ---- Con ratón en escritorio, tocar el mapa no mueve a Vanessa (se usa el teclado) -----------------------
+  // ---- Cartel del portal: su zona sensible es el cartel entero más un margen generoso (AC-77) -------------------------
+  {
+    const portal = configJson.maps["zona-a"].portals["a-b"].interaction;
+    const signBox = (t) =>
+      t.page.evaluate((key) => {
+        const o = window.__PHASER_GAME__.scene.getScene("ExplorationScene").children.list.find((x) => x.type === "Image" && x.texture.key === key);
+        const b = o.getBounds();
+        return { x: b.x, y: b.y, right: b.right, bottom: b.bottom };
+      }, configJson.ui.assets.exitSign);
+    const tries = [
+      ["la esquina superior izquierda del cartel (lejos del punto de interacción)", (b) => [b.x + 6, b.y + 6], true],
+      ["un punto a 28 px por encima del cartel", (b) => [(b.x + b.right) / 2, b.y - 28], true],
+      ["un punto a 28 px a la izquierda del cartel", (b) => [b.x - 28, (b.y + b.bottom) / 2], true],
+      ["un punto a 90 px del cartel (fuera de su zona)", (b) => [b.x - 90, b.y - 90], false],
+    ];
+    for (const [name, point, travels] of tries) {
+      const t = await touchCtx(390, 844);
+      await t.start();
+      await t.place(portal.x - 20, portal.y);
+      await t.page.waitForTimeout(500);
+      const [wx, wy] = point(await signBox(t));
+      await tap(t, wx, wy);
+      await t.page.waitForTimeout(900);
+      const zone = (await t.scene()).zone;
+      check(`AC-77: tocar ${name} ${travels ? "cambia de zona" : "no cambia de zona"}`, travels ? zone === "zona-b" : zone === "zona-a", zone);
+      await t.close();
+    }
+  }
+
+  // ---- Con ratón en escritorio se camina con clics, como en los juegos de ratón (SPEC 6.1; AC-61, AC-76) -----------
   {
     const t = await open({ viewport: { width: 1280, height: 720 } });
     await t.start();
     await t.place(...OPEN_SPOT);
     await t.page.waitForTimeout(300);
+    const goal = [200, 980];
+    const at = await toScreen(t, ...goal);
+    await t.page.mouse.click(at.x, at.y);
+    await t.page.waitForTimeout(120);
+    const early = await markers(t);
+    check("AC-76: en escritorio, un clic izquierdo en el mapa pone el círculo del destino y Vanessa echa a andar", early.ring && Math.hypot(early.ring.x - goal[0], early.ring.y - goal[1]) < 12 && Math.hypot(...(await t.scene()).vel) > 100, JSON.stringify(early));
+    await waitStopped(t);
+    const end = (await t.scene()).pos;
+    check("AC-76: llega al punto del clic (a menos de 6 px) y se detiene", Math.hypot(end.x - goal[0], end.y - goal[1]) < 6 && (await speedOf(t)) === 0, JSON.stringify(end));
+
+    // Clic derecho: también camina y no abre el menú del navegador
+    await t.place(...OPEN_SPOT);
+    await t.page.waitForTimeout(300);
+    await t.page.evaluate(() => { window.__ctx = []; document.addEventListener("contextmenu", (e) => window.__ctx.push(e.defaultPrevented)); });
+    const right = await toScreen(t, ...nearStation("apr-b"));
+    await t.page.mouse.click(right.x, right.y, { button: "right" });
+    await t.page.waitForTimeout(250);
+    check("AC-76: el clic derecho también camina y el menú del navegador no se abre sobre el mapa", Math.hypot(...(await t.scene()).vel) > 100 && (await t.page.evaluate(() => window.__ctx)).every(Boolean), JSON.stringify(await t.page.evaluate(() => window.__ctx)));
+    await waitStopped(t, 10000);
+
+    // Mantener el botón y arrastrar reorienta el destino (como mantener el clic en un MOBA)
+    await t.place(...OPEN_SPOT);
+    await t.page.waitForTimeout(300);
+    const a = await toScreen(t, 285, 990), b = await toScreen(t, 200, 990);
+    await t.page.mouse.move(a.x, a.y);
+    await t.page.mouse.down();
+    for (let i = 1; i <= 8; i++) { await t.page.mouse.move(a.x + ((b.x - a.x) * i) / 8, a.y + ((b.y - a.y) * i) / 8); await t.page.waitForTimeout(60); }
+    await t.page.mouse.up();
+    await waitStopped(t);
+    const p5 = (await t.scene()).pos;
+    check("AC-76: mantener el botón y arrastrar lleva a Vanessa hasta donde se suelta", Math.hypot(p5.x - 200, p5.y - 990) < 25, JSON.stringify(p5));
+
+    // El botón central no hace nada; una flecha cancela el recorrido
+    await t.place(...OPEN_SPOT);
+    await t.page.waitForTimeout(300);
     const before = (await t.scene()).pos;
-    const target = await toScreen(t, 200, 1030);
-    await t.page.mouse.click(target.x, target.y);
-    await t.page.waitForTimeout(600);
-    check("en escritorio con ratón, hacer clic en el mapa no mueve a Vanessa", JSON.stringify((await t.scene()).pos) === JSON.stringify(before));
-    check("y el aviso de proximidad habla del teclado", await (async () => { await t.place(...nearStation("apr-a")); await t.page.waitForTimeout(400); return /\(Enter\)/.test(await t.page.locator(".nearby-region").innerText()); })());
+    await t.page.mouse.click(at.x, at.y, { button: "middle" });
+    await t.page.waitForTimeout(400);
+    check("AC-76: el botón central del ratón no mueve a Vanessa", JSON.stringify((await t.scene()).pos) === JSON.stringify(before));
+    await t.page.mouse.click(at.x, at.y);
+    await t.page.waitForTimeout(150);
+    await t.page.keyboard.down("ArrowUp");
+    await t.page.waitForTimeout(150);
+    await t.page.keyboard.up("ArrowUp");
+    await t.page.waitForTimeout(500);
+    check("AC-76: una flecha del teclado cancela el recorrido por clic", (await speedOf(t)) === 0 && (await markers(t)).ring === null);
+
+    // Clic sobre la estación estando junto a ella = «Explorar»; con una ventana abierta, los clics no mueven
+    await t.place(...nearStation("apr-a"));
+    await t.page.waitForTimeout(400);
+    const sign = configJson.placements["apr-a"].position;
+    const sp = await toScreen(t, sign.x, sign.y - 110);
+    await t.page.mouse.click(sp.x, sp.y);
+    await t.page.waitForTimeout(500);
+    check("AC-76: un clic en la estación estando junto a ella abre el aprendizaje", (await dialogs(t)) === 1 && /Aprendizaje 1/.test(await t.page.locator("[role=dialog]").innerText()));
+    const frozen = (await t.scene()).pos;
+    await t.page.mouse.click(5, 360);
+    await t.page.waitForTimeout(400);
+    check("AC-76: con la ventana abierta los clics no mueven a Vanessa", JSON.stringify((await t.scene()).pos) === JSON.stringify(frozen));
+    await t.page.locator("[role=dialog] .reading__header button").click();
+    await t.page.waitForTimeout(400);
+    check("y el aviso de proximidad sigue hablando del teclado (Enter)", await (async () => { await t.place(...OPEN_SPOT); await t.page.waitForTimeout(300); await t.place(...nearStation("apr-a")); await t.page.waitForTimeout(400); const txt = await t.page.locator(".nearby-region").innerText(); return /\(Enter\)/.test(txt); })());
+    check("sin errores de consola", t.errors.length === 0, t.errors.join(" | "));
     await t.close();
   }
 
@@ -219,7 +305,7 @@ try {
     await t.start();
     await t.page.getByRole("button", { name: L.index }).click();
     await t.page.waitForTimeout(300);
-    check("AC-11: «Ver aprendizajes en lista» abre un diálogo con los seis aprendizajes y sus estados en texto", (await t.page.getByRole("dialog", { name: L.index }).count()) === 1 && (await t.page.locator(".learning-list__item").count()) === 6
+    check("AC-11: «Bitácora de aprendizajes» abre un diálogo con los seis aprendizajes y sus estados en texto", (await t.page.getByRole("dialog", { name: L.index }).count()) === 1 && (await t.page.locator(".learning-list__item").count()) === 6
       && (await t.page.locator(".learning-list__state").allInnerTexts()).join() === [L.stateAvailable, ...Array(5).fill(L.stateLocked)].join());
     check("AC-17: con la lista abierta el mapa está detenido", (await reasons(t)).includes("overlay"));
     const before = (await t.scene()).pos;
@@ -250,10 +336,10 @@ try {
       await t.page.waitForTimeout(250);
       await t.page.click("text=Siguiente");
       await t.page.waitForTimeout(150);
-      for (let s = 0; s < 4; s++) {
+      for (let s = 0; s < 3; s++) {
         await t.page.click("text=Marcar sección como leída");
         await t.page.waitForTimeout(80);
-        if (s < 3) await t.page.getByRole("tab").nth(s + 1).click();
+        if (s < 2) await t.page.getByRole("tab").nth(s + 1).click();
       }
       await t.page.click("text=Recoger insignia y continuar");
       await t.page.waitForTimeout(800); // la recompensa ignora «Cerrar» un instante (clics duplicados, Enter mantenido)
@@ -327,7 +413,7 @@ try {
     const long = "Textoenormesinespacios".repeat(7);
     const sizes = [["móvil pequeño 320×568", 320, 568], ["móvil 390×844", 390, 844], ["móvil apaisado 844×390", 844, 390], ["apaisado bajo 640×360 (zoom 200 %)", 640, 360], ["tableta vertical 768×1024", 768, 1024]];
     for (const [name, w, h] of sizes) {
-      const t = await touchCtx(w, h, { edit: (c) => { c.learnings["apr-a"].title = `${long} y un título muy largo con muchas palabras para comprobar que se parte bien`; c.ui.labels.index = "Ver aprendizajes en lista de la bitácora completa"; } });
+      const t = await touchCtx(w, h, { edit: (c) => { c.learnings["apr-a"].title = `${long} y un título muy largo con muchas palabras para comprobar que se parte bien`; c.ui.labels.index = "Bitácora de aprendizajes de la bitácora completa"; } });
       await t.start();
       await t.place(...nearStation("apr-a"));
       await t.page.waitForTimeout(300);

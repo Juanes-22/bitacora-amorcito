@@ -13,7 +13,7 @@ class MemoryStorage implements StorageLike {
 }
 const sample = (): SavedProgress => {
   const s = initialProgress(makeConfig());
-  s.entries["apr-a"] = { contentRevision: 1, readSectionIds: ["lived", "learning"], lastSectionId: "learning", completedAt: "2026-10-01T12:00:00.000Z" };
+  s.entries["apr-a"] = { contentRevision: 1, readSectionIds: ["learning", "lived"], lastSectionId: "learning", completedAt: "2026-10-01T12:00:00.000Z" };
   s.checkpoints = { "zona-a": { x: 330, y: 990 } };
   return s;
 };

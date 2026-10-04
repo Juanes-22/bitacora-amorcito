@@ -13,7 +13,7 @@ class MemoryStorage implements StorageLike {
   setItem(k: string, v: string) { if (this.fail) throw new Error("cuota"); this.writes++; this.data.set(k, v); }
   removeItem(k: string) { this.data.delete(k); }
 }
-const ALL: SectionId[] = ["lived", "learning", "reflection", "classroom"];
+const ALL: SectionId[] = ["learning", "reflection", "lived"];
 const KEY = storageKey("bitacora-prueba", "demo");
 
 describe("ProgressStore", () => {

@@ -1,6 +1,6 @@
 import type { AppMode, Point, SectionId } from "../config/types";
 
-export const SECTION_IDS: readonly SectionId[] = ["lived", "learning", "reflection", "classroom"];
+export const SECTION_IDS: readonly SectionId[] = ["learning", "reflection", "lived"];
 
 /** Avance de un aprendizaje, por ID estable. La revisión permite saber si sigue vigente (SPEC 13.1). */
 export interface LearningProgress {

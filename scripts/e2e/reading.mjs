@@ -5,7 +5,7 @@ import { configJson, dist, harness, SPOT_A, stationSpot } from "./helpers.mjs";
 const { open, check, finish } = await harness();
 
 const KEY = (mode = "demo") => `bitacora:progress:v3:${configJson.contentSetId}:${mode}`;
-const DONE = { contentRevision: 1, readSectionIds: ["lived", "learning", "reflection", "classroom"], completedAt: "2026-09-30T10:00:00.000Z" };
+const DONE = { contentRevision: 1, readSectionIds: ["learning", "reflection", "lived"], completedAt: "2026-09-30T10:00:00.000Z" };
 /** Guardado v3 válido para sembrar localStorage antes de cargar la página. */
 const saved = ({ entries = {}, zone = "zona-a", player = { x: 200, y: 1030 }, mode = "demo" } = {}) => ({
   [KEY(mode)]: JSON.stringify({
@@ -28,24 +28,24 @@ try {
     check("A1 la apertura se muestra con el foco en «Siguiente»", (await dialog.innerText()).includes("Lee cada sección") && (await t.page.evaluate(() => document.activeElement?.textContent)) === "Siguiente");
     await t.page.click("text=Siguiente");
     await t.page.waitForTimeout(250);
-    check("A2 la lectura muestra exactamente las cuatro pestañas en orden", JSON.stringify(await t.page.locator("[role=tab]").allInnerTexts()) === JSON.stringify(["Lo vivido", "Aprendizajes", "Reflexión", "En el aula"]));
-    check("A3 el contenido sale de bitacora.json (primera sección)", (await t.page.locator("[role=tabpanel]").innerText()).includes(sectionText("apr-a", "lived")));
+    check("A2 la lectura muestra exactamente las tres pestañas en orden", JSON.stringify(await t.page.locator("[role=tab]").allInnerTexts()) === JSON.stringify(["Resumen", "Reflexión", "Lo vivido"]));
+    check("A3 el contenido sale de bitacora.json (primera sección)", (await t.page.locator("[role=tabpanel]").innerText()).includes(sectionText("apr-a", "learning")));
     const before = await t.scene();
     await t.page.keyboard.press("ArrowRight");
     await t.page.waitForTimeout(200);
-    check("A4 las flechas cambian de pestaña sin mover al personaje", (await t.page.locator("[role=tab][aria-selected=true]").innerText()).startsWith("Aprendizajes") && dist(before.pos, (await t.scene()).pos) === 0 && (await t.page.locator("[role=tabpanel]").innerText()).includes(sectionText("apr-a", "learning")));
+    check("A4 las flechas cambian de pestaña sin mover al personaje", (await t.page.locator("[role=tab][aria-selected=true]").innerText()).startsWith("Reflexión") && dist(before.pos, (await t.scene()).pos) === 0 && (await t.page.locator("[role=tabpanel]").innerText()).includes(sectionText("apr-a", "reflection")));
     check("A5 abrir y cambiar de pestaña no marca nada ni concede la insignia", !Object.values(JSON.parse((await t.stored())[KEY()] ?? "{\"entries\":{}}").entries).some((e) => e.readSectionIds.length || e.completedAt));
     const claim = t.page.locator("text=Recoger insignia y continuar");
-    check("A6 «Recoger insignia» está deshabilitada y dice cuántas secciones faltan", (await claim.isDisabled()) && (await t.page.locator(".reading__remaining").innerText()) === "Faltan 4 por marcar");
+    check("A6 «Recoger insignia» está deshabilitada y dice cuántas secciones faltan", (await claim.isDisabled()) && (await t.page.locator(".reading__remaining").innerText()) === "Faltan 3 por marcar");
 
-    await t.page.click("[role=tab]:has-text('Lo vivido')");
-    for (let i = 0; i < 4; i++) {
+    await t.page.click("[role=tab]:has-text('Resumen')");
+    for (let i = 0; i < 3; i++) {
       if (i > 0) await t.page.keyboard.press("ArrowRight");
       await t.page.click("text=Marcar sección como leída");
       await t.page.waitForTimeout(80);
     }
     check("A7 cada pestaña marcada lo indica con texto", (await t.page.locator("[role=tab]").allInnerTexts()).every((x) => x.includes("Sección leída")));
-    check("A8 con las cuatro marcadas se habilita «Recoger insignia»", !(await claim.isDisabled()));
+    check("A8 con las tres marcadas se habilita «Recoger insignia»", !(await claim.isDisabled()));
     await t.log();
     await t.page.dblclick("text=Recoger insignia y continuar");
     await t.page.waitForTimeout(500);
@@ -99,16 +99,16 @@ try {
     await t.page.evaluate(() => { window.__g0 = window.__PHASER_GAME__; window.__c0 = document.querySelector("canvas:not(.hud__portrait canvas)"); });
     await openStation1(t);
     await t.page.click("text=Siguiente");
-    await t.page.click("text=Marcar sección como leída"); // «Lo vivido»
-    await t.page.keyboard.press("ArrowRight"); // pasa a «Aprendizajes» sin marcarla
+    await t.page.click("text=Marcar sección como leída"); // «Resumen»
+    await t.page.keyboard.press("ArrowRight"); // pasa a «Reflexión» sin marcarla
     await t.page.keyboard.press("Escape");
     await t.page.waitForTimeout(400);
     await openStation1(t);
     await t.page.click("text=Siguiente");
     await t.page.waitForTimeout(250);
-    check("I1 cerrar a medias conserva la sección marcada y la pestaña activa al volver a abrir", (await t.page.locator("[role=tab][aria-selected=true]").innerText()).startsWith("Aprendizajes") && (await t.page.locator("[role=tab]:has-text('Lo vivido')").innerText()).includes("Sección leída") && (await t.page.locator(".reading__status").innerText()) === "Sin marcar");
+    check("I1 cerrar a medias conserva la sección marcada y la pestaña activa al volver a abrir", (await t.page.locator("[role=tab][aria-selected=true]").innerText()).startsWith("Reflexión") && (await t.page.locator("[role=tab]:has-text('Resumen')").innerText()).includes("Sección leída") && (await t.page.locator(".reading__status").innerText()) === "Sin marcar");
 
-    for (const tab of ["Aprendizajes", "Reflexión", "En el aula"]) {
+    for (const tab of ["Reflexión", "Lo vivido"]) {
       await t.page.click(`[role=tab]:has-text('${tab}')`);
       await t.page.click("text=Marcar sección como leída");
     }
@@ -131,7 +131,7 @@ try {
     await openStation1(kb);
     await kb.page.keyboard.press("Enter"); // «Siguiente» (foco inicial)
     await kb.page.waitForTimeout(250);
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 3; i++) {
       if (i > 0) await kb.page.keyboard.press("ArrowRight");
       await kb.page.keyboard.press("Tab"); // panel
       await kb.page.keyboard.press("Tab"); // «Marcar sección como leída»
@@ -166,7 +166,7 @@ try {
     await t.page.waitForTimeout(250);
     const reading = await t.axe();
     check("Z4 ventana de lectura (pestañas, panel, botones) sin violaciones", reading.length === 0, reading.join(" | "));
-    for (let i = 0; i < 4; i++) { if (i) await t.page.keyboard.press("ArrowRight"); await t.page.click("text=Marcar sección como leída"); }
+    for (let i = 0; i < 3; i++) { if (i) await t.page.keyboard.press("ArrowRight"); await t.page.click("text=Marcar sección como leída"); }
     await t.page.click("text=Recoger insignia y continuar");
     await t.page.waitForTimeout(600);
     const rewardA11y = await t.axe();
@@ -226,7 +226,7 @@ try {
     await t.start();
     await openStation1(t);
     await t.page.click("text=Siguiente");
-    for (let i = 0; i < 4; i++) { if (i) await t.page.keyboard.press("ArrowRight"); await t.page.click("text=Marcar sección como leída"); }
+    for (let i = 0; i < 3; i++) { if (i) await t.page.keyboard.press("ArrowRight"); await t.page.click("text=Marcar sección como leída"); }
     await t.page.click("text=Recoger insignia y continuar");
     await t.page.waitForTimeout(600);
     await t.page.click("[role=dialog] >> text=Cerrar");
@@ -243,7 +243,7 @@ try {
     check("D1 con localStorage bloqueado la app arranca y avisa discretamente", (await blocked.page.locator(".hud__warning").count()) === 1 && blocked.errors.length === 0, blocked.errors.join(" | "));
     await openStation1(blocked);
     await blocked.page.click("text=Siguiente");
-    for (let i = 0; i < 4; i++) { if (i) await blocked.page.keyboard.press("ArrowRight"); await blocked.page.click("text=Marcar sección como leída"); }
+    for (let i = 0; i < 3; i++) { if (i) await blocked.page.keyboard.press("ArrowRight"); await blocked.page.click("text=Marcar sección como leída"); }
     await blocked.page.click("text=Recoger insignia y continuar");
     await blocked.page.waitForTimeout(600);
     await blocked.page.keyboard.press("Escape").catch(() => {});
@@ -269,7 +269,7 @@ try {
   {
     const t = await open({
       edit: (c) => {
-        c.learnings["apr-a"].sections.lived[0] = { type: "paragraph", text: "Texto editado solo en el JSON." };
+        c.learnings["apr-a"].sections.learning[0] = { type: "paragraph", text: "Texto editado solo en el JSON." };
         c.ui.labels.markRead = "Ya lo leí";
         c.badges["semilla-de-descubrimiento"].xp = 250;
         c.badges["semilla-de-descubrimiento"].title = "Otro nombre";

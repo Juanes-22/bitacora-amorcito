@@ -5,7 +5,7 @@ import { configJson, harness, SPOT_A, stationSpot } from "./helpers.mjs";
 const { open, check, finish, browser } = await harness();
 
 const KEY = (mode = "demo") => `bitacora:progress:v3:${configJson.contentSetId}:${mode}`;
-const DONE = { contentRevision: 1, readSectionIds: ["lived", "learning", "reflection", "classroom"], completedAt: "2026-09-30T10:00:00.000Z" };
+const DONE = { contentRevision: 1, readSectionIds: ["learning", "reflection", "lived"], completedAt: "2026-09-30T10:00:00.000Z" };
 const saved = ({ entries = {}, zone = "zona-a", player = { x: 200, y: 1030 }, mode = "demo", route = configJson.route } = {}) => ({
   [KEY(mode)]: JSON.stringify({
     schemaVersion: 3, contentSetId: configJson.contentSetId, mode, currentZoneId: zone, player, checkpoints: {},
@@ -34,11 +34,11 @@ async function goToStation(t, config, id) {
   await t.page.waitForTimeout(350);
 }
 
-/** Lectura completa de la estación abierta: apertura → cuatro secciones → recoger → cerrar la recompensa. */
+/** Lectura completa de la estación abierta: apertura → tres secciones → recoger → cerrar la recompensa. */
 async function readAndClaim(t) {
   await t.page.click("text=Siguiente");
   await t.page.waitForTimeout(200);
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 3; i++) {
     if (i > 0) await t.page.keyboard.press("ArrowRight");
     await t.page.click("text=Marcar sección como leída");
     await t.page.waitForTimeout(60);

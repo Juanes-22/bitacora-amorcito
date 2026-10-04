@@ -68,8 +68,12 @@ export class ZonePortal {
     }
   }
 
-  /** ¿Cae el punto del mundo sobre el anillo del portal (con un margen para dedos gruesos)? */
+  /** ¿Cae el punto del mundo sobre el cartel del portal o su anillo (con un margen para dedos gruesos)? */
   contains(x: number, y: number, pad = 0): boolean {
+    if (this.sign) {
+      const b = this.sign.getBounds();
+      if (x >= b.x - pad && x <= b.right + pad && y >= b.y - pad && y <= b.bottom + pad) return true;
+    }
     return Math.hypot(x - this.interaction.x, y - this.interaction.y) <= this.ring.radius * this.ring.scaleX + pad;
   }
 

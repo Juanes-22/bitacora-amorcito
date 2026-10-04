@@ -9,6 +9,8 @@ import { PathFollower } from "./PathFollower";
 
 /** Margen alrededor de una señal o un portal para que cuente un dedo algo desviado. */
 const HIT_PAD = 14;
+/** El portal es un blanco que se busca desde lejos y su cartel es delgado: su zona sensible es más generosa. */
+const PORTAL_PAD = 36;
 /** Con el dedo arrastrado, el destino se recalcula como mucho cada tanto y solo si se movió lo suficiente. */
 const DRAG_REPLAN_MS = 140;
 const DRAG_MIN_MOVE = 12;
@@ -36,9 +38,9 @@ export interface TapNavigationDeps {
 const keyOf = (t: NearbyTarget) => `${t.kind}:${t.id}`;
 
 /**
- * Tocar para caminar (SPEC 6.1). Un toque en el mapa lleva a Vanessa hasta ese punto rodeando los obstáculos, con un
- * círculo animado en el destino; un toque sobre una estación o un portal que ya está a su alcance los abre (el equivalente
- * a «Explorar»), y si aún no lo está camina hasta su punto de interacción. Arrastrar el dedo reorienta el destino. No mueve
+ * Tocar o hacer clic para caminar (SPEC 6.1). Un toque (o un clic del ratón) en el mapa lleva a Vanessa hasta ese punto
+ * rodeando los obstáculos, con un círculo animado en el destino; un toque sobre una estación o un portal que ya está a su alcance los abre (el equivalente
+ * a «Explorar»), y si aún no lo está camina hasta su punto de interacción. Arrastrar el dedo (o mantener el botón del ratón) reorienta el destino. No mueve
  * nada por su cuenta: entrega un vector al mismo ciclo de movimiento que usan las flechas, y cualquier flecha lo cancela.
  */
 export class TapNavigation {
@@ -69,17 +71,21 @@ export class TapNavigation {
     this.onUp = () => {
       this.pointerDown = false;
     };
+    scene.input.mouse?.disableContextMenu(); // el clic derecho también camina: sin el menú del navegador
     scene.input.on(Phaser.Input.Events.POINTER_DOWN, this.onDown);
     scene.input.on(Phaser.Input.Events.POINTER_MOVE, this.onMove);
     scene.input.on(Phaser.Input.Events.POINTER_UP, this.onUp);
     scene.input.on(Phaser.Input.Events.POINTER_UP_OUTSIDE, this.onUp);
   }
 
-  /** Táctil o lápiz siempre; el ratón solo en pantallas táctiles o estrechas (en escritorio se usa el teclado). */
+  /**
+   * Táctil y lápiz siempre. Con el ratón (escritorio) se camina con un clic, como en los juegos de ratón: vale el botón
+   * izquierdo y el derecho (el menú del navegador no se abre sobre el mapa); el botón central no hace nada.
+   */
   private accepts(p: Phaser.Input.Pointer): boolean {
     if (!this.deps.enabled()) return false;
     if (p.wasTouch || (p.event as PointerEvent | undefined)?.pointerType === "pen") return true;
-    return typeof window !== "undefined" && !!window.matchMedia?.("(pointer: coarse), (max-width: 640px)").matches;
+    return p.button === 0 || p.button === 2;
   }
 
   private hit(x: number, y: number): { target: NearbyTarget; point: Point; radius: number } | null {
@@ -87,7 +93,7 @@ export class TapNavigation {
       const inside =
         t.target.kind === "learning"
           ? !!this.deps.stations.get(t.target.id)?.contains(x, y, HIT_PAD) || Math.hypot(x - t.x, y - t.y) <= HIT_PAD * 1.5
-          : this.deps.portals.some((p) => p.contains(x, y, HIT_PAD)) && Math.hypot(x - t.x, y - t.y) <= t.radius;
+          : this.deps.portals.some((p) => p.portalId === t.target.id && p.contains(x, y, PORTAL_PAD));
       if (inside) return { target: t.target, point: { x: t.x, y: t.y }, radius: t.radius };
     }
     return null;

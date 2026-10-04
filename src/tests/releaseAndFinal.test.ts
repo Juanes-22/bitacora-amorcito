@@ -72,7 +72,7 @@ describe("modo final: contenido sin aprobar (SPEC 10)", () => {
     c.learnings["apr-b"].editorialStatus = "draft";
     c.learnings["apr-c"].editorialStatus = "ready";
     let s = initialProgress(c);
-    for (const sec of ["lived", "learning", "reflection", "classroom"] as const) {
+    for (const sec of ["learning", "reflection", "lived"] as const) {
       const r = markSectionRead(s, c, "apr-a", sec);
       if (r.ok) s = r.state;
     }
@@ -87,7 +87,7 @@ describe("modo final: contenido sin aprobar (SPEC 10)", () => {
 
   it("aunque todo esté completado, un contenido sin aprobar impide darlo por terminado", () => {
     const c = makeConfig(2);
-    const done = { contentRevision: 1, readSectionIds: ["lived", "learning", "reflection", "classroom"] as const, completedAt: "2026-10-01T00:00:00.000Z" };
+    const done = { contentRevision: 1, readSectionIds: ["learning", "reflection", "lived"] as const, completedAt: "2026-10-01T00:00:00.000Z" };
     const state = { ...initialProgress(c), entries: { "apr-a": { ...done, readSectionIds: [...done.readSectionIds] }, "apr-b": { ...done, readSectionIds: [...done.readSectionIds] } } };
     expect(summarize(c, state).finished).toBe(true);
     c.mode = "final"; // mismo avance, ahora el contenido no está aprobado

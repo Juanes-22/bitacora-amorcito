@@ -115,11 +115,11 @@ describe("bitacora.json: forma", () => {
     expect(i.some((x) => x.path.startsWith("learnings.apr-a.sections.lived[1]"))).toBe(true);
   });
 
-  it("exige exactamente las cuatro secciones", () => {
+  it("exige exactamente las tres secciones", () => {
     const i = issuesOf((c) => {
-      delete (c.learnings["apr-a"].sections as Partial<typeof c.learnings["apr-a"]["sections"]>).classroom;
+      delete (c.learnings["apr-a"].sections as Partial<typeof c.learnings["apr-a"]["sections"]>).lived;
     });
-    expect(at(i, "learnings.apr-a.sections.classroom")).toHaveLength(1);
+    expect(at(i, "learnings.apr-a.sections.lived")).toHaveLength(1);
   });
 
   it("el tipo BitacoraConfig y el esquema coinciden en las claves de nivel superior", () => {
@@ -219,8 +219,8 @@ describe("bitacora.json: referencias cruzadas", () => {
     expect(at(i, "learnings.apr-a.sections.lived[3].url")).toHaveLength(1);
   });
 
-  it("las pestañas deben cubrir las cuatro secciones sin duplicados", () => {
-    const i = issuesOf((c) => { c.ui.tabs[3].id = "lived"; });
+  it("las pestañas deben cubrir las tres secciones sin duplicados", () => {
+    const i = issuesOf((c) => { c.ui.tabs[2].id = "reflection"; });
     expect(at(i, "ui.tabs")).toHaveLength(1);
   });
 });
@@ -607,7 +607,7 @@ describe("bitacora.json: identidad de las estaciones, assets de interfaz y sombr
       expect(l.signTitle?.length, id).toBeGreaterThan(0);
       expect(l.signTitle!.length, id).toBeLessThanOrEqual(40);
     }
-    expect(real.learnings["apr-a"].signTitle).toBe("Semillas y saberes");
+    expect(real.learnings["apr-a"].signTitle).toBe("Plantas y semillas");
     expect(realManifest.assets[real.ui.assets.stationSign].labelZones).toHaveProperty("title");
   });
 

@@ -253,7 +253,7 @@ try {
     await t.page.waitForTimeout(500);
     const a11y = await t.axe();
     check("axe-core: la cabecera con el nuevo botón no tiene violaciones", a11y.length === 0, a11y.join(" | "));
-    await t.page.getByRole("button", { name: /Ver aprendizajes en lista/ }).click();
+    await t.page.getByRole("button", { name: /Bitácora de aprendizajes/ }).click();
     await t.page.waitForTimeout(300);
     check("AC-66: con una ventana abierta el botón está desactivado", await button.isDisabled());
     await t.close();

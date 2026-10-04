@@ -2,7 +2,7 @@
 // assets.schema.json en src/tests/config.test.ts: no sustituyen a la validación en runtime.
 
 export type AppMode = "demo" | "final";
-export type SectionId = "lived" | "learning" | "reflection" | "classroom";
+export type SectionId = "learning" | "reflection" | "lived";
 export type DialogueEvent = "open" | "locked" | "completed" | "reward";
 export type Point = { x: number; y: number };
 

@@ -6,7 +6,7 @@ import { configJson, harness } from "./helpers.mjs";
 
 const { open, check, finish } = await harness();
 const KEY = `bitacora:progress:v3:${configJson.contentSetId}:demo`;
-const DONE = { contentRevision: 1, readSectionIds: ["lived", "learning", "reflection", "classroom"], completedAt: "2026-09-30T10:00:00.000Z" };
+const DONE = { contentRevision: 1, readSectionIds: ["learning", "reflection", "lived"], completedAt: "2026-09-30T10:00:00.000Z" };
 const saved = (completed) => ({
   [KEY]: JSON.stringify({
     schemaVersion: 3, contentSetId: configJson.contentSetId, mode: "demo", currentZoneId: "zona-a", player: { x: 200, y: 1030 }, checkpoints: {},

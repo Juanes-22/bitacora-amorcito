@@ -4,7 +4,7 @@ import type { BitacoraConfig, ContentBlock, Learning, SectionId } from "../../co
 // dos zonas con portales de ida y regreso y N aprendizajes (5, 6 o 7 en las variantes).
 // La geometría es provisional; no es el bitacora.json del sitio.
 
-const SECTIONS: SectionId[] = ["lived", "learning", "reflection", "classroom"];
+const SECTIONS: SectionId[] = ["learning", "reflection", "lived"];
 const LETTERS = "abcdefghijklmnopqrstuvwxyz";
 
 const demoBlocks = (label: string): ContentBlock[] => [
@@ -137,14 +137,13 @@ export function makeConfig(count = 6): BitacoraConfig {
     },
     ui: {
       tabs: [
-        { id: "lived", label: "Lo vivido", required: true },
-        { id: "learning", label: "Aprendizajes", required: true },
+        { id: "learning", label: "Resumen", required: true },
         { id: "reflection", label: "Reflexión", required: true },
-        { id: "classroom", label: "En el aula", required: true },
+        { id: "lived", label: "Lo vivido", required: true },
       ],
       labels: {
         explore: "Explorar", markRead: "Marcar sección como leída", claimBadge: "Recoger insignia y continuar",
-        close: "Cerrar", index: "Ver aprendizajes en lista", reset: "Reiniciar recorrido",
+        close: "Cerrar", index: "Bitácora de aprendizajes", reset: "Reiniciar recorrido",
         continueRoute: "Continuar recorrido", startRoute: "Comenzar recorrido", pending: "Pendiente",
         demo: "Contenido de demostración", previous: "Anterior", next: "Siguiente",
         progressTemplate: "{completedCount} de {totalCount} aprendizajes",

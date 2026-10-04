@@ -18,7 +18,7 @@ function shuffle<T>(items: T[], next: () => number): T[] {
   }
   return a;
 }
-const DONE = (rev = 1) => ({ contentRevision: rev, readSectionIds: ["lived", "learning", "reflection", "classroom"] as const, completedAt: "2026-10-01T00:00:00.000Z" });
+const DONE = (rev = 1) => ({ contentRevision: rev, readSectionIds: ["learning", "reflection", "lived"] as const, completedAt: "2026-10-01T00:00:00.000Z" });
 
 describe("totales, numeración, siguiente y finalización dependen SOLO de route (SPEC 4.1, AC-25/26)", () => {
   it.each([1, 2, 3, 4, 5, 6, 7, 8])("variante aleatoria %i: archivados y orden de claves no alteran ningún derivado", (seed) => {

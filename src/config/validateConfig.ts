@@ -15,7 +15,7 @@ const validateShape = compileSchema(bitacoraSchema);
 
 const DIALOGUE_VARIABLE_SET = new Set<string>(DIALOGUE_VARIABLES);
 const ALLOWED_URL_PROTOCOLS = new Set(["http:", "https:", "mailto:"]);
-const SECTION_IDS = ["lived", "learning", "reflection", "classroom"];
+const SECTION_IDS = ["learning", "reflection", "lived"];
 // Orden de profundidad esperado de las capas de fondo del catálogo (SPEC 3.1).
 const LAYER_ORDER = ["horizon", "terrain", "midground", "foreground"];
 

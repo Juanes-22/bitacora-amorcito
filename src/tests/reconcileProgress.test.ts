@@ -6,7 +6,7 @@ import type { BitacoraConfig } from "../config/types";
 import { makeConfig } from "./fixtures/makeConfig";
 
 const T = "2026-10-01T12:00:00.000Z";
-const done = (rev = 1) => ({ contentRevision: rev, readSectionIds: ["lived", "learning", "reflection", "classroom"] as SavedProgress["entries"][string]["readSectionIds"], completedAt: T });
+const done = (rev = 1) => ({ contentRevision: rev, readSectionIds: ["learning", "reflection", "lived"] as SavedProgress["entries"][string]["readSectionIds"], completedAt: T });
 const withProgress = (config: BitacoraConfig, entries: SavedProgress["entries"], patch: Partial<SavedProgress> = {}): SavedProgress => ({
   ...initialProgress(config), entries: { ...initialProgress(config).entries, ...entries }, ...patch,
 });
@@ -147,7 +147,7 @@ describe("reconcileProgress: saneamiento", () => {
     const saved = withProgress(c, {});
     saved.entries["apr-a"] = { contentRevision: 1, readSectionIds: ["lived", "lived", "inventada", "reflection"] as never, completedAt: "ayer" };
     const e = reconcileProgress(c, saved).entries["apr-a"];
-    expect(e.readSectionIds).toEqual(["lived", "reflection"]);
+    expect(e.readSectionIds).toEqual(["reflection", "lived"]);
     expect(e.completedAt).toBeUndefined();
   });
 
@@ -155,7 +155,7 @@ describe("reconcileProgress: saneamiento", () => {
     const c = makeConfig(3);
     const saved = withProgress(c, {});
     saved.entries["apr-a"] = { contentRevision: 1, readSectionIds: ["lived"], completedAt: T };
-    expect(reconcileProgress(c, saved).entries["apr-a"].readSectionIds).toEqual(["lived", "learning", "reflection", "classroom"]);
+    expect(reconcileProgress(c, saved).entries["apr-a"].readSectionIds).toEqual(["learning", "reflection", "lived"]);
   });
 
   it("es idempotente y no modifica su entrada", () => {

@@ -6,7 +6,7 @@ import type { BitacoraConfig, SectionId } from "../config/types";
 import { makeConfig } from "./fixtures/makeConfig";
 
 const NOW = new Date("2026-10-01T12:00:00.000Z");
-const ALL: SectionId[] = ["lived", "learning", "reflection", "classroom"];
+const ALL: SectionId[] = ["learning", "reflection", "lived"];
 
 /** Aplica transiciones exigiendo que sean válidas. */
 function mark(config: BitacoraConfig, state: SavedProgress, id: string, sections: SectionId[]): SavedProgress {
@@ -67,14 +67,14 @@ describe("markSectionRead (AC-05)", () => {
 });
 
 describe("claimBadge (AC-06, AC-07)", () => {
-  it("exige las cuatro secciones: con tres marcadas no se concede", () => {
+  it("exige las tres secciones: con dos marcadas no se concede", () => {
     const c = makeConfig();
-    const s = mark(c, initialProgress(c), "apr-a", ["lived", "learning", "reflection"]);
+    const s = mark(c, initialProgress(c), "apr-a", ["learning", "reflection"]);
     expect(allRequiredRead(s, c, "apr-a")).toBe(false);
     expect(claimBadge(s, c, "apr-a", NOW)).toEqual({ ok: false, reason: "incomplete" });
   });
 
-  it("con las cuatro marcadas una única transición completa, registra la fecha y habilita la siguiente", () => {
+  it("con las tres marcadas una única transición completa, registra la fecha y habilita la siguiente", () => {
     const c = makeConfig();
     const s = mark(c, initialProgress(c), "apr-a", ALL);
     const r = claimBadge(s, c, "apr-a", NOW);
@@ -118,9 +118,9 @@ describe("claimBadge (AC-06, AC-07)", () => {
 
   it("los requisitos salen de ui.tabs: una pestaña no requerida no bloquea la insignia", () => {
     const c = makeConfig();
-    c.ui.tabs[3].required = false;
-    expect(requiredSectionIds(c)).toEqual(["lived", "learning", "reflection"]);
-    const r = claimBadge(mark(c, initialProgress(c), "apr-a", ["lived", "learning", "reflection"]), c, "apr-a", NOW);
+    c.ui.tabs[2].required = false;
+    expect(requiredSectionIds(c)).toEqual(["learning", "reflection"]);
+    const r = claimBadge(mark(c, initialProgress(c), "apr-a", ["learning", "reflection"]), c, "apr-a", NOW);
     expect(r).toMatchObject({ ok: true, changed: true });
   });
 });
@@ -162,9 +162,9 @@ describe("modo final y admisibilidad editorial (SPEC 10)", () => {
 describe("setActiveSection y totales derivados", () => {
   it("recuerda la pestaña activa sin contarla como lectura", () => {
     const c = makeConfig();
-    const s = setActiveSection(initialProgress(c), c, "apr-a", "classroom");
-    expect(s.entries["apr-a"]).toMatchObject({ lastSectionId: "classroom", readSectionIds: [] });
-    expect(setActiveSection(s, c, "apr-a", "classroom")).toBe(s);
+    const s = setActiveSection(initialProgress(c), c, "apr-a", "lived");
+    expect(s.entries["apr-a"]).toMatchObject({ lastSectionId: "lived", readSectionIds: [] });
+    expect(setActiveSection(s, c, "apr-a", "lived")).toBe(s);
   });
 
   it("deriva «3 de 6» y «300 / 600 XP» desde route y badges, sin números incrustados", () => {

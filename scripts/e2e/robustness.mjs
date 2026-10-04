@@ -8,7 +8,7 @@ const KEY = `bitacora:progress:v3:${configJson.contentSetId}:demo`;
 const SAVED = JSON.stringify({
   schemaVersion: 3, contentSetId: configJson.contentSetId, mode: "demo", currentZoneId: "zona-a", player: { x: 330, y: 990 }, checkpoints: {},
   entries: Object.fromEntries(configJson.route.map((id, i) => [id, i === 0
-    ? { contentRevision: 1, readSectionIds: ["lived", "learning", "reflection", "classroom"], completedAt: "2026-09-30T10:00:00.000Z" }
+    ? { contentRevision: 1, readSectionIds: ["learning", "reflection", "lived"], completedAt: "2026-09-30T10:00:00.000Z" }
     : { contentRevision: 1, readSectionIds: [] }])),
 });
 const seed = { [KEY]: SAVED };

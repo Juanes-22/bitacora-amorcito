@@ -408,12 +408,11 @@
         "badgeId": { "$ref": "#/$defs/id" },
         "sections": {
           "type": "object",
-          "required": ["lived", "learning", "reflection", "classroom"],
+          "required": ["learning", "reflection", "lived"],
           "properties": {
             "lived": { "$ref": "#/$defs/blocks" },
             "learning": { "$ref": "#/$defs/blocks" },
-            "reflection": { "$ref": "#/$defs/blocks" },
-            "classroom": { "$ref": "#/$defs/blocks" }
+            "reflection": { "$ref": "#/$defs/blocks" }
           },
           "additionalProperties": false
         },
@@ -472,13 +471,13 @@
       "properties": {
         "tabs": {
           "type": "array",
-          "minItems": 4,
-          "maxItems": 4,
+          "minItems": 3,
+          "maxItems": 3,
           "items": {
             "type": "object",
             "required": ["id", "label", "required"],
             "properties": {
-              "id": { "enum": ["lived", "learning", "reflection", "classroom"] },
+              "id": { "enum": ["learning", "reflection", "lived"] },
               "label": { "type": "string", "minLength": 1 },
               "required": { "type": "boolean" }
             },

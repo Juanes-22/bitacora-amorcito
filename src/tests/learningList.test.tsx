@@ -39,7 +39,7 @@ function mount(edit?: (c: BitacoraConfig) => void) {
 }
 
 describe("LearningList (AC-11)", () => {
-  it("es un diálogo modal con el título «Ver aprendizajes en lista» y una lista ordenada de los seis aprendizajes", () => {
+  it("es un diálogo modal con el título «Bitácora de aprendizajes» y una lista ordenada de los seis aprendizajes", () => {
     mount();
     const dialog = screen.getByRole("dialog", { name: base.ui.labels.index });
     expect(dialog.getAttribute("aria-modal")).toBe("true");

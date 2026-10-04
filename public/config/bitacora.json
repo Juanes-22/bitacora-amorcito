@@ -4,7 +4,7 @@
   "contentSetId": "bitacora-vanessa-estrada-2026-2",
   "configRevision": "2026-10-01-geometria-provisional",
   "mode": "demo",
-  "editorNotes": "Configuración de demostración. (1) Contenido: solo «apr-a» tiene el borrador de plantas y semillas (SPEC 9), pendiente de revisión de Vanessa; los otros cinco aprendizajes son textos de demostración. (2) Geometría: tamaños de zona, spawns, portales, estaciones y obstáculos son PROVISIONALES. Los obstáculos se derivaron de las capas reales con scripts/tools/derive-obstacles.py (agua, rocas, arbustos, vallas, árboles y límites del terreno) y se abrieron corredores donde el camino pasa bajo arbustos o la pasarela; requieren revisión visual en el juego. (3) Los fondos se componen con una sola variante por capa (zona A: midground cherry-tree v01 y foreground v03; zona B: horizon v01 y midground pavilion v01). (4) Vanessa y Jerry usan la hoja de caminar «v4» con los frames definidos en src/assets/frameDefinitions.ts (medidos sobre la imagen real, no una división en cuadrícula); companion «included» porque la hoja ya incluye a Jerry. (5) El cuerpo de colisión (píxeles de la textura, ×scale) se mide desde el punto de apoyo del personaje: offset (0,0) son los pies; en actores con frames, el pivote del frame manda sobre `origin`.",
+  "editorNotes": "Configuración de demostración. (1) Contenido: los seis aprendizajes son los textos de Vanessa (archivo bitacora-aprendizajes.md), cargados como borrador (`draft`) pendiente de su revisión; al aprobarlos se pasan a `ready`. Las insignias de los aprendizajes 2 a 6 siguen siendo provisionales. (2) Geometría: tamaños de zona, spawns, portales, estaciones y obstáculos son PROVISIONALES. Los obstáculos se derivaron de las capas reales con scripts/tools/derive-obstacles.py (agua, rocas, arbustos, vallas, árboles y límites del terreno) y se abrieron corredores donde el camino pasa bajo arbustos o la pasarela; requieren revisión visual en el juego. (3) Los fondos se componen con una sola variante por capa (zona A: midground cherry-tree v01 y foreground v03; zona B: horizon v01 y midground pavilion v01). (4) Vanessa y Jerry usan la hoja de caminar «v4» con los frames definidos en src/assets/frameDefinitions.ts (medidos sobre la imagen real, no una división en cuadrícula); companion «included» porque la hoja ya incluye a Jerry. (5) El cuerpo de colisión (píxeles de la textura, ×scale) se mide desde el punto de apoyo del personaje: offset (0,0) son los pies; en actores con frames, el pivote del frame manda sobre `origin`.",
   "project": {
     "title": "Mi bitácora — Un recorrido de aprendizajes",
     "studentName": "Vanessa Estrada",
@@ -1263,221 +1263,285 @@
   },
   "learnings": {
     "apr-a": {
-      "title": "Aprender con los sentidos: plantas, semillas y saberes",
-      "topic": "Plantas, semillas y saberes",
-      "signTitle": "Semillas y saberes",
+      "title": "Las plantas y las semillas",
+      "topic": "Plantas, semillas y plantas medicinales",
+      "signTitle": "Plantas y semillas",
       "editorialStatus": "draft",
       "contentRevision": 1,
       "badgeId": "semilla-de-descubrimiento",
       "sections": {
-        "lived": [
-          {
-            "type": "paragraph",
-            "text": "Durante una exploración guiada por la maestra, conocimos distintas plantas y semillas. Uno de los momentos más significativos para mí fue cuando compartió semillas de diferentes frutos y me detuve a olerlas una por una. Fue una experiencia muy bonita, porque no había tenido muchos acercamientos de ese tipo con la naturaleza."
-          },
-          {
-            "type": "paragraph",
-            "text": "También recibimos materiales sobre los usos atribuidos a algunas plantas. La actividad despertó mi curiosidad por las experiencias y los conocimientos que las personas construyen alrededor de ellas."
-          }
-        ],
         "learning": [
           {
             "type": "paragraph",
-            "text": "Esta experiencia me llevó a reconocer el lugar que pueden tener los sentidos en mi manera de aprender. Detenerme a oler, observar y prestar atención hizo que algo que antes me resultaba distante se volviera significativo."
+            "text": "Por medio de una exploración, conocimos más sobre las plantas y las semillas. La maestra nos explicó que las plantas son seres vivos muy importantes para la naturaleza y nos mostró diferentes tipos de semillas, como las de girasol, cebolla, zanahoria, orégano y coliflor."
           },
           {
             "type": "paragraph",
-            "text": "También me surgió el interés por conocer cómo se comparten los saberes sobre las plantas y cómo podría dialogar con ellos desde mi formación como maestra."
+            "text": "Muchas plantas nacen de una semilla, que guarda en su interior una pequeña planta y alimento para sus primeros días. Cuando tiene agua, aire y una temperatura adecuada, empieza a crecer: primero salen las raíces y después el brote. A ese comienzo se le llama germinación."
+          },
+          {
+            "type": "paragraph",
+            "text": "También conocimos algunas plantas medicinales como la manzanilla, la menta, la albahaca, el romero, la lavanda y la hierbabuena, y aprendimos sobre algunos de los usos que tradicionalmente se les han dado."
           }
         ],
         "reflection": [
           {
             "type": "paragraph",
-            "text": "La actividad me hizo pensar en la relación entre los conocimientos sobre las plantas, las mujeres que los han transmitido y su asociación con la brujería. Me pregunté por la forma en que ciertos saberes han sido valorados o desvalorizados, y por las relaciones de poder que intervienen en esa valoración."
+            "text": "Esta experiencia me hizo pensar que muchas veces usamos plantas y alimentos sin preguntarnos de dónde vienen o cómo comienzan a crecer. Conocer las semillas me ayudó a valorar más ese proceso y a tener mayor curiosidad por la naturaleza."
           },
           {
             "type": "paragraph",
-            "text": "Quiero profundizar en esas conexiones y contrastarlas con fuentes, sin dar por sentado que todas esas historias pueden explicarse de la misma manera. Como futura maestra, me interesa aprender a escuchar otros conocimientos y a formular preguntas sobre ellos."
+            "text": "También me llamó la atención conocer la relación que antiguamente se hacía entre las mujeres que tenían conocimientos sobre plantas y la llamada “brujería”. Esto me hizo pensar en cómo algunos conocimientos tradicionales fueron rechazados, aunque eran saberes que se transmitían de generación en generación."
+          },
+          {
+            "type": "paragraph",
+            "text": "Como futura docente, considero que este tipo de actividades son importantes porque permiten que los niños aprendan de una manera más cercana, explorando, observando y descubriendo lo que hay a su alrededor."
           }
         ],
-        "classroom": [
+        "lived": [
           {
             "type": "paragraph",
-            "text": "Como propuesta para una futura experiencia pedagógica, imagino una mesa de exploración con elementos naturales previamente seleccionados para el grupo. Podría invitar a observar, describir y comparar, dando espacio a lo que cada niña o niño quiera expresar."
-          },
-          {
-            "type": "paragraph",
-            "text": "También me gustaría incorporar relatos de las familias sobre su relación con las plantas. Esta sería una actividad de exploración y escucha, no una práctica de consumo de plantas ni de aplicación de remedios."
+            "text": "Para mí fue una experiencia muy bonita e interesante, porque no había tenido muchos acercamientos de este tipo con la naturaleza. Me gustó observar y oler las semillas, especialmente aquellas que nunca había visto. También me pareció interesante descubrir que algunos alimentos que consumimos tienen semillas muy diferentes."
           }
         ]
       }
     },
     "apr-b": {
-      "title": "Tema por definir",
-      "topic": "Tema por definir",
-      "signTitle": "Tema por definir",
-      "editorialStatus": "demo",
+      "title": "La plastilina casera",
+      "topic": "Plastilina casera y trabajo en equipo",
+      "signTitle": "La plastilina casera",
+      "editorialStatus": "draft",
       "contentRevision": 1,
       "badgeId": "insignia-demo-b",
       "sections": {
-        "lived": [
-          {
-            "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irá el relato de una experiencia significativa, escrito por Vanessa."
-          }
-        ],
         "learning": [
           {
             "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irá lo que Vanessa descubrió, comprendió o conectó con su formación."
+            "text": "Aprendimos a hacer plastilina casera con harina, aceite, agua y colorante. Trabajamos en equipos y, mientras mezclábamos los ingredientes, íbamos tocando y sintiendo cómo cambiaban sus texturas."
+          },
+          {
+            "type": "paragraph",
+            "text": "La idea era seguir mezclando hasta que quedara como una plastilina y después hacer un muñeco o alguna figura con ella."
           }
         ],
         "reflection": [
           {
             "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irán las emociones, preguntas y tensiones que Vanessa quiera compartir."
-          }
-        ],
-        "classroom": [
+            "text": "Esta experiencia me hizo pensar que podemos aprender y divertirnos con cosas sencillas que tenemos en casa. Me di cuenta de que no todo sale a la primera y que a veces necesitamos tiempo y ayuda para lograrlo."
+          },
           {
             "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irá la propuesta pedagógica que Vanessa imagine para el aula."
+            "text": "También fue bonito ver cómo nos ayudábamos entre compañeras. Como futura docente, me gustaría hacer este tipo de actividades con los niños, para que puedan tocar, probar, crear y aprender juntos."
+          }
+        ],
+        "lived": [
+          {
+            "type": "paragraph",
+            "text": "Me divertí mucho haciendo la plastilina. Mi mezcla se demoró bastante en quedar con la textura que necesitaba, pero fue interesante sentir cómo iba cambiando al agregar y mezclar los ingredientes."
+          },
+          {
+            "type": "paragraph",
+            "text": "Lo más chévere fue compartir con mis compañeras, reírnos y ayudarnos para que a todas nos quedara bien. Disfruté mucho ese momento de aprender y hacer algo juntas."
           }
         ]
       }
     },
     "apr-c": {
-      "title": "Tema por definir",
-      "topic": "Tema por definir",
-      "signTitle": "Tema por definir",
-      "editorialStatus": "demo",
+      "title": "El museo y la taxidermia",
+      "topic": "Museo, animales y taxidermia",
+      "signTitle": "El museo y la taxidermia",
+      "editorialStatus": "draft",
       "contentRevision": 1,
       "badgeId": "insignia-demo-c",
       "sections": {
-        "lived": [
-          {
-            "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irá el relato de una experiencia significativa, escrito por Vanessa."
-          }
-        ],
         "learning": [
           {
             "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irá lo que Vanessa descubrió, comprendió o conectó con su formación."
+            "text": "En el museo conocimos un poco sobre los planetas y los animales, pero lo que más me llamó la atención fue la taxidermia. Esta es una forma de conservar la piel de animales que ya han muerto y colocarla sobre una estructura que les da su forma, para que podamos ver cómo eran y conocerlos mejor."
+          },
+          {
+            "type": "paragraph",
+            "text": "Durante el recorrido nos explicaron qué animales estábamos viendo, de dónde venían y algunas de sus características. Después nos sentamos en grupos y nos pasaron una iguana disecada, un caparazón de tortuga, un oso perezoso disecado y dientes de tiburón para observarlos de cerca."
           }
         ],
         "reflection": [
           {
             "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irán las emociones, preguntas y tensiones que Vanessa quiera compartir."
-          }
-        ],
-        "classroom": [
+            "text": "Esta experiencia me hizo pensar en lo diferente que es ver un animal en una imagen y poder observarlo tan de cerca. Hay detalles que uno no se imagina o que pueden pasar desapercibidos, como lo filosos que son los dientes de un tiburón."
+          },
           {
             "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irá la propuesta pedagógica que Vanessa imagine para el aula."
+            "text": "También pensé que un museo es un lugar donde siempre podemos encontrar algo que nos dé curiosidad. Aunque ya es mi lugar favorito de la universidad, esta vez tuve la oportunidad de conocer mejor algunos de los animales que están allí."
+          },
+          {
+            "type": "paragraph",
+            "text": "Como futura docente, me gustaría que los niños también pudieran vivir experiencias así, donde tengan la oportunidad de observar, preguntar y sorprenderse con lo que van descubriendo."
+          }
+        ],
+        "lived": [
+          {
+            "type": "paragraph",
+            "text": "Este ha sido uno de mis aprendizajes favoritos. Me encanta el museo de la universidad, especialmente la zona de los animales, así que disfruté mucho conocer más sobre ellos. Algunos no los reconocía bien y fue interesante que nos explicaran cuáles eran."
+          },
+          {
+            "type": "paragraph",
+            "text": "La parte que más me gustó fue cuando nos sentamos en grupos y nos pasaron los animales y las otras piezas. Nos contaron que algunos animales habían sido retirados de las vitrinas porque se habían deteriorado."
+          },
+          {
+            "type": "paragraph",
+            "text": "Nunca pensé que tendría la oportunidad de ver animales disecados tan de cerca. Los dientes de tiburón fueron lo que más me sorprendió: ¡son demasiado filosos! Fue una experiencia que disfruté muchísimo."
           }
         ]
       }
     },
     "apr-d": {
-      "title": "Tema por definir",
-      "topic": "Tema por definir",
-      "signTitle": "Tema por definir",
-      "editorialStatus": "demo",
+      "title": "Pingüinos: cómo se adaptan los seres vivos",
+      "topic": "Adaptación de los seres vivos: los pingüinos",
+      "signTitle": "Los pingüinos y su adaptación",
+      "editorialStatus": "draft",
       "contentRevision": 1,
       "badgeId": "insignia-demo-d",
       "sections": {
-        "lived": [
-          {
-            "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irá el relato de una experiencia significativa, escrito por Vanessa."
-          }
-        ],
         "learning": [
           {
             "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irá lo que Vanessa descubrió, comprendió o conectó con su formación."
+            "text": "Aprendimos que los seres vivos tienen distintas formas de sobrevivir en el lugar donde viven. Uno de los ejemplos fue el pingüino y la manera en que cuida a su cría en medio del frío."
+          },
+          {
+            "type": "paragraph",
+            "text": "Cuando la mamá pone el huevo, se lo pasa con mucho cuidado al papá y va al mar a buscar alimento. Él lo mantiene sobre sus patas y lo cubre con un pliegue de piel de su barriga para darle calor. Es importante que el huevo no quede sobre el hielo, porque podría enfriarse demasiado. Los papás también se juntan con otros pingüinos para mantenerse calientes mientras esperan."
           }
         ],
         "reflection": [
           {
             "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irán las emociones, preguntas y tensiones que Vanessa quiera compartir."
-          }
-        ],
-        "classroom": [
+            "text": "Me sorprendió pensar en cómo los animales pueden comunicarse sin hablar como nosotros. También me llamó mucho la atención todo lo que hacen los pingüinos para proteger a su cría, desde mantener el huevo caliente hasta conseguir alimento."
+          },
           {
             "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irá la propuesta pedagógica que Vanessa imagine para el aula."
+            "text": "Esta experiencia me hizo pensar que hay muchas cosas de la naturaleza que todavía no conocemos y que pueden sorprendernos cuando nos detenemos a aprender sobre ellas."
+          },
+          {
+            "type": "paragraph",
+            "text": "Como futura docente, me gustaría compartir estos temas con los niños, porque conocer cómo viven los animales puede despertar muchas preguntas y ganas de seguir descubriendo."
+          }
+        ],
+        "lived": [
+          {
+            "type": "paragraph",
+            "text": "Este tema me encantó y me pareció demasiado interesante. Cuando la profesora empezó a contarnos sobre los pingüinos, me concentré mucho en lo que decía porque quería saber más."
+          },
+          {
+            "type": "paragraph",
+            "text": "Lo que más me llamó la atención fue cómo se reparten el cuidado de su cría: mientras la mamá busca alimento, el papá se queda protegiendo el huevo. También me sorprendió que pudiera alimentar al bebé por un tiempo mientras esperaba su regreso."
+          },
+          {
+            "type": "paragraph",
+            "text": "Disfruté mucho este aprendizaje porque conocí una parte de la vida de los pingüinos que me pareció increíble."
           }
         ]
       }
     },
     "apr-e": {
-      "title": "Tema por definir",
-      "topic": "Tema por definir",
-      "signTitle": "Tema por definir",
-      "editorialStatus": "demo",
+      "title": "La Tierra y sus movimientos",
+      "topic": "Rotación y traslación de la Tierra",
+      "signTitle": "La Tierra y sus movimientos",
+      "editorialStatus": "draft",
       "contentRevision": 1,
       "badgeId": "insignia-demo-e",
       "sections": {
-        "lived": [
-          {
-            "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irá el relato de una experiencia significativa, escrito por Vanessa."
-          }
-        ],
         "learning": [
           {
             "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irá lo que Vanessa descubrió, comprendió o conectó con su formación."
+            "text": "La Tierra está en movimiento, aunque nosotros no lo sintamos. Uno de sus movimientos es la rotación, que es cuando gira sobre sí misma. Tarda aproximadamente 24 horas en dar una vuelta completa."
+          },
+          {
+            "type": "paragraph",
+            "text": "Este giro hace que tengamos el día y la noche. En la parte de la Tierra que recibe la luz del Sol es de día, mientras que en la parte que queda al otro lado es de noche. Por eso, mientras aquí estamos desayunando, en otro lugar del mundo puede ser hora de dormir. Las diferencias de horario entre lugares tienen que ver con ese giro, porque el Sol no ilumina todos los lugares al mismo tiempo."
+          },
+          {
+            "type": "paragraph",
+            "text": "Otro movimiento es la traslación, que es el recorrido de la Tierra alrededor del Sol. Tarda aproximadamente 365 días y unas horas en completar una vuelta, es decir, cerca de un año."
+          },
+          {
+            "type": "paragraph",
+            "text": "Para mostrarnos el giro de la Tierra, la profesora usó una pelota con el mapa del mundo, parecida a un globo terráqueo. Mientras la giraba, nos explicaba por qué en unos lugares era de día y en otros era de noche."
           }
         ],
         "reflection": [
           {
             "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irán las emociones, preguntas y tensiones que Vanessa quiera compartir."
-          }
-        ],
-        "classroom": [
+            "text": "Este aprendizaje me hizo pensar que cosas tan comunes como el día, la noche y los horarios tienen una explicación que a veces no nos detenemos a conocer. Me pareció curioso pensar que, mientras nosotros estamos haciendo nuestras actividades, en otros lugares las personas pueden estar durmiendo."
+          },
           {
             "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irá la propuesta pedagógica que Vanessa imagine para el aula."
+            "text": "Como futura docente, me parece una buena idea usar objetos sencillos para explicar estos temas. Una pelota con el mapa del mundo puede ayudar a los niños a imaginar cómo gira la Tierra y a entender mejor algo que no podemos ver completo desde donde estamos."
+          }
+        ],
+        "lived": [
+          {
+            "type": "paragraph",
+            "text": "Aunque no estuve en la clase anterior, en la que la profesora había comenzado este tema, pude escuchar la parte final de la explicación y más o menos le fui cogiendo el hilo."
+          },
+          {
+            "type": "paragraph",
+            "text": "Me gustó que usara la pelota para mostrar cómo giraba la Tierra mientras nos hablaba del día, la noche y los diferentes horarios. No recuerdo todos los detalles, pero sí me pareció un tema interesante y pude entender un poco mejor por qué no es la misma hora en todos los lugares."
           }
         ]
       }
     },
     "apr-f": {
-      "title": "Tema por definir",
-      "topic": "Tema por definir",
-      "signTitle": "Tema por definir",
-      "editorialStatus": "demo",
+      "title": "Plantas: su origen",
+      "topic": "Plantas nativas e introducidas",
+      "signTitle": "El origen de las plantas",
+      "editorialStatus": "draft",
       "contentRevision": 1,
       "badgeId": "insignia-demo-f",
       "sections": {
-        "lived": [
-          {
-            "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irá el relato de una experiencia significativa, escrito por Vanessa."
-          }
-        ],
         "learning": [
           {
             "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irá lo que Vanessa descubrió, comprendió o conectó con su formación."
+            "text": "El origen de una planta tiene que ver con el lugar donde crece de manera natural. Las plantas nativas son propias de una región, mientras que las introducidas han llegado desde otros lugares por la acción de las personas. Por eso, no todas las plantas que vemos en un jardín vienen de la misma región."
+          },
+          {
+            "type": "paragraph",
+            "text": "Para acercarnos a este tema, visitamos el jardín botánico. Comenzamos sentándonos en una banca y la profesora nos mostró unas cartas de plantas, parecidas a las del tarot. Cada una eligió la que más le llamaba la atención. Yo escogí una con una chica mirando un pajarito en un árbol y me salió la canela."
+          },
+          {
+            "type": "paragraph",
+            "text": "Después tuvimos unos cinco minutos para observar lo que había a nuestro alrededor. Pudimos fijarnos en las plantas, sus hojas y sus troncos. En uno de los letreros aparecía una datilera plateada identificada como planta introducida. También hubo un momento en el que la profesora nos leyó un cuento sobre mariposas."
           }
         ],
         "reflection": [
           {
             "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irán las emociones, preguntas y tensiones que Vanessa quiera compartir."
-          }
-        ],
-        "classroom": [
+            "text": "Esta experiencia me hizo pensar que muchas veces vemos las plantas sin detenernos a conocerlas. Yo creía que todas las palmas eran iguales, pero al mirarlas con atención encontré diferencias que nunca había notado."
+          },
           {
             "type": "paragraph",
-            "text": "Contenido de demostración. Aquí irá la propuesta pedagógica que Vanessa imagine para el aula."
+            "text": "También me di cuenta de que observar puede despertar muchas preguntas. Ver tantos hormigueros me hizo querer saber cómo serían por dentro y cómo vivirían las hormigas allí."
+          },
+          {
+            "type": "paragraph",
+            "text": "Como futura docente, me gustaría darles a los niños momentos para explorar lo que tienen cerca y contar qué les llama la atención. A veces basta con detenernos unos minutos para descubrir algo nuevo."
+          }
+        ],
+        "lived": [
+          {
+            "type": "paragraph",
+            "text": "Lo que más me llamó la atención fue una palma con el tronco delgado y lleno de espinas. Algunas se rompían fácilmente, pero chuzaban bastante. También noté que unas estaban cortadas y me pregunté si lo hacían para evitar que alguien se lastimara."
+          },
+          {
+            "type": "paragraph",
+            "text": "Después vi otra palma con un tronco demasiado grueso. Me sorprendió mucho la diferencia entre las dos, porque antes pensaba que todas eran parecidas."
+          },
+          {
+            "type": "paragraph",
+            "text": "También me impresionó la cantidad de hormigueros que había en ese espacio y ver las hormigas rojas. Nunca me imaginé encontrar tantos juntos, y me quedé pensando en cómo serían por dentro."
+          },
+          {
+            "type": "paragraph",
+            "text": "Aunque me sentí cansada de caminar, me interesé bastante por lo que nos iba contando la profesora. Fue bonito tener un momento para mirar con más atención y descubrir cosas que normalmente podrían pasar desapercibidas."
           }
         ]
       }
@@ -1548,17 +1612,16 @@
   },
   "ui": {
     "tabs": [
-      {"id": "lived", "label": "Lo vivido", "required": true},
-      {"id": "learning", "label": "Aprendizajes", "required": true},
+      {"id": "learning", "label": "Resumen", "required": true},
       {"id": "reflection", "label": "Reflexión", "required": true},
-      {"id": "classroom", "label": "En el aula", "required": true}
+      {"id": "lived", "label": "Lo vivido", "required": true}
     ],
     "labels": {
       "explore": "Explorar",
       "markRead": "Marcar sección como leída",
       "claimBadge": "Recoger insignia y continuar",
       "close": "Cerrar",
-      "index": "Ver aprendizajes en lista",
+      "index": "Bitácora de aprendizajes",
       "reset": "Reiniciar recorrido",
       "continueRoute": "Continuar recorrido",
       "startRoute": "Comenzar recorrido",

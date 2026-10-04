@@ -163,6 +163,7 @@
           }
         },
         "meaning": { "type": "string", "minLength": 1 },
+        "group": { "type": "string", "minLength": 1 },
         "hitArea": {
           "type": "object",
           "required": ["x", "y", "width", "height"],

@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
+import { BADGE_PANEL_PARTS } from "../src/config/badgePanelParts";
 import { describe, expect, it } from "vitest";
 import { PNG } from "pngjs";
 import type { AssetEntry, AssetManifest } from "../src/config/types";
@@ -51,11 +52,11 @@ const issues = (id: string, mutate?: (atlas: any, entry: AssetEntry) => void) =>
 };
 
 describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)", () => {
-  it("el manifiesto con los dos kits y la música es válido: 113 entradas y recuentos coherentes", () => {
+  it("el manifiesto con los dos kits y la música es válido: 173 entradas y recuentos coherentes", () => {
     const r = validateAssetManifest(manifest);
     expect(r.ok ? "" : JSON.stringify(r.ok ? [] : r.issues)).toBe("");
-    expect(manifest.assetCount).toBe(113);
-    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, characters: 14, decorations: 18, effects: 18, stations: 10, ui: 31 });
+    expect(manifest.assetCount).toBe(173);
+    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, characters: 14, decorations: 18, effects: 18, stations: 10, ui: 91 });
   });
 
   it("las 45 entradas originales siguen en su sitio y con sus campos (el kit solo se añadió)", () => {
@@ -74,7 +75,9 @@ describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)
     expect(ids.slice(90, 92).sort()).toEqual(AVATAR_IDS);
     expect(ids.slice(92, 100).sort()).toEqual(UI_V2_IDS);
     expect(ids.slice(100, 106).sort()).toEqual(CHICKEN_IDS);
-    expect(ids.slice(106).sort()).toEqual(BADGE_IDS);
+    expect(ids.slice(106, 113).sort()).toEqual(BADGE_IDS);
+    expect(ids.slice(113)).toHaveLength(60);
+    expect(ids.slice(113).every((id) => id.startsWith("ui.badge-panel."))).toBe(true);
   });
 
   it("el kit conserva su metadata (origen, escala recomendada, animación y movimiento) sin duplicarla en otro sitio", () => {
@@ -148,6 +151,36 @@ describe("assets de interfaz y estaciones del paquete bitacora-ui-assets (SPEC 4
     m.assets["station.sign.board"].labelZones!.title.width = 999;
     const r = validateAssetManifest(m);
     expect(r.ok ? [] : r.issues.map((i) => i.message)).toEqual(expect.arrayContaining([expect.stringContaining("se sale")]));
+  });
+});
+
+describe("kit de interfaz del panel de insignias (SPEC 7, AC-80)", () => {
+  const parts = () => Object.entries(manifest.assets).filter(([id]) => id.startsWith("ui.badge-panel."));
+
+  it("60 piezas de kind «badge-panel-part» con su grupo, tamaño, transparencia y archivo del kit", () => {
+    expect(parts()).toHaveLength(60);
+    const groups: Record<string, number> = {};
+    for (const [id, e] of parts()) {
+      expect(e, id).toMatchObject({ kind: "badge-panel-part", category: "ui", hasAlphaChannel: true, transparent: true });
+      groups[e.group as string] = (groups[e.group as string] ?? 0) + 1;
+      const png = PNG.sync.read(readFileSync(join(root, e.path)));
+      expect([png.width, png.height], id).toEqual([e.width, e.height]);
+      expect(e.path.startsWith(`ui/badge-panel/${e.group}/`), id).toBe(true);
+    }
+    expect(groups).toEqual({ frames: 6, buttons: 8, labels: 4, controls: 4, icons: 17, decorations: 15, effects: 6 });
+  });
+
+  it("los marcos, botones, etiquetas y recuadros traen sus cortes de nueve zonas", () => {
+    const nine = parts().filter(([, e]) => e.nineSlice);
+    expect(nine).toHaveLength(18);
+    expect(manifest.assets["ui.badge-panel.panel-frame"].nineSlice).toEqual({ top: 78, right: 78, bottom: 78, left: 78 });
+    expect(manifest.assets["ui.badge-panel.button-primary"].nineSlice).toEqual({ top: 30, right: 61, bottom: 30, left: 61 });
+    expect(manifest.assets["ui.badge-panel.reflection-callout"].nineSlice).toEqual({ top: 48, right: 63, bottom: 48, left: 63 });
+  });
+
+  it("todas las piezas que usa el componente existen, y no hay avisos de archivos", () => {
+    for (const name of BADGE_PANEL_PARTS) expect(manifest.assets[`ui.badge-panel.${name}`], name).toBeDefined();
+    expect(checkAssetFiles(manifest, manifestPath).warnings).toEqual([]);
   });
 });
 

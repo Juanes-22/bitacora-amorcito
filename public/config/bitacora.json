@@ -1519,43 +1519,50 @@
       "title": "Curiosidad que florece",
       "description": "Valorar cómo nacen las plantas y despertar curiosidad por la naturaleza.",
       "assetId": "ui.badge.plantas-semillas",
-      "xp": 100
+      "xp": 100,
+      "tone": "jade"
     },
     "crear-juntas": {
       "title": "Crear juntas",
       "description": "Crear con materiales sencillos, tener paciencia y ayudarse entre compañeras.",
       "assetId": "ui.badge.plastilina-casera",
-      "xp": 100
+      "xp": 100,
+      "tone": "lavender"
     },
     "mirar-de-cerca": {
       "title": "Mirar de cerca",
       "description": "Observar detalles de los animales, hacer preguntas y sorprenderse en el museo.",
       "assetId": "ui.badge.museo-taxidermia",
-      "xp": 100
+      "xp": 100,
+      "tone": "gold"
     },
     "cuidar-la-vida": {
       "title": "Cuidar la vida",
       "description": "Reconocer las formas de adaptación y el cuidado de la cría.",
       "assetId": "ui.badge.pinguinos-adaptacion",
-      "xp": 100
+      "xp": 100,
+      "tone": "jade"
     },
     "imaginar-para-comprender": {
       "title": "Imaginar para comprender",
       "description": "Usar la imaginación y objetos sencillos para comprender fenómenos que no podemos ver completos.",
       "assetId": "ui.badge.tierra-movimientos",
-      "xp": 100
+      "xp": 100,
+      "tone": "gold"
     },
     "detenerse-a-descubrir": {
       "title": "Detenerse a descubrir",
       "description": "Mirar con atención las plantas cercanas, notar diferencias y despertar nuevas preguntas.",
       "assetId": "ui.badge.plantas-origen",
-      "xp": 100
+      "xp": 100,
+      "tone": "jade"
     },
     "jerry-companero-de-aventuras": {
       "title": "Compañero de aventuras",
       "description": "Celebrar a Jerry como compañero cariñoso de la exploración.",
       "assetId": "ui.badge.jerry",
       "xp": 0,
+      "tone": "lavender",
       "awardedFor": "route-complete"
     }
   },
@@ -1585,6 +1592,36 @@
     }
   },
   "ui": {
+    "badgePanel": {
+      "assetPrefix": "ui.badge-panel.",
+      "labels": {
+        "title": "Mis insignias",
+        "subtitle": "Colección de aprendizajes",
+        "obtainedTemplate": "{completedCount} de {totalCount} obtenidas",
+        "obtained": "Obtenida",
+        "pending": "Por descubrir",
+        "special": "Especial",
+        "viewBadge": "Ver insignia",
+        "hint": "Elige una insignia para conocer su historia.",
+        "backToMap": "Volver al mapa",
+        "backToCollection": "Volver a la colección",
+        "myCollection": "Mi colección",
+        "closePanel": "Cerrar panel de insignias",
+        "eyebrowLearning": "INSIGNIA DE APRENDIZAJE",
+        "eyebrowSpecial": "INSIGNIA DE AMISTAD",
+        "stillPending": "Aún está por descubrir",
+        "represents": "Qué representa",
+        "howEarned": "Cómo la conseguí",
+        "howToEarn": "Cómo conseguirla",
+        "completingTemplate": "Completando el aprendizaje {number}:",
+        "completeTemplate": "Completa el aprendizaje {number}:",
+        "completeRoute": "Completa todo el recorrido de aprendizajes.",
+        "routeEarned": "Terminando todo el recorrido de aprendizajes.",
+        "takeaway": "Lo que me llevo",
+        "viewLearning": "Ver aprendizaje",
+        "xpTemplate": "+{xp} XP"
+      }
+    },
     "tabs": [
       {"id": "learning", "label": "Resumen", "required": true},
       {"id": "reflection", "label": "Reflexión", "required": true},

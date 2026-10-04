@@ -3,6 +3,7 @@ import { PhaserGame } from "../components/game/PhaserGame";
 import { Cover } from "../components/ui/Cover";
 import { LearningDialog } from "../components/reading/LearningDialog";
 import { BadgeCollection } from "../components/ui/BadgeCollection";
+import { BadgePanel } from "../components/ui/BadgePanel";
 import { ConfirmDialog } from "../components/ui/ConfirmDialog";
 import { LearningList } from "../components/ui/LearningList";
 import { IconButton } from "../components/ui/IconButton";
@@ -120,7 +121,11 @@ function Loaded({ config, assets }: { config: BitacoraConfig; assets: AssetRegis
           {started ? <ProgressHUD bridge={bridge} onOpenBadges={reading || overlay ? undefined : overlayActions.openCollection} tools={tools} /> : null}
           {reading ? <LearningDialog reading={reading} actions={actions} /> : null}
           {overlay?.kind === "collection" ? (
-            <BadgeCollection completion={overlay.completion} onClose={overlayActions.closeOverlay} onReset={overlayActions.askReset} />
+            config.ui.badgePanel ? (
+              <BadgePanel completion={overlay.completion} onClose={overlayActions.closeOverlay} onReset={overlayActions.askReset} onOpenLearning={overlayActions.openFromList} />
+            ) : (
+              <BadgeCollection completion={overlay.completion} onClose={overlayActions.closeOverlay} onReset={overlayActions.askReset} />
+            )
           ) : null}
           {overlay?.kind === "list" ? <LearningList onOpen={overlayActions.openFromList} onClose={overlayActions.closeOverlay} /> : null}
           {overlay?.kind === "confirm-reset" ? <ConfirmDialog onConfirm={overlayActions.confirmReset} onCancel={overlayActions.cancelReset} /> : null}

@@ -1,3 +1,4 @@
+import { BADGE_PANEL_PARTS } from "../config/badgePanelParts";
 import { describe, expect, it } from "vitest";
 import manifestJson from "../../public/assets/assets.json";
 import bitacoraJson from "../../public/config/bitacora.json";
@@ -32,7 +33,7 @@ const at = (issues: ConfigIssue[], path: string) => issues.filter((i) => i.path 
 
 describe("assets.json real", () => {
   it("es válido y conserva sus entradas originales sin migrar", () => {
-    expect(Object.keys(realManifest.assets)).toHaveLength(113);
+    expect(Object.keys(realManifest.assets)).toHaveLength(173);
     expect(realManifest.assets["ui.panel.cream.nine-slice"].nineSlice).toEqual({ top: 32, right: 32, bottom: 32, left: 32 });
     expect(realManifest.assets["character.vanessa-jerry.walk.poses-v4"].requiresFrameDefinition).toBe(true);
     expect(realManifest).not.toHaveProperty("animations");
@@ -737,5 +738,41 @@ describe("bitacora.json: insignias de los aprendizajes y de Jerry (AC-79)", () =
   it("el esquema solo admite awardedFor «route-complete» y el asset debe ser de kind «badge»", () => {
     expect(issuesOf((c) => { c.badges["jerry"] = { title: "J", description: "x", assetId: "ui.badge.jerry", xp: 0, awardedFor: "nunca" as never }; }).length).toBeGreaterThan(0);
     expect(at(issuesOf((c) => { c.badges["jerry"] = { title: "J", description: "x", assetId: "station.sign.board", xp: 0, awardedFor: "route-complete" }; }), "badges.jerry.assetId")[0]?.message).toContain("badge");
+  });
+});
+
+describe("bitacora.json: panel de insignias con el kit de interfaz (AC-80)", () => {
+  const real = bitacoraJson as unknown as BitacoraConfig;
+  const panelFixture = (edit: (p: NonNullable<BitacoraConfig["ui"]["badgePanel"]>) => void) => (c: BitacoraConfig) => {
+    c.ui.badgePanel = structuredClone(real.ui.badgePanel as NonNullable<BitacoraConfig["ui"]["badgePanel"]>);
+    edit(c.ui.badgePanel);
+  };
+
+  it("el bitacora.json real usa el kit y el fixture, sin él, sigue siendo válido", () => {
+    expect(real.ui.badgePanel?.assetPrefix).toBe("ui.badge-panel.");
+    expect(real.ui.badgePanel?.labels.title).toBe("Mis insignias");
+    expect(issuesOf((c) => { delete c.ui.badgePanel; })).toEqual([]);
+    expect(issuesOf(panelFixture(() => undefined))).toEqual([]);
+  });
+
+  it("todas las piezas del kit deben existir con el prefijo y ser del kind «badge-panel-part»", () => {
+    const missing = issuesOf(panelFixture((p) => { p.assetPrefix = "ui.otro-kit."; }));
+    expect(missing.filter((i) => i.path === "ui.badgePanel.assetPrefix").length).toBe(BADGE_PANEL_PARTS.length);
+    expect(missing[0].message).toContain("asset ID no encontrado");
+  });
+
+  it("los textos del panel solo admiten sus variables y ninguno puede estar vacío", () => {
+    expect(at(issuesOf(panelFixture((p) => { p.labels.obtainedTemplate = "{completedCount} de {nada}"; })), "ui.badgePanel.labels.obtainedTemplate")[0]?.message).toContain("{nada}");
+    expect(at(issuesOf(panelFixture((p) => { p.labels.xpTemplate = "+{xp} {level}"; })), "ui.badgePanel.labels.xpTemplate")).toHaveLength(1);
+    expect(issuesOf(panelFixture((p) => { p.labels.title = ""; })).length).toBeGreaterThan(0);
+    expect(issuesOf(panelFixture((p) => { delete (p.labels as Partial<typeof p.labels>).hint; })).length).toBeGreaterThan(0);
+  });
+
+  it("el color de cada insignia es jade, lavanda o dorado, y «lo que me llevo» es opcional y no puede estar vacío", () => {
+    expect(Object.values(real.badges).map((b) => b.tone)).toEqual(["jade", "lavender", "gold", "jade", "gold", "jade", "lavender"]);
+    expect(Object.values(real.badges).every((b) => b.takeaway === undefined)).toBe(true); // no se inventa: lo escribe la autora
+    expect(issuesOf((c) => { c.badges[Object.keys(c.badges)[0]].tone = "rojo" as never; }).length).toBeGreaterThan(0);
+    expect(issuesOf((c) => { c.badges[Object.keys(c.badges)[0]].takeaway = ""; }).length).toBeGreaterThan(0);
+    expect(issuesOf((c) => { c.badges[Object.keys(c.badges)[0]].takeaway = "Una semilla me invita a observar."; })).toEqual([]);
   });
 });

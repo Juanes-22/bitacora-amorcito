@@ -472,7 +472,9 @@
         "description": { "type": "string", "minLength": 1 },
         "assetId": { "$ref": "#/$defs/assetId" },
         "xp": { "type": "integer", "minimum": 0 },
-        "awardedFor": { "const": "route-complete" }
+        "awardedFor": { "const": "route-complete" },
+        "tone": { "enum": ["jade", "lavender", "gold"] },
+        "takeaway": { "type": "string", "minLength": 1 }
       },
       "additionalProperties": false
     },
@@ -502,6 +504,46 @@
       "type": "object",
       "required": ["tabs", "labels", "assets", "defaultDialogueIds"],
       "properties": {
+        "badgePanel": {
+          "type": "object",
+          "required": ["assetPrefix", "labels"],
+          "properties": {
+            "assetPrefix": { "type": "string", "pattern": "^[a-zA-Z0-9]+(\\.[a-zA-Z0-9-]+)*\\.$" },
+            "labels": {
+              "type": "object",
+              "required": ["title", "subtitle", "obtainedTemplate", "obtained", "pending", "special", "viewBadge", "hint", "backToMap", "backToCollection", "myCollection", "closePanel", "eyebrowLearning", "eyebrowSpecial", "stillPending", "represents", "howEarned", "howToEarn", "completingTemplate", "completeTemplate", "completeRoute", "routeEarned", "takeaway", "viewLearning", "xpTemplate"],
+              "properties": {
+                "title": { "type": "string", "minLength": 1 },
+                "subtitle": { "type": "string", "minLength": 1 },
+                "obtainedTemplate": { "type": "string", "minLength": 1 },
+                "obtained": { "type": "string", "minLength": 1 },
+                "pending": { "type": "string", "minLength": 1 },
+                "special": { "type": "string", "minLength": 1 },
+                "viewBadge": { "type": "string", "minLength": 1 },
+                "hint": { "type": "string", "minLength": 1 },
+                "backToMap": { "type": "string", "minLength": 1 },
+                "backToCollection": { "type": "string", "minLength": 1 },
+                "myCollection": { "type": "string", "minLength": 1 },
+                "closePanel": { "type": "string", "minLength": 1 },
+                "eyebrowLearning": { "type": "string", "minLength": 1 },
+                "eyebrowSpecial": { "type": "string", "minLength": 1 },
+                "stillPending": { "type": "string", "minLength": 1 },
+                "represents": { "type": "string", "minLength": 1 },
+                "howEarned": { "type": "string", "minLength": 1 },
+                "howToEarn": { "type": "string", "minLength": 1 },
+                "completingTemplate": { "type": "string", "minLength": 1 },
+                "completeTemplate": { "type": "string", "minLength": 1 },
+                "completeRoute": { "type": "string", "minLength": 1 },
+                "routeEarned": { "type": "string", "minLength": 1 },
+                "takeaway": { "type": "string", "minLength": 1 },
+                "viewLearning": { "type": "string", "minLength": 1 },
+                "xpTemplate": { "type": "string", "minLength": 1 }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
         "tabs": {
           "type": "array",
           "minItems": 3,

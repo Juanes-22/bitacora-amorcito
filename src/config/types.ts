@@ -47,6 +47,28 @@ export interface Badge {
    * aventuras). No suma XP ni cuenta en «n de m insignias».
    */
   awardedFor?: "route-complete";
+  /** Color de su halo y sus ramitas en el panel de insignias (por defecto `jade`). */
+  tone?: "jade" | "lavender" | "gold";
+  /** «Lo que me llevo»: lo que la autora se queda de esta insignia, en primera persona. Sin él, el panel no muestra esa sección. */
+  takeaway?: string;
+}
+
+/** Textos del panel de insignias (SPEC 7). Las plantillas solo admiten sus variables: `{completedCount}`, `{totalCount}`, `{number}`, `{xp}`. */
+export interface BadgePanelLabels {
+  title: string; subtitle: string; obtainedTemplate: string;
+  obtained: string; pending: string; special: string; viewBadge: string; hint: string;
+  backToMap: string; backToCollection: string; myCollection: string; closePanel: string;
+  eyebrowLearning: string; eyebrowSpecial: string; stillPending: string;
+  represents: string; howEarned: string; howToEarn: string;
+  completingTemplate: string; completeTemplate: string; completeRoute: string; routeEarned: string;
+  takeaway: string; viewLearning: string; xpTemplate: string;
+}
+
+/** El panel de insignias hecho con el kit de interfaz `ui.badgePanel.*`. Sin él se usa la lista sencilla. */
+export interface BadgePanelConfig {
+  /** Prefijo de los IDs del kit en `assets.json` (p. ej. `ui.badgePanel.`). */
+  assetPrefix: string;
+  labels: BadgePanelLabels;
 }
 
 export interface Dialogue {
@@ -159,6 +181,8 @@ export interface IdleConfig {
 }
 
 export interface UiConfig {
+  /** Panel de insignias con el kit de interfaz (opcional). */
+  badgePanel?: BadgePanelConfig;
   tabs: Array<{ id: SectionId; label: string; required: boolean }>;
   labels: {
     explore: string; markRead: string; claimBadge: string; close: string;
@@ -350,6 +374,8 @@ export interface AssetEntry {
   labelZones?: Record<string, LabelZone>;
   /** Puntos de anclaje de lo que se pega a la imagen (p. ej. la insignia «Completado» bajo el letrero): `x`/`y` es el centro. */
   attachments?: Record<string, { x: number; y: number; width: number; height: number }>;
+  /** Carpeta o familia a la que pertenece una pieza de un kit (p. ej. `frames`, `icons` en el panel de insignias). */
+  group?: string;
   /** Qué significa el recurso (insignias): texto de referencia del paquete, no se muestra por sí solo. */
   meaning?: string;
   /** Zona sensible (píxeles de la textura, esquina superior izquierda). */

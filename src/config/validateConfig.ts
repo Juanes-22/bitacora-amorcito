@@ -1,6 +1,7 @@
 import bitacoraSchema from "../../public/config/bitacora.schema.json";
 import { DIALOGUE_VARIABLES, LABEL_TEMPLATE_VARIABLES, variablesIn } from "../domain/templates";
 import { ajvIssues, compileSchema } from "./schemaValidation";
+import { BADGE_PANEL_PARTS, BADGE_PANEL_TEMPLATE_VARIABLES } from "./badgePanelParts";
 import type {
   AssetManifest,
   BitacoraConfig,
@@ -177,6 +178,17 @@ export function validateBitacora(
   for (const [key, allowed] of Object.entries(LABEL_TEMPLATE_VARIABLES)) {
     for (const v of variablesIn(c.ui.labels[key as keyof typeof LABEL_TEMPLATE_VARIABLES])) {
       if (!(allowed as readonly string[]).includes(v)) err(`ui.labels.${key}`, `variable «{${v}}» no permitida`);
+    }
+  }
+
+  // Panel de insignias con el kit de interfaz: todas sus piezas existen y los textos usan solo sus variables.
+  const panel = c.ui.badgePanel;
+  if (panel) {
+    for (const name of BADGE_PANEL_PARTS) checkAsset(`ui.badgePanel.assetPrefix`, `${panel.assetPrefix}${name}`, ["badge-panel-part"]);
+    for (const [key, allowed] of Object.entries(BADGE_PANEL_TEMPLATE_VARIABLES)) {
+      for (const v of variablesIn(panel.labels[key as keyof typeof BADGE_PANEL_TEMPLATE_VARIABLES])) {
+        if (!(allowed as readonly string[]).includes(v)) err(`ui.badgePanel.labels.${key}`, `variable «{${v}}» no permitida`);
+      }
     }
   }
 

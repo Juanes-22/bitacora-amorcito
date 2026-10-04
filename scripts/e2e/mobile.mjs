@@ -465,7 +465,7 @@ try {
     await t.page.waitForTimeout(250);
     await t.page.getByRole("button", { name: L.badges }).click();
     await t.page.waitForTimeout(250);
-    check("la colección de insignias tiene un solo «Cerrar», el verde, con el foco", (await closeButtons().count()) === 1 && (await t.page.evaluate(() => document.activeElement?.classList.contains("pixel-button"))));
+    check("el panel de insignias se abre con el foco dentro, su botón X con nombre y el verde «Volver al mapa»", (await t.page.evaluate(() => !!document.activeElement?.closest(".bpk-dialog"))) && (await t.page.getByRole("button", { name: "Cerrar panel de insignias" }).count()) === 1 && (await t.page.getByRole("button", { name: "Volver al mapa" }).count()) === 1);
     await t.page.keyboard.press("Escape");
     await t.page.waitForTimeout(250);
     await t.place(...nearStation("apr-a"));

@@ -5,6 +5,7 @@ import "./styles/tokens.css";
 import "./styles/game.css";
 import "./styles/ui.css";
 import "./styles/reading.css";
+import "./styles/badgePanel.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

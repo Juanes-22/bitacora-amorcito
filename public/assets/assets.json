@@ -3,7 +3,7 @@
   "project": "Bitácora Amorcito",
   "basePath": ".",
   "pathConvention": "Paths are relative to the directory containing this assets.json.",
-  "assetCount": 113,
+  "assetCount": 173,
   "categoryCounts": {
     "audio": 3,
     "backgrounds": 17,
@@ -12,7 +12,7 @@
     "effects": 18,
     "references": 2,
     "stations": 10,
-    "ui": 31
+    "ui": 91
   },
   "assets": {
     "background.complete.garden": {
@@ -4209,6 +4209,1314 @@
         "width": 64,
         "height": 64
       }
+    },
+    "ui.badge-panel.panel-frame": {
+      "path": "ui/badge-panel/frames/panel-frame.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · marco: panel-frame",
+      "kind": "badge-panel-part",
+      "group": "frames",
+      "width": 486,
+      "height": 432,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 203745,
+      "sha256": "1a08ee683f8307371afc12b09649201f37bb5d63db5cc16e3cf090bf5edc281c",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/frames/panel-frame.png",
+      "recommendedDisplay": {
+        "width": 1060,
+        "height": 780
+      },
+      "nineSlice": {
+        "top": 78,
+        "right": 78,
+        "bottom": 78,
+        "left": 78
+      }
+    },
+    "ui.badge-panel.card-earned": {
+      "path": "ui/badge-panel/frames/card-earned.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · marco: card-earned",
+      "kind": "badge-panel-part",
+      "group": "frames",
+      "width": 455,
+      "height": 421,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 197910,
+      "sha256": "26a9349beabe3b6fe11e4ad0710d223fcd34fee82ad748f3479bfb12a7d819c2",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/frames/card-earned.png",
+      "recommendedDisplay": {
+        "width": 300,
+        "height": 258
+      },
+      "nineSlice": {
+        "top": 76,
+        "right": 76,
+        "bottom": 76,
+        "left": 76
+      }
+    },
+    "ui.badge-panel.card-earned-hover": {
+      "path": "ui/badge-panel/frames/card-earned-hover.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · marco: card-earned-hover",
+      "kind": "badge-panel-part",
+      "group": "frames",
+      "width": 491,
+      "height": 438,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 229484,
+      "sha256": "7215db9bb1008863d5f360da8e98eb35913b535659d30e21bdf45b4359ed696d",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/frames/card-earned-hover.png",
+      "recommendedDisplay": {
+        "width": 300,
+        "height": 258
+      },
+      "nineSlice": {
+        "top": 79,
+        "right": 79,
+        "bottom": 79,
+        "left": 79
+      }
+    },
+    "ui.badge-panel.card-pending": {
+      "path": "ui/badge-panel/frames/card-pending.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · marco: card-pending",
+      "kind": "badge-panel-part",
+      "group": "frames",
+      "width": 473,
+      "height": 413,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 170050,
+      "sha256": "ee996efa8a8a54744de93e8ee5fbbe2e59f7f0afbce057d23ee8efb8c23e5b50",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/frames/card-pending.png",
+      "recommendedDisplay": {
+        "width": 300,
+        "height": 258
+      },
+      "nineSlice": {
+        "top": 74,
+        "right": 74,
+        "bottom": 74,
+        "left": 74
+      }
+    },
+    "ui.badge-panel.card-special": {
+      "path": "ui/badge-panel/frames/card-special.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · marco: card-special",
+      "kind": "badge-panel-part",
+      "group": "frames",
+      "width": 473,
+      "height": 410,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 168205,
+      "sha256": "637e13b7a4d4bd5ad459397bb316b5707410fd8b5c0202cd3fa6c3e73568b0e8",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/frames/card-special.png",
+      "recommendedDisplay": {
+        "width": 300,
+        "height": 258
+      },
+      "nineSlice": {
+        "top": 74,
+        "right": 74,
+        "bottom": 74,
+        "left": 74
+      }
+    },
+    "ui.badge-panel.card-display": {
+      "path": "ui/badge-panel/frames/card-display.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · marco: card-display",
+      "kind": "badge-panel-part",
+      "group": "frames",
+      "width": 472,
+      "height": 418,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 202957,
+      "sha256": "850923e09004b7038e189d63145a1560441824023e5bc6bb23f4d7326f86e8d8",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/frames/card-display.png",
+      "recommendedDisplay": {
+        "width": 300,
+        "height": 258
+      },
+      "nineSlice": {
+        "top": 75,
+        "right": 75,
+        "bottom": 75,
+        "left": 75
+      }
+    },
+    "ui.badge-panel.button-close": {
+      "path": "ui/badge-panel/buttons/button-close.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · botón: button-close",
+      "kind": "badge-panel-part",
+      "group": "buttons",
+      "width": 152,
+      "height": 153,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 40274,
+      "sha256": "13afaa30cdb17cdfa8c5a75efff19f466d45af8021fe17f7ec6307c3069c7acf",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/buttons/button-close.png",
+      "recommendedDisplay": {
+        "width": 48,
+        "height": 48
+      }
+    },
+    "ui.badge-panel.button-close-hover": {
+      "path": "ui/badge-panel/buttons/button-close-hover.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · botón: button-close-hover",
+      "kind": "badge-panel-part",
+      "group": "buttons",
+      "width": 155,
+      "height": 157,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 41598,
+      "sha256": "3785ed466e8e48dc59683709c38818b9238c9f7a04c7c53ae46476954d8bcb74",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/buttons/button-close-hover.png",
+      "recommendedDisplay": {
+        "width": 48,
+        "height": 48
+      }
+    },
+    "ui.badge-panel.button-back": {
+      "path": "ui/badge-panel/buttons/button-back.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · botón: button-back",
+      "kind": "badge-panel-part",
+      "group": "buttons",
+      "width": 152,
+      "height": 154,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 40642,
+      "sha256": "565a309f4852bc604fe42af73bea64d766872112373059d3a87672f2e9d88f69",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/buttons/button-back.png",
+      "recommendedDisplay": {
+        "width": 48,
+        "height": 48
+      }
+    },
+    "ui.badge-panel.button-back-hover": {
+      "path": "ui/badge-panel/buttons/button-back-hover.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · botón: button-back-hover",
+      "kind": "badge-panel-part",
+      "group": "buttons",
+      "width": 155,
+      "height": 157,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 41133,
+      "sha256": "94907c070bb7530b7acd87b7ac310bf4fcc286519d989d37147a83fd3db19b54",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/buttons/button-back-hover.png",
+      "recommendedDisplay": {
+        "width": 48,
+        "height": 48
+      }
+    },
+    "ui.badge-panel.button-primary": {
+      "path": "ui/badge-panel/buttons/button-primary.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · botón: button-primary",
+      "kind": "badge-panel-part",
+      "group": "buttons",
+      "width": 278,
+      "height": 115,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 40532,
+      "sha256": "8c9403466fb1c38a526f63649b8262d71e5bbad6da034478433c49c5b35692d7",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/buttons/button-primary.png",
+      "recommendedDisplay": {
+        "width": 250,
+        "height": 48
+      },
+      "nineSlice": {
+        "top": 30,
+        "right": 61,
+        "bottom": 30,
+        "left": 61
+      }
+    },
+    "ui.badge-panel.button-primary-hover": {
+      "path": "ui/badge-panel/buttons/button-primary-hover.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · botón: button-primary-hover",
+      "kind": "badge-panel-part",
+      "group": "buttons",
+      "width": 278,
+      "height": 115,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 43547,
+      "sha256": "3ab71ee806cf2ee47ff945b54ecc24e03c2877d231c2a702fd3725de71645d90",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/buttons/button-primary-hover.png",
+      "recommendedDisplay": {
+        "width": 250,
+        "height": 48
+      },
+      "nineSlice": {
+        "top": 30,
+        "right": 61,
+        "bottom": 30,
+        "left": 61
+      }
+    },
+    "ui.badge-panel.button-secondary": {
+      "path": "ui/badge-panel/buttons/button-secondary.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · botón: button-secondary",
+      "kind": "badge-panel-part",
+      "group": "buttons",
+      "width": 278,
+      "height": 115,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 42800,
+      "sha256": "6ee41db03bab40f6cc78833c05a168dcfb64c65b1d9688ab7edb0b6953fe682f",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/buttons/button-secondary.png",
+      "recommendedDisplay": {
+        "width": 250,
+        "height": 48
+      },
+      "nineSlice": {
+        "top": 30,
+        "right": 61,
+        "bottom": 30,
+        "left": 61
+      }
+    },
+    "ui.badge-panel.button-secondary-hover": {
+      "path": "ui/badge-panel/buttons/button-secondary-hover.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · botón: button-secondary-hover",
+      "kind": "badge-panel-part",
+      "group": "buttons",
+      "width": 278,
+      "height": 115,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 41761,
+      "sha256": "88090e69e7f4b37789e4fca36355e7729d378d28d0242bda8b6f11c63f45f18e",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/buttons/button-secondary-hover.png",
+      "recommendedDisplay": {
+        "width": 250,
+        "height": 48
+      },
+      "nineSlice": {
+        "top": 30,
+        "right": 61,
+        "bottom": 30,
+        "left": 61
+      }
+    },
+    "ui.badge-panel.label-earned": {
+      "path": "ui/badge-panel/labels/label-earned.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · etiqueta: label-earned",
+      "kind": "badge-panel-part",
+      "group": "labels",
+      "width": 258,
+      "height": 103,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 32990,
+      "sha256": "c937d359d197ef50f0fe8ec7264766bf9a42f2378e985995a473e74114777ca8",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/labels/label-earned.png",
+      "recommendedDisplay": {
+        "width": 148,
+        "height": 30
+      },
+      "nineSlice": {
+        "top": 27,
+        "right": 57,
+        "bottom": 27,
+        "left": 57
+      }
+    },
+    "ui.badge-panel.label-pending": {
+      "path": "ui/badge-panel/labels/label-pending.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · etiqueta: label-pending",
+      "kind": "badge-panel-part",
+      "group": "labels",
+      "width": 258,
+      "height": 103,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 34861,
+      "sha256": "18005094f883174adc87d11f5214e5a788cb51f944ff2080d6386c1e29c417ff",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/labels/label-pending.png",
+      "recommendedDisplay": {
+        "width": 148,
+        "height": 30
+      },
+      "nineSlice": {
+        "top": 27,
+        "right": 57,
+        "bottom": 27,
+        "left": 57
+      }
+    },
+    "ui.badge-panel.label-special": {
+      "path": "ui/badge-panel/labels/label-special.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · etiqueta: label-special",
+      "kind": "badge-panel-part",
+      "group": "labels",
+      "width": 258,
+      "height": 103,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 33396,
+      "sha256": "fc3cb4af3545a067af019457ad28ca77b9c23571be589f5889743d5da886c72e",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/labels/label-special.png",
+      "recommendedDisplay": {
+        "width": 148,
+        "height": 30
+      },
+      "nineSlice": {
+        "top": 27,
+        "right": 57,
+        "bottom": 27,
+        "left": 57
+      }
+    },
+    "ui.badge-panel.label-xp": {
+      "path": "ui/badge-panel/labels/label-xp.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · etiqueta: label-xp",
+      "kind": "badge-panel-part",
+      "group": "labels",
+      "width": 258,
+      "height": 103,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 34655,
+      "sha256": "e1e592da2edc6a34887922ea86767f099bc95c3c309ada09d6015dc3ca57da6c",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/labels/label-xp.png",
+      "recommendedDisplay": {
+        "width": 148,
+        "height": 30
+      },
+      "nineSlice": {
+        "top": 27,
+        "right": 57,
+        "bottom": 27,
+        "left": 57
+      }
+    },
+    "ui.badge-panel.progress-capsule": {
+      "path": "ui/badge-panel/controls/progress-capsule.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · control: progress-capsule",
+      "kind": "badge-panel-part",
+      "group": "controls",
+      "width": 280,
+      "height": 105,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 37587,
+      "sha256": "c5a7162268f8cea0c112dc007956e71c7cacceec0efa51de93f08c99fab02179",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/controls/progress-capsule.png",
+      "recommendedDisplay": {
+        "width": 300,
+        "height": 50
+      },
+      "nineSlice": {
+        "top": 27,
+        "right": 62,
+        "bottom": 27,
+        "left": 62
+      }
+    },
+    "ui.badge-panel.card-hover-footer": {
+      "path": "ui/badge-panel/controls/card-hover-footer.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · control: card-hover-footer",
+      "kind": "badge-panel-part",
+      "group": "controls",
+      "width": 286,
+      "height": 94,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 34910,
+      "sha256": "df078a9214434fd314de737ceb199ba32c18fbbcb99563b1a3c64abd1bbbfbf4",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/controls/card-hover-footer.png",
+      "recommendedDisplay": {
+        "width": 260,
+        "height": 28
+      },
+      "nineSlice": {
+        "top": 24,
+        "right": 61,
+        "bottom": 24,
+        "left": 61
+      }
+    },
+    "ui.badge-panel.reflection-callout": {
+      "path": "ui/badge-panel/controls/reflection-callout.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · control: reflection-callout",
+      "kind": "badge-panel-part",
+      "group": "controls",
+      "width": 287,
+      "height": 185,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 56384,
+      "sha256": "4db57ad75e1f0a20456a7801c112b21bf2222d36bdb2a3e2bcd571b4e8acb0f7",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/controls/reflection-callout.png",
+      "recommendedDisplay": {
+        "width": 480,
+        "height": 86
+      },
+      "nineSlice": {
+        "top": 48,
+        "right": 63,
+        "bottom": 48,
+        "left": 63
+      }
+    },
+    "ui.badge-panel.lesson-callout": {
+      "path": "ui/badge-panel/controls/lesson-callout.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · control: lesson-callout",
+      "kind": "badge-panel-part",
+      "group": "controls",
+      "width": 283,
+      "height": 143,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 46179,
+      "sha256": "8a4cefb9232b4d4fffe6ea5e224a5944d0f180dfe922b4d4a16f154195f9cea1",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/controls/lesson-callout.png",
+      "recommendedDisplay": {
+        "width": 480,
+        "height": 54
+      },
+      "nineSlice": {
+        "top": 37,
+        "right": 62,
+        "bottom": 37,
+        "left": 62
+      }
+    },
+    "ui.badge-panel.check-white": {
+      "path": "ui/badge-panel/icons/check-white.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · icono: check-white",
+      "kind": "badge-panel-part",
+      "group": "icons",
+      "width": 190,
+      "height": 150,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 31101,
+      "sha256": "3035e49b47716083caaf2d686047df9f0b67bb0aed2e5eb5ed4019070fd8a6ce",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/icons/check-white.png",
+      "recommendedDisplay": {
+        "width": 28,
+        "height": 28
+      }
+    },
+    "ui.badge-panel.lock-seal": {
+      "path": "ui/badge-panel/icons/lock-seal.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · icono: lock-seal",
+      "kind": "badge-panel-part",
+      "group": "icons",
+      "width": 233,
+      "height": 230,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 85758,
+      "sha256": "cf30ed89b78537a7e3f89eccdb2707573b4891cecbda21aa7bfbfc21b03f3ea8",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/icons/lock-seal.png",
+      "recommendedDisplay": {
+        "width": 28,
+        "height": 28
+      }
+    },
+    "ui.badge-panel.calendar": {
+      "path": "ui/badge-panel/icons/calendar.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · icono: calendar",
+      "kind": "badge-panel-part",
+      "group": "icons",
+      "width": 218,
+      "height": 210,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 68807,
+      "sha256": "8c3f698eb6a757a5f8b50bd250fd43197d592b4248a5fe0a6cb664e3b6199595",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/icons/calendar.png",
+      "recommendedDisplay": {
+        "width": 28,
+        "height": 28
+      }
+    },
+    "ui.badge-panel.book-brown": {
+      "path": "ui/badge-panel/icons/book-brown.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · icono: book-brown",
+      "kind": "badge-panel-part",
+      "group": "icons",
+      "width": 244,
+      "height": 184,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 68353,
+      "sha256": "8d4bd59390dd93728ac7f7205558e3a85bbcdd2c3bc767d6c92491c52f81503b",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/icons/book-brown.png",
+      "recommendedDisplay": {
+        "width": 28,
+        "height": 28
+      }
+    },
+    "ui.badge-panel.book-cream": {
+      "path": "ui/badge-panel/icons/book-cream.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · icono: book-cream",
+      "kind": "badge-panel-part",
+      "group": "icons",
+      "width": 246,
+      "height": 185,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 68184,
+      "sha256": "e7746576bbea4114ab5e5342b11b33b51c7d64701ca7c432a018536eb0ade911",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/icons/book-cream.png",
+      "recommendedDisplay": {
+        "width": 28,
+        "height": 28
+      }
+    },
+    "ui.badge-panel.sprout": {
+      "path": "ui/badge-panel/icons/sprout.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · icono: sprout",
+      "kind": "badge-panel-part",
+      "group": "icons",
+      "width": 221,
+      "height": 223,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 74694,
+      "sha256": "c2e6d2671ccb0d4f481d55f51bd539f8e116978fbd59fedefb0768b4955a2331",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/icons/sprout.png",
+      "recommendedDisplay": {
+        "width": 28,
+        "height": 28
+      }
+    },
+    "ui.badge-panel.heart-green": {
+      "path": "ui/badge-panel/icons/heart-green.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · icono: heart-green",
+      "kind": "badge-panel-part",
+      "group": "icons",
+      "width": 191,
+      "height": 181,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 47184,
+      "sha256": "a3bf556f090f5cd64c41c9f34eed38f8148196bf01309788053b9d48f7bad445",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/icons/heart-green.png",
+      "recommendedDisplay": {
+        "width": 28,
+        "height": 28
+      }
+    },
+    "ui.badge-panel.xp-star": {
+      "path": "ui/badge-panel/icons/xp-star.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · icono: xp-star",
+      "kind": "badge-panel-part",
+      "group": "icons",
+      "width": 210,
+      "height": 205,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 56630,
+      "sha256": "c558362a6a896e74e6a37d9d7529196f73bd413bce925bad32f2bb43f9bbce0b",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/icons/xp-star.png",
+      "recommendedDisplay": {
+        "width": 28,
+        "height": 28
+      }
+    },
+    "ui.badge-panel.paw-lavender": {
+      "path": "ui/badge-panel/icons/paw-lavender.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · icono: paw-lavender",
+      "kind": "badge-panel-part",
+      "group": "icons",
+      "width": 233,
+      "height": 198,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 74085,
+      "sha256": "dbfa8563998b426c8a99dda9a7e6d3b0c255f0320d75144e037b4760d6fae35c",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/icons/paw-lavender.png",
+      "recommendedDisplay": {
+        "width": 28,
+        "height": 28
+      }
+    },
+    "ui.badge-panel.paw-gold": {
+      "path": "ui/badge-panel/icons/paw-gold.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · icono: paw-gold",
+      "kind": "badge-panel-part",
+      "group": "icons",
+      "width": 235,
+      "height": 201,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 73516,
+      "sha256": "79d4c7d7bad0b7a31e9ac92f84dae09f9aa3587b94ec461c8c834ed7630a73cb",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/icons/paw-gold.png",
+      "recommendedDisplay": {
+        "width": 28,
+        "height": 28
+      }
+    },
+    "ui.badge-panel.chevron-left": {
+      "path": "ui/badge-panel/icons/chevron-left.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · icono: chevron-left",
+      "kind": "badge-panel-part",
+      "group": "icons",
+      "width": 95,
+      "height": 154,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 11497,
+      "sha256": "71825bab4a2fee8588474a2115a1fe762f42a3aa44c89b0ea561b653da94cc81",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/icons/chevron-left.png",
+      "recommendedDisplay": {
+        "width": 28,
+        "height": 28
+      }
+    },
+    "ui.badge-panel.chevron-right": {
+      "path": "ui/badge-panel/icons/chevron-right.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · icono: chevron-right",
+      "kind": "badge-panel-part",
+      "group": "icons",
+      "width": 94,
+      "height": 154,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 10934,
+      "sha256": "adc204ef092e56e338582c7216d1a223f3cf6391522c978ff34bca8cad658e1a",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/icons/chevron-right.png",
+      "recommendedDisplay": {
+        "width": 28,
+        "height": 28
+      }
+    },
+    "ui.badge-panel.close-x": {
+      "path": "ui/badge-panel/icons/close-x.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · icono: close-x",
+      "kind": "badge-panel-part",
+      "group": "icons",
+      "width": 150,
+      "height": 145,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 19384,
+      "sha256": "98028760288dcd9a7bee3523c63334882ae605c7facdbaa7fca633d1847015b6",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/icons/close-x.png",
+      "recommendedDisplay": {
+        "width": 28,
+        "height": 28
+      }
+    },
+    "ui.badge-panel.sparkle-gold": {
+      "path": "ui/badge-panel/icons/sparkle-gold.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · icono: sparkle-gold",
+      "kind": "badge-panel-part",
+      "group": "icons",
+      "width": 138,
+      "height": 137,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 21448,
+      "sha256": "d8e4e0d27467101b8828534f59942201d02f5f87351e4c67079af053c967a992",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/icons/sparkle-gold.png",
+      "recommendedDisplay": {
+        "width": 28,
+        "height": 28
+      }
+    },
+    "ui.badge-panel.starburst-gold": {
+      "path": "ui/badge-panel/icons/starburst-gold.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · icono: starburst-gold",
+      "kind": "badge-panel-part",
+      "group": "icons",
+      "width": 171,
+      "height": 169,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 42874,
+      "sha256": "dc4d346f64c7fbff7c4f96faf8b127f5da4267382ee6674f7030f503d74e069b",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/icons/starburst-gold.png",
+      "recommendedDisplay": {
+        "width": 28,
+        "height": 28
+      }
+    },
+    "ui.badge-panel.cursor-hand": {
+      "path": "ui/badge-panel/icons/cursor-hand.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · icono: cursor-hand",
+      "kind": "badge-panel-part",
+      "group": "icons",
+      "width": 175,
+      "height": 203,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 39126,
+      "sha256": "d54db0c9ac63fb85326ddbb789c8cd5b76b4147e2da89edef1765284088f6118",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/icons/cursor-hand.png",
+      "recommendedDisplay": {
+        "width": 28,
+        "height": 28
+      }
+    },
+    "ui.badge-panel.branch-green-left": {
+      "path": "ui/badge-panel/decorations/branch-green-left.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · decoración: branch-green-left",
+      "kind": "badge-panel-part",
+      "group": "decorations",
+      "width": 204,
+      "height": 258,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 63816,
+      "sha256": "3d0b3f8da94eff9d3e44eb3dbecf9b93d225a322280289f627db13121bb7f904",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/decorations/branch-green-left.png",
+      "recommendedDisplay": {
+        "width": 40,
+        "height": 72
+      }
+    },
+    "ui.badge-panel.branch-green-right": {
+      "path": "ui/badge-panel/decorations/branch-green-right.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · decoración: branch-green-right",
+      "kind": "badge-panel-part",
+      "group": "decorations",
+      "width": 204,
+      "height": 258,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 64183,
+      "sha256": "4f8b76e144566b37bfe95842a7eaa87e236878d67efa105392fcc3c39136a8db",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/decorations/branch-green-right.png",
+      "recommendedDisplay": {
+        "width": 40,
+        "height": 72
+      }
+    },
+    "ui.badge-panel.branch-muted-left": {
+      "path": "ui/badge-panel/decorations/branch-muted-left.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · decoración: branch-muted-left",
+      "kind": "badge-panel-part",
+      "group": "decorations",
+      "width": 204,
+      "height": 258,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 62734,
+      "sha256": "ce0d2aaec4513895bc3f025546a45a984160583f454eae53deee5417f82884c5",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/decorations/branch-muted-left.png",
+      "recommendedDisplay": {
+        "width": 40,
+        "height": 72
+      }
+    },
+    "ui.badge-panel.branch-muted-right": {
+      "path": "ui/badge-panel/decorations/branch-muted-right.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · decoración: branch-muted-right",
+      "kind": "badge-panel-part",
+      "group": "decorations",
+      "width": 204,
+      "height": 258,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 62777,
+      "sha256": "c98ed705e36220aeeb1b49fe67d830958fd9e4de93ef4d0e67783dea88bc8531",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/decorations/branch-muted-right.png",
+      "recommendedDisplay": {
+        "width": 40,
+        "height": 72
+      }
+    },
+    "ui.badge-panel.branch-lavender-left": {
+      "path": "ui/badge-panel/decorations/branch-lavender-left.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · decoración: branch-lavender-left",
+      "kind": "badge-panel-part",
+      "group": "decorations",
+      "width": 174,
+      "height": 238,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 60245,
+      "sha256": "3fc932a7f24c487731f23fb66824bd601940d865d18eb0ac69cf73f3695c1ff6",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/decorations/branch-lavender-left.png",
+      "recommendedDisplay": {
+        "width": 40,
+        "height": 72
+      }
+    },
+    "ui.badge-panel.branch-lavender-right": {
+      "path": "ui/badge-panel/decorations/branch-lavender-right.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · decoración: branch-lavender-right",
+      "kind": "badge-panel-part",
+      "group": "decorations",
+      "width": 175,
+      "height": 235,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 60619,
+      "sha256": "35e24cd9f26a74e67ea69a626b7f38d3a1c2352c4ae3d589e368b8c8c2095971",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/decorations/branch-lavender-right.png",
+      "recommendedDisplay": {
+        "width": 40,
+        "height": 72
+      }
+    },
+    "ui.badge-panel.corner-gold-top-left": {
+      "path": "ui/badge-panel/decorations/corner-gold-top-left.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · decoración: corner-gold-top-left",
+      "kind": "badge-panel-part",
+      "group": "decorations",
+      "width": 184,
+      "height": 169,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 42037,
+      "sha256": "d469a3782640ef5451c0b749e6b546d22af140cc11efdeec196741c0f9516bba",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/decorations/corner-gold-top-left.png",
+      "recommendedDisplay": {
+        "width": 36,
+        "height": 36
+      }
+    },
+    "ui.badge-panel.corner-gold-top-right": {
+      "path": "ui/badge-panel/decorations/corner-gold-top-right.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · decoración: corner-gold-top-right",
+      "kind": "badge-panel-part",
+      "group": "decorations",
+      "width": 184,
+      "height": 169,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 41197,
+      "sha256": "7d0cc2f37a1236e01841b30480f9ac21fdf622cd55be182196251498b089ca08",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/decorations/corner-gold-top-right.png",
+      "recommendedDisplay": {
+        "width": 36,
+        "height": 36
+      }
+    },
+    "ui.badge-panel.flowers-bottom-left": {
+      "path": "ui/badge-panel/decorations/flowers-bottom-left.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · decoración: flowers-bottom-left",
+      "kind": "badge-panel-part",
+      "group": "decorations",
+      "width": 219,
+      "height": 261,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 78220,
+      "sha256": "20ddb86f872163f661d9ecc5e8bab4e86d4a8ac24e0354563e630bd21405a5ba",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/decorations/flowers-bottom-left.png",
+      "recommendedDisplay": {
+        "width": 64,
+        "height": 76
+      }
+    },
+    "ui.badge-panel.flowers-bottom-right": {
+      "path": "ui/badge-panel/decorations/flowers-bottom-right.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · decoración: flowers-bottom-right",
+      "kind": "badge-panel-part",
+      "group": "decorations",
+      "width": 221,
+      "height": 261,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 76145,
+      "sha256": "cf228af105e852431ea031809fa279f0361fb84b8315b2e77fcd134cd124dfa8",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/decorations/flowers-bottom-right.png",
+      "recommendedDisplay": {
+        "width": 64,
+        "height": 76
+      }
+    },
+    "ui.badge-panel.divider-gold": {
+      "path": "ui/badge-panel/decorations/divider-gold.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · decoración: divider-gold",
+      "kind": "badge-panel-part",
+      "group": "decorations",
+      "width": 320,
+      "height": 65,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 17366,
+      "sha256": "f209bc38768aaf6a60bfc6e859bccba2585c006cff08d865d3b084062e81db50",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/decorations/divider-gold.png",
+      "recommendedDisplay": {
+        "width": 320,
+        "height": 14
+      }
+    },
+    "ui.badge-panel.paw-trail-lavender": {
+      "path": "ui/badge-panel/decorations/paw-trail-lavender.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · decoración: paw-trail-lavender",
+      "kind": "badge-panel-part",
+      "group": "decorations",
+      "width": 242,
+      "height": 193,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 47142,
+      "sha256": "d749835007bef7d718cbf813051eb28cccf6d3fe220ce804aaa23e19c6cc561f",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/decorations/paw-trail-lavender.png",
+      "recommendedDisplay": {
+        "width": 68,
+        "height": 56
+      }
+    },
+    "ui.badge-panel.halo-jade": {
+      "path": "ui/badge-panel/effects/halo-jade.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · efecto: halo-jade",
+      "kind": "badge-panel-part",
+      "group": "effects",
+      "width": 407,
+      "height": 404,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 249483,
+      "sha256": "6ed6ffac03872590e0cffbf791e309363b975ebdae87158f1a35176a040804e9",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/effects/halo-jade.png",
+      "recommendedDisplay": {
+        "width": 240,
+        "height": 240
+      }
+    },
+    "ui.badge-panel.halo-gold": {
+      "path": "ui/badge-panel/effects/halo-gold.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · efecto: halo-gold",
+      "kind": "badge-panel-part",
+      "group": "effects",
+      "width": 406,
+      "height": 404,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 254529,
+      "sha256": "7ae7ea41754354994bce92dfeebd82bac3dac8b50e9d27fb8c64379e71ba11e9",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/effects/halo-gold.png",
+      "recommendedDisplay": {
+        "width": 240,
+        "height": 240
+      }
+    },
+    "ui.badge-panel.halo-lavender": {
+      "path": "ui/badge-panel/effects/halo-lavender.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · efecto: halo-lavender",
+      "kind": "badge-panel-part",
+      "group": "effects",
+      "width": 407,
+      "height": 404,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 257426,
+      "sha256": "d65b7e5ab67d6e4b66546913965bbf275e0b0966947b9463df5808b8c5f7f69c",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/effects/halo-lavender.png",
+      "recommendedDisplay": {
+        "width": 240,
+        "height": 240
+      }
+    },
+    "ui.badge-panel.sparkle-ring": {
+      "path": "ui/badge-panel/effects/sparkle-ring.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · efecto: sparkle-ring",
+      "kind": "badge-panel-part",
+      "group": "effects",
+      "width": 348,
+      "height": 349,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 225400,
+      "sha256": "0798bd52a7f62b7541a79915b5026083b8eb9bd1aa6d93d58e3ca575fd05c3e3",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/effects/sparkle-ring.png",
+      "recommendedDisplay": {
+        "width": 240,
+        "height": 240
+      }
+    },
+    "ui.badge-panel.progress-filled": {
+      "path": "ui/badge-panel/effects/progress-filled.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · efecto: progress-filled",
+      "kind": "badge-panel-part",
+      "group": "effects",
+      "width": 392,
+      "height": 140,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 63830,
+      "sha256": "38460bc4e70cbd6e0cdd84cc3aff30a38d22932eff52fd10a32cf9419e9fa716",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/effects/progress-filled.png",
+      "recommendedDisplay": {
+        "width": 25,
+        "height": 16
+      }
+    },
+    "ui.badge-panel.progress-empty": {
+      "path": "ui/badge-panel/effects/progress-empty.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · efecto: progress-empty",
+      "kind": "badge-panel-part",
+      "group": "effects",
+      "width": 391,
+      "height": 140,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 65370,
+      "sha256": "8001a6af04279fa8960c0a6bd2918fc290c6be7458b910de9df70f28f2c2dae7",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/effects/progress-empty.png",
+      "recommendedDisplay": {
+        "width": 25,
+        "height": 16
+      }
+    },
+    "ui.badge-panel.divider-line-left": {
+      "path": "ui/badge-panel/decorations/divider-line-left.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · decoración: divider-line-left",
+      "kind": "badge-panel-part",
+      "group": "decorations",
+      "width": 118,
+      "height": 65,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 5039,
+      "sha256": "a121f2c099e45772c23072ccb42060e6ac98685707284929e998cd3a26665527",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/decorations/divider-line-left.png",
+      "recommendedDisplay": {
+        "width": 320,
+        "height": 14
+      }
+    },
+    "ui.badge-panel.divider-diamond": {
+      "path": "ui/badge-panel/decorations/divider-diamond.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · decoración: divider-diamond",
+      "kind": "badge-panel-part",
+      "group": "decorations",
+      "width": 84,
+      "height": 65,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 7546,
+      "sha256": "dc6c5afdd635225913b91e6edac9d3eabe2f8c7a3a75ddbadaea448c6eecd7c9",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/decorations/divider-diamond.png",
+      "recommendedDisplay": {
+        "width": 320,
+        "height": 14
+      }
+    },
+    "ui.badge-panel.divider-line-right": {
+      "path": "ui/badge-panel/decorations/divider-line-right.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · decoración: divider-line-right",
+      "kind": "badge-panel-part",
+      "group": "decorations",
+      "width": 118,
+      "height": 65,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 5465,
+      "sha256": "41d2614ccce22124ee4063bef8f1a37b17f7cb359569b727e0f8710dc33e0074",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/decorations/divider-line-right.png",
+      "recommendedDisplay": {
+        "width": 320,
+        "height": 14
+      }
+    },
+    "ui.badge-panel.cursor-hand-32": {
+      "path": "ui/badge-panel/icons/cursor-hand-32.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de insignias · icono: cursor-hand-32",
+      "kind": "badge-panel-part",
+      "group": "icons",
+      "width": 32,
+      "height": 32,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1530,
+      "sha256": "275275cd125e8f78ba119544d5301c5969e939ee43ddd4bdd2aed8b5b2b86890",
+      "originalPath": "bitacora-panel-insignias/public/assets/ui/badge-panel/icons/cursor-hand-32.png",
+      "recommendedDisplay": {
+        "width": 28,
+        "height": 28
+      }
     }
   },
   "sourceDocuments": [
@@ -4427,6 +5735,18 @@
       "originalPath": "bitacora-insignias/generation-prompts.json",
       "sizeBytes": 19896,
       "sha256": "d6dd394621de15e43771e9cc32bde6d2564d414c93074516a1093635196fd78b"
+    },
+    {
+      "path": "docs/source/badge-panel/readme.md",
+      "originalPath": "bitacora-panel-insignias/README.md",
+      "sizeBytes": 8478,
+      "sha256": "a51ab0d778d385d5c931d222810d7359a54e0a326359e948377d1fbc516138c9"
+    },
+    {
+      "path": "docs/source/badge-panel/generation-prompts.json",
+      "originalPath": "bitacora-panel-insignias/generation-prompts.json",
+      "sizeBytes": 18041,
+      "sha256": "3b5c3a0cbb30967e28918d9f7379dadf5b2094ece38d5bbc3fd390031323736e"
     }
   ],
   "notes": [
@@ -4442,6 +5762,7 @@
     "Añadido el avatar de Vanessa con Jerry (estático y hoja de reposo y alegría, `avatar-sheet`) para el retrato de la cabecera: ver docs/source/avatar. Las entradas anteriores no se modificaron.",
     "Añadidos los assets del paquete bitacora-ui-assets (letrero de estación, señal de cambio de mapa, insignia «Completado», botones con etiqueta y brillo de la próxima estación): ver docs/source/ui-assets. Los textos no vienen en los PNG: `labelZones` y `attachments` dicen dónde ponerlos. Las entradas anteriores no se modificaron.",
     "Añadidas cinco gallinas y un pollito animados (hojas con atlas, `critterAnimations`): ver docs/source/chickens. Las entradas anteriores no se modificaron.",
-    "Añadidas las siete insignias del paquete bitacora-insignias (seis de aprendizaje y la de Jerry): ver docs/source/badges. Las entradas anteriores no se modificaron."
+    "Añadidas las siete insignias del paquete bitacora-insignias (seis de aprendizaje y la de Jerry): ver docs/source/badges. Las entradas anteriores no se modificaron.",
+    "Añadidos los 60 recursos de interfaz del panel de insignias (kit bitacora-panel-insignias): ver docs/source/badge-panel. Las siete insignias del kit no se copian porque ya están en el catálogo. Las entradas anteriores no se modificaron."
   ]
 }

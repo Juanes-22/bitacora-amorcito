@@ -1,0 +1,182 @@
+/* Panel de insignias (SPEC 7): colección de tarjetas y detalle de una insignia, con el kit `ui.badge-panel.*`. Las imágenes y los
+   cortes de nueve zonas llegan como variables CSS desde el componente (`--bpk-<pieza>` y `--bpk-<pieza>-slice`), resueltas con el
+   registro de assets: aquí no hay rutas. */
+
+/* ---- Marcos de nueve zonas: el ancho del borde es fijo y solo se estira el centro ---- */
+.bpk-dialog { border-style: solid; border-color: transparent; border-width: 22px; border-image-source: var(--bpk-panel-frame); border-image-slice: var(--bpk-panel-frame-slice) fill; border-image-width: 22px; border-image-repeat: stretch; image-rendering: pixelated; background: none; }
+.bpk-card--earned { border-style: solid; border-color: transparent; border-width: 14px; border-image-source: var(--bpk-card-earned); border-image-slice: var(--bpk-card-earned-slice) fill; border-image-width: 14px; border-image-repeat: stretch; image-rendering: pixelated; background: none; }
+.bpk-card--earned:hover, .bpk-card--earned:focus-visible { border-style: solid; border-color: transparent; border-width: 14px; border-image-source: var(--bpk-card-earned-hover); border-image-slice: var(--bpk-card-earned-hover-slice) fill; border-image-width: 14px; border-image-repeat: stretch; image-rendering: pixelated; background: none; }
+.bpk-card--pending { border-style: solid; border-color: transparent; border-width: 14px; border-image-source: var(--bpk-card-pending); border-image-slice: var(--bpk-card-pending-slice) fill; border-image-width: 14px; border-image-repeat: stretch; image-rendering: pixelated; background: none; }
+.bpk-special { border-style: solid; border-color: transparent; border-width: 14px; border-image-source: var(--bpk-card-special); border-image-slice: var(--bpk-card-special-slice) fill; border-image-width: 14px; border-image-repeat: stretch; image-rendering: pixelated; background: none; }
+.bpk-hero { border-style: solid; border-color: transparent; border-width: 14px; border-image-source: var(--bpk-card-display); border-image-slice: var(--bpk-card-display-slice) fill; border-image-width: 14px; border-image-repeat: stretch; image-rendering: pixelated; background: none; }
+.bpk-status--earned { border-style: solid; border-color: transparent; border-width: 10px; border-image-source: var(--bpk-label-earned); border-image-slice: var(--bpk-label-earned-slice) fill; border-image-width: 10px; border-image-repeat: stretch; image-rendering: pixelated; background: none; }
+.bpk-status--pending { border-style: solid; border-color: transparent; border-width: 10px; border-image-source: var(--bpk-label-pending); border-image-slice: var(--bpk-label-pending-slice) fill; border-image-width: 10px; border-image-repeat: stretch; image-rendering: pixelated; background: none; }
+.bpk-status--special { border-style: solid; border-color: transparent; border-width: 10px; border-image-source: var(--bpk-label-special); border-image-slice: var(--bpk-label-special-slice) fill; border-image-width: 10px; border-image-repeat: stretch; image-rendering: pixelated; background: none; }
+.bpk-status--xp { border-style: solid; border-color: transparent; border-width: 10px; border-image-source: var(--bpk-label-xp); border-image-slice: var(--bpk-label-xp-slice) fill; border-image-width: 10px; border-image-repeat: stretch; image-rendering: pixelated; background: none; }
+.bpk-button--primary { border-style: solid; border-color: transparent; border-width: 10px; border-image-source: var(--bpk-button-primary); border-image-slice: var(--bpk-button-primary-slice) fill; border-image-width: 10px; border-image-repeat: stretch; image-rendering: pixelated; background: none; }
+.bpk-button--primary:hover { border-style: solid; border-color: transparent; border-width: 10px; border-image-source: var(--bpk-button-primary-hover); border-image-slice: var(--bpk-button-primary-hover-slice) fill; border-image-width: 10px; border-image-repeat: stretch; image-rendering: pixelated; background: none; }
+.bpk-button--secondary { border-style: solid; border-color: transparent; border-width: 10px; border-image-source: var(--bpk-button-secondary); border-image-slice: var(--bpk-button-secondary-slice) fill; border-image-width: 10px; border-image-repeat: stretch; image-rendering: pixelated; background: none; }
+.bpk-button--secondary:hover { border-style: solid; border-color: transparent; border-width: 10px; border-image-source: var(--bpk-button-secondary-hover); border-image-slice: var(--bpk-button-secondary-hover-slice) fill; border-image-width: 10px; border-image-repeat: stretch; image-rendering: pixelated; background: none; }
+.bpk-progress { border-style: solid; border-color: transparent; border-width: 10px; border-image-source: var(--bpk-progress-capsule); border-image-slice: var(--bpk-progress-capsule-slice) fill; border-image-width: 10px; border-image-repeat: stretch; image-rendering: pixelated; background: none; }
+.bpk-card-footer { border-style: solid; border-color: transparent; border-width: 10px; border-image-source: var(--bpk-card-hover-footer); border-image-slice: var(--bpk-card-hover-footer-slice) fill; border-image-width: 10px; border-image-repeat: stretch; image-rendering: pixelated; background: none; }
+.bpk-reflection-callout { border-style: solid; border-color: transparent; border-width: 10px; border-image-source: var(--bpk-reflection-callout); border-image-slice: var(--bpk-reflection-callout-slice) fill; border-image-width: 10px; border-image-repeat: stretch; image-rendering: pixelated; background: none; }
+.bpk-lesson-callout { border-style: solid; border-color: transparent; border-width: 10px; border-image-source: var(--bpk-lesson-callout); border-image-slice: var(--bpk-lesson-callout-slice) fill; border-image-width: 10px; border-image-repeat: stretch; image-rendering: pixelated; background: none; }
+
+/* ---- Disposición ---- */
+
+.bpk-overlay, .bpk-overlay * { box-sizing: border-box; }
+.bpk-overlay {
+  position: absolute; inset: 0; z-index: 8; display: grid; place-items: center;
+  padding: 24px; background: rgb(28 30 20 / 42%); color: #58331f;
+  font-family: var(--font-ui);
+}
+.bpk-dialog {
+  width: min(1060px, 100%); max-height: calc(100dvh - 48px); overflow: auto;
+  padding: 12px; filter: drop-shadow(0 14px 24px rgb(20 17 9 / 25%));
+  overscroll-behavior: contain; isolation: isolate;
+}
+.bpk-dialog button { font: inherit; color: inherit; cursor: pointer; }
+.bpk-dialog button:focus-visible { outline: 3px solid #674398; outline-offset: 4px; }
+.bpk-dialog img { image-rendering: pixelated; object-fit: contain; display: block; }
+.bpk-header { display: flex; align-items: center; gap: 18px; margin-bottom: 14px; }
+.bpk-header h1 { font-size: 32px; line-height: 1.05; margin: 0 0 4px; color: #512a15; }
+.bpk-subtitle { margin: 0; font-size: 18px; font-weight: 700; }
+.bpk-header .bpk-progress { margin-left: auto; }
+.bpk-icon-button { flex: 0 0 46px; width: 46px; height: 46px; border: 0; padding: 0; background: none; background-size: 100% 100%; image-rendering: pixelated; }
+.bpk-icon-button--close { background-image: var(--bpk-button-close); }
+.bpk-icon-button--close:hover { background-image: var(--bpk-button-close-hover); }
+.bpk-icon-button--back { background-image: var(--bpk-button-back); }
+.bpk-icon-button--back:hover { background-image: var(--bpk-button-back-hover); }
+.bpk-icon { width: 24px; height: 24px; flex-shrink: 0; }
+.bpk-progress { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 1px 6px; font-size: 15px; font-weight: 700; white-space: nowrap; min-height: 45px; border-image-width: 9px; border-width: 9px; }
+.bpk-progress-segments { display: flex; gap: 3px; }
+.bpk-progress-segments img { width: 23px; height: 15px; object-fit: fill; }
+.bpk-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.bpk-card {
+  position: relative; display: flex; flex-direction: column; align-items: center;
+  min-width: 0; min-height: 270px; padding: 3px 6px 15px; appearance: none;
+  transition: transform 140ms ease, filter 140ms ease;
+}
+.bpk-card:hover { transform: translateY(-3px); filter: drop-shadow(0 3px 4px rgb(97 71 31 / 15%)); }
+.bpk-number { font-size: 13px; line-height: 18px; font-weight: 800; color: #70432a; letter-spacing: .06em; }
+.bpk-medal-stage { position: relative; width: 184px; max-width: 100%; height: 132px; flex-shrink: 0; display: grid; place-items: center; margin: 0 auto; }
+.bpk-medal { width: 138px; height: 138px; position: relative; z-index: 2; }
+.bpk-medal--pending { filter: grayscale(1) saturate(0) contrast(.7) brightness(1.08); opacity: .85; }
+.bpk-branch { position: absolute; z-index: 1; width: 32px; height: 60px; bottom: 6px; }
+.bpk-branch--left { left: 0; }
+.bpk-branch--right { right: 0; }
+.bpk-halo { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .26; z-index: 0; }
+.bpk-glint { position: absolute; width: 11px; height: 11px; top: 16px; z-index: 3; }
+.bpk-glint--left { left: 22px; }
+.bpk-glint--right { right: 22px; top: 44px; }
+.bpk-lock { position: absolute; z-index: 4; bottom: -3px; left: calc(50% - 14px); width: 28px; height: 28px; }
+.bpk-card-title { font-size: 17px; line-height: 20px; font-weight: 800; min-height: 36px; display: grid; align-content: center; margin: 1px 0 3px; text-align: center; }
+.bpk-status { display: inline-flex; align-items: center; justify-content: center; gap: 5px; border-width: 7px; border-image-width: 7px; padding: 0 6px; min-height: 28px; min-width: 132px; font-size: 13px; line-height: 15px; font-weight: 800; white-space: nowrap; }
+.bpk-status .bpk-icon { width: 16px; height: 16px; }
+.bpk-status--earned { color: #fffaf0; }
+.bpk-status--special { color: #6b3688; min-width: 96px; }
+.bpk-status--xp { color: #714618; min-width: 130px; min-height: 44px; font-size: 18px; }
+.bpk-status--xp .bpk-icon { width: 27px; height: 27px; }
+.bpk-card-footer {
+  position: absolute; bottom: -3px; left: -3px; right: -3px; height: 24px;
+  border-width: 5px; border-image-width: 5px; padding: 0; display: flex; gap: 5px;
+  align-items: center; justify-content: center; font-size: 12px; font-weight: 700;
+  opacity: 0; transition: opacity 140ms ease;
+}
+.bpk-card-footer .bpk-icon { width: 10px; height: 13px; }
+.bpk-card:hover .bpk-card-footer, .bpk-card:focus-visible .bpk-card-footer { opacity: 1; }
+.bpk-special {
+  width: 100%; min-height: 84px; margin-top: 12px; padding: 0 14px;
+  display: grid; grid-template-columns: 26px 72px 1fr auto 20px; align-items: center;
+  gap: 16px; text-align: left; transition: transform 140ms ease;
+}
+.bpk-special:hover { transform: translateY(-2px); }
+.bpk-special .bpk-medal { width: 72px; height: 72px; }
+.bpk-special-title { margin: 0 0 5px; font-weight: 800; font-size: 18px; }
+.bpk-special-status { display: flex; gap: 6px; align-items: center; font-weight: 700; font-size: 14px; }
+.bpk-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 12px; margin-top: 12px; border-top: 1px solid #d8b279; }
+.bpk-hint { margin: 0; font-size: 14px; color: #916347; }
+.bpk-button { min-height: 46px; min-width: 220px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 0 14px; font-weight: 800 !important; font-size: 17px !important; }
+.bpk-button--primary { color: #fffaf0 !important; }
+.bpk-button--primary .bpk-icon { width: 26px; height: 26px; }
+.bpk-back-label { border: 0; background: none; padding: 0; font-weight: 800 !important; font-size: 19px !important; }
+.bpk-header--detail .bpk-icon-button--close { margin-left: auto; }
+.bpk-detail { display: grid; grid-template-columns: minmax(280px, .82fr) minmax(0, 1.18fr); gap: 28px; }
+.bpk-hero { position: relative; min-height: 470px; padding: 14px 10px 48px; display: flex; flex-direction: column; align-items: center; gap: 12px; justify-content: center; }
+.bpk-hero .bpk-number { font-size: 16px; margin-top: 0; }
+.bpk-hero .bpk-medal-stage { width: 286px; height: 282px; margin: 0; }
+.bpk-hero .bpk-medal { width: 230px; height: 230px; }
+.bpk-hero .bpk-branch { width: 46px; height: 104px; bottom: 22px; }
+.bpk-hero .bpk-halo { opacity: .45; }
+.bpk-hero .bpk-glint { width: 17px; height: 17px; }
+.bpk-hero .bpk-lock { width: 42px; height: 42px; bottom: 15px; left: calc(50% - 21px); }
+.bpk-hero .bpk-status { font-size: 14px; min-height: 36px; }
+.bpk-hero .bpk-status--xp { min-height: 44px; font-size: 18px; }
+.bpk-hero-flower { position: absolute; bottom: 0; width: 54px; height: 66px; }
+.bpk-hero-flower--left { left: 0; }
+.bpk-hero-flower--right { right: 0; }
+.bpk-detail-copy { padding: 12px 0; }
+.bpk-eyebrow { color: #b58442; font-size: 13px; font-weight: 800; letter-spacing: .055em; margin: 0 0 10px; }
+.bpk-detail-copy h2 { font-size: 32px; line-height: 1.12; margin: 0 0 16px; color: #512a15; }
+.bpk-date { display: flex; align-items: center; gap: 8px; font-size: 16px; margin: 0; }
+.bpk-divider { display: flex; align-items: center; height: 18px; gap: 0; margin: 10px 0 12px; }
+.bpk-divider-line { height: 10px; width: auto; flex: 1 1 0; min-width: 0; object-fit: fill !important; }
+.bpk-divider-center { width: 26px; height: 18px; flex: 0 0 26px; }
+.bpk-detail-section { margin-top: 18px; }
+.bpk-detail-section h3 { font-size: 20px; margin: 0 0 7px; display: flex; align-items: center; gap: 9px; }
+.bpk-detail-section p { font-size: 18px; line-height: 1.5; margin: 0 0 9px 33px; }
+.bpk-lesson-callout, .bpk-reflection-callout { display: flex; align-items: center; gap: 12px; padding: 2px 10px; font-size: 17px; line-height: 1.45; margin-left: 33px; border-image-width: 7px; border-width: 7px; }
+.bpk-lesson-callout { font-weight: 800; min-height: 48px; }
+.bpk-reflection-callout { min-height: 76px; }
+.bpk-detail-footer { justify-content: flex-end; }
+.bpk-detail-footer .bpk-button { min-width: 260px; }
+@media (hover: none) { .bpk-card-footer { opacity: 1; } .bpk-card { padding-bottom: 36px; } }
+@media (max-width: 720px) {
+  .bpk-overlay { padding: 10px; }
+  .bpk-dialog { max-height: calc(100dvh - 20px); padding: 6px; border-width: 15px; border-image-width: 15px; }
+  .bpk-header { gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  .bpk-header h1 { font-size: 25px; } .bpk-subtitle { font-size: 14px; }
+  .bpk-header .bpk-progress { order: 3; flex: 1 0 100%; margin-left: 0; }
+  .bpk-header:not(.bpk-header--detail) .bpk-icon-button--close { margin-left: auto; }
+  .bpk-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
+  .bpk-card { min-height: 260px; padding-bottom: 36px; border-width: 9px; border-image-width: 9px; padding-left: 0; padding-right: 0; }
+  .bpk-medal-stage { width: 146px; height: 130px; } .bpk-medal { width: 118px; height: 118px; }
+  .bpk-branch { width: 22px; height: 50px; bottom: 9px; }
+  .bpk-status { min-width: 112px; padding: 0 2px; font-size: 11px; }
+  .bpk-card-title { font-size: 13px; max-width: 100%; }
+  .bpk-card-footer { opacity: 1; }
+  .bpk-special { grid-template-columns: 58px 1fr 16px; gap: 9px; padding: 0 4px; }
+  .bpk-special > .bpk-icon:first-child { display: none; }
+  .bpk-special .bpk-medal { width: 58px; height: 58px; }
+  .bpk-special-status { grid-column: 2; font-size: 12px; }
+  .bpk-special > .bpk-icon:last-child { grid-column: 3; grid-row: 1; }
+  .bpk-special-title { font-size: 15px; }
+  .bpk-footer { flex-direction: column; align-items: stretch; gap: 10px; }
+  .bpk-hint { text-align: center; }
+  .bpk-button { min-width: 0; width: 100%; }
+  .bpk-detail { grid-template-columns: 1fr; gap: 14px; }
+  .bpk-hero { min-height: 395px; padding-bottom: 35px; }
+  .bpk-hero .bpk-medal-stage { height: 224px; width: 262px; }
+  .bpk-hero .bpk-medal { width: 204px; height: 204px; }
+  .bpk-detail-copy h2 { font-size: 27px; }
+  .bpk-detail-section p, .bpk-lesson-callout, .bpk-reflection-callout { margin-left: 0; }
+  .bpk-detail-footer .bpk-button { min-width: 0; }
+}
+@media (max-width: 370px) {
+  .bpk-grid { grid-template-columns: 1fr; }
+  .bpk-header h1 { font-size: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bpk-card, .bpk-card-footer, .bpk-special { transition: none; transform: none !important; }
+}
+
+/* ---- Pie: «Reiniciar recorrido» (texto sencillo, sin competir con el botón principal) y reflexión final ---- */
+.bpk-footer-actions { display: flex; align-items: center; gap: 18px; }
+.bpk-reset { border: 0; background: none; padding: 8px 6px; font-weight: 700 !important; font-size: 15px !important; color: #70432a !important; text-decoration: underline; text-underline-offset: 3px; }
+.bpk-reset:hover { color: #512a15 !important; }
+.bpk-reflection { margin-top: 14px; padding-top: 10px; border-top: 2px dashed #d8b279; }
+.bpk-reflection h3 { margin: 0 0 6px; font-size: 20px; color: #512a15; }
+.bpk-reflection p { margin: 0; font-size: 16px; color: #916347; }
+@media (max-width: 720px) {
+  .bpk-footer-actions { flex-direction: column-reverse; align-items: stretch; gap: 6px; text-align: center; }
+}

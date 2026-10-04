@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "1.0",
+  "generator": "built-in image_gen",
+  "purpose": "Original art for the badge panel; individual PNGs are lossless atlas crops. Only the 32px cursor changes resolution.",
+  "references": [
+    "references/collection-reference.png",
+    "references/detail-reference.png"
+  ],
+  "suppliedBadgesDirectory": "public/assets/ui/badges",
+  "generations": [
+    {
+      "id": "frames",
+      "prompt": "Use case: ui-mockup.\nAsset type: ONE production pixel-art UI FRAME ATLAS for \"Bitácora Amorcito\", to be cut into reusable transparent PNG game UI components.\nReference image 1 is the collectible collection mockup. Reference image 2 is its badge detail mockup. Reproduce their cream parchment frames, warm brown stepped outlines, restrained gold corner trim, jade and lavender accents. Generate the frame artwork only. NO badge medallions, NO text, NO icons, NO map.\nCanvas: landscape 3:2, ideally 1536 x 1024. EXACTLY six isolated frames arranged in an evenly spaced 3-column by 2-row grid. Each of the six cells is exactly equal and includes one centered RECTANGULAR panel at about 80% of cell width and 78% of cell height. At least 40 pixels empty transparent gutter inside every cell. Assets do not overlap. Actual transparent RGBA background outside all frames; no checkerboard drawn into the image. Filled frame interiors should be opaque smooth ivory #fff7e8. Create complete uninterrupted blank frames, not fragmented corner pieces.\n\nReading order of the six cells is critical:\n1 top left: main modal parchment panel frame; strong but elegant warm brown stepped outline, inner cream edging, gold ornaments at ALL FOUR corners matching the reference modal. Flat blank cream interior, no center ornaments.\n2 top middle: obtained card frame; delicate gold and jade double-line stepped border, tiny gold corner detail, very restrained edge highlights, blank ivory interior.\n3 top right: hovered obtained card frame; same as cell 2 but brighter gold border and a subtle gold outer glow, blank ivory interior. Distinct hover state, not exaggerated.\n4 bottom left: pending card frame; warm beige ivory interior, light taupe brown stepped thin outline, corner details subdued, blank center.\n5 bottom middle: Jerry special card frame; cream very lightly lilac interior, lavender thin stepped double border, tiny purple corner details, blank center. This frame will stretch horizontally via nine-slicing, so keep all ornamentation within its corners.\n6 bottom right: badge hero display card frame; ivory interior, gold-and-dark-jade stepped double border and fine gold corner filigree, clean blank center. Do NOT draw flowers or leaves inside; these are separate decoration assets.\n\nAll six must work as NINE-SLICE frames: straight uniform-width horizontal and vertical edges, decoration only in the outer 15% corners, absolutely blank smooth center, no diagonal edge perspective, no baked text, no badge imagery. Borders have chunky crisp pixel steps like the reference and modest pixel bevel/shadow, never vector anti-aliased curves. Each frame has a square-on front view. No sheet title, numbers, cell separators or labels. Warm handmade cozy game style with accurate consistent palette: cream #fff7e8, brown #70432a, gold #d6a640, jade #397d62, lavender #a877c2.",
+      "referenceImages": [
+        "collection-reference",
+        "detail-reference"
+      ],
+      "transparent_background": true,
+      "layout": {
+        "columns": 3,
+        "rows": 2
+      },
+      "assets": [
+        "panel-frame",
+        "card-earned",
+        "card-earned-hover",
+        "card-pending",
+        "card-special",
+        "card-display"
+      ],
+      "outputAtlas": "source/atlases/frames.png"
+    },
+    {
+      "id": "controls",
+      "prompt": "Use case: ui-mockup.\nAsset type: ONE transparent production pixel-art CONTROLS AND LABELS ATLAS for the cozy badge panel of \"Bitácora Amorcito\".\nUse the two reference mockups to exactly match their cream parchment, jade-green buttons, warm brown stepped outlines, gold hover accent and lavender special label. Generate modular empty UI assets, not a mockup screen.\nSquare canvas ideally 1536 x 1536, EXACT 4 columns by 4 rows with equal 384 x 384 cells. One isolated centered sprite per cell. True RGBA transparency outside sprites. No drawn checkerboard, no white backdrop, no map, no cell lines, no sheet titles, no characters or badge medallions. At least 32 transparent pixels between cell boundaries and sprites. All sprites front-on, crisp visible pixel steps and small pixel bevels. NO TEXT at all. The X and arrow are icon glyphs permitted only in the first four cells. In every other cell, leave the label completely empty for React overlay text and separate icon overlays.\n\nReading order row by row, exactly sixteen assets:\nRow 1:\n1 square close button normal, warm ivory bevel, peach edge, brown pixel X at its center, 160 x 160 approx.\n2 square close button hover, same X, slightly more gold/beige edge and highlight.\n3 square back button normal, warm ivory bevel, peach edge, brown LEFT ARROW icon.\n4 square back button hover, same LEFT ARROW, slightly brighter gold edge.\nRow 2: all four wide empty buttons approx 310 x 102, scalable horizontal center and no baked text:\n5 jade primary button normal, dark green stepped border, medium jade face, top lighter stripe, subtle darker bottom pixel shadow.\n6 jade primary button hover, brighter jade face and restrained thin gold highlight.\n7 ivory secondary button normal, fine stepped warm brown edge and pale peach bevel.\n8 ivory secondary button hover, gold/brown edge, brighter cream face.\nRow 3: all four empty STATUS PILLS approx 285 x 74, gentle stepped chamfered ends, no icons or text:\n9 earned pill, rich jade green face with subtle lighter upper pixels.\n10 pending pill, warm beige matte face and understated taupe edge.\n11 special pill, light lilac face, darker lavender thin border.\n12 XP pill, light warm golden cream face with thin amber stepped border.\nRow 4:\n13 empty collection-progress capsule approx 300 x 95, cream face, thin tan-gold outline, no progress segments, no icons or text.\n14 card hover footer strip approx 320 x 68, golden honey face, fine amber border, no arrow and no text.\n15 empty reflection callout box approx 310 x 168, smooth cream center and thin soft peach stepped border.\n16 empty lesson callout box approx 310 x 110, smooth pale ivory-green center and thin sage stepped border.\n\nMatch references closely, do not exaggerate gloss. Blank button/capsule/callout centers need smooth flat fills so text is legible. Wide assets will use nine-slicing: reserve ornamentation to ends and keep center edges straight and unadorned. No shadows that bleed into adjacent cells, no glow background. NO LETTERS, NO words, NO numbers, no extra sprites. Exactly the same size and shape for corresponding normal/hover variants.",
+      "referenceImages": [
+        "collection-reference",
+        "detail-reference"
+      ],
+      "transparent_background": true,
+      "layout": {
+        "columns": 4,
+        "rows": 4
+      },
+      "assets": [
+        "button-close",
+        "button-close-hover",
+        "button-back",
+        "button-back-hover",
+        "button-primary",
+        "button-primary-hover",
+        "button-secondary",
+        "button-secondary-hover",
+        "label-earned",
+        "label-pending",
+        "label-special",
+        "label-xp",
+        "progress-capsule",
+        "card-hover-footer",
+        "reflection-callout",
+        "lesson-callout"
+      ],
+      "outputAtlas": "source/atlases/controls.png"
+    },
+    {
+      "id": "icons",
+      "prompt": "Use case: ui-mockup.\nAsset type: ONE transparent pixel-art ICON ATLAS, complete icon set for the collection and detail screens of \"Bitácora Amorcito\".\nUse attached collection and detail references for exact palette and cozy game treatment. Square canvas, ideally 1536 x 1536, arranged in an EXACT 4-column by 4-row evenly spaced invisible grid. SIXTEEN isolated centered icons, one per equal cell. Each icon occupies around 40% of its cell, generously padded and easy to isolate. Genuine transparent RGBA surrounding all icons. No backdrop, no squares around icons except the intentional lock seal, no cell lines, no labels, no letters, no numbers. This is game sprite art, crisp chunky visible pixels, coherent logical pixel size, no soft vector curves. Front view, readable at 24-40 CSS pixels, keep forms simple, not over detailed.\n\nExactly these icons in strict reading order:\nRow 1:\n1 a WHITE CHECK MARK with an almost invisible cream edge, for use on the jade obtained label. NOT a green circle, standalone tick.\n2 a small LOCK SEAL: warm ivory round chamfered pixel circle with tan border, dark brown padlock icon and light keyhole at center. Match lock under gray badge in collection reference. No text.\n3 calendar icon: warm dark brown outline with two top binder tabs, cream face, a tiny 2x3 grid of brown day squares, no numerals. Match calendar in detail reference.\n4 open book: dark warm brown outline, cream pages, clean central spine. Match detail \"Cómo la conseguí\" book.\nRow 2:\n5 open book icon with CREAM PAGES and dark green outline, for jade \"Ver aprendizaje\" button. Match bottom right detail.\n6 bright green sprout with TWO leaves, brown stem and small brown soil mound, like lesson row in detail.\n7 simple green pixel HEART with dark green edge and tiny pale highlight, like \"Lo que me llevo\" icon.\n8 five-point gold XP STAR, brown outline, warm yellow fill and cream pixel highlight, same as XP label in detail.\nRow 3:\n9 flat lavender PAW PRINT, one broad heart-like central pad plus FOUR separate toe pads, match Jerry special row in collection.\n10 golden amber PAW PRINT, same geometry as cell 9.\n11 small dark brown LEFT CHEVRON, no box.\n12 small dark brown RIGHT CHEVRON, no box.\nRow 4:\n13 simple warm dark brown pixel X, thick balanced strokes, no button face.\n14 four-point GOLD SPARKLE, small diamond center and tapering crisp pixel rays, no surrounding scatter.\n15 eight-point GOLD STARBURST, very small clean glint design, no surrounding scatter.\n16 white HAND POINTER CURSOR with a dark warm brown outline, pointing index finger upward, cozy pixel-game cursor, same as hovered card in collection.\n\nAlpha transparency, no white rectangles behind sprites. No drop shadows that fill the gaps. Icons are consistent with the existing illustrations. No photorealistic metal, no 3D, no emoji-like vector aesthetic. Do NOT replace the numbered white tick with a medal or a check inside a circle.",
+      "referenceImages": [
+        "collection-reference",
+        "detail-reference"
+      ],
+      "transparent_background": true,
+      "layout": {
+        "columns": 4,
+        "rows": 4
+      },
+      "assets": [
+        "check-white",
+        "lock-seal",
+        "calendar",
+        "book-brown",
+        "book-cream",
+        "sprout",
+        "heart-green",
+        "xp-star",
+        "paw-lavender",
+        "paw-gold",
+        "chevron-left",
+        "chevron-right",
+        "close-x",
+        "sparkle-gold",
+        "starburst-gold",
+        "cursor-hand"
+      ],
+      "outputAtlas": "source/atlases/icons.png"
+    },
+    {
+      "id": "decorations",
+      "prompt": "Use case: ui-mockup.\nAsset type: ONE transparent DECORATION SPRITE ATLAS for the collectible badge collection and detail panel in \"Bitácora Amorcito\".\nReferences are the approved collection screen and badge detail screen. Match the understated pixel leafy branches around medals, gold frame corners, white flowers and thin gold dividers. Generate ONLY modular isolated decorations. Canvas landscape 4:3, ideally 1536 x 1152. EXACT 4 columns by 3 rows, 12 equal square cells and ONE isolated sprite per cell. Center every decoration inside its cell with at least 40 transparent pixels gutter from all cell edges. Genuine RGBA transparency all around artwork. No map, no cream sheet backdrop, no text, no numbers, no medallions, no gridlines or titles.\n\nReading order:\nRow 1:\n1 green LEFT branch: a graceful slender branch rising from bottom right toward upper left, 5-6 small green oval pointed leaves alternating sides, dark jade pixel stems, light green highlights. Slight arc to loosely flank a round medal. Entire isolated plant, no badge.\n2 green RIGHT branch: MATCHING MIRROR PAIR to cell 1, rises from bottom left toward upper right.\n3 warm gray LEFT branch: same shape and silhouette as cell 1, muted gray/taupe leaves and stems, for pending medals.\n4 warm gray RIGHT branch: matching mirror pair to cell 3.\nRow 2:\n5 lavender LEFT sprig: slender dark purple stem with 3-4 small lavender flower buds and a few muted green leaves, arc same direction as cell 1. Like the sprigs outside purple medal in collection.\n6 lavender RIGHT sprig: matching mirror pair to cell 5.\n7 gold TOP LEFT corner ornament: a modest stepped L-shaped amber/gold metal corner cap facing inward/down/right, pale cream pixel highlights, same top left gold corner in reference modal. Isolated corner only, NO complete box.\n8 gold TOP RIGHT corner ornament: matching mirror pair, points inward/down/left.\nRow 3:\n9 BOTTOM LEFT floral corner decoration: a small asymmetrical cluster of green leaves and TWO tiny white daisy flowers with pale yellow centers, branches grow up and right along a corner, like lower left of detail hero display card. No frame.\n10 BOTTOM RIGHT floral corner decoration: matching mirrored counterpart to cell 9.\n11 HORIZONTAL GOLD DIVIDER: a thin straight warm gold line with a small 4-point diamond in its CENTER and tiny clean ends, width around 290 px, height 22 px, no other marks. This sprite will stretch or be used as three separate line/diamond sections.\n12 LAVENDER PAW TRAIL decoration: three little purple paw prints along a subtle diagonal upward-right path, small toe pads, playful but quiet, with space separating prints. For Jerry special card.\n\nCrisp pixel art with small deliberate square stair-steps and consistent chunky logical pixels. Palette green #397d62 and light green #90b36a, lavender #aa79c4, brown #70432a, gold #d6a640, cream #fff7e8. No photorealism, no watercolor, no vector curves, no heavy shadows or glowing backgrounds. Branches should be refined and small, avoid large bushy plants that obscure the badges. All art fronts aligned, clear shapes at small CSS sizes.",
+      "referenceImages": [
+        "collection-reference",
+        "detail-reference"
+      ],
+      "transparent_background": true,
+      "layout": {
+        "columns": 4,
+        "rows": 3
+      },
+      "assets": [
+        "branch-green-left",
+        "branch-green-right",
+        "branch-muted-left",
+        "branch-muted-right",
+        "branch-lavender-left",
+        "branch-lavender-right",
+        "corner-gold-top-left",
+        "corner-gold-top-right",
+        "flowers-bottom-left",
+        "flowers-bottom-right",
+        "divider-gold",
+        "paw-trail-lavender"
+      ],
+      "outputAtlas": "source/atlases/decorations.png"
+    },
+    {
+      "id": "effects",
+      "prompt": "Use case: ui-mockup.\nAsset type: ONE transparent pixel-art EFFECTS AND PROGRESS ATLAS for \"Bitácora Amorcito\".\nReferences: collectible collection UI and badge detail UI. Match the pale jade halo behind enlarged sunflower badge in detail and the six small collection-progress blocks in collection. Generate modular reusable assets, not a screen. Landscape canvas ideally 1536 x 1024, EXACT 3 columns and 2 rows of equal square cells. SIX isolated sprites, one centered in each cell with at least 40px clear transparent gutters. True transparent RGBA; do not bake a checkerboard or colored full-canvas background. No badge medallions, no text, no labels, no gridlines.\n\nReading order:\nTop left: JADE HALO, a large quiet circular achievement aura made of three broad concentric pale sage pixel-stepped translucent discs. Very soft pale green, center brightest but low opacity so badge remains dominant, outermost ring fades to fully transparent. No hard dark edge, no rays, no metal, no stars.\nTop middle: GOLD HALO, same shape as top left with pale butter/gold tones, quiet and translucent.\nTop right: LAVENDER HALO, same shape as top left, pale pastel purple, quiet and translucent.\nBottom left: GOLD SPARKLE RING, exactly six little separated gold 4-point pixel glints distributed in a loose circular arrangement around a COMPLETELY EMPTY center. Only those six gold sparkles on transparent background; no disc, no lines, no complete ring. For overlays around an earned medallion.\nBottom middle: FILLED PROGRESS BLOCK, small wide low chamfered pixel rectangle, jade-green face #397d62 with subtle lighter top pixel strip and dark jade fine outline. Approx 210 x 110 within its cell. Blank, no text.\nBottom right: EMPTY PROGRESS BLOCK, EXACT same shape and size as bottom middle, warm pale beige face #e8d3b0 and slightly darker tan thin outline. Blank, no text.\n\nPixel art style matching the reference, visible restrained pixel steps, no fake photorealistic lighting, no neon colors. Halos should remain very pale and their alpha should really be partially transparent. Progress blocks should be opaque inside and transparent outside. No huge glows crossing into adjacent cells.",
+      "referenceImages": [
+        "collection-reference",
+        "detail-reference"
+      ],
+      "transparent_background": true,
+      "layout": {
+        "columns": 3,
+        "rows": 2
+      },
+      "assets": [
+        "halo-jade",
+        "halo-gold",
+        "halo-lavender",
+        "sparkle-ring",
+        "progress-filled",
+        "progress-empty"
+      ],
+      "outputAtlas": "source/atlases/effects.png"
+    }
+  ],
+  "processing": {
+    "crop": "Automatic gutter detection and alpha bounding boxes; no redrawing, recoloring or creative edits.",
+    "alpha": "Original generated RGBA preserved.",
+    "originalBadges": "Byte-for-byte copies of the seven user files."
+  }
+}

@@ -7,6 +7,8 @@ export interface WatchOptions {
   debounceMs?: number;
   /** Intervalo con el que se comprueba que el guardado terminó (tamaño y fecha estables). */
   settleMs?: number;
+  /** Cada cuánto se comprueba por sondeo si cambió algo sin que llegara un evento del sistema de archivos. */
+  pollMs?: number;
   log?: (line: string) => void;
   /** Se llama con el informe de cada importación (para pruebas y para el modo desarrollo). */
   onReport?: (report: ImportReport) => void;
@@ -37,13 +39,15 @@ function signature(paths: Paths): string {
  * Un error se informa y la sesión sigue: el siguiente guardado vuelve a intentarlo.
  */
 export function startWatch(paths: Paths, options: WatchOptions = {}): { stop(): void; run(): Promise<ImportReport> } {
-  const { debounceMs = 400, settleMs = 150 } = options;
+  const { debounceMs = 400, settleMs = 150, pollMs = 1500 } = options;
   const log = options.log ?? ((line: string) => console.log(line));
   const watchers: FSWatcher[] = [];
   let timer: NodeJS.Timeout | undefined;
   let running = false;
   let again = false;
   let stopped = false;
+  /** Firma de los archivos en la última importación: si cambia sin que haya llegado un evento, el sondeo la detecta. */
+  let lastSignature = signature(paths);
 
   const once = async (): Promise<ImportReport> => {
     // Espera a que el guardado termine: la firma de los archivos debe repetirse.
@@ -54,6 +58,7 @@ export function startWatch(paths: Paths, options: WatchOptions = {}): { stop(): 
       if (now === previous) break;
       previous = now;
     }
+    lastSignature = previous;
     const stamp = new Date().toLocaleTimeString("es");
     let report: ImportReport;
     try {
@@ -106,11 +111,18 @@ export function startWatch(paths: Paths, options: WatchOptions = {}): { stop(): 
       log(`⚠ no se pudo vigilar ${dir}: ${(e as Error).message}`);
     }
   }
+  // Red de seguridad: `fs.watch` puede perder un evento (justo al arrancar, o con ciertos editores y sistemas de archivos). Cada
+  // pocos segundos se compara la firma de los archivos y, si cambió, se importa igual.
+  const poll = setInterval(() => {
+    if (!stopped && !running && signature(paths) !== lastSignature) schedule(null);
+  }, pollMs);
+  poll.unref();
   return {
     run,
     stop() {
       stopped = true;
       clearTimeout(timer);
+      clearInterval(poll);
       watchers.forEach((w) => w.close());
     },
   };

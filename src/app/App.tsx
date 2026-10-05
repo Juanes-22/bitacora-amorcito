@@ -19,6 +19,7 @@ import type { BitacoraConfig } from "../config/types";
 import { GameBridge } from "../game/bridge/GameBridge";
 import type { AssetFailure } from "../game/bridge/events";
 import { BitacoraProvider } from "./BitacoraProvider";
+import { fontsReady } from "./fontsReady";
 import { ControlReasons } from "./controlReasons";
 import { createMusicPlayer } from "../audio/createMusicPlayer";
 import { SfxService } from "../audio/SfxService";
@@ -43,7 +44,8 @@ export function App({ load = defaultLoader }: { load?: Loader }) {
 
   const run = useCallback(() => {
     setState({ phase: "loading" });
-    load().then((result) => setState({ phase: "done", result }));
+    // Las tipografías propias llegan antes de crear el mapa: Phaser pinta su texto una sola vez (ver `fontsReady`).
+    Promise.all([load(), fontsReady()]).then(([result]) => setState({ phase: "done", result }));
   }, [load]);
   useEffect(run, [run]);
 

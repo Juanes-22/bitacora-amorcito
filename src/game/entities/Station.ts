@@ -3,13 +3,13 @@ import type { StationState } from "../../domain/progression";
 import type { AssetEntry, LabelZone, Placement, Point } from "../../config/types";
 import type { AssetRegistry } from "../../config/assetRegistry";
 import { createNextStationGlow, createStationSparkles, createXpStar, type Sparkles } from "../systems/stationEffects";
+import { uiFont } from "../fonts";
 import { REF_SIGN_SCALE } from "../systems/worldScale";
 
 /** El aro mide esta fracción del ancho del letrero; la estrella de XP, su escala respecto del factor de la señal. */
 const GLOW_WIDTH = 0.85;
 const XP_SCALE = 0.06;
 const SPARKLE_SCALE = 0.08; // los destellos, respecto del factor de la señal
-const FONT = '"Trebuchet MS", system-ui, sans-serif';
 
 export interface StationAssets {
   sign: string;
@@ -138,12 +138,12 @@ export class Station {
       const n = zone(zones.number);
       const t = zone(zones.title);
       this.label = scene.add
-        .text(n.c.x, n.c.y, String(number), { fontFamily: FONT, fontStyle: "bold", fontSize: `${Math.round((zones.number.fontSize ?? 44) * signScale)}px`, color: zones.number.color ?? "#4b2b18" })
+        .text(n.c.x, n.c.y, String(number), { fontFamily: uiFont(), fontStyle: "bold", fontSize: `${Math.round((zones.number.fontSize ?? 44) * signScale)}px`, color: zones.number.color ?? "#4b2b18" })
         .setOrigin(0.5)
         .setResolution(2)
         .setDepth(depth + 1);
       this.title = scene.add
-        .text(t.c.x, t.c.y, id.title, { fontFamily: FONT, fontStyle: "bold", color: zones.title.color ?? "#4b2b18", align: "center" })
+        .text(t.c.x, t.c.y, id.title, { fontFamily: uiFont(), fontStyle: "bold", color: zones.title.color ?? "#4b2b18", align: "center" })
         .setOrigin(0.5)
         .setResolution(2)
         .setDepth(depth + 1);
@@ -161,7 +161,7 @@ export class Station {
         const img = scene.add.image(c.x, c.y, id.completedBadge).setDisplaySize(aw, ah).setDepth(depth + 2);
         const sx = aw / (badge.width ?? 256);
         const text = scene.add
-          .text(c.x - aw / 2 + (labelZone.x + labelZone.width / 2) * sx, c.y - ah / 2 + (labelZone.y + labelZone.height / 2) * sx, id.completedLabel, { fontFamily: FONT, fontStyle: "bold", color: labelZone.color ?? "#184c2a", align: "center" })
+          .text(c.x - aw / 2 + (labelZone.x + labelZone.width / 2) * sx, c.y - ah / 2 + (labelZone.y + labelZone.height / 2) * sx, id.completedLabel, { fontFamily: uiFont(), fontStyle: "bold", color: labelZone.color ?? "#184c2a", align: "center" })
           .setOrigin(0.5)
           .setResolution(2)
           .setDepth(depth + 3);
@@ -179,7 +179,7 @@ export class Station {
         .strokeRoundedRect(c.x - pw / 2, c.y - ph / 2, pw, ph, ph / 2)
         .fillStyle(0xffffff, 0.18)
         .fillRoundedRect(c.x - pw / 2 + ph * 0.3, c.y - ph / 2 + ph * 0.12, pw - ph * 0.6, ph * 0.28, ph * 0.14);
-      const nt = scene.add.text(c.x, c.y, id.nextLabel, { fontFamily: FONT, fontStyle: "bold", color: "#ffffff", align: "center" }).setOrigin(0.5).setResolution(2).setDepth(depth + 3);
+      const nt = scene.add.text(c.x, c.y, id.nextLabel, { fontFamily: uiFont(), fontStyle: "bold", color: "#ffffff", align: "center" }).setOrigin(0.5).setResolution(2).setDepth(depth + 3);
       fitText(nt, id.nextLabel, pw - ph * 0.6, ph * 0.8, ph * 0.62, 7);
       this.next.push(pill, nt);
       [...this.completed, ...this.next].forEach((o) => (o as Phaser.GameObjects.Components.Visible & Phaser.GameObjects.GameObject).setVisible(false));
@@ -189,7 +189,7 @@ export class Station {
       }
     } else {
       this.label = scene.add
-        .text(x, y - h * 0.36, String(number), { fontFamily: FONT, fontStyle: "bold", fontSize: `${Math.round(30 * k)}px`, color: "#502010" })
+        .text(x, y - h * 0.36, String(number), { fontFamily: uiFont(), fontStyle: "bold", fontSize: `${Math.round(30 * k)}px`, color: "#502010" })
         .setOrigin(0.5)
         .setResolution(2)
         .setDepth(depth + 1);
@@ -249,7 +249,7 @@ export class Station {
   setPending(label: string | null): void {
     if (label === null) return void this.pendingTag?.setVisible(false);
     this.pendingTag ??= this.scene.add
-      .text(this.base.x, this.base.y - this.sign.displayHeight - 3, label, { fontFamily: FONT, fontStyle: "bold", fontSize: `${Math.round(13 * this.k)}px`, color: "#fff7e9", backgroundColor: "#7a4a34", padding: { x: Math.round(6 * this.k), y: Math.round(2 * this.k) } })
+      .text(this.base.x, this.base.y - this.sign.displayHeight - 3, label, { fontFamily: uiFont(), fontStyle: "bold", fontSize: `${Math.round(13 * this.k)}px`, color: "#fff7e9", backgroundColor: "#7a4a34", padding: { x: Math.round(6 * this.k), y: Math.round(2 * this.k) } })
       .setOrigin(0.5, 1) // encima de la señal: debajo se queda Vanessa al interactuar y taparía la etiqueta
       .setResolution(2)
       .setDepth(this.base.y + 2);

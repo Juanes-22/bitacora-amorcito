@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import type { AssetRegistry } from "../../config/assetRegistry";
+import { uiFont } from "../fonts";
 import type { Portal } from "../../config/types";
 
 /** La señal de cambio de mapa (SPEC 4.3): su imagen y la escala con la que se dibuja en el mundo. */
@@ -9,7 +10,6 @@ export interface ExitSign {
   scale: number;
 }
 
-const FONT = '"Trebuchet MS", system-ui, sans-serif';
 
 /**
  * Marcador de un portal entre zonas. Con la imagen de señal del catálogo es un cartel de madera con una flecha y el nombre del
@@ -44,7 +44,7 @@ export class ZonePortal {
       this.sign = scene.add.image(bx, by, exit.assetId).setOrigin(ox, o.y).setScale(s).setFlipX(flip).setDepth(by);
       const zx = flip ? W - (zone.x + zone.width) : zone.x;
       this.label = scene.add
-        .text(bx + (zx + zone.width / 2 - ox * W) * s, by + (zone.y + zone.height / 2 - o.y * H) * s, portal.label, { fontFamily: FONT, fontStyle: "bold", color: zone.color ?? "#4b2b18", align: "center" })
+        .text(bx + (zx + zone.width / 2 - ox * W) * s, by + (zone.y + zone.height / 2 - o.y * H) * s, portal.label, { fontFamily: uiFont(), fontStyle: "bold", color: zone.color ?? "#4b2b18", align: "center" })
         .setOrigin(0.5)
         .setResolution(2)
         .setDepth(by + 1);
@@ -56,7 +56,7 @@ export class ZonePortal {
       return;
     }
     this.label = scene.add
-      .text(x, y - radius * 0.55 - 10 * k, portal.label, { fontFamily: '"Trebuchet MS", system-ui, sans-serif', fontStyle: "bold", fontSize: `${Math.round(15 * k)}px`, color: "#fff7e9", stroke: "#502010", strokeThickness: Math.round(4 * k) })
+      .text(x, y - radius * 0.55 - 10 * k, portal.label, { fontFamily: uiFont(), fontStyle: "bold", fontSize: `${Math.round(15 * k)}px`, color: "#fff7e9", stroke: "#502010", strokeThickness: Math.round(4 * k) })
       .setOrigin(0.5, 1)
       .setResolution(2)
       .setDepth(y + 1);

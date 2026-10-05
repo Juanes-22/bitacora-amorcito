@@ -54,6 +54,9 @@ try {
   check("PROD-6: tras «Comenzar» se cargan los efectos de interfaz y los sonidos de la zona activa (y no los de la otra)", ["test-badge.wav", "test-birds.wav", "test-portal.wav", "test-river.wav", "test-ui-confirm.wav", "test-ui-open.wav"].every((f) => sfx.includes(f)) && !sfx.includes("test-wind.wav"), sfx.join(", "));
   const button = page.locator(".hud__music");
   check("PROD-7: el botón «Sonido» está en la cabecera, con etiqueta y ≥ 44 px", (await button.count()) === 1 && (await button.getAttribute("aria-label")) === "Silenciar sonido" && (await button.boundingBox()).width >= 43.5);
+  const woff = requests.filter((u) => /\.woff2(\?|$)/.test(u));
+  check("PROD-9: las tipografías se publican con el sitio (tres .woff2 del mismo origen, bajo bundle/) y no se pide ninguna a un servidor externo", woff.length === 3 && woff.every((u) => new URL(u).origin === new URL(base).origin && /\/bundle\//.test(u)) && !requests.some((u) => /fonts\.(googleapis|gstatic)\.com/.test(u)), woff.join(", "));
+  check("PROD-10: Nunito y Gelasio quedan cargadas (normal y cursiva) antes del mapa", await page.evaluate(() => ["Nunito", "Gelasio"].every((f) => [...document.fonts].some((x) => x.family.replace(/"/g, "") === f && x.status === "loaded")) && [...document.fonts].some((x) => x.family.replace(/"/g, "") === "Gelasio" && x.style === "italic" && x.status === "loaded")));
   check("PROD-8: sin errores en la consola", errors.length === 0, errors.join(" | "));
   await ctx.close();
 } catch (e) {

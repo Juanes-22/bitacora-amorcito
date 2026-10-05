@@ -1,0 +1,33 @@
+/*
+ * Tipografías propias (SPEC 14): se sirven desde el propio sitio para que el móvil, la tableta y el escritorio muestren la misma letra y no
+ * dependan de lo que traiga cada sistema (Android no trae Trebuchet MS ni Georgia). Ambas son fuentes variables con licencia SIL OFL 1.1
+ * (paquetes @fontsource-variable): Nunito para la interfaz y los letreros del mapa, y Gelasio —compatible en medidas con Georgia— para las
+ * lecturas. Solo se incluye el subconjunto latino (todo el español); lo que no cubra, cae a la siguiente de la lista (`--font-ui`,
+ * `--font-reading`). La descarga la adelanta `fontsReady()` antes de mostrar la bitácora.
+ */
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 200 1000;
+  font-display: swap;
+  src: url("../../node_modules/@fontsource-variable/nunito/files/nunito-latin-wght-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Gelasio";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("../../node_modules/@fontsource-variable/gelasio/files/gelasio-latin-wght-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Gelasio";
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("../../node_modules/@fontsource-variable/gelasio/files/gelasio-latin-wght-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}

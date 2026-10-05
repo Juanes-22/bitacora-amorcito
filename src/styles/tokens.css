@@ -22,8 +22,8 @@ html {
   --ink-soft: #7a4a34;
   --focus: #b3470f;
 
-  --font-ui: "Trebuchet MS", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --font-reading: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  --font-ui: "Nunito", "Trebuchet MS", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-reading: "Gelasio", Georgia, "Iowan Old Style", "Palatino Linotype", serif;
   --panel-edge: 1.5rem;
   --gutter: 1rem;
 }

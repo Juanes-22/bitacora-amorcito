@@ -40,7 +40,7 @@
 .jp-header { display: flex; align-items: center; gap: 1rem; padding-right: 3.75rem; flex-wrap: wrap; }
 .jp-heading-icon { width: 4.125rem; height: 3.625rem; flex: none; }
 .jp-title-block { flex: 1; min-width: 13.75rem; }
-.jp-dialog h1 { margin: 0; font-size: 2.125rem; line-height: 1.15; letter-spacing: -.0.1875rem; color: #512a15; }
+.jp-dialog h1 { margin: 0; font-size: 2.125rem; line-height: 1.15; letter-spacing: 0; color: #512a15; }
 .jp-subtitle { font-size: 1.0625rem; color: var(--jp-muted); margin: 0.375rem 0 0; }
 .jp-dialog .jp-close { position: absolute; top: 0.5rem; right: 0.625rem; z-index: 3; width: 2.875rem; height: 2.875rem; padding: 0; border: 0 !important; background-color: transparent !important; background-image: var(--bpk-button-close); background-size: 100% 100%; image-rendering: pixelated; }
 @media (hover: hover) { .jp-dialog .jp-close:hover { background-image: var(--bpk-button-close-hover); } }
@@ -183,9 +183,16 @@
   .jp-article { flex: none; overflow: visible; font-size: 1.125rem; padding-right: 0.25rem; }
   .jp-sidebar { flex: none; overflow: visible; display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
   .jp-sidebar-card { padding: 0.375rem 0.25rem 0.5rem; }
-  .jp-tab { min-width: 0; flex: 1; padding: 0 0.1875rem; font-size: 0.8125rem !important; gap: 0.25rem; white-space: nowrap; }
-  .jp-tab .jp-tab-check { width: 0.75rem; height: 0.75rem; margin-left: 0; }
-  .jp-tab .jp-icon { width: 1.25rem; height: 1.25rem; }
+  /* Las tres pestañas en columnas iguales: el icono arriba, el nombre debajo y la marca de «leída» en la esquina, para que nada se monte en el
+     borde ni en el texto aunque la pantalla sea estrecha. */
+  .jp-tablist { flex: 1 1 100%; flex-wrap: nowrap; gap: 0.5rem; }
+  .jp-tab { min-width: 0; flex: 1 1 0; min-height: 3.75rem; flex-direction: column; gap: 0.125rem; padding: 0.125rem 0.25rem; border-width: 0.5rem; border-image-width: 0.5rem; font-size: 0.8125rem !important; line-height: 1.15; text-align: center; position: relative; white-space: nowrap; }
+  .jp-tab .jp-tab-check { position: absolute; top: 0.375rem; right: 0.375rem; width: 0.6875rem; height: 0.6875rem; margin: 0; }
+  .jp-tab .jp-icon { width: 1.375rem; height: 1.375rem; }
+  /* «‹ Bitácora de aprendizajes» se queda a la izquierda del botón de cerrar (que está arriba a la derecha) y, si no cabe, pasa a dos líneas. */
+  .jp-back-link { max-width: calc(100% - 3.25rem); text-align: left; line-height: 1.2; font-size: 1rem !important; }
+  .jp-reader-title .jp-status { min-height: 2rem; padding: 0 0.625rem; font-size: 0.875rem; }
+  .jp-reader-title .jp-status .jp-icon { width: 1rem; height: 1rem; }
   .jp-section-count { width: 100%; font-size: 0.8125rem; }
   .jp-reader-title { padding-right: 2.5rem; }
   .jp-footer { flex-direction: column; align-items: stretch; }

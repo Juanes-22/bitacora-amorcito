@@ -66,9 +66,58 @@ try {
     const fit2 = await pillFits(t.page, ".bpk-progress");
     check(`ML-10 (${tag}): la cápsula "n de 6 obtenidas" queda dentro de su borde`, fit2.ok, JSON.stringify(fit2));
     check(`ML-11 (${tag}): la colección no se sale por los lados`, await noSideOverflow(t.page));
-    check(`ML-12 (${tag}): sin errores de consola`, t.errors.length === 0, t.errors.join(" | "));
     await t.page.screenshot({ path: `/tmp/ml-${vp.width}x${vp.height}-badges.png` });
     await t.close();
+
+    // Detalle de una insignia (la de un aprendizaje y la secreta de Rocky): los botones de volver y cerrar son cuadrados y caben en la fila
+    const all = await open({ viewport: vp, seed: progress(6) });
+    await all.start();
+    await all.page.getByRole("button", { name: "Insignias" }).click();
+    await all.page.waitForTimeout(500);
+    const details = [["la de un aprendizaje", () => all.page.locator(".bpk-card").first()], ["la secreta de Rocky", () => all.page.locator(".bpk-special").nth(1)]];
+    for (const [name, pick] of details) {
+      await pick().click();
+      await all.page.waitForTimeout(400);
+      const back = await box(all.page, ".bpk-header--detail .bpk-icon-button--back");
+      const label = await box(all.page, ".bpk-header--detail .bpk-back-label");
+      const closeBtn = await box(all.page, ".bpk-header--detail .bpk-icon-button--close");
+      const square = (b) => b && b.w >= 40 && b.w <= 60 && Math.abs(b.w - b.h) <= 2;
+      check(`ML-13 (${tag}): en el detalle de ${name}, los botones de volver y cerrar son cuadrados (≈ 46 px), no se estiran`, square(back) && square(closeBtn), JSON.stringify({ back, closeBtn }));
+      check(`ML-14 (${tag}): y «Mi colección» queda entre los dos, en la misma fila, sin salirse`, label && back.r <= label.x + 1 && label.r <= closeBtn.x + 1 && Math.abs(back.y - closeBtn.y) <= 2 && closeBtn.r <= vp.width, JSON.stringify({ back, label, closeBtn }));
+      await all.page.screenshot({ path: `/tmp/ml-${vp.width}x${vp.height}-detail-${name.includes("Rocky") ? "rocky" : "normal"}.png` });
+      await all.page.getByRole("button", { name: "Mi colección", exact: true }).click();
+      await all.page.waitForTimeout(300);
+    }
+    await all.page.keyboard.press("Escape");
+    await all.page.waitForTimeout(300);
+
+    // El lector: las tres pestañas (Resumen, Reflexión, Lo vivido) caben en sus botones, sin pisar el borde, el texto ni la marca de «leída»
+    await all.page.getByRole("button", { name: "Bitácora" }).click();
+    await all.page.waitForTimeout(400);
+    await all.page.getByRole("button", { name: /^Volver a leer: Aprendizaje 1/ }).click();
+    await all.page.waitForTimeout(500);
+    const tabs = await all.page.evaluate(() => [...document.querySelectorAll(".jp-tab")].map((tab) => {
+      const r = tab.getBoundingClientRect();
+      const border = parseFloat(getComputedStyle(tab).borderLeftWidth);
+      const range = document.createRange();
+      const text = [...tab.childNodes].find((n) => n.nodeType === 3 && n.textContent.trim());
+      range.selectNodeContents(text);
+      const tr = range.getBoundingClientRect();
+      const inner = (b) => b.left >= r.left + border - 0.5 && b.right <= r.right - border + 0.5 && b.top >= r.top + border - 0.5 && b.bottom <= r.bottom - border + 0.5;
+      const icons = [...tab.querySelectorAll("img")].map((i) => i.getBoundingClientRect());
+      const check = tab.querySelector(".jp-tab-check")?.getBoundingClientRect();
+      const overlap = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
+      return { label: text.textContent.trim(), h: Math.round(r.height), w: Math.round(r.width), textInside: inner(tr), iconsInside: icons.every(inner), checkClear: !check || !overlap(check, tr) };
+    }));
+    check(`ML-15 (${tag}): las tres pestañas del lector miden al menos 44 px de alto`, tabs.length === 3 && tabs.every((x) => x.h >= 44), JSON.stringify(tabs));
+    check(`ML-16 (${tag}): el nombre y los iconos de cada pestaña quedan dentro de su borde y la marca de «leída» no toca el texto`, tabs.every((x) => x.textInside && x.iconsInside && x.checkClear), JSON.stringify(tabs));
+    check(`ML-17 (${tag}): el lector no se sale por los lados`, await noSideOverflow(all.page));
+    const link = await box(all.page, ".jp-back-link");
+    const closeBtn = await box(all.page, ".jp-dialog .jp-close");
+    check(`ML-18 (${tag}): «Bitácora de aprendizajes» (volver) no se monta con el botón de cerrar`, link && closeBtn && link.r <= closeBtn.x + 1, JSON.stringify({ link, closeBtn }));
+    await all.page.screenshot({ path: `/tmp/ml-${vp.width}x${vp.height}-reader.png` });
+    check(`ML-12 (${tag}): sin errores de consola`, t.errors.length === 0 && all.errors.length === 0, [...t.errors, ...all.errors].join(" | "));
+    await all.close();
   }
 } catch (e) {
   check(`excepción no controlada: ${String(e?.stack ?? e).split("\n").slice(0, 2).join(" ")}`, false);

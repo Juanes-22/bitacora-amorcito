@@ -39,8 +39,10 @@ describe("public/config/bitacora.json (configuración inicial)", () => {
     expect(c.route).toHaveLength(6);
     expect(new Set(c.route.map((id) => c.placements[id].zoneId))).toEqual(new Set(["zona-a", "zona-b"]));
     expect(Object.keys(c.maps)).toHaveLength(2);
+    // `enabled` es del contrato de los emisores de sonido (apagar uno sin borrarlo), no de la ruta: se revisa fuera de `sounds`.
+    const withoutSounds = JSON.stringify(c, (key, value) => (key === "sounds" ? undefined : value));
     for (const forbidden of ["order", "nextLearningId", "totalStations", "enabled"]) {
-      expect(JSON.stringify(c)).not.toContain(`"${forbidden}"`);
+      expect(withoutSounds).not.toContain(`"${forbidden}"`);
     }
   });
 

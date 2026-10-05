@@ -411,7 +411,8 @@ describe("PreferencesStorage (AC-51)", () => {
     const a = new PreferencesStorage(store);
     expect(a.musicMuted).toBe(false);
     a.setMusicMuted(true);
-    expect(JSON.parse(store.data.get(PREFERENCES_KEY) as string)).toEqual({ musicMuted: true });
+    // El botón silencia el juego completo: se escribe `soundMuted` y, con el mismo valor, el nombre anterior.
+    expect(JSON.parse(store.data.get(PREFERENCES_KEY) as string)).toEqual({ soundMuted: true, musicMuted: true });
     expect(new PreferencesStorage(store).musicMuted).toBe(true);
   });
 
@@ -439,7 +440,7 @@ describe("PreferencesStorage (AC-51)", () => {
     const prefs = new PreferencesStorage(store);
     expect(prefs.musicMuted).toBe(true);
     prefs.setMusicMuted(false);
-    expect(JSON.parse(store.data.get(PREFERENCES_KEY) as string)).toEqual({ musicMuted: false });
+    expect(JSON.parse(store.data.get(PREFERENCES_KEY) as string)).toEqual({ soundMuted: false, musicMuted: false });
   });
 
   it("es independiente del progreso: usa su propia clave", () => {

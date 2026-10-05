@@ -8,3 +8,4 @@ playtest-output
 *.tiled-session
 tools/tiled/backups/
 tools/tiled/legacy/*.local
+tools/tiled/.audio-lab.lock

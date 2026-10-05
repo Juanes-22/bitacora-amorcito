@@ -1,6 +1,7 @@
 // Arnés común de las pruebas E2E: servidor de Vite propio, navegador, páginas con la configuración editada
 // solo para esa página y comprobaciones con resumen. Uso: const h = await harness(); ...; await h.finish().
 import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { createRequire } from "node:module";
 import { chromium } from "playwright";
 import { createServer } from "vite";
@@ -28,7 +29,11 @@ export const startLabel = async (page) => (await page.locator(START).innerText()
 
 export const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 
-export async function harness() {
+/**
+ * `root`: otra carpeta de proyecto que servir (una copia temporal, ver `workspace.mjs`) en lugar de la del repositorio. Con ella las
+ * pruebas pueden GUARDAR (laboratorio de sonidos, importaciones) sin tocar los archivos reales.
+ */
+export async function harness({ root } = {}) {
   const failures = [];
   let total = 0;
   const check = (name, ok, detail = "") => {
@@ -38,7 +43,11 @@ export async function harness() {
   };
   // Las pruebas no deben importar mapas de Tiled por su cuenta (lo prueba tiled.mjs aparte).
   process.env.TILED_WATCH = "0";
-  const server = await createServer({ server: { port: 0, host: "127.0.0.1" }, logLevel: "error" });
+  const server = await createServer(
+    root
+      ? { root, configFile: join(root, "vite.config.ts"), server: { port: 0, host: "127.0.0.1", fs: { strict: false } }, logLevel: "error" }
+      : { server: { port: 0, host: "127.0.0.1" }, logLevel: "error" },
+  );
   await server.listen();
   const base = server.resolvedUrls.local[0];
   const browser = await chromium.launch();

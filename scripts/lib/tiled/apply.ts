@@ -1,4 +1,4 @@
-import type { BitacoraConfig, MapZone, Placement } from "../../../src/config/types";
+import type { BitacoraConfig, MapSound, MapZone, Placement } from "../../../src/config/types";
 import type { ConfigIssue } from "../../../src/config/types";
 import type { Source, TiledIssue } from "./types";
 import { formatSource } from "./types";
@@ -35,7 +35,7 @@ function reorderCollection<T extends object>(items: T[], base: unknown): T[] {
   });
 }
 
-const ZONE_KEYS = ["label", "width", "height", "layers", "initialSpawnId", "spawns", "obstacles", "decorations", "ambient", "critters", "portals"];
+const ZONE_KEYS = ["label", "width", "height", "layers", "initialSpawnId", "spawns", "obstacles", "decorations", "ambient", "critters", "portals", "sounds"];
 
 function shapeZone(zone: MapZone, base: MapZone | undefined): MapZone {
   const z: Record<string, unknown> = { ...zone };
@@ -46,10 +46,20 @@ function shapeZone(zone: MapZone, base: MapZone | undefined): MapZone {
   if (zone.critters) z.critters = reorderCollection(zone.critters, base?.critters);
   // `critters` es opcional: si la zona no lo tenía y sigue sin animales, no se añade; si lo tenía vacío, se conserva.
   if (!zone.critters && base && Object.hasOwn(base, "critters")) z.critters = [];
+  // `sounds`, igual: omitido si la zona nunca tuvo sonidos; `{}` si tenía un registro explícito y se quedó sin emisores.
+  if (zone.sounds) z.sounds = reorderRegistry(zone.sounds, base?.sounds);
+  else if (base && Object.hasOwn(base, "sounds")) z.sounds = {};
   const ordered: Record<string, unknown> = {};
   for (const k of base ? [...Object.keys(base)] : ZONE_KEYS) if (Object.hasOwn(z, k)) ordered[k] = z[k];
   for (const k of ZONE_KEYS) if (!Object.hasOwn(ordered, k) && Object.hasOwn(z, k)) ordered[k] = z[k];
   return ordered as unknown as MapZone;
+}
+
+/** Un registro por ID (los sonidos): conserva el orden de las claves del anterior y, en cada valor, el de sus campos. */
+function reorderRegistry(items: Record<string, MapSound>, base: Record<string, MapSound> | undefined): Record<string, MapSound> {
+  const out: Record<string, MapSound> = {};
+  for (const [id, item] of Object.entries(items)) out[id] = reorderLike(item, base?.[id]);
+  return out;
 }
 
 export interface Candidate {
@@ -141,6 +151,14 @@ export function describeChanges(before: BitacoraConfig, after: BitacoraConfig): 
       if (x.length !== y.length) out.push(`${id}.${key}: ${x.length} → ${y.length} (${y.length > x.length ? "+" : ""}${y.length - x.length})`);
       const changed = x.slice(0, Math.min(x.length, y.length)).filter((v, i) => !jsonEqual(v, y[i])).length;
       if (changed) out.push(`${id}.${key}: ${changed} modificado(s)`);
+    }
+    // Los sonidos se comparan por su identificador (`soundId`), no por posición.
+    const sx = a.sounds ?? {};
+    const sy = b.sounds ?? {};
+    for (const k of new Set([...Object.keys(sx), ...Object.keys(sy)])) {
+      if (!(k in sx)) out.push(`${id}.sounds.${k}: nuevo`);
+      else if (!(k in sy)) out.push(`${id}.sounds.${k}: eliminado`);
+      else if (!jsonEqual(sx[k], sy[k])) out.push(`${id}.sounds.${k}: modificado`);
     }
     for (const key of ["spawns", "portals"] as const) {
       const x = a[key] as Record<string, unknown>;

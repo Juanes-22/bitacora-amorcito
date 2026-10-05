@@ -1,5 +1,6 @@
 import type { AssetManifest } from "../../../src/config/types";
-import { critterIds, idsByAmbientKind } from "./catalog";
+import { critterIds, idsByAmbientKind, sfxIds } from "./catalog";
+import { SOUND_DEFAULTS, SOUND_PLAYBACK_MODES } from "../../../src/config/sounds";
 import type { ProjectClass, ProjectEnum, ProjectMember, ProjectPropertyType, TiledProject } from "./types";
 import { isRecord, type PropMap } from "./util";
 
@@ -11,17 +12,35 @@ const str = (name: string, value = ""): ProjectMember => ({ name, type: "string"
 const num = (name: string, value: number): ProjectMember => ({ name, type: "float", value });
 const int = (name: string, value: number): ProjectMember => ({ name, type: "int", value });
 const en = (name: string, propertyType: string, value: string): ProjectMember => ({ name, type: "string", propertyType, value });
+const bool = (name: string, value: boolean): ProjectMember => ({ name, type: "bool", value });
 
-export const CLASS_NAMES = ["Station", "Decoration", "Ambient", "Critter", "Particles", "Swim", "Collision", "Spawn", "Portal", "EditorOnly", "Zone", "BackgroundLayer"] as const;
-export const ENUM_NAMES = ["DepthMode", "AmbientType", "CritterType", "ParticleAsset", "SwimAsset", "CritterAsset"] as const;
+export const CLASS_NAMES = ["Station", "Decoration", "Ambient", "Critter", "Particles", "Swim", "Collision", "Spawn", "Portal", "EditorOnly", "Zone", "BackgroundLayer", "SoundEmitter", "SoundArea"] as const;
+export const ENUM_NAMES = ["DepthMode", "AmbientType", "CritterType", "ParticleAsset", "SwimAsset", "CritterAsset", "SoundAsset", "SoundPlayback"] as const;
 
 const depth = (mode: "fixed" | "y", value: number): ProjectMember[] => [en("depthMode", "DepthMode", mode), num("depth", value)];
+
+/** Propiedades comunes de los dos sonidos del mapa (SPEC 6.5): los valores iniciales son los de `SOUND_DEFAULTS`. */
+const soundCommon = (sounds: string[]): ProjectMember[] => [
+  str("soundId"),
+  str("label"),
+  en("assetId", "SoundAsset", sounds[0] ?? ""),
+  bool("enabled", true),
+  num("volume", SOUND_DEFAULTS.volume),
+  num("rate", SOUND_DEFAULTS.rate),
+  en("playback", "SoundPlayback", "loop"),
+  int("fadeInMs", SOUND_DEFAULTS.fadeInMs),
+  int("fadeOutMs", SOUND_DEFAULTS.fadeOutMs),
+  int("intervalMinMs", SOUND_DEFAULTS.intervalMinMs),
+  int("intervalMaxMs", SOUND_DEFAULTS.intervalMaxMs),
+  int("cooldownMs", SOUND_DEFAULTS.cooldownMs),
+];
 
 /** Definiciones que genera la integración. Los enums de assets salen del manifiesto. */
 export function projectTypes(manifest: AssetManifest): { enums: Array<Omit<ProjectEnum, "id">>; classes: Array<Omit<ProjectClass, "id">> } {
   const particles = idsByAmbientKind(manifest, "particles");
   const swimmers = idsByAmbientKind(manifest, "swim");
   const critters = critterIds(manifest);
+  const sounds = sfxIds(manifest);
   const enumOf = (name: string, values: string[]): Omit<ProjectEnum, "id"> => ({ name, type: "enum", storageType: "string", values, valuesAsFlags: false });
   const first = (list: string[]) => list[0] ?? "";
   const cls = (name: string, color: string, members: ProjectMember[], useAs: string[]): Omit<ProjectClass, "id"> => ({ name, type: "class", color, drawFill: true, members, useAs });
@@ -33,6 +52,9 @@ export function projectTypes(manifest: AssetManifest): { enums: Array<Omit<Proje
       enumOf("ParticleAsset", particles),
       enumOf("SwimAsset", swimmers),
       enumOf("CritterAsset", critters),
+      // Solo efectos de sonido (`kind` «sfx»): si no hay ninguno el selector queda vacío; nunca se ofrece una pista de música.
+      enumOf("SoundAsset", sounds),
+      enumOf("SoundPlayback", [...SOUND_PLAYBACK_MODES]),
     ],
     classes: [
       cls("Station", "#ffe0a03c", [str("learningId"), num("interactionOffsetX", 0), num("interactionOffsetY", 0), num("interactionRadius", 70)], ["object", "tile"]),
@@ -47,6 +69,8 @@ export function projectTypes(manifest: AssetManifest): { enums: Array<Omit<Proje
       cls("EditorOnly", "#ff9e9e9e", [], ["object", "layer"]),
       cls("Zone", "#ff6a6ad9", [str("zoneId"), str("label"), str("initialSpawnId")], ["map"]),
       cls("BackgroundLayer", "#ff8a6a4a", [str("assetId"), int("depth", 0)], ["layer"]),
+      cls("SoundEmitter", "#ff2f9e8f", [...soundCommon(sounds), num("innerRadius", SOUND_DEFAULTS.innerRadius), num("radius", SOUND_DEFAULTS.radius)], ["object"]),
+      cls("SoundArea", "#ff7d5fd1", [...soundCommon(sounds), num("edgeFadePx", SOUND_DEFAULTS.edgeFadePx)], ["object"]),
     ],
   };
 }

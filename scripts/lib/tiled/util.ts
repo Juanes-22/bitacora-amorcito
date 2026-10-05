@@ -83,6 +83,9 @@ export function prop(name: string, value: string | number | boolean, enumType?: 
   return enumType ? { name, type, propertytype: enumType, value } : { name, type, value };
 }
 
+/** Propiedad decimal: con valor entero (`radius: 260`) `prop` la daría por `int`; aquí se declara `float` como en la clase del proyecto. */
+export const floatProp = (name: string, value: number): TiledProperty => ({ name, type: "float", value });
+
 /** Nombre de la clase de un objeto, capa, tile o mapa: `class` (Tiled ≥ 1.9) o `type` (anteriores). */
 export const classOf = (o: { class?: string; type?: string }, legacyTypeAllowed = true): string => {
   if (o.class) return o.class;

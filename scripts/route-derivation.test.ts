@@ -75,6 +75,12 @@ describe("totales, numeración, siguiente y finalización dependen SOLO de route
 });
 
 /** Recorre los fuentes (no las pruebas) buscando prácticas que romperían «route es la única fuente». */
+/** El JSON sin el contrato de los sonidos (`sounds` y sus definiciones del esquema), donde `enabled` sí es un campo propio. */
+function withoutSounds(text: string): string {
+  const SOUND_KEYS = new Set(["sounds", "mapSound", "sound-point", "sound-rect"]);
+  return JSON.stringify(JSON.parse(text), (key, value) => (SOUND_KEYS.has(key) ? undefined : value));
+}
+
 function sources(dir: string): Array<{ file: string; text: string }> {
   return readdirSync(dir).flatMap((name) => {
     const path = join(dir, name);
@@ -105,11 +111,13 @@ describe("auditoría estática del código fuente", () => {
   it("el contrato de configuración no tiene campos que dupliquen la ruta: order, nextLearningId, totalStations, enabled", () => {
     const contract = [
       // Solo el contrato de la BITÁCORA (antes del bloque del manifiesto): un atlas tiene su propio `layout.order` de fotogramas.
-      readFileSync("src/config/types.ts", "utf8").split("// ---- assets.json real")[0].replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, ""),
+      readFileSync("src/config/types.ts", "utf8").split("// ---- assets.json real")[0].replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "")
+        // `enabled` es del emisor de sonido (apagarlo sin borrarlo), no de la ruta: se excluye ese contrato, no el campo en general.
+        .replace(/interface MapSoundBase \{[\s\S]*?\n\}/, ""),
       readFileSync("public/config/bitacora.schema.json", "utf8"),
       readFileSync("public/config/bitacora.json", "utf8"),
-      readFileSync("public/config/maps.schema.json", "utf8"),
-      readFileSync("public/config/maps.json", "utf8"),
+      withoutSounds(readFileSync("public/config/maps.schema.json", "utf8")),
+      withoutSounds(readFileSync("public/config/maps.json", "utf8")),
     ];
     for (const text of contract) expect(text).not.toMatch(/["\s](order|nextLearningId|totalStations|enabled)["\s]*[:?]/);
     // El guardado tampoco contiene derivados.

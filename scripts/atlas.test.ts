@@ -34,6 +34,9 @@ const AVATAR_IDS = ["character.vanessa-jerry.avatar", "character.vanessa-jerry.a
 const UI_V2_IDS = ["effect.station-glow.pulse", "map.sign.exit-right", "station.sign.board", "ui.badge.completed-pill", "ui.button.jerry.labeled", "ui.button.journal.labeled", "ui.button.sound-off.labeled", "ui.button.sound-on.labeled"];
 const CHICKEN_IDS = ["fauna.chick.black", "fauna.hen.black-crested", "fauna.hen.brown", "fauna.hen.grey-fluffy", "fauna.hen.white", "fauna.hen.white-fluffy"];
 const BADGE_IDS = ["ui.badge.jerry", "ui.badge.museo-taxidermia", "ui.badge.pinguinos-adaptacion", "ui.badge.plantas-origen", "ui.badge.plantas-semillas", "ui.badge.plastilina-casera", "ui.badge.tierra-movimientos"];
+const SFX_IDS = [
+  "audio.sfx.test-river", "audio.sfx.test-wind", "audio.sfx.test-birds", "audio.sfx.test-ui-open", "audio.sfx.test-ui-confirm", "audio.sfx.test-badge", "audio.sfx.test-portal",
+];
 const MUSIC_IDS = ["audio.music.beyond-the-clouds", "audio.music.enchanted-festival", "audio.music.little-town-orchestral"];
 const ATLAS_IDS = [
   "animation.water.ripples", "animation.water.waterfall", "animation.water.foam-splash",
@@ -54,11 +57,11 @@ const issues = (id: string, mutate?: (atlas: any, entry: AssetEntry) => void) =>
 };
 
 describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)", () => {
-  it("el manifiesto con los kits y la música es válido: 192 entradas y recuentos coherentes", () => {
+  it("el manifiesto con los kits, la música y los sonidos de prueba es válido: 199 entradas y recuentos coherentes", () => {
     const r = validateAssetManifest(manifest);
     expect(r.ok ? "" : JSON.stringify(r.ok ? [] : r.issues)).toBe("");
-    expect(manifest.assetCount).toBe(192);
-    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, characters: 14, decorations: 18, effects: 18, stations: 10, ui: 110 });
+    expect(manifest.assetCount).toBe(199);
+    expect(manifest.categoryCounts).toMatchObject({ audio: 10, backgrounds: 17, characters: 14, decorations: 18, effects: 18, stations: 10, ui: 110 });
   });
 
   it("las 45 entradas originales siguen en su sitio y con sus campos (los kits solo se añadieron)", () => {
@@ -83,8 +86,9 @@ describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)
     expect(ids.slice(173, 184)).toHaveLength(11);
     expect(ids.slice(173, 184).every((id) => id.startsWith("ui.journal-panel."))).toBe(true);
     expect(ids.slice(184, 185)).toEqual(["ui.badge.rocky"]); // la insignia de Rocky (versión 1.1.0 de los kits de insignias) se añadió después
-    expect(ids.slice(185)).toHaveLength(7); // la presentación (kit bitacora-panel-presentacion) se añadió al final
-    expect(ids.slice(185).every((id) => id.startsWith("ui.presentation."))).toBe(true);
+    expect(ids.slice(185, 192)).toHaveLength(7); // la presentación (kit bitacora-panel-presentacion) se añadió después
+    expect(ids.slice(185, 192).every((id) => id.startsWith("ui.presentation."))).toBe(true);
+    expect(ids.slice(192)).toEqual(SFX_IDS); // los sonidos de prueba de los efectos (SPEC 6.5) se añadieron al final
   });
 
   it("el kit conserva su metadata (origen, escala recomendada, animación y movimiento) sin duplicarla en otro sitio", () => {

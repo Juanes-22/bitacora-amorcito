@@ -12,7 +12,7 @@ import { replaceTopLevel } from "./jsonStyle";
 import { mergeProject } from "./project";
 import { renderFrame, resizeArea, type AtlasFrame } from "./preview";
 import { tiledJson } from "./tiledJson";
-import type { TiledIssue, TiledProject, TiledTileset } from "./types";
+import type { TiledIssue, TiledMap, TiledProject, TiledTileset } from "./types";
 import { formatIssue } from "./types";
 
 export { defaultPaths };
@@ -70,28 +70,61 @@ export function runImport(paths: Paths, options: ImportOptions): ImportReport {
     report.errors.push(`no hay mapas .tmj en ${posix(relative(paths.root, paths.mapsDir))}: ejecuta npm run tiled:generate`);
     return report;
   }
-
-  const issues: TiledIssue[] = [];
-  const zones: ZoneImport[] = [];
+  const maps: ImportInputs["maps"] = [];
   for (const file of files) {
-    let map;
     try {
-      map = readMap(file);
+      maps.push({ file, map: readMap(file) });
     } catch (e) {
       report.errors.push((e as Error).message);
-      continue;
     }
+  }
+  const computed = computeImport(paths, { manifestJson, base, mapsText, project, maps }, report);
+  if (!computed.ok || computed.report.inSync || !options.apply) return computed.report;
+
+  if (computed.mapsText === null) {
+    report.warnings.push("no se localizaron `placements` y `maps` en maps.json: se reescribió el archivo entero con formato estándar");
+  }
+  report.backup = backupFile(paths, paths.mapsFile);
+  writeAtomic(paths.mapsFile, computed.mapsText ?? `${JSON.stringify({ $schema: "./maps.schema.json", placements: computed.candidate.placements, maps: computed.candidate.maps }, null, 2)}\n`);
+  report.written = true;
+  return report;
+}
+
+/** Lo que `computeImport` necesita, ya leído: así se puede importar con mapas, manifiesto o configuración distintos de los del disco (en memoria). */
+export interface ImportInputs {
+  manifestJson: AssetManifest;
+  /** La configuración vigente, unida (bitacora.json y maps.json). */
+  base: BitacoraConfig;
+  /** Texto actual de maps.json, para conservar su estilo al reescribir `placements` y `maps`. */
+  mapsText: string;
+  project?: TiledProject;
+  maps: Array<{ file: string; map: TiledMap }>;
+}
+
+export type ImportComputation =
+  | { ok: true; report: ImportReport; candidate: BitacoraConfig; /** Texto nuevo de maps.json; `null` si no se localizaron sus regiones. */ mapsText: string | null }
+  | { ok: false; report: ImportReport };
+
+/**
+ * Lee los mapas, construye la configuración candidata completa en memoria y la valida con el mismo `validateProject` del build, sin
+ * escribir nada. Es la base de `runImport` y del guardado del laboratorio de sonidos. `report` trae los errores de lectura anteriores.
+ */
+export function computeImport(paths: Paths, inputs: ImportInputs, report: ImportReport): ImportComputation {
+  const { manifestJson, base, project } = inputs;
+  const issues: TiledIssue[] = [];
+  const zones: ZoneImport[] = [];
+  for (const { file, map } of inputs.maps) {
     const r = importMap(file, map, { manifest: manifestJson, config: base, project, assetsDir: paths.assetsDir, mapDir: dirname(file), loadTileset: tilesetLoader(file) });
     issues.push(...r.issues);
     report.warnings.push(...r.warnings.map(formatIssue));
     if (r.result) zones.push(r.result);
   }
   report.errors.push(...issues.map(formatIssue));
-  if (report.errors.length) return report;
+  if (report.errors.length) return { ok: false, report };
 
   const built = buildCandidate(base, zones);
   report.errors.push(...built.issues.map(formatIssue));
-  if (!built.candidate) return report;
+  if (!built.candidate) return { ok: false, report };
   const { candidate } = built;
   report.zones = candidate.managed;
 
@@ -99,21 +132,13 @@ export function runImport(paths: Paths, options: ImportOptions): ImportReport {
   report.errors.push(...validation.errors.filter((e) => /^(bitacora|maps|assets)\.json/.test(e.path)).map((e) => annotate({ path: e.path, message: e.message }, candidate.sources)));
   report.warnings.push(...validation.warnings.map((w) => `${w.path}: ${w.message}`));
   report.info.push(...validation.info);
-  if (report.errors.length) return report;
+  if (report.errors.length) return { ok: false, report };
 
   report.changes = describeChanges(base, candidate.config);
   report.inSync = jsonEqual(base.maps, candidate.config.maps) && jsonEqual(base.placements, candidate.config.placements);
   report.ok = true;
-  if (report.inSync || !options.apply) return report;
-
-  const text = replaceTopLevel(mapsText, { placements: candidate.config.placements, maps: candidate.config.maps });
-  if (text === null) {
-    report.warnings.push("no se localizaron `placements` y `maps` en maps.json: se reescribió el archivo entero con formato estándar");
-  }
-  report.backup = backupFile(paths, paths.mapsFile);
-  writeAtomic(paths.mapsFile, text ?? `${JSON.stringify({ $schema: "./maps.schema.json", placements: candidate.config.placements, maps: candidate.config.maps }, null, 2)}\n`);
-  report.written = true;
-  return report;
+  const text = report.inSync ? inputs.mapsText : replaceTopLevel(inputs.mapsText, { placements: candidate.config.placements, maps: candidate.config.maps });
+  return { ok: true, report, candidate: candidate.config, mapsText: text };
 }
 
 // -- Generar -------------------------------------------------------------------------------------------------------------
@@ -159,7 +184,7 @@ function renderPreview(paths: Paths, entry: AssetManifest["assets"][string], fra
 }
 
 /** Estilo del proyecto: 4 espacios, claves ordenadas y los arreglos vacíos con su salto de línea (como lo escribe Tiled). */
-function projectJson(project: TiledProject): string {
+export function projectJson(project: TiledProject): string {
   const ind = (n: number) => " ".repeat(n * 4);
   const put = (v: unknown, level: number): string => {
     if (v === null || typeof v !== "object") return JSON.stringify(v);

@@ -669,6 +669,36 @@
           "targetZoneId": "zona-b",
           "targetSpawnId": "desde-a"
         }
+      },
+      "sounds": {
+        "rio-pradera": {
+          "label": "Río de la pradera (sonido de prueba)",
+          "assetId": "audio.sfx.test-river",
+          "enabled": true,
+          "volume": 0.25,
+          "rate": 1,
+          "fadeInMs": 250,
+          "fadeOutMs": 400,
+          "playback": {"mode": "loop"},
+          "shape": "point",
+          "position": {"x": 1110, "y": 780},
+          "innerRadius": 60,
+          "radius": 320
+        },
+        "pajaros-cerezo": {
+          "label": "Pájaros del cerezo (sonido de prueba)",
+          "assetId": "audio.sfx.test-birds",
+          "enabled": true,
+          "volume": 0.3,
+          "rate": 1,
+          "fadeInMs": 250,
+          "fadeOutMs": 400,
+          "playback": {"mode": "interval", "minMs": 14000, "maxMs": 30000},
+          "shape": "point",
+          "position": {"x": 810, "y": 260},
+          "innerRadius": 40,
+          "radius": 300
+        }
       }
     },
     "zona-b": {
@@ -1200,6 +1230,48 @@
           "interaction": {"x": 45, "y": 430, "radius": 60},
           "targetZoneId": "zona-a",
           "targetSpawnId": "desde-b"
+        }
+      },
+      "sounds": {
+        "cascada-pabellon": {
+          "label": "Cascada junto al puente (sonido de prueba)",
+          "assetId": "audio.sfx.test-river",
+          "enabled": true,
+          "volume": 0.25,
+          "rate": 1.15,
+          "fadeInMs": 250,
+          "fadeOutMs": 400,
+          "playback": {"mode": "loop"},
+          "shape": "point",
+          "position": {"x": 260, "y": 850},
+          "innerRadius": 60,
+          "radius": 320
+        },
+        "viento-lomas": {
+          "label": "Viento sobre las lomas (sonido de prueba)",
+          "assetId": "audio.sfx.test-wind",
+          "enabled": true,
+          "volume": 0.12,
+          "rate": 1,
+          "fadeInMs": 250,
+          "fadeOutMs": 400,
+          "playback": {"mode": "loop"},
+          "shape": "rect",
+          "area": {"x": 0, "y": 0, "width": 1448, "height": 300},
+          "edgeFadePx": 150
+        },
+        "campana-entrada": {
+          "label": "Campanilla de la entrada (sonido de prueba)",
+          "assetId": "audio.sfx.test-ui-confirm",
+          "enabled": true,
+          "volume": 0.3,
+          "rate": 1,
+          "fadeInMs": 250,
+          "fadeOutMs": 400,
+          "playback": {"mode": "enter", "cooldownMs": 20000},
+          "shape": "rect",
+          "area": {"x": 640, "y": 400, "width": 560, "height": 150},
+          "edgeFadePx": 40
         }
       }
     }

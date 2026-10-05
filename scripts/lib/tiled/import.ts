@@ -1,6 +1,7 @@
 import { basename, resolve as resolvePath } from "node:path";
 import { KINDS } from "../../../src/config/validateConfig";
-import type { AmbientEffect, AssetManifest, BitacoraConfig, Critter, Decoration, MapLayer, MapZone, Obstacle, Placement, Point, Portal } from "../../../src/config/types";
+import { SOUND_LIMITS, SOUND_PLAYBACK_MODES } from "../../../src/config/sounds";
+import type { AmbientEffect, AssetManifest, BitacoraConfig, Critter, Decoration, MapLayer, MapSound, MapZone, Obstacle, Placement, Point, Portal, SoundPlayback } from "../../../src/config/types";
 import { ambientKindOf, CLASS_ROLE, geometryOf, type Geometry, type Role } from "./catalog";
 import { classDefaults } from "./project";
 import type { Source, TiledImageLayer, TiledIssue, TiledLayer, TiledMap, TiledObject, TiledObjectLayer, TiledProject, TiledTile, TiledTileset } from "./types";
@@ -69,6 +70,18 @@ class Reader {
     }
     return p.value;
   }
+  bool(name: string, required = true): boolean | undefined {
+    const p = this.props.get(name);
+    if (!p) {
+      if (required) this.fail(name, "falta la propiedad");
+      return undefined;
+    }
+    if (typeof p.value !== "boolean") {
+      this.fail(name, `debe ser verdadero o falso (es ${typeof p.value})`);
+      return undefined;
+    }
+    return p.value;
+  }
   num(name: string, required = true, check?: { min?: number; max?: number; exclusiveMin?: number; int?: boolean }): number | undefined {
     const p = this.props.get(name);
     if (!p) {
@@ -112,7 +125,7 @@ export const UNIFORM_LENIENCY = 0.05;
 /** Límites de las gallinas en maps.schema.json (una prueba comprueba que siguen coincidiendo): se avisan aquí con su objeto. */
 export const CRITTER_LIMITS = { scale: 4, radius: 120, chicks: 8, chickScale: 4 } as const;
 
-const MAP_CLASSES = new Set(["Station", "Decoration", "Ambient", "Critter", "Particles", "Swim", "Collision", "Spawn", "Portal"]);
+const MAP_CLASSES = new Set(["Station", "Decoration", "Ambient", "Critter", "Particles", "Swim", "Collision", "Spawn", "Portal", "SoundEmitter", "SoundArea"]);
 
 /** Resuelve las propiedades de un objeto: valores por defecto de su clase < propiedades del tile < propiedades del propio objeto. */
 export function resolveProps(defaults: Map<string, PropMap>, className: string, tileProps: PropMap | undefined, own: PropMap): PropMap {
@@ -228,6 +241,7 @@ export function importMap(file: string, map: TiledMap, ctx: ImportContext): { re
   const obstacles: Obstacle[] = [];
   const spawns: Record<string, Point> = {};
   const portals: Record<string, Portal> = {};
+  const sounds: Record<string, MapSound> = {};
   const stations: StationImport[] = [];
   const sources = new Map<string, Source>();
   const zoneKey = zoneId ?? "?";
@@ -266,7 +280,7 @@ export function importMap(file: string, map: TiledMap, ctx: ImportContext): { re
     const layerDefault = propsOf(layer.properties).get("defaultClass")?.value;
     const className = classOf(obj) || (tileRef ? classOf(tileRef.tile) : "") || (typeof layerDefault === "string" ? layerDefault : "");
     if (!className) {
-      fail_(undefined, "no tiene clase: asígnale una (Station, Decoration, Ambient, Critter, Particles, Swim, Collision, Spawn o Portal)");
+      fail_(undefined, "no tiene clase: asígnale una (Station, Decoration, Ambient, Critter, Particles, Swim, Collision, Spawn, Portal, SoundEmitter o SoundArea)");
       continue;
     }
     if (!MAP_CLASSES.has(className)) {
@@ -574,6 +588,64 @@ export function importMap(file: string, map: TiledMap, ctx: ImportContext): { re
         record(`maps.${zoneKey}.spawns.${spawnId}`);
         break;
       }
+      case "SoundEmitter":
+      case "SoundArea": {
+        const isPoint = className === "SoundEmitter";
+        const soundId = r.str("soundId");
+        const soundLabel = r.str("label");
+        const assetId = r.str("assetId");
+        const enabled = r.bool("enabled");
+        const volume = r.num("volume", true, { min: SOUND_LIMITS.volume.min, max: SOUND_LIMITS.volume.max });
+        const rate = r.num("rate", true, { min: SOUND_LIMITS.rate.min, max: SOUND_LIMITS.rate.max });
+        const fadeInMs = r.num("fadeInMs", true, { min: 0 });
+        const fadeOutMs = r.num("fadeOutMs", true, { min: 0 });
+        const mode = r.str("playback");
+        // La geometría: el emisor es un punto; el área, un rectángulo sin rotación (la rotación ya se rechazó arriba).
+        if (obj.gid !== undefined || obj.ellipse || obj.polygon || obj.polyline || obj.text) r.fail(undefined, `«${className}» no admite esta geometría: ${isPoint ? "usa un punto (Insertar punto)" : "usa un rectángulo (Insertar rectángulo)"}`);
+        else if (isPoint && !obj.point) r.fail(undefined, "un emisor de sonido debe ser un punto (Insertar punto), no un rectángulo");
+        else if (!isPoint && obj.point) r.fail(undefined, "un área de sonido debe ser un rectángulo (Insertar rectángulo), no un punto");
+        else if (!isPoint && !(w > 0 && h > 0)) r.fail(undefined, "el área de sonido necesita un ancho y un alto positivos");
+        // Las propiedades de otro modo o de la otra clase que el objeto escribió a propósito se señalan: no se descartan en silencio.
+        const explicit = (name: string): boolean => r.has(name) && r.from(name) !== "class";
+        let playback: SoundPlayback | undefined;
+        if (mode !== undefined && !(SOUND_PLAYBACK_MODES as readonly string[]).includes(mode)) r.fail("playback", `debe ser ${SOUND_PLAYBACK_MODES.map((m) => `«${m}»`).join(", ")} (es «${mode}»)`);
+        else if (mode === "loop") playback = { mode };
+        else if (mode === "interval") {
+          const minMs = r.num("intervalMinMs", true, { exclusiveMin: 0 });
+          const maxMs = r.num("intervalMaxMs", true, { exclusiveMin: 0 });
+          if (minMs !== undefined && maxMs !== undefined) {
+            if (minMs > maxMs) r.fail("intervalMinMs", `el mínimo (${minMs} ms) no puede superar al máximo (${maxMs} ms)`);
+            else playback = { mode, minMs, maxMs };
+          }
+        } else if (mode === "enter") {
+          const cooldownMs = r.num("cooldownMs", true, { min: 0 });
+          if (cooldownMs !== undefined) playback = { mode, cooldownMs };
+        }
+        if (mode !== "interval") for (const name of ["intervalMinMs", "intervalMaxMs"]) if (explicit(name)) r.fail(name, `solo se usa con playback «interval» (este es «${mode}»): quítala o cambia el modo`);
+        if (mode !== "enter" && explicit("cooldownMs")) r.fail("cooldownMs", `solo se usa con playback «enter» (este es «${mode}»): quítala o cambia el modo`);
+        for (const name of isPoint ? ["edgeFadePx"] : ["innerRadius", "radius"]) if (explicit(name)) r.fail(name, `no corresponde a ${className}${isPoint ? " (es de SoundArea)" : " (es de SoundEmitter)"}: quítala`);
+        if (assetId !== undefined) {
+          const entry = manifest.assets[assetId];
+          if (!entry) r.fail("assetId", `asset ID no encontrado en assets.json: «${assetId}»`);
+          else if (entry.kind !== "sfx" || entry.type !== "audio") r.fail("assetId", `«${assetId}» es de kind «${entry.kind}»; se esperaba un efecto de sonido (kind «sfx»)`);
+        }
+        if (soundId !== undefined && !/^[a-z0-9][a-z0-9-]*$/.test(soundId)) r.fail("soundId", `«${soundId}» no es un identificador válido: minúsculas, números y guiones`);
+        if (soundId !== undefined && Object.hasOwn(sounds, soundId)) r.fail("soundId", `el sonido «${soundId}» está repetido en esta zona`);
+        const base = { label: soundLabel as string, assetId: assetId as string, enabled: enabled as boolean, volume: volume as number, rate: rate as number, fadeInMs: fadeInMs as number, fadeOutMs: fadeOutMs as number, playback: playback as SoundPlayback };
+        if (isPoint) {
+          const innerRadius = r.num("innerRadius", true, { min: 0 });
+          const radius = r.num("radius", true, { exclusiveMin: 0 });
+          if (innerRadius !== undefined && radius !== undefined && innerRadius >= radius) r.fail("innerRadius", `el radio interior (${innerRadius}) debe ser menor que el exterior (${radius})`);
+          if (r.failed || soundId === undefined) break;
+          sounds[soundId] = { ...base, shape: "point", position: { x: clean(left), y: clean(top) }, innerRadius: innerRadius as number, radius: radius as number };
+        } else {
+          const edgeFadePx = r.num("edgeFadePx", true, { min: 0 });
+          if (r.failed || soundId === undefined) break;
+          sounds[soundId] = { ...base, shape: "rect", area: { x: clean(left), y: clean(top), width: clean(w), height: clean(h) }, edgeFadePx: edgeFadePx as number };
+        }
+        record(`maps.${zoneKey}.sounds.${soundId}`);
+        break;
+      }
       case "Portal": {
         const portalId = r.str("portalId");
         const portalLabel = r.str("label");
@@ -592,7 +664,7 @@ export function importMap(file: string, map: TiledMap, ctx: ImportContext): { re
   }
 
   if (issues.length > 0 || zoneId === undefined || label === undefined || initialSpawnId === undefined) return { issues, warnings };
-  const zone: MapZone = { label, width, height, layers, initialSpawnId, spawns, obstacles, decorations, ambient, ...(critters.length ? { critters } : {}), portals };
+  const zone: MapZone = { label, width, height, layers, initialSpawnId, spawns, obstacles, decorations, ambient, ...(critters.length ? { critters } : {}), portals, ...(Object.keys(sounds).length ? { sounds } : {}) };
   return { result: { zoneId, file: fileName, zone, stations, sources }, issues, warnings };
 }
 

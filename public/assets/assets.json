@@ -3,9 +3,9 @@
   "project": "Bitácora Amorcito",
   "basePath": ".",
   "pathConvention": "Paths are relative to the directory containing this assets.json.",
-  "assetCount": 192,
+  "assetCount": 199,
   "categoryCounts": {
-    "audio": 3,
+    "audio": 10,
     "backgrounds": 17,
     "characters": 14,
     "decorations": 18,
@@ -5909,6 +5909,90 @@
         "width": 442,
         "height": 24
       }
+    },
+    "audio.sfx.test-river": {
+      "path": "audio/sfx/test-river.wav",
+      "type": "audio",
+      "format": "wav",
+      "category": "audio",
+      "label": "Sonido de prueba: río (ruido filtrado, para repetir en bucle)",
+      "kind": "sfx",
+      "sizeBytes": 176444,
+      "sha256": "37a735376d035e7195e5643a358b2f962228c114f2ce4381c4a6d4fe2683f986",
+      "originalPath": "scripts/tools/generate-test-sfx.ts",
+      "durationSeconds": 4
+    },
+    "audio.sfx.test-wind": {
+      "path": "audio/sfx/test-wind.wav",
+      "type": "audio",
+      "format": "wav",
+      "category": "audio",
+      "label": "Sonido de prueba: viento (ruido grave, para repetir en bucle)",
+      "kind": "sfx",
+      "sizeBytes": 220544,
+      "sha256": "487c160e9ddaedd88597e7732357b660b8c22042252c3e68d61da20514daa5c6",
+      "originalPath": "scripts/tools/generate-test-sfx.ts",
+      "durationSeconds": 5
+    },
+    "audio.sfx.test-birds": {
+      "path": "audio/sfx/test-birds.wav",
+      "type": "audio",
+      "format": "wav",
+      "category": "audio",
+      "label": "Sonido de prueba: pájaros (tres trinos cortos)",
+      "kind": "sfx",
+      "sizeBytes": 44144,
+      "sha256": "f59dfc2260e32333f8b3bfb43257bf287d2c75dc4ba0d7806ce930c63377254e",
+      "originalPath": "scripts/tools/generate-test-sfx.ts",
+      "durationSeconds": 1
+    },
+    "audio.sfx.test-ui-open": {
+      "path": "audio/sfx/test-ui-open.wav",
+      "type": "audio",
+      "format": "wav",
+      "category": "audio",
+      "label": "Sonido de prueba: abrir (dos notas suaves)",
+      "kind": "sfx",
+      "sizeBytes": 13274,
+      "sha256": "260bb4903a95f0ddf7cb2746e56a425dca6667ba4da087a5026c4b141a4b641f",
+      "originalPath": "scripts/tools/generate-test-sfx.ts",
+      "durationSeconds": 0.3
+    },
+    "audio.sfx.test-ui-confirm": {
+      "path": "audio/sfx/test-ui-confirm.wav",
+      "type": "audio",
+      "format": "wav",
+      "category": "audio",
+      "label": "Sonido de prueba: confirmar (una nota corta)",
+      "kind": "sfx",
+      "sizeBytes": 6218,
+      "sha256": "27c0b266605709e284fbf65b7c067c21853329748c4a39f2849393ebe9df57c5",
+      "originalPath": "scripts/tools/generate-test-sfx.ts",
+      "durationSeconds": 0.14
+    },
+    "audio.sfx.test-badge": {
+      "path": "audio/sfx/test-badge.wav",
+      "type": "audio",
+      "format": "wav",
+      "category": "audio",
+      "label": "Sonido de prueba: recompensa (arpegio brillante)",
+      "kind": "sfx",
+      "sizeBytes": 66194,
+      "sha256": "442953813113d18c15e233890fe910276482e09a58f32de05af37c0d4c670388",
+      "originalPath": "scripts/tools/generate-test-sfx.ts",
+      "durationSeconds": 1.5
+    },
+    "audio.sfx.test-portal": {
+      "path": "audio/sfx/test-portal.wav",
+      "type": "audio",
+      "format": "wav",
+      "category": "audio",
+      "label": "Sonido de prueba: viajar (barrido ascendente)",
+      "kind": "sfx",
+      "sizeBytes": 24300,
+      "sha256": "d40c7b7cfdadd8eea5df35ca0d239149bb554ef0153f7363e5d89beb3fd5b7cf",
+      "originalPath": "scripts/tools/generate-test-sfx.ts",
+      "durationSeconds": 0.55
     }
   },
   "sourceDocuments": [
@@ -6212,6 +6296,7 @@
     "Añadidos los 60 recursos de interfaz del panel de insignias (kit bitacora-panel-insignias): ver docs/source/badge-panel. Las siete insignias del kit no se copian porque ya están en el catálogo. Las entradas anteriores no se modificaron.",
     "Añadidas las 11 piezas nuevas del panel de aprendizajes (kit bitacora-panel-aprendizajes): ver docs/source/journal-panel. Las piezas compartidas con el panel de insignias y las insignias del kit no se copian porque ya están en el proyecto. Las entradas anteriores no se modificaron.",
     "Añadida la insignia de Rocky (paquetes bitacora-insignias y bitacora-panel-insignias, versión 1.1.0): ver docs/source/badges y docs/source/badge-panel. Las entradas anteriores no se modificaron.",
-    "Añadidas las 7 piezas de la presentación del kit bitacora-panel-presentacion (v2.0.0): ver docs/source/presentation. Las entradas anteriores no se modificaron."
+    "Añadidas las 7 piezas de la presentación del kit bitacora-panel-presentacion (v2.0.0): ver docs/source/presentation. Las entradas anteriores no se modificaron.",
+    "Añadidos los sonidos de prueba del laboratorio de sonidos (scripts/tools/generate-test-sfx.ts): tonos y ruido sintetizados, no son sonidos definitivos. Las entradas anteriores no se modificaron."
   ]
 }

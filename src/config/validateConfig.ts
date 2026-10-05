@@ -33,6 +33,8 @@ export const KINDS = {
   stationObject: ["station-item", "foliage"],
   layer: ["background-layer", "complete-background"],
   badge: ["badge", "station-item", "icon"],
+  /** Un efecto de sonido: nunca una pista de música ni una imagen (SPEC 6.5). */
+  sfx: ["sfx"],
   portrait: ["portrait", "character-sprite"],
   actor: ["character-sprite", "pose-sheet"],
   uiAsset: {
@@ -369,6 +371,29 @@ export function validateBitacoraFiles(
   const shortest = Math.min(...music.tracks.map((id) => manifest.assets[id]?.durationSeconds ?? Infinity));
   if (Number.isFinite(shortest) && music.crossfadeMs >= (shortest * 1000) / 2) {
     err("audio.music.crossfadeMs", `debe ser menor que la mitad de la pista más corta (${Math.round(shortest * 500)} ms)`);
+  }
+
+  // -- efectos de sonido (SPEC 6.5) -----------------------------------------------------------------------
+  const sfx = c.audio.sfx;
+  if (sfx) {
+    for (const [event, preset] of Object.entries(sfx.events ?? {})) {
+      checkAsset(`audio.sfx.events.${event}.assetId`, preset.assetId, KINDS.sfx, "audio");
+    }
+  }
+  for (const [zoneId, zone] of Object.entries(c.maps)) {
+    for (const [soundId, sound] of Object.entries(zone.sounds ?? {})) {
+      const at = `maps.${zoneId}.sounds.${soundId}`;
+      checkAsset(`${at}.assetId`, sound.assetId, KINDS.sfx, "audio");
+      const p = sound.playback;
+      if (p.mode === "interval" && p.minMs > p.maxMs) err(`${at}.playback`, `el intervalo mínimo (${p.minMs} ms) no puede superar al máximo (${p.maxMs} ms)`);
+      if (sound.shape === "point") {
+        if (sound.innerRadius >= sound.radius) err(`${at}.innerRadius`, `el radio interior (${sound.innerRadius}) debe ser menor que el exterior (${sound.radius})`);
+        if (!inside(zone, sound.position.x, sound.position.y)) err(`${at}.position`, "queda fuera de las dimensiones de la zona");
+      } else {
+        const a = sound.area;
+        if (a.x < 0 || a.y < 0 || a.x + a.width > zone.width || a.y + a.height > zone.height) err(`${at}.area`, "el rectángulo queda fuera de las dimensiones de la zona");
+      }
+    }
   }
 
   if (c.gameplay.camera.maxZoom < c.gameplay.cameraZoom) err("gameplay.camera.maxZoom", "no puede ser menor que cameraZoom (el zoom base)");

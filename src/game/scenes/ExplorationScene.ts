@@ -117,6 +117,9 @@ export class ExplorationScene extends Phaser.Scene {
     this.physics.add.collider(this.player.feet, this.world.obstacles);
     this.cleanups.push(setupCamera(this, this.world, this.player, config.gameplay, reducedMotion));
 
+    // Los sonidos de la zona (SPEC 6.5): los emisores se activan con esta escena y su token; los recursos se cargan por su cuenta, sin retrasar el mapa.
+    this.deps.sfx?.setZone(this.zoneId, zone.sounds, this.token);
+    this.deps.sfx?.setListener(this.player.position);
     this.input2 = new InputController(this, bridge, config.gameplay.player.idle?.actionKey);
     this.interaction = new InteractionSystem(bridge, this.token, this.zoneId, this.world.targets);
     // Tocar para caminar y tocar la estación para explorar (SPEC 6.1): usa la misma rejilla que valida la alcanzabilidad.
@@ -217,6 +220,7 @@ export class ExplorationScene extends Phaser.Scene {
     if (manualActive) this.tap?.cancel();
     const vector = manualActive ? manual : (this.tap?.vector(this.player.position, delta, config.gameplay.playerSpeed) ?? manual);
     this.player.update(vector, config.gameplay.playerSpeed, delta);
+    this.deps.sfx?.setListener(this.player.position); // los pies de Vanessa son el oyente de los sonidos del mapa
 
     const requested = this.interaction.update(this.player.position, this.input2.consumeInteract());
     if (requested) {
@@ -263,6 +267,7 @@ export class ExplorationScene extends Phaser.Scene {
 
   private onShutdown(): void {
     this.alive = false;
+    this.deps.sfx?.clearZone(this.token); // detiene los sonidos de esta zona; una limpieza tardía de otra escena no toca a la actual
     if (this.player && this.wasMoving) {
       this.deps.bridge.emit("game:checkpoint", { zoneId: this.zoneId, position: this.player.position, token: this.token });
     }

@@ -5,6 +5,7 @@ import { PNG } from "pngjs";
 import { beforeAll, describe, expect, it } from "vitest";
 import { navigationGrid } from "../src/config/reachability";
 import type { AmbientEffect, AssetManifest, BitacoraConfig } from "../src/config/types";
+import { acquireSaveLock } from "./lib/audio-lab/lock";
 import { buildCandidate, jsonEqual } from "./lib/tiled/apply";
 import { buildTileset, catalogEntries, CLASS_ROLE, geometryOf, tileKey } from "./lib/tiled/catalog";
 import { findTiled, runTiled } from "./lib/tiled/cli";
@@ -515,6 +516,169 @@ function workspace(): { dir: string; paths: Paths } {
   return { dir, paths: pathsIn(dir) };
 }
 
+describe("sonidos del mapa en Tiled (SPEC 6.5, AC-92)", () => {
+  const sound = (map: TiledMap, soundId: string) => layerOf(map, "sonidos").objects.find((o) => prop(o, "soundId")?.value === soundId) as TiledObject;
+  const failsWith = (mutate: (maps: Record<string, TiledMap>) => void, expected: RegExp) => {
+    const maps = exportAll();
+    mutate(maps);
+    const { candidate, issues } = importAll(maps);
+    expect(candidate).toBeUndefined();
+    expect(issues.join("\n")).toMatch(expected);
+    return issues.join("\n");
+  };
+  const imported = (mutate: (maps: Record<string, TiledMap>) => void, base: BitacoraConfig = config) => {
+    const maps = exportAll(base);
+    mutate(maps);
+    const r = importAll(maps, base);
+    expect(r.issues).toEqual([]);
+    return r.candidate!.config;
+  };
+
+  it("la exportación crea la capa «sonidos» con un punto por emisor (SoundEmitter) y un rectángulo por área (SoundArea)", () => {
+    const maps = exportAll();
+    const a = layerOf(maps["zona-a"], "sonidos");
+    expect(a.type).toBe("objectgroup");
+    const river = sound(maps["zona-a"], "rio-pradera");
+    expect(river).toMatchObject({ class: "SoundEmitter", point: true, x: 1110, y: 780 });
+    expect(prop(river, "assetId")).toMatchObject({ type: "string", propertytype: "SoundAsset", value: "audio.sfx.test-river" });
+    expect(prop(river, "playback")).toMatchObject({ propertytype: "SoundPlayback", value: "loop" });
+    const area = sound(maps["zona-b"], "viento-lomas");
+    expect(area).toMatchObject({ class: "SoundArea", x: 0, y: 0, width: 1448, height: 300 });
+    expect(prop(area, "edgeFadePx")).toBeDefined();
+    expect(prop(area, "radius")).toBeUndefined();
+  });
+
+  it("la ida y vuelta conserva todos los sonidos tal cual (incluidos los modos intervalo y entrada)", () => {
+    const c = imported(() => undefined);
+    for (const id of ["zona-a", "zona-b"]) expect(c.maps[id].sounds).toEqual(config.maps[id].sounds);
+    expect(Object.values(c.maps["zona-a"].sounds!).map((s) => s.playback.mode).sort()).toEqual(["interval", "loop"]);
+    expect(c.maps["zona-b"].sounds!["campana-entrada"].playback).toEqual(config.maps["zona-b"].sounds!["campana-entrada"].playback);
+    expect(config.maps["zona-b"].sounds!["campana-entrada"].playback.mode).toBe("enter");
+  });
+
+  it("mover el emisor, cambiar su volumen y su modo en Tiled se importa", () => {
+    const c = imported((maps) => {
+      const o = sound(maps["zona-a"], "rio-pradera");
+      o.x += 25;
+      o.y -= 10;
+      setProp(o, "volume", 0.5);
+      setProp(o, "playback", "interval");
+      setProp(o, "intervalMinMs", 2000);
+      setProp(o, "intervalMaxMs", 4000);
+    });
+    expect(c.maps["zona-a"].sounds!["rio-pradera"]).toMatchObject({ position: { x: 1135, y: 770 }, volume: 0.5, playback: { mode: "interval", minMs: 2000, maxMs: 4000 } });
+    expect(c.maps["zona-a"].sounds!["pajaros-cerezo"]).toEqual(config.maps["zona-a"].sounds!["pajaros-cerezo"]);
+  });
+
+  it("duplicar un objeto con otro soundId añade un emisor; borrarlo lo quita", () => {
+    const added = imported((maps) => {
+      const copy = clone(sound(maps["zona-a"], "rio-pradera"));
+      copy.id = nextId(maps["zona-a"]);
+      setProp(copy, "soundId", "grillos");
+      copy.x = 300;
+      layerOf(maps["zona-a"], "sonidos").objects.push(copy);
+    });
+    expect(Object.keys(added.maps["zona-a"].sounds!)).toEqual(["rio-pradera", "pajaros-cerezo", "grillos"]);
+    const removed = imported((maps) => {
+      const layer = layerOf(maps["zona-a"], "sonidos");
+      layer.objects = layer.objects.filter((o) => prop(o, "soundId")?.value !== "pajaros-cerezo");
+    });
+    expect(Object.keys(removed.maps["zona-a"].sounds!)).toEqual(["rio-pradera"]);
+  });
+
+  it("omitido y `{}` son distintos: una zona que tenía sonidos y se queda sin ellos conserva `{}`; una que nunca los tuvo, sigue sin la clave", () => {
+    const emptied = imported((maps) => { layerOf(maps["zona-a"], "sonidos").objects = []; });
+    expect(emptied.maps["zona-a"].sounds).toEqual({});
+    const never = clone(config);
+    delete never.maps["zona-a"].sounds;
+    const kept = imported(() => undefined, never);
+    expect(Object.hasOwn(kept.maps["zona-a"], "sounds")).toBe(false);
+    const explicitEmpty = clone(config);
+    explicitEmpty.maps["zona-a"].sounds = {};
+    expect(imported(() => undefined, explicitEmpty).maps["zona-a"].sounds).toEqual({});
+  });
+
+  it("`enabled: false` se conserva y ocultar la capa en el editor NO apaga el sonido", () => {
+    const c = imported((maps) => {
+      setProp(sound(maps["zona-a"], "pajaros-cerezo"), "enabled", false);
+      layerOf(maps["zona-a"], "sonidos").visible = false;
+    });
+    expect(c.maps["zona-a"].sounds!["pajaros-cerezo"].enabled).toBe(false);
+    expect(c.maps["zona-a"].sounds!["rio-pradera"].enabled).toBe(true);
+  });
+
+  it("una guía EditorOnly entre los sonidos se ignora", () => {
+    const c = imported((maps) => {
+      const guide = clone(sound(maps["zona-a"], "rio-pradera"));
+      guide.id = nextId(maps["zona-a"]);
+      guide.class = "EditorOnly";
+      setProp(guide, "soundId", "guia");
+      layerOf(maps["zona-a"], "sonidos").objects.push(guide);
+    });
+    expect(Object.keys(c.maps["zona-a"].sounds!)).not.toContain("guia");
+  });
+
+  it("los errores indican capa, objeto y propiedad", () => {
+    const msg = failsWith((m) => setProp(sound(m["zona-a"], "rio-pradera"), "assetId", "audio.sfx.no-existe"), /audio\.sfx\.no-existe/);
+    expect(msg).toMatch(/sonidos#\d+@assetId/);
+    failsWith((m) => setProp(sound(m["zona-a"], "rio-pradera"), "assetId", "audio.music.beyond-the-clouds"), /sfx|audio\.music\.beyond-the-clouds/);
+    failsWith((m) => setProp(sound(m["zona-a"], "rio-pradera"), "assetId", "ui.panel.cream.nine-slice"), /sfx|ui\.panel\.cream\.nine-slice/);
+    expect(failsWith((m) => setProp(sound(m["zona-a"], "rio-pradera"), "volume", 1.5), /volume/)).toMatch(/@volume/);
+    failsWith((m) => setProp(sound(m["zona-a"], "rio-pradera"), "rate", 3), /rate/);
+    failsWith((m) => setProp(sound(m["zona-a"], "rio-pradera"), "playback", "aleatorio"), /playback/);
+    failsWith((m) => setProp(sound(m["zona-a"], "rio-pradera"), "fadeInMs", -1), /fadeInMs/);
+    failsWith((m) => {
+      const o = sound(m["zona-a"], "pajaros-cerezo");
+      setProp(o, "intervalMinMs", 9000);
+      setProp(o, "intervalMaxMs", 1000);
+    }, /intervalMinMs|intervalMaxMs|mínimo/);
+    failsWith((m) => {
+      const o = sound(m["zona-a"], "rio-pradera");
+      setProp(o, "innerRadius", 400);
+      setProp(o, "radius", 100);
+    }, /innerRadius|radio interior/);
+  });
+
+  it("rechaza identificadores duplicados o inválidos, rotación y geometrías que el contrato no representa", () => {
+    failsWith((m) => {
+      const copy = clone(sound(m["zona-a"], "rio-pradera"));
+      copy.id = nextId(m["zona-a"]);
+      layerOf(m["zona-a"], "sonidos").objects.push(copy);
+    }, /repetido|rio-pradera/);
+    failsWith((m) => setProp(sound(m["zona-a"], "rio-pradera"), "soundId", "Con Espacios"), /soundId/);
+    failsWith((m) => { sound(m["zona-a"], "rio-pradera").rotation = 15; }, /rotaci/i);
+    failsWith((m) => {
+      const o = sound(m["zona-a"], "rio-pradera");
+      delete o.point;
+      o.width = 40;
+      o.height = 40;
+    }, /punto|point|SoundEmitter/i);
+    failsWith((m) => {
+      const o = sound(m["zona-b"], "viento-lomas");
+      o.polygon = [{ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 0, y: 10 }];
+    }, /rect|polígono|polygon|SoundArea/i);
+    failsWith((m) => setProp(sound(m["zona-b"], "viento-lomas"), "radius", 100), /radius|SoundEmitter/);
+  });
+
+  it("el proyecto de Tiled define las clases SoundEmitter y SoundArea y los enums SoundAsset (solo efectos) y SoundPlayback", () => {
+    const t = projectTypes(manifest);
+    const assetsEnum = t.enums.find((e) => e.name === "SoundAsset")!;
+    const sfxIds = Object.entries(manifest.assets).filter(([, e]) => e.kind === "sfx").map(([id]) => id);
+    expect(assetsEnum.values).toEqual(sfxIds);
+    expect(assetsEnum.values.some((v) => v.startsWith("audio.music"))).toBe(false);
+    expect(t.enums.find((e) => e.name === "SoundPlayback")!.values).toEqual(["loop", "interval", "enter"]);
+    const emitter = t.classes.find((c) => c.name === "SoundEmitter")!;
+    const area = t.classes.find((c) => c.name === "SoundArea")!;
+    const names = (c: typeof emitter) => c.members.map((m) => m.name);
+    expect(names(emitter)).toEqual(expect.arrayContaining(["soundId", "label", "assetId", "enabled", "volume", "rate", "playback", "fadeInMs", "fadeOutMs", "intervalMinMs", "intervalMaxMs", "cooldownMs", "innerRadius", "radius"]));
+    expect(names(area)).toEqual(expect.arrayContaining(["edgeFadePx"]));
+    expect(names(area)).not.toContain("radius");
+    expect(emitter.members.find((m) => m.name === "volume")!.value).toBe(0.3);
+    expect(project.propertyTypes!.some((p) => p.name === "SoundEmitter")).toBe(true);
+    expect(project.propertyTypes!.some((p) => p.name === "SoundAsset" && (p as { values?: string[] }).values?.includes("audio.sfx.test-river"))).toBe(true);
+  });
+});
+
 describe("archivos: generar, importar y escribir", () => {
 
   it("la primera generación crea catálogo, previews, proyecto y un mapa por zona, y no sobrescribe en la siguiente", () => {
@@ -699,6 +863,55 @@ describe("importación automática en desarrollo (plugin de Vite)", () => {
       await until(() => (JSON.parse(readFileSync(paths.mapsFile, "utf8")) as BitacoraConfig).placements["apr-d"].position.y === config.placements["apr-d"].position.y + 6);
       expect(sent.filter((s) => s.type === "error")).toHaveLength(2); // las dos veces del paso 1, ninguna más
     } finally {
+      stop();
+    }
+  }, 120000);
+
+  it("un error en un sonido sale sobre la página con su capa, objeto y propiedad, sin tocar maps.json, y se quita al corregirlo; la edición válida de un sonido se importa sola (SPEC 6.5)", async () => {
+    const { paths } = workspace();
+    const file = join(paths.mapsDir, "zona-a.tmj");
+    const original = readFileSync(file, "utf8");
+    const editA = (change: (map: TiledMap) => void) => {
+      const map = JSON.parse(readFileSync(file, "utf8")) as TiledMap;
+      change(map);
+      writeFileSync(file, tiledJson(map as never));
+    };
+    const river = (m: TiledMap) => layerOf(m, "sonidos").objects.find((o) => prop(o, "soundId")?.value === "rio-pradera") as TiledObject;
+    const { server, sent } = fakeServer();
+    const stop = setupTiledImport(server, { paths, debounceMs: 80, settleMs: 40, pollMs: 300, startupCheck: false });
+    try {
+      const before = readFileSync(paths.mapsFile, "utf8");
+      editA((m) => setProp(river(m), "assetId", "audio.music.beyond-the-clouds"));
+      await until(() => sent.some((x) => x.type === "error"));
+      expect(sent.find((x) => x.type === "error")!.err!.message).toMatch(/sonidos#\d+@assetId|assetId/);
+      expect(readFileSync(paths.mapsFile, "utf8")).toBe(before); // el último resultado válido sigue ahí
+      writeFileSync(file, original);
+      await until(() => sent.some((x) => x.type === "full-reload"));
+      editA((m) => setProp(river(m), "volume", 0.33));
+      await until(() => (JSON.parse(readFileSync(paths.mapsFile, "utf8")) as BitacoraConfig).maps["zona-a"].sounds!["rio-pradera"].volume === 0.33);
+    } finally {
+      stop();
+    }
+  }, 120000);
+
+  it("no importa mientras un guardado del laboratorio de sonidos tiene el cerrojo, y lo hace al terminar", async () => {
+    const { paths } = workspace();
+    const file = join(paths.mapsDir, "zona-a.tmj");
+    const map = JSON.parse(readFileSync(file, "utf8")) as TiledMap;
+    const obj = layerOf(map, "sonidos").objects.find((o) => prop(o, "soundId")?.value === "rio-pradera") as TiledObject;
+    setProp(obj, "volume", 0.21);
+    const release = acquireSaveLock(paths); // un guardado en curso (otro proceso, o el servidor de desarrollo)
+    writeFileSync(file, tiledJson(map as never));
+    const { server } = fakeServer();
+    const stop = setupTiledImport(server, { paths, debounceMs: 40, settleMs: 40, pollMs: 200, startupCheck: false });
+    try {
+      const before = readFileSync(paths.mapsFile, "utf8");
+      await new Promise((r) => setTimeout(r, 1200));
+      expect(readFileSync(paths.mapsFile, "utf8")).toBe(before); // esperó: no leyó una transacción a medias
+      release();
+      await until(() => (JSON.parse(readFileSync(paths.mapsFile, "utf8")) as BitacoraConfig).maps["zona-a"].sounds!["rio-pradera"].volume === 0.21);
+    } finally {
+      release();
       stop();
     }
   }, 120000);

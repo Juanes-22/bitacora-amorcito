@@ -538,6 +538,9 @@
       "preparationTemplate": "Recorrido en preparación: faltan {pending} por aprobar",
       "musicMute": "Silenciar música",
       "musicUnmute": "Activar música",
+      "soundMute": "Silenciar sonido",
+      "soundUnmute": "Activar sonido",
+      "soundActivate": "Activar audio",
       "stateLocked": "Bloqueado",
       "stateAvailable": "Disponible",
       "stateCompleted": "Completado",
@@ -620,6 +623,17 @@
       "rotation": "sequential",
       "volume": 0.35,
       "crossfadeMs": 2500
+    },
+    "sfx": {
+      "active": true,
+      "volume": 0.8,
+      "maxVoices": 12,
+      "events": {
+        "ui.open": {"assetId": "audio.sfx.test-ui-open", "volume": 0.5, "rate": 1},
+        "ui.confirm": {"assetId": "audio.sfx.test-ui-confirm", "volume": 0.5, "rate": 1},
+        "badge.earned": {"assetId": "audio.sfx.test-badge", "volume": 0.7, "rate": 1},
+        "portal.travel": {"assetId": "audio.sfx.test-portal", "volume": 0.5, "rate": 1}
+      }
     }
   }
 }

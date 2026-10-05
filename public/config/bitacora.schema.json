@@ -152,7 +152,37 @@
             "crossfadeMs": { "type": "number", "minimum": 0 }
           },
           "additionalProperties": false
+        },
+        "sfx": {
+          "type": "object",
+          "required": ["active", "volume", "maxVoices"],
+          "properties": {
+            "active": { "type": "boolean" },
+            "volume": { "type": "number", "minimum": 0, "maximum": 1 },
+            "maxVoices": { "type": "integer", "minimum": 1, "maximum": 64 },
+            "events": {
+              "type": "object",
+              "properties": {
+                "ui.open": { "$ref": "#/$defs/oneShotPreset" },
+                "ui.confirm": { "$ref": "#/$defs/oneShotPreset" },
+                "badge.earned": { "$ref": "#/$defs/oneShotPreset" },
+                "portal.travel": { "$ref": "#/$defs/oneShotPreset" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
         }
+      },
+      "additionalProperties": false
+    },
+    "oneShotPreset": {
+      "type": "object",
+      "required": ["assetId", "volume", "rate"],
+      "properties": {
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "volume": { "type": "number", "minimum": 0, "maximum": 1 },
+        "rate": { "type": "number", "minimum": 0.5, "maximum": 2 }
       },
       "additionalProperties": false
     },
@@ -422,6 +452,9 @@
             "cancel": { "type": "string", "minLength": 1 },
             "preparationTemplate": { "type": "string", "minLength": 1 },
             "musicMute": { "type": "string", "minLength": 1 },
+            "soundMute": { "type": "string", "minLength": 1 },
+            "soundUnmute": { "type": "string", "minLength": 1 },
+            "soundActivate": { "type": "string", "minLength": 1 },
             "musicUnmute": { "type": "string", "minLength": 1 },
             "stateLocked": { "type": "string", "minLength": 1 },
             "stateAvailable": { "type": "string", "minLength": 1 },

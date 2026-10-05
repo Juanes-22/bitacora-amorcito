@@ -129,6 +129,8 @@ export function idsByAmbientKind(manifest: AssetManifest, kind: "particles" | "s
   return Object.entries(manifest.assets).filter(([, e]) => ambientKindOf(e) === kind).map(([id]) => id);
 }
 export const critterIds = (manifest: AssetManifest): string[] => Object.entries(manifest.assets).filter(([, e]) => e.kind === "critter-sheet").map(([id]) => id);
+/** Los efectos de sonido del catálogo: lo único que ofrece el selector `SoundAsset` de Tiled (nunca la música ni una imagen). */
+export const sfxIds = (manifest: AssetManifest): string[] => Object.entries(manifest.assets).filter(([, e]) => e.kind === "sfx" && e.type === "audio").map(([id]) => id);
 
 export const tileKey = (role: Role, assetId: string): string => `${role}:${assetId}`;
 

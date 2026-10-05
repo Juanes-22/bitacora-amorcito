@@ -7,7 +7,8 @@ import { BitacoraProvider } from "../app/BitacoraProvider";
 import { createMusicPlayer, musicTracks } from "../audio/createMusicPlayer";
 import { MusicPlayer, type AudioLike } from "../audio/MusicPlayer";
 import { Cover } from "../components/ui/Cover";
-import { MusicToggle } from "../components/ui/MusicToggle";
+import { SoundToggle } from "../components/ui/SoundToggle";
+import { SoundControl } from "../audio/SoundControl";
 import { createAssetRegistry } from "../config/assetRegistry";
 import { releaseBlockers } from "../config/releaseBlockers";
 import type { AssetManifest, BitacoraConfig } from "../config/types";
@@ -57,15 +58,16 @@ describe("musicTracks y createMusicPlayer", () => {
     const player = createMusicPlayer(config, registry, prefs, { createAudio: fakeAudio, visibility: { isHidden: () => false, subscribe: () => () => undefined } }) as MusicPlayer;
     expect(player.getState().muted).toBe(true);
     player.setMuted(false);
-    expect(JSON.parse(store.data.get(PREFERENCES_KEY) as string)).toEqual({ musicMuted: false });
+    expect(JSON.parse(store.data.get(PREFERENCES_KEY) as string)).toEqual({ soundMuted: false, musicMuted: false });
   });
 });
 
-describe("MusicToggle (AC-51)", () => {
+describe("SoundToggle solo con música (AC-51)", () => {
+  // Sin efectos de sonido el botón es el de siempre: «música» en su etiqueta y la misma preferencia.
   const renderToggle = (player: MusicPlayer) =>
     render(
       <BitacoraProvider config={config} assets={registry}>
-        <MusicToggle player={player} />
+        <SoundToggle control={new SoundControl(player, null, new PreferencesStorage(memory()))} />
       </BitacoraProvider>,
     );
 

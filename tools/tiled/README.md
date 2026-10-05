@@ -31,6 +31,7 @@ nada depende de una carpeta personal.
 | `estaciones` | Una estación por aprendizaje activo | Mover y ajustar interacción; no se borran |
 | `puntos` | Puntos de aparición (`Spawn`) y portales (`Portal`) | Sí |
 | `colisiones` | Rectángulos y círculos (`Collision`) | Sí |
+| `sonidos` | Sonidos del mapa: puntos `SoundEmitter` y rectángulos `SoundArea` (ver §9) | Sí |
 
 **La clase del objeto decide su destino, no la capa** (los nombres de capa son solo orden). Un rectángulo sin clase en `colisiones`
 se toma como `Collision`. El orden de cada colección es el de los objetos en su capa; los nuevos se añaden al final.
@@ -73,11 +74,13 @@ Los valores por defecto vienen de la clase del proyecto; el tile y el propio obj
 | `Critter` (tile) | `critterType` (`wander` o `family`), `radius`; familia: `chickAssetId`, `chicks` | `chickScale` |
 | `Decoration` (tile) | `originX`, `originY`, `depthMode`, `depth` | — |
 | `Collision` (rectángulo o elipse con ancho = alto) | — | — |
+| `SoundEmitter` (**punto**) | `soundId`, `label`, `assetId`, `enabled`, `volume`, `rate`, `playback`, `fadeInMs`, `fadeOutMs`, `innerRadius`, `radius` | `intervalMinMs`, `intervalMaxMs` (solo con `playback = interval`), `cooldownMs` (solo con `enter`) ² |
+| `SoundArea` (**rectángulo**) | las mismas, con `edgeFadePx` en lugar de `innerRadius` y `radius` | las mismas ² |
 | `Spawn` (punto) | `spawnId` (el mapa lleva `initialSpawnId`) | — |
 | `Portal` (elipse circular centrada en el punto de interacción; su diámetro es 2 × el radio) | `portalId`, `label`, `targetZoneId`, `targetSpawnId` | — |
 
 Propiedades del mapa: `zoneId`, `label`, `initialSpawnId`. ¹ El juego conserva y valida `decorationAssetId`/`decorationOffset`,
-pero hoy no los dibuja.
+pero hoy no los dibuja. ² Las propiedades de modo vienen en la clase con valores por defecto (12 000 / 28 000 ms y 1 500 ms): se editan en el objeto cuando el modo las usa y **no deben estar escritas** con otro modo —el importador lo señala en lugar de descartarlas—.
 
 `explicit` (texto, p. ej. `scale,flipX`): la escala y el reflejo salen del tamaño y del tile, así que un `scale: 1` o un `flipX: false`
 *explícitos* en `maps.json` se anotan aquí para no perderse. No hace falta tocarla.
@@ -131,7 +134,7 @@ Al añadir assets al manifiesto (siempre añadiendo entradas, nunca cambiando la
 npm run tiled:catalog     # catálogo, previews y clases del proyecto; no toca los mapas
 ```
 
-Solo entran los assets colocables según las mismas reglas que valida el juego (`kind` y `motion`); la interfaz y la música no. Los
+Solo entran los assets colocables según las mismas reglas que valida el juego (`kind` y `motion`); la interfaz y la música no. Los efectos de sonido (`kind` «sfx») no son objetos del mapa: se ofrecen en el selector `SoundAsset` (§9). Los
 IDs de tile son estables: añadir un asset no cambia los objetos ya colocados. Si un asset deja de ser colocable, su tile se conserva
 marcado `obsolete` (Tiled sigue dibujándolo) y el importador pide sustituirlo. Los enums de assets del proyecto (partículas, patos,
 animales) también se actualizan; los tipos propios que añadas al proyecto se respetan.
@@ -157,6 +160,47 @@ animales) también se actualizan; los tipos propios que añadas al proyecto se r
 - Los previews están reducidos al tamaño visual del juego con un promedio de área; el juego usa filtrado `nearest`.
 - Las capas se ordenan en Tiled por su posición en la lista; el juego usa `depth` (fijo o por `y`).
 - La cuadrícula de 2 px es una ayuda del editor; la navegación del juego usa su propia rejilla y las colisiones exactas.
+
+## 9. Sonidos del mapa y laboratorio de sonidos
+
+Los sonidos de las zonas (un río, el viento, pájaros…) son objetos de la capa **`sonidos`** y se importan a `maps.json › maps[zona].sounds`
+como el resto de los datos espaciales. Lo que no es espacial —el volumen general de los efectos, el límite de voces y el sonido de
+«abrir», «confirmar», «insignia» y «portal»— vive en `bitacora.json › audio.sfx` y **Tiled no lo toca**. Diseño: `.claude/SPEC.md` §6.5.
+
+| Dato | Dónde vive |
+| --- | --- |
+| Posición, alcance, modo, volumen, velocidad y fundidos de un sonido del mapa | Objeto de Tiled → `maps.json › maps[zona].sounds[soundId]` |
+| Efecto de cada acción (`ui.open`, `ui.confirm`, `badge.earned`, `portal.travel`), volumen general y `maxVoices` | `bitacora.json › audio.sfx` |
+| El archivo de sonido (ruta, formato, duración, tamaño, huella) | `public/assets/assets.json` (entradas `audio.sfx.*`, `kind: "sfx"`) |
+| El silencio del visitante (botón «Sonido») | Su navegador (`soundMuted`), nunca los JSON |
+
+**Añadir un efecto al catálogo y al selector de Tiled.**
+1. Copia el archivo (WAV, MP3, OGG o M4A, hasta 8 MB y 60 s) a `public/assets/audio/sfx/`.
+2. Añade UNA entrada nueva a `public/assets/assets.json` (no cambies las existentes): `"audio.sfx.mi-sonido": { "path": "audio/sfx/mi-sonido.wav", "type": "audio", "format": "wav", "category": "audio", "label": "…", "kind": "sfx", "sizeBytes": …, "sha256": "…", "durationSeconds": … }` y suma 1 a `assetCount` y a `categoryCounts.audio`. (Si lo subes desde el laboratorio, esto lo hace él: ver abajo.)
+3. `npm run tiled:catalog` actualiza el proyecto de Tiled: el nuevo ID aparece en el selector `SoundAsset` de las propiedades `assetId`. Ahí solo hay efectos, nunca música.
+
+**Colocar un sonido a mano.**
+1. Abre el mapa de la zona. Si no tiene la capa `sonidos`, ejecuta una vez `npm run tiled:sounds` (añade la capa vacía, con copia previa del mapa) y vuelve a abrirlo en Tiled.
+2. Selecciona la capa `sonidos`. **Insert Point** para un emisor puntual (se oye por distancia) o **Insert Rectangle** para un área (se oye dentro y cae fuera).
+3. Pon su clase: `SoundEmitter` para el punto, `SoundArea` para el rectángulo.
+4. Rellena `soundId` (minúsculas, números y guiones; único en la zona), `label` y `assetId` (elígelo de la lista). Ajusta `volume` (0–1), `rate` (0,5–2) y los fundidos.
+5. Elige `playback`: **`loop`** suena sin parar mientras estés al alcance; **`interval`** suena una vez y espera entre `intervalMinMs` y `intervalMaxMs` (ajústalos en el objeto); **`enter`** suena al entrar en su zona, con `cooldownMs` entre disparos (ajústalo en el objeto). Con `loop` no dejes escritas esas propiedades.
+6. El alcance: en un emisor, `innerRadius` (volumen completo) y `radius` (silencio); en un área, `edgeFadePx` (hasta dónde se oye fuera del rectángulo, 0 = nada).
+7. Guarda. Con `npm run dev` abierto se importa solo; si no, `npm run tiled:import`. `enabled` en falso apaga el sonido sin borrarlo (ocultar la capa **no** lo apaga). Un error nombra el archivo, la capa, el objeto y la propiedad, y `maps.json` no cambia hasta corregirlo.
+
+**El laboratorio de sonidos** (solo desarrollo). Con `npm run dev`, abre la página con `?audioLab=1` y pulsa **Sonidos** (o `Alt+Mayús+S`).
+- *Mapa*: elige un emisor; **Probar** lo reproduce con sus valores y la distancia del oyente. En el modo **Mapa** Vanessa queda quieta y mueves el oyente haciendo clic o arrastrando sobre el mapa (o con las flechas); en el modo **Recorrido** caminas con las flechas (pulsa «Ir al mapa del juego» para darle el foco) y oyes lo que oiría el visitante.
+- *Archivo de prueba*: elige o suelta un archivo real, pruébalo y pulsa **Usar en lo seleccionado**. Vive en la memoria de la pestaña; solo entra al proyecto si guardas un ajuste que lo usa.
+- *Presets*: el volumen general, `maxVoices` y el efecto de cada acción. Probar un efecto de insignia solo suena; **no** concede ninguna insignia.
+- Ajusta volumen, velocidad, modo, fundidos y alcance: los cambios se oyen en vivo, también con una prueba sonando. **Solo** calla la música y los demás; **Detener todo** calla también el ambiente hasta «Reanudar el ambiente». El diagnóstico muestra por qué algo suena bajo o no suena.
+
+**Borrador, sesión y proyecto.** Un cambio es un **borrador** (etiqueta «sin guardar» y contador en el botón): vive en la pestaña. **Restablecer** lo descarta. **Aplicar a esta sesión** lo aplica al juego en marcha (también un emisor nuevo) sin guardarlo: al recargar se pierde. **Comprobar** lo valida en el servidor sin escribir. **Guardar en el proyecto** lo escribe de forma definitiva.
+
+**Guardar desde el juego.** *Guardar en el proyecto* modifica solo lo necesario: el objeto de Tiled del emisor y `maps.json` (un emisor deja `bitacora.json` y `assets.json` intactos), o la región `audio.sfx` de `bitacora.json` (presets y ajustes generales); si el archivo es nuevo, también lo copia a `public/assets/audio/sfx/` y lo registra en `assets.json`. Valida el resultado entero antes de escribir, guarda copia de cada archivo en `tools/tiled/backups/`, y si algo falla recupera todo. Tras guardar, la página se recarga una vez. **Si tienes ese mapa abierto en Tiled, Tiled avisará de que el archivo cambió: acepta recargarlo** (si no, tu siguiente guardado desde Tiled sobrescribiría el cambio). Si cambias el mismo archivo en Tiled y en el laboratorio a la vez, el laboratorio detecta el conflicto, **no escribe nada** y conserva tu borrador: recarga la página y vuelve a aplicarlo.
+
+**Exportar e importar ajustes.** *Exportar ajustes* baja un `.json` con tus cambios y los archivos nuevos dentro; en otra copia del proyecto: `npm run audio-lab:import -- ajustes.json` (con `--dry-run` solo valida).
+
+**Si algo no suena.** Mira el diagnóstico del panel: «bloqueado por el navegador» (pulsa en la página o «Activar audio»), «silenciado» (botón Sonido), «suspendido por reading» (hay una lectura abierta), un error de carga con el ID del recurso, o «fuera de alcance». El juego se recorre y se lee igual aunque un sonido falle.
 
 ## Comprobar que Tiled abre los archivos (opcional)
 

@@ -148,6 +148,15 @@ export function validateAssetManifest(data: unknown): ValidationResult<AssetMani
       if (!a.credit) issues.push({ path: `${at}.credit`, message: "una pista de música necesita credit (título, autor, licencia y si está verificada)" });
       else if (a.credit.verified && !a.credit.attribution) issues.push({ path: `${at}.credit.attribution`, message: "una atribución verificada necesita su texto de atribución" });
     }
+    if (a.kind === "sfx") {
+      // Un efecto de sonido (SPEC 6.5): corto, con su duración, formato, tamaño y huella; sin metadata gráfica.
+      if (a.type !== "audio") issues.push({ path: `${at}.type`, message: "un efecto de sonido debe ser de type «audio»" });
+      if (a.category !== "audio") issues.push({ path: `${at}.category`, message: "un efecto de sonido debe ser de category «audio»" });
+      if (a.durationSeconds === undefined || !(a.durationSeconds > 0)) issues.push({ path: `${at}.durationSeconds`, message: "un efecto de sonido necesita durationSeconds mayor que 0" });
+      if (!a.format) issues.push({ path: `${at}.format`, message: "un efecto de sonido necesita format (wav, mp3, ogg o m4a)" });
+      if (a.sizeBytes === undefined) issues.push({ path: `${at}.sizeBytes`, message: "un efecto de sonido necesita sizeBytes" });
+      if (!a.sha256) issues.push({ path: `${at}.sha256`, message: "un efecto de sonido necesita sha256" });
+    }
     if (a.motion && (!a.origin || !a.recommendedScale)) {
       issues.push({ path: at, message: "un asset con motion necesita origin y recommendedScale" });
     }

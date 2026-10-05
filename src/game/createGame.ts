@@ -1,5 +1,8 @@
 import Phaser from "phaser";
 import type { AssetRegistry } from "../config/assetRegistry";
+import { createGameSfxBackend } from "../audio/PhaserSfxBackend";
+import type { SfxService } from "../audio/SfxService";
+import type { SfxBackend } from "../audio/sfxTypes";
 import type { BitacoraConfig, Point } from "../config/types";
 import type { GameBridge } from "./bridge/GameBridge";
 import { EXPLORATION_SCENE, ExplorationScene } from "./scenes/ExplorationScene";
@@ -16,6 +19,8 @@ export interface GameDeps {
   initial?: { zoneId: string; position: Point };
   /** prefers-reduced-motion: sin sacudidas, destellos ni seguimiento suavizado (SPEC 14). */
   reducedMotion: boolean;
+  /** Efectos de sonido (SPEC 6.5): uno por juego; el juego le entrega su Sound Manager y la posición del oyente. Opcional. */
+  sfx?: SfxService | null;
 }
 
 /** Clave del DataManager global de Phaser donde las escenas encuentran sus dependencias. */
@@ -54,11 +59,29 @@ export function createGame(parent: HTMLElement, input: Omit<GameDeps, "celebrate
   });
   game.events.once(Phaser.Core.Events.DESTROY, off);
 
+  // Los efectos de sonido usan el contexto de audio del juego: se conectan cuando arranca y se sueltan al destruirlo (con sus voces y su caché).
+  const sfx = deps.sfx;
+  if (sfx) {
+    // Phaser destruye el juego de forma diferida: en desarrollo (StrictMode) el segundo juego ya se conectó cuando llega el aviso del
+    // primero. Por eso cada juego suelta SU reproductor y no el que esté conectado en ese momento.
+    let backend: SfxBackend | null = null;
+    const attach = () => {
+      backend = createGameSfxBackend(game);
+      sfx.attach(backend);
+    };
+    if (game.isBooted) attach();
+    else game.events.once(Phaser.Core.Events.BOOT, attach);
+    game.events.once(Phaser.Core.Events.DESTROY, () => {
+      if (backend) sfx.detach(backend);
+    });
+  }
+
   // Solo desarrollo: lo usa el harness de /phaser-playtest y permite inspeccionar escenas y el puente.
   if (import.meta.env.DEV) {
-    const w = window as unknown as { __PHASER_GAME__?: Phaser.Game; __BITACORA_BRIDGE__?: GameBridge };
+    const w = window as unknown as { __PHASER_GAME__?: Phaser.Game; __BITACORA_BRIDGE__?: GameBridge; __BITACORA_SFX__?: SfxService | null };
     w.__PHASER_GAME__ = game;
     w.__BITACORA_BRIDGE__ = deps.bridge;
+    w.__BITACORA_SFX__ = deps.sfx ?? null;
   }
   return game;
 }

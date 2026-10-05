@@ -1,5 +1,6 @@
-import type { AmbientEffect, AssetManifest, BitacoraConfig, Critter, Placement } from "../../../src/config/types";
+import type { AmbientEffect, AssetManifest, BitacoraConfig, Critter, MapSound, Placement } from "../../../src/config/types";
 import { geometryOf, ROLE_CLASS, tileKey, type Role } from "./catalog";
+import { soundProperties, soundShape } from "./sounds";
 import type { TiledImageLayer, TiledMap, TiledObject, TiledObjectLayer, TiledProperty } from "./types";
 import { encodeGid, prop, tidy } from "./util";
 
@@ -199,6 +200,13 @@ export function exportZone(ctx: ExportContext, zoneId: string): TiledMap {
     }),
   ];
 
+  // -- Sonidos ---------------------------------------------------------------------------------------------------------
+  const soundObjects: TiledObject[] = Object.entries(zone.sounds ?? {}).map(([soundId, s]) => soundObject(soundId, s));
+  function soundObject(soundId: string, s: MapSound): TiledObject {
+    entryOf(s.assetId, `maps.${zoneId}.sounds.${soundId}`);
+    return object({ name: soundId, ...soundShape(s), properties: soundProperties(soundId, s) });
+  }
+
   // -- Colisiones ------------------------------------------------------------------------------------------------------
   const collisions: TiledObject[] = zone.obstacles.map((o) =>
     o.type === "rect"
@@ -214,6 +222,7 @@ export function exportZone(ctx: ExportContext, zoneId: string): TiledMap {
     objectLayer("estaciones", stations),
     ...above,
     objectLayer("puntos", points),
+    objectLayer("sonidos", soundObjects),
     objectLayer("colisiones", collisions, [prop("defaultClass", "Collision")]),
   ];
 

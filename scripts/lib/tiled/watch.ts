@@ -1,5 +1,6 @@
 import { existsSync, readdirSync, statSync, watch, type FSWatcher } from "node:fs";
 import { dirname, join } from "node:path";
+import { isSaveLocked } from "../audio-lab/lock";
 import { runImport, type ImportReport, type Paths } from "./run";
 
 export interface WatchOptions {
@@ -15,6 +16,8 @@ export interface WatchOptions {
 }
 
 const WATCHED = /\.(tmj|tsj|tiled-project)$/;
+/** Cuánto se espera, como máximo, a que termine un guardado del laboratorio de sonidos antes de importar de todos modos. */
+const SAVE_WAIT_MS = 30_000;
 
 /** Firma de los archivos vigilados: cambia mientras alguien (Tiled) sigue escribiéndolos. */
 function signature(paths: Paths): string {
@@ -50,6 +53,9 @@ export function startWatch(paths: Paths, options: WatchOptions = {}): { stop(): 
   let lastSignature = signature(paths);
 
   const once = async (): Promise<ImportReport> => {
+    // Un guardado del laboratorio de sonidos escribe varios archivos a la vez: no se importa una transacción a medias. Al terminar,
+    // los archivos ya coinciden con maps.json y la importación no encuentra nada que cambiar.
+    for (let waited = 0; isSaveLocked(paths) && waited < SAVE_WAIT_MS; waited += 100) await new Promise((r) => setTimeout(r, 100));
     // Espera a que el guardado termine: la firma de los archivos debe repetirse.
     let previous = signature(paths);
     for (let i = 0; i < 20; i++) {

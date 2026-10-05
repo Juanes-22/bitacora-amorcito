@@ -87,6 +87,8 @@ export class MusicPlayer {
   private suspended = false;
   private master = 0;
   private masterTarget = 0;
+  /** Factor de mezcla de la sesión (el laboratorio de sonidos baja la música para oír un efecto): no es el silencio ni se guarda. */
+  private sessionGain = 1;
   private current = 0;
   private timer: ReturnType<typeof setInterval> | undefined;
   private lastTick = 0;
@@ -132,6 +134,15 @@ export class MusicPlayer {
     }
   }
 
+  /** Multiplica el volumen de la música (0..1) sin silenciarla ni tocar la lista: es una mezcla temporal, no una preferencia. */
+  setSessionGain(gain: number): void {
+    this.sessionGain = clamp01(gain);
+  }
+
+  get mixGain(): number {
+    return this.sessionGain;
+  }
+
   /** Apaga o enciende; si el navegador había bloqueado la reproducción, el gesto reintenta en lugar de apagar. */
   toggle(): void {
     if (this.state.status === "blocked" && !this.state.muted) {
@@ -174,7 +185,7 @@ export class MusicPlayer {
       const played = slot.audio.currentTime * 1000;
       const remaining = Number.isFinite(slot.audio.duration) ? slot.audio.duration * 1000 - played : Infinity;
       const gain = crossfadeMs > 0 ? Math.min(clamp01(played / crossfadeMs), clamp01(remaining / crossfadeMs)) : 1;
-      slot.audio.volume = clamp01(gain * volume * this.master);
+      slot.audio.volume = clamp01(gain * volume * this.master * this.sessionGain);
     }
     if (this.masterTarget === 0 && this.master === 0 && !this.suspended) {
       this.pauseAll();

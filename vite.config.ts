@@ -2,6 +2,10 @@ import { resolve } from "node:path";
 import react from "@vitejs/plugin-react";
 import type { Plugin } from "vite";
 import { defineConfig } from "vitest/config";
+import { ReloadGate } from "./scripts/vite/reloadGate";
+
+/** Una sola recarga del navegador por tanda de cambios en la configuración (también la de un guardado del laboratorio de sonidos). */
+const reloadGate = new ReloadGate();
 
 /**
  * En desarrollo, recarga la página cuando cambia `public/config/bitacora.json` (el contenido) o `public/config/maps.json` (la geometría;
@@ -13,10 +17,12 @@ function reloadOnConfigChange(): Plugin {
     name: "bitacora-config-reload",
     apply: "serve",
     configureServer(server) {
-      const files = ["bitacora.json", "maps.json"].map((name) => resolve(server.config.root, "public/config", name));
+      // También `assets.json`: el laboratorio de sonidos incorpora recursos nuevos al catálogo.
+      const files = ["config/bitacora.json", "config/maps.json", "assets/assets.json"].map((name) => resolve(server.config.root, "public", name));
       for (const file of files) server.watcher.add(file);
+      reloadGate.attach(() => server.ws.send({ type: "full-reload", path: "*" }));
       server.watcher.on("change", (file) => {
-        if (files.includes(resolve(file))) server.ws.send({ type: "full-reload", path: "*" });
+        if (files.includes(resolve(file))) reloadGate.request();
       });
     },
   };
@@ -42,9 +48,25 @@ function tiledImportOnSave(): Plugin {
   };
 }
 
+/**
+ * Solo en desarrollo: las rutas con las que el laboratorio de sonidos (`?audioLab=1`) guarda en el proyecto (`scripts/vite/audioLab.ts`).
+ * No actúa en las pruebas ni en el build, y las rutas no existen en `dist`.
+ */
+function audioLabSave(): Plugin {
+  return {
+    name: "bitacora-audio-lab",
+    apply: "serve",
+    async configureServer(server) {
+      if (process.env.VITEST) return;
+      const { setupAudioLab } = await import("./scripts/vite/audioLab");
+      setupAudioLab(server, { gate: reloadGate });
+    },
+  };
+}
+
 export default defineConfig({
   base: "./",
-  plugins: [react(), reloadOnConfigChange(), tiledImportOnSave()],
+  plugins: [react(), reloadOnConfigChange(), tiledImportOnSave(), audioLabSave()],
   build: {
     outDir: "dist",
     // El código compilado no debe compartir carpeta con public/assets/ (assets.json y sus imágenes).

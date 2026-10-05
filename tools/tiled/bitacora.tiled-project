@@ -87,6 +87,34 @@
             "valuesAsFlags": false
         },
         {
+            "id": 19,
+            "name": "SoundAsset",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "audio.sfx.test-river",
+                "audio.sfx.test-wind",
+                "audio.sfx.test-birds",
+                "audio.sfx.test-ui-open",
+                "audio.sfx.test-ui-confirm",
+                "audio.sfx.test-badge",
+                "audio.sfx.test-portal"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "id": 20,
+            "name": "SoundPlayback",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "loop",
+                "interval",
+                "enter"
+            ],
+            "valuesAsFlags": false
+        },
+        {
             "color": "#ffe0a03c",
             "drawFill": true,
             "id": 7,
@@ -417,6 +445,169 @@
             "type": "class",
             "useAs": [
                 "layer"
+            ]
+        },
+        {
+            "color": "#ff2f9e8f",
+            "drawFill": true,
+            "id": 21,
+            "members": [
+                {
+                    "name": "soundId",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "label",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "assetId",
+                    "propertyType": "SoundAsset",
+                    "type": "string",
+                    "value": "audio.sfx.test-river"
+                },
+                {
+                    "name": "enabled",
+                    "type": "bool",
+                    "value": true
+                },
+                {
+                    "name": "volume",
+                    "type": "float",
+                    "value": 0.3
+                },
+                {
+                    "name": "rate",
+                    "type": "float",
+                    "value": 1
+                },
+                {
+                    "name": "playback",
+                    "propertyType": "SoundPlayback",
+                    "type": "string",
+                    "value": "loop"
+                },
+                {
+                    "name": "fadeInMs",
+                    "type": "int",
+                    "value": 250
+                },
+                {
+                    "name": "fadeOutMs",
+                    "type": "int",
+                    "value": 400
+                },
+                {
+                    "name": "intervalMinMs",
+                    "type": "int",
+                    "value": 12000
+                },
+                {
+                    "name": "intervalMaxMs",
+                    "type": "int",
+                    "value": 28000
+                },
+                {
+                    "name": "cooldownMs",
+                    "type": "int",
+                    "value": 1500
+                },
+                {
+                    "name": "innerRadius",
+                    "type": "float",
+                    "value": 50
+                },
+                {
+                    "name": "radius",
+                    "type": "float",
+                    "value": 260
+                }
+            ],
+            "name": "SoundEmitter",
+            "type": "class",
+            "useAs": [
+                "object"
+            ]
+        },
+        {
+            "color": "#ff7d5fd1",
+            "drawFill": true,
+            "id": 22,
+            "members": [
+                {
+                    "name": "soundId",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "label",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "assetId",
+                    "propertyType": "SoundAsset",
+                    "type": "string",
+                    "value": "audio.sfx.test-river"
+                },
+                {
+                    "name": "enabled",
+                    "type": "bool",
+                    "value": true
+                },
+                {
+                    "name": "volume",
+                    "type": "float",
+                    "value": 0.3
+                },
+                {
+                    "name": "rate",
+                    "type": "float",
+                    "value": 1
+                },
+                {
+                    "name": "playback",
+                    "propertyType": "SoundPlayback",
+                    "type": "string",
+                    "value": "loop"
+                },
+                {
+                    "name": "fadeInMs",
+                    "type": "int",
+                    "value": 250
+                },
+                {
+                    "name": "fadeOutMs",
+                    "type": "int",
+                    "value": 400
+                },
+                {
+                    "name": "intervalMinMs",
+                    "type": "int",
+                    "value": 12000
+                },
+                {
+                    "name": "intervalMaxMs",
+                    "type": "int",
+                    "value": 28000
+                },
+                {
+                    "name": "cooldownMs",
+                    "type": "int",
+                    "value": 1500
+                },
+                {
+                    "name": "edgeFadePx",
+                    "type": "float",
+                    "value": 80
+                }
+            ],
+            "name": "SoundArea",
+            "type": "class",
+            "useAs": [
+                "object"
             ]
         }
     ]

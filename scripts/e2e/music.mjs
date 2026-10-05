@@ -17,14 +17,18 @@ const spy = () => {
   window.Audio.prototype = Original.prototype;
 };
 const audios = (page) => page.evaluate(() => window.__audios.map((a) => ({ src: a.src.split("/").pop(), paused: a.paused, t: a.currentTime, d: a.duration, volume: a.volume, hasSrc: a.hasAttribute("src") })));
-const label = (page) => page.getByRole("button", { name: /música/i }).first();
+// El botón «Sonido» silencia el juego completo (música y efectos, SPEC 6.4 y 6.5): con efectos activos habla de «sonido» y sin ellos, de «música».
+const sfxOn = configJson.audio.sfx?.active === true;
+const MUTE = sfxOn ? configJson.ui.labels.soundMute : configJson.ui.labels.musicMute;
+const UNMUTE = sfxOn ? configJson.ui.labels.soundUnmute : configJson.ui.labels.musicUnmute;
+const label = (page) => page.locator(".hud__music");
 
 try {
   // ---- Inicio, apagado y encendido, continuidad entre zonas, rotación ---------------------------------------
   {
     const requests = [];
     const t = await open({ init: spy });
-    t.page.on("request", (r) => /\/audio\//.test(r.url()) && requests.push(r.url().split("/").pop()));
+    t.page.on("request", (r) => /\/audio\/music\//.test(r.url()) && requests.push(r.url().split("/").pop()));
     await t.page.waitForTimeout(1500);
     check("AC-50: antes de pulsar «Comenzar» no hay audio ni se piden las pistas", (await audios(t.page)).length === 0 && requests.length === 0, JSON.stringify(requests));
     check("AC-50: la portada no muestra créditos de la música", !(await t.page.locator(".cover").innerText()).match(/Matthew Pablo|CC BY|Beyond The Clouds/i));
@@ -38,15 +42,15 @@ try {
 
     const button = label(t.page);
     const box = await button.boundingBox();
-    check("AC-51: el botón de música está en la cabecera, con etiqueta «Silenciar música» y mide ≥ 44 px", (await button.getAttribute("aria-label")) === configJson.ui.labels.musicMute && box.width >= 43.5 && box.height >= 43.5, JSON.stringify(box));
+    check("AC-51: el botón de música está en la cabecera, con la etiqueta del botón «Sonido» y mide ≥ 44 px", (await button.getAttribute("aria-label")) === MUTE && box.width >= 43.5 && box.height >= 43.5, JSON.stringify(box));
 
     await button.focus();
     await t.page.keyboard.press("Enter");
     await t.page.waitForTimeout(1000);
     const muted = await audios(t.page);
-    check("AC-51: pulsar el botón (con teclado) apaga la música y cambia la etiqueta a «Activar música»", muted[0].paused && (await button.getAttribute("aria-label")) === configJson.ui.labels.musicUnmute, JSON.stringify(muted));
+    check("AC-51: pulsar el botón (con teclado) apaga la música y cambia la etiqueta a «Activar sonido»", muted[0].paused && (await button.getAttribute("aria-label")) === UNMUTE, JSON.stringify(muted));
     const stored = await t.stored();
-    check("AC-51: la preferencia se guarda aparte del progreso", JSON.parse(stored["bitacora:preferences:v1"]).musicMuted === true && Object.keys(stored).some((k) => k.startsWith("bitacora:progress")) !== undefined, JSON.stringify(Object.keys(stored)));
+    check("AC-51: la preferencia se guarda aparte del progreso", (({ soundMuted, musicMuted }) => soundMuted === true && musicMuted === true)(JSON.parse(stored["bitacora:preferences:v1"])) && Object.keys(stored).some((k) => k.startsWith("bitacora:progress")) !== undefined, JSON.stringify(Object.keys(stored)));
 
     await t.page.keyboard.press("Enter");
     await t.page.waitForTimeout(1500);
@@ -105,7 +109,7 @@ try {
     await t.start();
     await t.page.waitForTimeout(1500);
     const a = await audios(t.page);
-    check("AC-51: con la música apagada en una visita anterior, «Comenzar» no la hace sonar", a.length === 0 && (await label(t.page).getAttribute("aria-label")) === configJson.ui.labels.musicUnmute, JSON.stringify(a));
+    check("AC-51: con la música apagada en una visita anterior, «Comenzar» no la hace sonar", a.length === 0 && (await label(t.page).getAttribute("aria-label")) === UNMUTE, JSON.stringify(a));
     await label(t.page).click();
     await t.page.waitForTimeout(1500);
     const on = await audios(t.page);
@@ -126,12 +130,24 @@ try {
     await t.close();
   }
 
-  // ---- Música desactivada por configuración: no hay botón ni audio ------------------------------------------
+  // ---- Música desactivada por configuración: sin música ni efectos no hay botón; con efectos, el botón «Sonido» sigue ----------
   {
+    const t = await open({ init: spy, edit: (c) => { c.audio.music.active = false; if (c.audio.sfx) c.audio.sfx.active = false; } });
+    await t.start();
+    await t.page.waitForTimeout(1000);
+    check("con la música y los efectos desactivados no hay audio ni botón de sonido", (await audios(t.page)).length === 0 && (await label(t.page).count()) === 0);
+    await t.close();
+  }
+  if (sfxOn) {
     const t = await open({ init: spy, edit: (c) => { c.audio.music.active = false; } });
     await t.start();
     await t.page.waitForTimeout(1000);
-    check("con audio.music.active = false no hay audio ni botón de música", (await audios(t.page)).length === 0 && (await label(t.page).count()) === 0);
+    const btn = label(t.page);
+    check("con la música desactivada pero con efectos, el audio de música no suena y el botón «Sonido» existe", (await audios(t.page)).length === 0 && (await btn.count()) === 1 && (await btn.getAttribute("aria-label")) === MUTE);
+    await btn.click();
+    await t.page.waitForTimeout(300);
+    const stored = JSON.parse((await t.stored())["bitacora:preferences:v1"]);
+    check("y silenciarlo guarda la preferencia (soundMuted) y cambia su etiqueta", stored.soundMuted === true && (await btn.getAttribute("aria-label")) === UNMUTE, JSON.stringify(stored));
     await t.close();
   }
 

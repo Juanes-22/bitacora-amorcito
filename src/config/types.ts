@@ -1,6 +1,8 @@
 // Tipos de los dos contratos externos. Se contrastan con bitacora.schema.json y
 // assets.schema.json en src/tests/config.test.ts: no sustituyen a la validación en runtime.
 
+import type { SfxEventId } from "./sounds";
+
 export type AppMode = "demo" | "final";
 export type SectionId = "learning" | "reflection" | "lived";
 export type DialogueEvent = "open" | "locked" | "completed" | "reward";
@@ -234,6 +236,38 @@ export type Critter =
   | { type: "wander"; assetId: string; position: Point; radius: number; scale?: number; flipX?: boolean }
   | { type: "family"; assetId: string; chickAssetId: string; chicks: number; position: Point; radius: number; scale?: number; chickScale?: number };
 
+/** Cómo suena un sonido del mapa (SPEC 6.5): continuo, repetido con esperas aleatorias, o una vez al entrar en su zona. */
+export type SoundPlayback =
+  | { mode: "loop" }
+  | { mode: "interval"; minMs: number; maxMs: number }
+  | { mode: "enter"; cooldownMs: number };
+
+interface MapSoundBase {
+  /** Nombre legible (el laboratorio y los mensajes de error). */
+  label: string;
+  /** Recurso de `assets.json` de `kind` «sfx». */
+  assetId: string;
+  /** Apagarlo sin borrarlo: en el recorrido un emisor deshabilitado nunca suena. */
+  enabled: boolean;
+  /** 0..1 */
+  volume: number;
+  /** 0.5..2; 1 es la velocidad original. */
+  rate: number;
+  fadeInMs: number;
+  fadeOutMs: number;
+  playback: SoundPlayback;
+}
+
+/**
+ * Un sonido colocado en el mapa, con su alcance: un punto (volumen completo hasta `innerRadius` y silencio desde `radius`) o un
+ * rectángulo (completo dentro y con caída de `edgeFadePx` fuera). La clave del registro es su `soundId` dentro de la zona.
+ */
+export type MapSound = MapSoundBase &
+  (
+    | { shape: "point"; position: Point; innerRadius: number; radius: number }
+    | { shape: "rect"; area: { x: number; y: number; width: number; height: number }; edgeFadePx: number }
+  );
+
 export interface MapZone {
   label: string;
   width: number;
@@ -248,6 +282,8 @@ export interface MapZone {
   /** Gallinas y pollitos que andan por la zona (opcional, SPEC 3.3). */
   critters?: Critter[];
   portals: Record<string, Portal>;
+  /** Sonidos del mapa (opcional, SPEC 6.5): los coloca Tiled. Omitido si la zona nunca tuvo; `{}` si se vació a propósito. */
+  sounds?: Record<string, MapSound>;
 }
 
 export type AnimationName = "idle" | "walkUp" | "walkDown" | "walkLeft" | "walkRight" | "celebrate";
@@ -308,6 +344,8 @@ export interface UiConfig {
     finalReflectionPending?: string; resetConfirmTitle: string; resetConfirmText: string;
     resetConfirm: string; cancel: string; preparationTemplate: string;
     musicMute: string; musicUnmute: string;
+    /** El botón «Sonido» cuando hay efectos de sonido (SPEC 6.5): silenciar/activar todo el audio y reintentar si el navegador lo bloqueó. Sin ellos se usan los de la música. */
+    soundMute?: string; soundUnmute?: string; soundActivate?: string;
     stateLocked: string; stateAvailable: string; stateCompleted: string;
     tapExplore: string; tapTravel: string;
     jerryAction: string; playerName: string; nextBadge: string;
@@ -349,7 +387,24 @@ export interface GameplayConfig {
   companion: { mode: "separate" | "included"; actor?: ActorSpec; followDistance: number };
 }
 
-/** Música de fondo (SPEC 6.4): qué pistas, en qué orden y cómo suenan. Las rutas viven en assets.json. */
+/** Un efecto de una sola vez asociado a una acción del juego (SPEC 6.5). */
+export interface OneShotPreset {
+  assetId: string;
+  volume: number;
+  rate: number;
+}
+
+/** Efectos de sonido (SPEC 6.5): el volumen general, el límite de voces y qué suena en cada acción. Los emisores del mapa viven en `maps.json`. */
+export interface SfxConfig {
+  active: boolean;
+  /** Volumen general de los efectos, 0..1. */
+  volume: number;
+  /** Cuántos efectos pueden sonar a la vez. */
+  maxVoices: number;
+  events?: Partial<Record<SfxEventId, OneShotPreset>>;
+}
+
+/** Música de fondo (SPEC 6.4) y efectos de sonido (SPEC 6.5). Las rutas viven en assets.json. */
 export interface AudioConfig {
   music: {
     active: boolean;
@@ -358,6 +413,7 @@ export interface AudioConfig {
     volume: number;
     crossfadeMs: number;
   };
+  sfx?: SfxConfig;
 }
 
 export interface BitacoraConfig {

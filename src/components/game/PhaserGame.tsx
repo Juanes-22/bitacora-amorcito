@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type Ref, type RefObject } from "react";
 import type Phaser from "phaser";
+import type { SfxService } from "../../audio/SfxService";
 import type { AssetRegistry } from "../../config/assetRegistry";
 import type { BitacoraConfig, Point } from "../../config/types";
 import { createGame } from "../../game/createGame";
@@ -13,13 +14,15 @@ interface Props {
   initial?: { zoneId: string; position: Point };
   inert?: boolean;
   hostRef?: Ref<HTMLDivElement>;
+  /** Efectos de sonido del juego (SPEC 6.5). Debe ser estable: cambiar su identidad recrearía el juego. */
+  sfx?: SfxService | null;
 }
 
 /**
  * Aloja la única instancia de Phaser.Game. Solo se recrea si cambian la configuración, el registro o el
  * puente (es decir, tras una recarga), nunca por progreso, pestañas ni insignias (SPEC 11.4).
  */
-export function PhaserGame({ config, assets, bridge, initial, inert, hostRef }: Props) {
+export function PhaserGame({ config, assets, bridge, initial, inert, hostRef, sfx }: Props) {
   const initialRef = useRef(initial); // solo el primer arranque: no debe recrear el juego si cambia el progreso
   const containerRef = useRef<HTMLDivElement | null>(null);
   // Avance de la carga de lo esencial de la zona (0..1); `null` cuando el mapa ya está listo.
@@ -38,7 +41,7 @@ export function PhaserGame({ config, assets, bridge, initial, inert, hostRef }: 
     const container = containerRef.current;
     if (!container) return;
     const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
-    const game: Phaser.Game = createGame(container, { config, assets, bridge, reducedMotion, initial: initialRef.current });
+    const game: Phaser.Game = createGame(container, { config, assets, bridge, reducedMotion, initial: initialRef.current, sfx });
     // Un clic en el mapa le da el foco: el teclado del juego solo escucha ahí.
     const focus = () => container.focus({ preventScroll: true });
     container.addEventListener("pointerdown", focus);
@@ -46,7 +49,7 @@ export function PhaserGame({ config, assets, bridge, initial, inert, hostRef }: 
       container.removeEventListener("pointerdown", focus);
       game.destroy(true);
     };
-  }, [config, assets, bridge]);
+  }, [config, assets, bridge, sfx]);
 
   const label = config.ui.labels.loadingMap ?? "Cargando el mapa…";
   return (

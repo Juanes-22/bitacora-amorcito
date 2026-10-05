@@ -68,6 +68,22 @@ export function topLevelValueRange(text: string, key: string): { start: number; 
   return null;
 }
 
+/**
+ * Rango del valor al final de una ruta de claves de objeto (`["audio", "sfx"]`, `["assets"]`). Como `topLevelValueRange`, recorre el
+ * texto respetando cadenas y anidación; `null` si la ruta no existe (o pasa por algo que no es un objeto).
+ */
+export function valueRangeAt(text: string, path: string[]): { start: number; end: number } | null {
+  let range: { start: number; end: number } = { start: 0, end: text.length };
+  for (const key of path) {
+    const scope = text.slice(range.start, range.end);
+    if (!scope.startsWith("{")) return null;
+    const found = topLevelValueRange(scope, key);
+    if (!found) return null;
+    range = { start: range.start + found.start, end: range.start + found.end };
+  }
+  return path.length === 0 ? null : range;
+}
+
 /** Fin del valor JSON que empieza en `start`. */
 function valueEnd(text: string, start: number): number {
   const c = text[start];

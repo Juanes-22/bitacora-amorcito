@@ -3,6 +3,8 @@ import { isAdmissible, stationStatesOf, summarize, unapprovedIds } from "../doma
 import type { BitacoraConfig, DialogueEvent, SectionId } from "../config/types";
 import type { GameBridge } from "../game/bridge/GameBridge";
 import type { NearbyTarget } from "../game/bridge/events";
+import type { SfxService } from "../audio/SfxService";
+import { ControlReasons } from "./controlReasons";
 import type { ProgressStore } from "./progressStore";
 
 /** Lo que muestra la ventana de lectura (SPEC 12.7): mensaje → lectura → recompensa, o solo un mensaje. */
@@ -68,7 +70,14 @@ export function useProgressController(
   config: BitacoraConfig | null,
   store: ProgressStore | null,
   hostRef: RefObject<HTMLElement | null>,
+  extras: {
+    /** Efectos de sonido de las acciones del juego (SPEC 6.5). Sin él el juego es el de siempre. */
+    sfx?: SfxService | null;
+    /** El propietario compartido de los motivos de pausa (el laboratorio de sonidos añade el suyo). Por defecto, uno propio. */
+    controls?: ControlReasons;
+  } = {},
 ): ProgressController {
+  const { sfx, controls } = extras;
   const [nearby, setNearby] = useState<NearbyTarget | null>(null);
   const [reading, setReading] = useState<ReadingState | null>(null);
   const [overlay, setOverlay] = useState<OverlayState | null>(null);
@@ -77,7 +86,7 @@ export function useProgressController(
 
   useEffect(() => {
     if (!bridge || !config || !store) return;
-    const reasons = new Set<string>();
+    const reasons = controls ?? new ControlReasons(bridge);
     let zoneId = store.getState().currentZoneId;
     let version = 0;
     let lastStates = "";
@@ -98,7 +107,7 @@ export function useProgressController(
       current = next;
       setReading(next);
     };
-    const publishControls = () => bridge.emit("app:controls", { reasons: [...reasons] });
+    const publishControls = () => reasons.publish();
     const sync = (force = false) => {
       const stations = stationStatesOf(config, store.getState());
       const key = JSON.stringify(stations);
@@ -158,6 +167,7 @@ export function useProgressController(
         return { accepted: false, reason: "away" };
       }
       // Con la Bitácora de aprendizajes (su lector), se entra directo a la lectura: sin ventana de apertura ni de relectura.
+      sfx?.playEvent("ui.open"); // la apertura real de una lectura (un mensaje de «bloqueado», «pendiente» o «lejos» no cuenta)
       if (config.ui.journalPanel && config.ui.badgePanel) {
         open({ kind: "reading", learningId, active: resumeSection(learningId) });
         return { accepted: true };
@@ -197,6 +207,7 @@ export function useProgressController(
         const target = portal ? config.maps[portal.targetZoneId] : undefined;
         if (!portal || !target?.spawns[portal.targetSpawnId]) return resolve(requestId, false, "invalid-portal");
         resolve(requestId, true);
+        sfx?.playEvent("portal.travel");
         stationHere = null;
         reasons.add("transition");
         publishControls();
@@ -221,7 +232,9 @@ export function useProgressController(
         show({ ...current, active: section });
       },
       markRead(section) {
-        if (current?.kind === "reading") store.markSection(current.learningId, section);
+        if (current?.kind !== "reading") return;
+        const result = store.markSection(current.learningId, section);
+        if (result.ok && result.changed) sfx?.playEvent("ui.confirm"); // solo cuando de verdad se marca algo nuevo
       },
       claimBadge() {
         if (current?.kind !== "reading") return;
@@ -230,6 +243,9 @@ export function useProgressController(
         if (result.ok && result.changed) {
           const completedAt = result.state.entries[current.learningId].completedAt;
           celebration = { effectId: `${current.learningId}@${completedAt}`, learningId: current.learningId };
+          // El aviso de recompensa suena AQUÍ, al confirmarse la transición y abrirse la ventana de recompensa (no al celebrar después, que
+          // duplicaría el sonido). Una sola vez por transacción: Jerry y Rocky, que se conceden con la última, no añaden otro.
+          sfx?.playEvent("badge.earned", { effectId: celebration.effectId });
           show({ kind: "reward", learningId: current.learningId });
         }
       },
@@ -277,10 +293,14 @@ export function useProgressController(
 
     overlayRef.current = {
       openCollection() {
-        if (!current && !currentOverlay) openOverlay({ kind: "collection", completion: false });
+        if (current || currentOverlay) return;
+        sfx?.playEvent("ui.open");
+        openOverlay({ kind: "collection", completion: false });
       },
       openList() {
-        if (!current && !currentOverlay) openOverlay({ kind: "list" });
+        if (current || currentOverlay) return;
+        sfx?.playEvent("ui.open");
+        openOverlay({ kind: "list" });
       },
       /** Abre un aprendizaje desde una ventana de la Bitácora: la lista o el detalle de una insignia («Ver aprendizaje»). */
       openFromList(learningId) {
@@ -307,6 +327,7 @@ export function useProgressController(
       confirmReset() {
         if (currentOverlay?.kind !== "confirm-reset") return;
         // Reinicia el avance de ESTA bitácora y modo, la escena, los controles y las celebraciones pendientes.
+        sfx?.playEvent("ui.confirm");
         clearTimeout(completionTimer);
         celebration = null;
         store.reset();
@@ -334,7 +355,7 @@ export function useProgressController(
       setReading(null);
       setOverlay(null);
     };
-  }, [bridge, config, store, hostRef]);
+  }, [bridge, config, store, hostRef, sfx, controls]);
 
   const actions: ReadingActions = {
     continueReading: useCallback(() => actionsRef.current.continueReading(), []),

@@ -13,8 +13,14 @@
     "validate:release": "tsx scripts/validate-config.ts --release",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.node.json --noEmit",
     "test": "vitest run",
-    "test:e2e": "node scripts/e2e/exploration.mjs && node scripts/e2e/reading.mjs && node scripts/e2e/journey.mjs && node scripts/e2e/scale.mjs && node scripts/e2e/ambient.mjs && node scripts/e2e/music.mjs && node scripts/e2e/mobile.mjs && node scripts/e2e/robustness.mjs && node scripts/e2e/idle.mjs && node scripts/e2e/station-effects.mjs && node scripts/e2e/avatar.mjs && node scripts/e2e/identity.mjs && node scripts/e2e/critters.mjs",
-    "build": "npm run validate:config && npm run typecheck && vite build",
+    "test:e2e": "node scripts/e2e/exploration.mjs && node scripts/e2e/reading.mjs && node scripts/e2e/journey.mjs && node scripts/e2e/scale.mjs && node scripts/e2e/ambient.mjs && node scripts/e2e/music.mjs && node scripts/e2e/mobile.mjs && node scripts/e2e/robustness.mjs && node scripts/e2e/idle.mjs && node scripts/e2e/station-effects.mjs && node scripts/e2e/avatar.mjs && node scripts/e2e/identity.mjs && node scripts/e2e/critters.mjs && node scripts/e2e/tiled.mjs && node scripts/e2e/loading.mjs",
+    "tiled:generate": "tsx scripts/generate-tiled.ts",
+    "tiled:catalog": "tsx scripts/generate-tiled.ts --catalog",
+    "tiled:import": "tsx scripts/import-tiled.ts",
+    "tiled:check": "tsx scripts/import-tiled.ts --check",
+    "tiled:watch": "tsx scripts/watch-tiled.ts",
+    "tiled:cli-check": "tsx scripts/tools/tiled-cli-check.ts",
+    "build": "npm run tiled:check && npm run validate:config && npm run typecheck && vite build",
     "preview": "vite preview"
   },
   "dependencies": {

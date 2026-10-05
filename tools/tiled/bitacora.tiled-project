@@ -11,5 +11,413 @@
     "properties": [
     ],
     "propertyTypes": [
+        {
+            "id": 1,
+            "name": "DepthMode",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "fixed",
+                "y"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "id": 2,
+            "name": "AmbientType",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "animation",
+                "sway",
+                "drift",
+                "glow"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "id": 3,
+            "name": "CritterType",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "wander",
+                "family"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "id": 4,
+            "name": "ParticleAsset",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "particle.leaf",
+                "particle.petal",
+                "particle.water-droplet",
+                "particle.firefly-mote",
+                "particle.pollen"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "id": 5,
+            "name": "SwimAsset",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "animation.fauna.duckling-swim",
+                "animation.fauna.white-duck-swim"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "id": 6,
+            "name": "CritterAsset",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "fauna.hen.grey-fluffy",
+                "fauna.hen.black-crested",
+                "fauna.hen.white",
+                "fauna.hen.brown",
+                "fauna.hen.white-fluffy",
+                "fauna.chick.black"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "color": "#ffe0a03c",
+            "drawFill": true,
+            "id": 7,
+            "members": [
+                {
+                    "name": "learningId",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "interactionOffsetX",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "interactionOffsetY",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "interactionRadius",
+                    "type": "float",
+                    "value": 70
+                }
+            ],
+            "name": "Station",
+            "type": "class",
+            "useAs": [
+                "object",
+                "tile"
+            ]
+        },
+        {
+            "color": "#ff6aa84f",
+            "drawFill": true,
+            "id": 8,
+            "members": [
+                {
+                    "name": "assetId",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "originX",
+                    "type": "float",
+                    "value": 0.5
+                },
+                {
+                    "name": "originY",
+                    "type": "float",
+                    "value": 1
+                },
+                {
+                    "name": "depthMode",
+                    "propertyType": "DepthMode",
+                    "type": "string",
+                    "value": "y"
+                },
+                {
+                    "name": "depth",
+                    "type": "float",
+                    "value": 0
+                }
+            ],
+            "name": "Decoration",
+            "type": "class",
+            "useAs": [
+                "object",
+                "tile"
+            ]
+        },
+        {
+            "color": "#ff4a90d9",
+            "drawFill": true,
+            "id": 9,
+            "members": [
+                {
+                    "name": "assetId",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "ambientType",
+                    "propertyType": "AmbientType",
+                    "type": "string",
+                    "value": "animation"
+                },
+                {
+                    "name": "depthMode",
+                    "propertyType": "DepthMode",
+                    "type": "string",
+                    "value": "y"
+                },
+                {
+                    "name": "depth",
+                    "type": "float",
+                    "value": 0
+                }
+            ],
+            "name": "Ambient",
+            "type": "class",
+            "useAs": [
+                "object",
+                "tile"
+            ]
+        },
+        {
+            "color": "#ffd98a4a",
+            "drawFill": true,
+            "id": 10,
+            "members": [
+                {
+                    "name": "assetId",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "critterType",
+                    "propertyType": "CritterType",
+                    "type": "string",
+                    "value": "wander"
+                },
+                {
+                    "name": "radius",
+                    "type": "float",
+                    "value": 24
+                },
+                {
+                    "name": "chickAssetId",
+                    "propertyType": "CritterAsset",
+                    "type": "string",
+                    "value": "fauna.chick.black"
+                },
+                {
+                    "name": "chicks",
+                    "type": "int",
+                    "value": 0
+                }
+            ],
+            "name": "Critter",
+            "type": "class",
+            "useAs": [
+                "object",
+                "tile"
+            ]
+        },
+        {
+            "color": "#ffb06ad9",
+            "drawFill": true,
+            "id": 11,
+            "members": [
+                {
+                    "name": "assetId",
+                    "propertyType": "ParticleAsset",
+                    "type": "string",
+                    "value": "particle.leaf"
+                },
+                {
+                    "name": "frequencyMs",
+                    "type": "int",
+                    "value": 700
+                },
+                {
+                    "name": "depthMode",
+                    "propertyType": "DepthMode",
+                    "type": "string",
+                    "value": "fixed"
+                },
+                {
+                    "name": "depth",
+                    "type": "float",
+                    "value": 1500
+                }
+            ],
+            "name": "Particles",
+            "type": "class",
+            "useAs": [
+                "object"
+            ]
+        },
+        {
+            "color": "#ff3fb8b8",
+            "drawFill": true,
+            "id": 12,
+            "members": [
+                {
+                    "name": "assetId",
+                    "propertyType": "SwimAsset",
+                    "type": "string",
+                    "value": "animation.fauna.duckling-swim"
+                },
+                {
+                    "name": "depthMode",
+                    "propertyType": "DepthMode",
+                    "type": "string",
+                    "value": "y"
+                },
+                {
+                    "name": "depth",
+                    "type": "float",
+                    "value": 0
+                }
+            ],
+            "name": "Swim",
+            "type": "class",
+            "useAs": [
+                "object"
+            ]
+        },
+        {
+            "color": "#ffd9453f",
+            "drawFill": true,
+            "id": 13,
+            "members": [
+            ],
+            "name": "Collision",
+            "type": "class",
+            "useAs": [
+                "object"
+            ]
+        },
+        {
+            "color": "#ff3fd96a",
+            "drawFill": true,
+            "id": 14,
+            "members": [
+                {
+                    "name": "spawnId",
+                    "type": "string",
+                    "value": ""
+                }
+            ],
+            "name": "Spawn",
+            "type": "class",
+            "useAs": [
+                "object"
+            ]
+        },
+        {
+            "color": "#ffd9d93f",
+            "drawFill": true,
+            "id": 15,
+            "members": [
+                {
+                    "name": "portalId",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "label",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "targetZoneId",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "targetSpawnId",
+                    "type": "string",
+                    "value": ""
+                }
+            ],
+            "name": "Portal",
+            "type": "class",
+            "useAs": [
+                "object"
+            ]
+        },
+        {
+            "color": "#ff9e9e9e",
+            "drawFill": true,
+            "id": 16,
+            "members": [
+            ],
+            "name": "EditorOnly",
+            "type": "class",
+            "useAs": [
+                "object",
+                "layer"
+            ]
+        },
+        {
+            "color": "#ff6a6ad9",
+            "drawFill": true,
+            "id": 17,
+            "members": [
+                {
+                    "name": "zoneId",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "label",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "initialSpawnId",
+                    "type": "string",
+                    "value": ""
+                }
+            ],
+            "name": "Zone",
+            "type": "class",
+            "useAs": [
+                "map"
+            ]
+        },
+        {
+            "color": "#ff8a6a4a",
+            "drawFill": true,
+            "id": 18,
+            "members": [
+                {
+                    "name": "assetId",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "depth",
+                    "type": "int",
+                    "value": 0
+                }
+            ],
+            "name": "BackgroundLayer",
+            "type": "class",
+            "useAs": [
+                "layer"
+            ]
+        }
     ]
 }

@@ -986,7 +986,7 @@
           "type": "drift",
           "assetId": "background.sky.cloud",
           "position": {"x": 420, "y": 35},
-          "scale": 1.0,
+          "scale": 1,
           "depth": {"mode": "fixed", "value": 5}
         },
         {
@@ -1210,7 +1210,7 @@
         }
       ],
       "critters": [
-        {"type": "family", "assetId": "fauna.hen.white-fluffy", "chickAssetId": "fauna.chick.black", "chicks": 4, "position": {"x": 1272, "y": 697}, "radius": 16, "scale": 1.15},
+        {"type": "family", "assetId": "fauna.hen.white-fluffy", "chickAssetId": "fauna.chick.black", "chicks": 4, "position": {"x": 1196, "y": 995}, "radius": 16, "scale": 1.15},
         {"type": "wander", "assetId": "fauna.hen.grey-fluffy", "position": {"x": 700, "y": 935}, "radius": 22, "scale": 1.15},
         {"type": "wander", "assetId": "fauna.hen.brown", "position": {"x": 730, "y": 1030}, "radius": 28, "scale": 1.15},
         {"type": "wander", "assetId": "fauna.hen.white", "position": {"x": 765, "y": 862}, "radius": 16, "scale": 1.15},
@@ -1653,6 +1653,7 @@
       "levelTemplate": "Nivel {level}",
       "emptyRouteLabel": "Contenido por definir",
       "mapLabel": "Mapa de la bitácora",
+      "loadingMap": "Cargando el mapa…",
       "badges": "Insignias",
       "notEarned": "Por obtener",
       "routeBadgeLocked": "Insignia de Jerry: al completar el recorrido",

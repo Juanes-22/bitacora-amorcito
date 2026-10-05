@@ -4,3 +4,7 @@ dist
 *.local
 .claude/settings.local.json
 playtest-output
+# Tiled: estado personal del editor y copias de seguridad automáticas
+*.tiled-session
+tools/tiled/backups/
+tools/tiled/legacy/*.local

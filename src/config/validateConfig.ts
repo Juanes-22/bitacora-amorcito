@@ -20,8 +20,8 @@ const SECTION_IDS = ["learning", "reflection", "lived"];
 // Orden de profundidad esperado de las capas de fondo del catálogo (SPEC 3.1).
 const LAYER_ORDER = ["horizon", "terrain", "midground", "foreground"];
 
-/** `kind` admitidos por cada uso de un assetId (AC-29: metadata incompatible). */
-const KINDS = {
+/** `kind` admitidos por cada uso de un assetId (AC-29: metadata incompatible). Las herramientas del editor de mapas comparten esta tabla. */
+export const KINDS = {
   sign: ["station-sign"],
   stationObject: ["station-item", "foliage"],
   layer: ["background-layer", "complete-background"],
@@ -39,7 +39,7 @@ const KINDS = {
 };
 
 /** `kind` admitido por cada tipo de efecto ambiental (SPEC 3.2). */
-const AMBIENT_KINDS = {
+export const AMBIENT_KINDS = {
   animation: ["animation-sheet"], sway: ["foliage", "light-prop"], drift: ["sky-element"], particles: ["particle"],
   glow: ["light-glow"], swim: ["animation-sheet"],
 } as const;
@@ -47,7 +47,7 @@ const AMBIENT_KINDS = {
 export const MAX_AMBIENT_PER_ZONE = 60;
 /** Presupuesto de animalitos por zona (gallinas y pollitos, contados uno a uno). */
 export const MAX_CRITTERS_PER_ZONE = 30;
-const AMBIENT_MOTION = { sway: "sway", drift: "drift", particles: "particle", glow: "pulse", swim: "swim" } as const;
+export const AMBIENT_MOTION = { sway: "sway", drift: "drift", particles: "particle", glow: "pulse", swim: "swim" } as const;
 
 export interface ValidateOptions {
   /** Definiciones de frames inspeccionadas. Sin ellas ninguna animación declarada es válida. */

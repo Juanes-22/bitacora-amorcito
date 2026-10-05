@@ -3,7 +3,30 @@
     "expandedProjectPaths": [
     ],
     "fileStates": {
+        "maps/zona-a.tmj": {
+            "scale": 1.0749,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 903.8050051167551,
+                "y": 556.3308214717649
+            }
+        },
+        "maps/zona-a.tmx": {
+            "scale": 0.4767,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 800.2936857562407,
+                "y": 549.6119152506818
+            }
+        },
+        "tilesets/catalogo.tsj": {
+            "scaleInDock": 1
+        },
+        "tilesets/catalogo.tsx": {
+            "dynamicWrapping": true
+        }
     },
+    "last.imagePath": "/Users/jgarciam/Desktop/bitacora-amorcito/public/assets/decorations/plants",
     "map.height": 543,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 2,
@@ -13,5 +36,8 @@
     ],
     "project": "bitacora.tiled-project",
     "recentFiles": [
-    ]
+        "maps/zona-a.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.type": 1
 }

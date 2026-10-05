@@ -4,18 +4,19 @@ import type { Plugin } from "vite";
 import { defineConfig } from "vitest/config";
 
 /**
- * En desarrollo, recarga la página cuando cambia `public/config/bitacora.json` (p. ej. al importar una edición de Tiled con
- * `npm run tiled:import` o `npm run tiled:watch`). Es una recarga completa: la escena de Phaser no se actualiza en caliente.
+ * En desarrollo, recarga la página cuando cambia `public/config/bitacora.json` (el contenido) o `public/config/maps.json` (la geometría;
+ * p. ej. al importar una edición de Tiled con `npm run tiled:import` o `npm run tiled:watch`). Es una recarga completa: la escena de
+ * Phaser no se actualiza en caliente.
  */
 function reloadOnConfigChange(): Plugin {
   return {
     name: "bitacora-config-reload",
     apply: "serve",
     configureServer(server) {
-      const config = resolve(server.config.root, "public/config/bitacora.json");
-      server.watcher.add(config);
+      const files = ["bitacora.json", "maps.json"].map((name) => resolve(server.config.root, "public/config", name));
+      for (const file of files) server.watcher.add(file);
       server.watcher.on("change", (file) => {
-        if (resolve(file) === config) server.ws.send({ type: "full-reload", path: "*" });
+        if (files.includes(resolve(file))) server.ws.send({ type: "full-reload", path: "*" });
       });
     },
   };
@@ -23,9 +24,27 @@ function reloadOnConfigChange(): Plugin {
 
 // base relativa: el destino de publicación aún no está decidido y los assets
 // se resuelven en runtime desde la URL del manifiesto (SPEC 12.2).
+/**
+ * En desarrollo, importa a `maps.json` las ediciones de los mapas de Tiled al guardarlas y muestra los errores sobre la página
+ * (`scripts/vite/tiledImport.ts`). No actúa en las pruebas ni con `TILED_WATCH=0`. Se carga bajo demanda: arrancar las pruebas o el
+ * build no paga por él.
+ */
+function tiledImportOnSave(): Plugin {
+  return {
+    name: "bitacora-tiled-import",
+    apply: "serve",
+    async configureServer(server) {
+      if (process.env.VITEST || process.env.TILED_WATCH === "0") return;
+      const { setupTiledImport } = await import("./scripts/vite/tiledImport");
+      const stop = setupTiledImport(server);
+      server.httpServer?.once("close", stop);
+    },
+  };
+}
+
 export default defineConfig({
   base: "./",
-  plugins: [react(), reloadOnConfigChange()],
+  plugins: [react(), reloadOnConfigChange(), tiledImportOnSave()],
   build: {
     outDir: "dist",
     // El código compilado no debe compartir carpeta con public/assets/ (assets.json y sus imágenes).

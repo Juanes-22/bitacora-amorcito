@@ -1,8 +1,13 @@
 import { BADGE_PANEL_PARTS } from "../config/badgePanelParts";
+import { JOURNAL_PANEL_PARTS } from "../config/journalPanelParts";
 import { describe, expect, it } from "vitest";
 import manifestJson from "../../public/assets/assets.json";
-import bitacoraJson from "../../public/config/bitacora.json";
+import bitacoraJson from "./fixtures/realConfig";
 import bitacoraSchema from "../../public/config/bitacora.schema.json";
+import mapsSchema from "../../public/config/maps.schema.json";
+import { configFileOf, mergeConfig, splitConfig } from "../config/mapsFile";
+import { PRESENTATION_PARTS } from "../config/presentationParts";
+import { fullTitle } from "../domain/projectTitle";
 import { validateAssetManifest } from "../config/validateAssets";
 import { validateBitacora, type ValidateOptions } from "../config/validateConfig";
 import type { AssetManifest, BitacoraConfig, ConfigIssue } from "../config/types";
@@ -33,7 +38,7 @@ const at = (issues: ConfigIssue[], path: string) => issues.filter((i) => i.path 
 
 describe("assets.json real", () => {
   it("es válido y conserva sus entradas originales sin migrar", () => {
-    expect(Object.keys(realManifest.assets)).toHaveLength(173);
+    expect(Object.keys(realManifest.assets)).toHaveLength(192);
     expect(realManifest.assets["ui.panel.cream.nine-slice"].nineSlice).toEqual({ top: 32, right: 32, bottom: 32, left: 32 });
     expect(realManifest.assets["character.vanessa-jerry.walk.poses-v4"].requiresFrameDefinition).toBe(true);
     expect(realManifest).not.toHaveProperty("animations");
@@ -123,11 +128,32 @@ describe("bitacora.json: forma", () => {
     expect(at(i, "learnings.apr-a.sections.lived")).toHaveLength(1);
   });
 
-  it("el tipo BitacoraConfig y el esquema coinciden en las claves de nivel superior", () => {
+  it("el tipo BitacoraConfig y los dos esquemas (contenido y mapas) coinciden en las claves de nivel superior", () => {
     const typed: BitacoraConfig = makeConfig();
-    expect(Object.keys(typed).sort()).toEqual([...bitacoraSchema.required].sort());
-    const optional = Object.keys(bitacoraSchema.properties).filter((k) => !bitacoraSchema.required.includes(k));
-    expect(optional.sort()).toEqual(["$schema", "editorNotes"]);
+    const required = [...bitacoraSchema.required, ...mapsSchema.required];
+    expect(Object.keys(typed).sort()).toEqual(required.sort());
+    const optional = [...Object.keys(bitacoraSchema.properties), ...Object.keys(mapsSchema.properties)].filter((k) => !required.includes(k));
+    expect(optional.sort()).toEqual(["$schema", "$schema", "editorNotes"]);
+    expect(mapsSchema.required).toEqual(["placements", "maps"]);
+  });
+
+  it("maps.schema.json repite sin cambios las definiciones compartidas con bitacora.schema.json", () => {
+    for (const name of ["id", "assetId", "point", "normalizedPoint"] as const) {
+      expect(mapsSchema.$defs[name], name).toEqual(bitacoraSchema.$defs[name]);
+    }
+  });
+
+  it("separar la configuración en los dos archivos y volver a unirla no cambia nada", () => {
+    const { content, mapsFile } = splitConfig(bitacoraJson as unknown as BitacoraConfig);
+    expect(Object.keys(content)).not.toContain("maps");
+    expect(Object.keys(content)).not.toContain("placements");
+    expect(Object.keys(mapsFile).sort()).toEqual(["maps", "placements"]);
+    expect(mergeConfig(content, mapsFile)).toEqual(bitacoraJson);
+    expect(configFileOf("maps.zona-a.layers[0].assetId")).toBe("maps.json");
+    expect(configFileOf("placements.apr-a.zoneId")).toBe("maps.json");
+    expect(configFileOf("maps")).toBe("maps.json");
+    expect(configFileOf("mapsXYZ")).toBe("bitacora.json");
+    expect(configFileOf("route[2]")).toBe("bitacora.json");
   });
 });
 
@@ -719,9 +745,45 @@ describe("bitacora.json: insignias de los aprendizajes y de Jerry (AC-79)", () =
       expect(b.xp, id).toBe(100);
       expect(b.awardedFor, id).toBeUndefined();
     }
-    const jerry = Object.values(real.badges).filter((b) => b.awardedFor === "route-complete");
-    expect(jerry).toHaveLength(1);
-    expect(jerry[0]).toMatchObject({ title: "Compañero de aventuras", assetId: "ui.badge.jerry", xp: 0 });
+    const special = Object.values(real.badges).filter((b) => b.awardedFor === "route-complete");
+    expect(special.map((b) => b.title)).toEqual(["Jerry", "Rocky"]);
+    expect(special.map((b) => b.assetId)).toEqual(["ui.badge.jerry", "ui.badge.rocky"]);
+    expect(special.every((b) => b.xp === 0)).toBe(true);
+  });
+
+  it("Rocky es una insignia de recuerdo que se desbloquea con la de Jerry, con los textos de la actualización 1.1.0 del kit", () => {
+    const rocky = real.badges["rocky-siempre-contigo"];
+    expect(rocky).toMatchObject({ title: "Rocky", subtitle: "Siempre en nuestro corazón", specialType: "memorial", awardedFor: "route-complete", tone: "gold", xp: 0 });
+    expect(rocky.description).toBe("El amor y el cariño que sentimos por Rocky, un perrito muy especial en la vida de Vanessa.");
+    expect(rocky.takeaway).toContain("le guardamos un lugar en esta bitácora y en nuestro corazón");
+    expect(real.badges["jerry-companero-de-aventuras"].specialType).toBe("friendship");
+    expect(realManifest.assets["ui.badge.rocky"]).toMatchObject({ kind: "badge", width: 1254, height: 1254, transparent: true });
+  });
+
+  it("los campos de las insignias especiales solo valen con `awardedFor`, y una de recuerdo exige los textos `memorial` del panel", () => {
+    type Panel = NonNullable<BitacoraConfig["ui"]["badgePanel"]>;
+    const memorial = (edit?: (c: BitacoraConfig) => void) => (c: BitacoraConfig) => {
+      c.ui.badgePanel = structuredClone(real.ui.badgePanel as Panel);
+      c.badges["rocky"] = { title: "Rocky", description: "x", assetId: "ui.badge.rocky", xp: 0, awardedFor: "route-complete", specialType: "memorial", secret: true, subtitle: "Siempre" };
+      edit?.(c);
+    };
+    expect(issuesOf(memorial())).toEqual([]);
+    for (const key of ["specialType", "subtitle", "unlockCondition", "secret"] as const) {
+      const issues = issuesOf(memorial((c) => { delete c.badges["rocky"].awardedFor; (c.badges["rocky"] as unknown as Record<string, unknown>)[key] = key === "secret" ? true : key === "specialType" ? "friendship" : "x"; }));
+      expect(at(issues, `badges.rocky.${key}`)[0]?.message, key).toContain("awardedFor");
+    }
+    expect(issuesOf(memorial((c) => { c.badges["rocky"].subtitle = ""; })).length).toBeGreaterThan(0);
+    expect(issuesOf(memorial((c) => { c.badges["rocky"].specialType = "otro" as never; })).length).toBeGreaterThan(0);
+    expect(issuesOf(memorial((c) => { (c.badges["rocky"] as unknown as Record<string, unknown>).secret = "sí"; })).length).toBeGreaterThan(0);
+    expect(at(issuesOf(memorial((c) => { delete (c.ui.badgePanel as Panel).labels.memorial; })), "ui.badgePanel.labels.memorial")[0]?.message).toContain("rocky");
+    expect(at(issuesOf(memorial((c) => { (c.ui.badgePanel as Panel).labels.memorial = { ...((real.ui.badgePanel as Panel).labels.memorial as NonNullable<Panel["labels"]["memorial"]>), placeTemplate: "Para {otro}" }; })), "ui.badgePanel.labels.memorial.placeTemplate")).toHaveLength(1);
+    // Sin panel de insignias (lista sencilla) no hay textos que exigir.
+    expect(issuesOf((c) => { c.badges["rocky"] = { title: "Rocky", description: "x", assetId: "ui.badge.rocky", xp: 0, awardedFor: "route-complete", specialType: "memorial" }; })).toEqual([]);
+  });
+
+  it("Rocky es secreta: solo se muestra al terminar el recorrido", () => {
+    expect(real.badges["rocky-siempre-contigo"].secret).toBe(true);
+    expect(real.badges["jerry-companero-de-aventuras"].secret).toBeUndefined(); // la de Jerry se ve, por descubrir
   });
 
   it("una insignia de recorrido debe valer 0 XP y no puede ser la de un aprendizaje", () => {
@@ -769,10 +831,104 @@ describe("bitacora.json: panel de insignias con el kit de interfaz (AC-80)", () 
   });
 
   it("el color de cada insignia es jade, lavanda o dorado, y «lo que me llevo» es opcional y no puede estar vacío", () => {
-    expect(Object.values(real.badges).map((b) => b.tone)).toEqual(["jade", "lavender", "gold", "jade", "gold", "jade", "lavender"]);
-    expect(Object.values(real.badges).every((b) => b.takeaway === undefined)).toBe(true); // no se inventa: lo escribe la autora
+    expect(Object.values(real.badges).map((b) => b.tone)).toEqual(["jade", "lavender", "gold", "jade", "gold", "jade", "lavender", "gold"]);
+    // «Lo que me llevo» no se inventa: solo lo tiene la dedicatoria a Rocky que trae el kit 1.1.0 (la autora escribe el resto).
+    expect(Object.entries(real.badges).filter(([, b]) => b.takeaway !== undefined).map(([id]) => id)).toEqual(["rocky-siempre-contigo"]);
     expect(issuesOf((c) => { c.badges[Object.keys(c.badges)[0]].tone = "rojo" as never; }).length).toBeGreaterThan(0);
     expect(issuesOf((c) => { c.badges[Object.keys(c.badges)[0]].takeaway = ""; }).length).toBeGreaterThan(0);
     expect(issuesOf((c) => { c.badges[Object.keys(c.badges)[0]].takeaway = "Una semilla me invita a observar."; })).toEqual([]);
+  });
+});
+
+describe("bitacora.json: presentación con el kit de interfaz (AC-87)", () => {
+  const real = bitacoraJson as unknown as BitacoraConfig;
+  const presentation = (edit?: (p: NonNullable<BitacoraConfig["ui"]["presentation"]>) => void) => (c: BitacoraConfig) => {
+    c.ui.presentation = structuredClone(real.ui.presentation as NonNullable<BitacoraConfig["ui"]["presentation"]>);
+    edit?.(c.ui.presentation);
+  };
+
+  it("el bitacora.json real usa el kit y, sin él, sigue siendo válido (portada sencilla)", () => {
+    expect(real.ui.presentation?.assetPrefix).toBe("ui.presentation.");
+    expect(real.ui.presentation?.labels).toEqual({ subjectLabel: "ASIGNATURA", heroAlt: "Vanessa y Jerry junto a un libro abierto y un brote" });
+    expect(issuesOf(presentation())).toEqual([]);
+    expect(issuesOf((c) => { delete c.ui.presentation; })).toEqual([]);
+  });
+
+  it("título y subtítulo: el título completo es «título — subtítulo» y los opcionales no pueden estar vacíos", () => {
+    expect(real.project).toMatchObject({ title: "Mi bitácora", subtitle: "Un recorrido de aprendizajes", welcomeTitle: "Cada experiencia deja una semilla." });
+    expect(fullTitle(real.project)).toBe("Mi bitácora — Un recorrido de aprendizajes");
+    expect(fullTitle({ title: "Solo título" })).toBe("Solo título");
+    expect(issuesOf((c) => { c.project.subtitle = ""; }).length).toBeGreaterThan(0);
+    expect(issuesOf((c) => { c.project.welcomeTitle = ""; }).length).toBeGreaterThan(0);
+    expect(issuesOf((c) => { delete c.project.subtitle; delete c.project.welcomeTitle; })).toEqual([]);
+  });
+
+  it("todas las piezas del kit deben existir con el prefijo y ser del kind «presentation-part»", () => {
+    const missing = issuesOf(presentation((p) => { p.assetPrefix = "ui.otro-kit."; }));
+    expect(missing.filter((i) => i.path === "ui.presentation.assetPrefix").length).toBe(PRESENTATION_PARTS.length);
+    expect(missing[0].message).toContain("asset ID no encontrado");
+    const wrongKind = issuesOf(presentation((p) => { p.assetPrefix = "ui.badge-panel."; }));
+    expect(wrongKind.some((i) => i.path === "ui.presentation.assetPrefix" && /kind/.test(i.message))).toBe(false); // piezas con otros nombres: no existen
+    expect(wrongKind.filter((i) => i.path === "ui.presentation.assetPrefix").length).toBeGreaterThan(0);
+  });
+
+  it("los dos rótulos propios son obligatorios y no pueden estar vacíos", () => {
+    expect(issuesOf(presentation((p) => { p.labels.subjectLabel = ""; })).length).toBeGreaterThan(0);
+    expect(issuesOf(presentation((p) => { delete (p.labels as Partial<typeof p.labels>).heroAlt; })).length).toBeGreaterThan(0);
+    expect(issuesOf(presentation((p) => { (p.labels as unknown as Record<string, unknown>).otro = "x"; })).length).toBeGreaterThan(0);
+  });
+});
+
+describe("bitacora.json: Bitácora de aprendizajes con el kit de interfaz (AC-83)", () => {
+  const real = bitacoraJson as unknown as BitacoraConfig;
+  /** La Bitácora de aprendizajes se apoya en el panel de insignias: el fixture lleva los dos. */
+  const journal = (edit: (p: NonNullable<BitacoraConfig["ui"]["journalPanel"]>) => void) => (c: BitacoraConfig) => {
+    c.ui.badgePanel = structuredClone(real.ui.badgePanel as NonNullable<BitacoraConfig["ui"]["badgePanel"]>);
+    c.ui.journalPanel = structuredClone(real.ui.journalPanel as NonNullable<BitacoraConfig["ui"]["journalPanel"]>);
+    edit(c.ui.journalPanel);
+  };
+
+  it("el bitacora.json real usa el kit y, sin él, sigue siendo válido (lista y lectura sencillas)", () => {
+    expect(real.ui.journalPanel?.assetPrefix).toBe("ui.journal-panel.");
+    expect(real.ui.journalPanel?.labels.title).toBe("Bitácora de aprendizajes");
+    expect(issuesOf((c) => { delete c.ui.journalPanel; })).toEqual([]);
+    expect(issuesOf(journal(() => undefined))).toEqual([]);
+  });
+
+  it("cada aprendizaje de la ruta lleva su ilustración del kit y hasta cuatro palabras clave que salen de sus textos", () => {
+    for (const id of real.route) {
+      const l = real.learnings[id];
+      expect(l.illustrationAssetId, id).toMatch(/^ui\.journal-panel\.learning-/);
+      expect(l.keywords!.length, id).toBeGreaterThanOrEqual(2);
+      expect(l.keywords!.length, id).toBeLessThanOrEqual(4);
+    }
+    expect(issuesOf((c) => { c.learnings["apr-a"].keywords = ["a", "b", "c", "d", "e"]; }).length).toBeGreaterThan(0);
+    expect(issuesOf((c) => { c.learnings["apr-a"].keywords = [""]; }).length).toBeGreaterThan(0);
+  });
+
+  it("necesita el panel de insignias (comparte sus piezas) y todas sus piezas deben existir con el kind correcto", () => {
+    expect(at(issuesOf((c) => { journal(() => undefined)(c); delete c.ui.badgePanel; }), "ui.journalPanel")[0]?.message).toContain("necesita `ui.badgePanel`");
+    const missing = issuesOf(journal((p) => { p.assetPrefix = "ui.otro-kit."; }));
+    expect(missing.filter((i) => i.path === "ui.journalPanel.assetPrefix").length).toBe(JOURNAL_PANEL_PARTS.length);
+    expect(at(issuesOf((c) => { journal(() => undefined)(c); c.learnings["apr-a"].illustrationAssetId = "station.item.books"; }), "learnings.apr-a.illustrationAssetId")[0]?.message).toContain("kind");
+    expect(at(issuesOf((c) => { journal(() => undefined)(c); c.learnings["apr-a"].illustrationAssetId = "ui.journal-panel.no-existe"; }), "learnings.apr-a.illustrationAssetId")[0]?.message).toContain("no encontrado");
+  });
+
+  it("los textos solo admiten sus variables y ninguno puede faltar; los iconos de zona deben ser zonas y piezas del kit", () => {
+    expect(at(issuesOf(journal((p) => { p.labels.progressTemplate = "{completed} de {nada}"; })), "ui.journalPanel.labels.progressTemplate")[0]?.message).toContain("{nada}");
+    expect(at(issuesOf(journal((p) => { p.labels.requirementTemplate = "Completa {total}"; })), "ui.journalPanel.labels.requirementTemplate")).toHaveLength(1);
+    expect(issuesOf(journal((p) => { delete (p.labels as Partial<typeof p.labels>).markAndContinue; })).length).toBeGreaterThan(0);
+    expect(issuesOf(journal((p) => { p.labels.title = ""; })).length).toBeGreaterThan(0);
+    expect(at(issuesOf(journal((p) => { p.zoneIcons = { "zona-z": "zone-cherry-tree" }; })), "ui.journalPanel.zoneIcons.zona-z")[0]?.message).toContain("no existe en maps");
+    expect(at(issuesOf(journal((p) => { p.zoneIcons = { "zona-a": "ribbon-next-blank" }; })), "ui.journalPanel.zoneIcons.zona-a")[0]?.message).toContain("zone-cherry-tree");
+  });
+});
+
+describe("bitacora.json: aviso de estación lejana (awayFromStationTemplate)", () => {
+  it("es opcional, solo admite {number}, {title} y {zone} y no puede estar vacío", () => {
+    expect(issuesOf((c) => { delete c.ui.labels.awayFromStationTemplate; })).toEqual([]);
+    expect(issuesOf((c) => { c.ui.labels.awayFromStationTemplate = "Ve a {zone}: {title} ({number})"; })).toEqual([]);
+    expect(at(issuesOf((c) => { c.ui.labels.awayFromStationTemplate = "Ve a {lugar}"; }), "ui.labels.awayFromStationTemplate")[0]?.message).toContain("{lugar}");
+    expect(issuesOf((c) => { c.ui.labels.awayFromStationTemplate = ""; }).length).toBeGreaterThan(0);
   });
 });

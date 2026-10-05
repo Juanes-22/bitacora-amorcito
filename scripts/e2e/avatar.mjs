@@ -1,6 +1,6 @@
 // E2E del avatar animado de la cabecera (SPEC 14, AC-71): reposo, alegría al completar una estación, movimiento reducido y respaldo.
 // Uso: npm run test:e2e
-import { configJson, harness } from "./helpers.mjs";
+import { configJson, harness, START } from "./helpers.mjs";
 
 const { open, check, finish } = await harness();
 const L = configJson.ui.labels;
@@ -55,17 +55,8 @@ try {
     await t.start();
     await t.page.waitForTimeout(400);
     const idle = await sample(t, 2800);
-    await t.page.getByRole("button", { name: L.index }).click();
-    await t.page.waitForTimeout(250);
-    await t.page.getByRole("button", { name: new RegExp(`${L.explore}: Aprendizaje 1:`) }).click();
-    await t.page.waitForTimeout(250);
-    await t.page.click("text=Siguiente");
-    for (let s = 0; s < 3; s++) {
-      await t.page.click("text=Marcar sección como leída");
-      await t.page.waitForTimeout(80);
-      if (s < 2) await t.page.getByRole("tab").nth(s + 1).click();
-    }
-    await t.page.click("text=Recoger insignia y continuar");
+    await t.exploreFromIndex("apr-a");
+    await t.readAndClaim();
     await t.page.waitForTimeout(800);
     await t.page.click("[role=dialog] >> text=Cerrar");
     const happy = await sample(t, 1500, 40);
@@ -93,7 +84,7 @@ try {
   // ---- La hoja no carga: se queda el avatar estático --------------------------------------------------------------
   {
     const t = await open({ blockUrl: "**/vanessa-jerry-avatar-idle-happy.png" });
-    await t.page.locator(".pixel-button").dispatchEvent("click");
+    await t.page.locator(START).dispatchEvent("click");
     await t.page.waitForTimeout(800);
     const dom = await t.page.evaluate(() => { const p = document.querySelector(".hud__portrait"); const img = p?.querySelector("img"); return { canvas: !!p?.querySelector("canvas"), imgHidden: img?.hidden, loaded: !!img?.complete && img.naturalWidth > 0, src: img?.getAttribute("src") }; });
     check("AC-71: si la hoja no carga, la cabecera conserva el avatar estático y el juego sigue", !dom.canvas && dom.imgHidden === false && dom.loaded && /vanessa-jerry-avatar\.png/.test(dom.src) && (await t.page.locator("canvas").count()) >= 1, JSON.stringify(dom));

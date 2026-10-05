@@ -1,16 +1,19 @@
 // @vitest-environment jsdom
 import { act, cleanup, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import bitacoraJson from "../../public/config/bitacora.json";
+import bitacoraJson from "./fixtures/realConfig";
 import { ProgressStore } from "../app/progressStore";
 import { useProgressController } from "../app/useProgressController";
 import type { BitacoraConfig, SectionId } from "../config/types";
 import { GameBridge } from "../game/bridge/GameBridge";
 import type { BridgeEvents } from "../game/bridge/events";
 import { ProgressStorage, storageKey, type StorageLike } from "../storage/progressStorage";
+import { classicOf, demoOf } from "./fixtures/demoConfig";
 
 afterEach(cleanup);
-const base = bitacoraJson as unknown as BitacoraConfig;
+const real = bitacoraJson as unknown as BitacoraConfig;
+/** Sin la Bitácora de aprendizajes: la lectura sencilla, que abre con su ventana de apertura. La real entra directo a la lectura (más abajo). */
+const base = classicOf(demoOf(real));
 const ALL: SectionId[] = ["learning", "reflection", "lived"];
 const KEY = (c: BitacoraConfig) => storageKey(c.contentSetId, c.mode);
 
@@ -90,6 +93,48 @@ describe("useProgressController", () => {
     expect(result.current.reading).toEqual({ kind: "intro", learningId: "apr-a", event: "open" });
     expect(resolvedFor("r-apr-a")).toEqual([{ requestId: "r-apr-a", accepted: true, reason: undefined }]);
     expect(log.controls.at(-1)).toEqual(["reading"]);
+  });
+
+  it("con la Bitácora de aprendizajes se entra directo a la lectura (sin ventana de apertura ni de relectura) y se retoma donde se quedó", () => {
+    config = demoOf(real);
+    const first = setup();
+    open("apr-a");
+    expect(first.result.current.reading).toEqual({ kind: "reading", learningId: "apr-a", active: "learning" });
+    expect(resolvedFor("r-apr-a")).toEqual([{ requestId: "r-apr-a", accepted: true, reason: undefined }]);
+    expect(log.controls.at(-1)).toEqual(["reading"]);
+    act(() => first.result.current.actions.markRead("learning"));
+    act(() => first.result.current.actions.selectSection("reflection"));
+    act(() => first.result.current.actions.close());
+    open("apr-a", "r-again");
+    expect(first.result.current.reading).toEqual({ kind: "reading", learningId: "apr-a", active: "reflection" });
+    // Una completada también se relee directo.
+    ALL.forEach((s) => act(() => first.result.current.actions.markRead(s)));
+    act(() => first.result.current.actions.claimBadge());
+    act(() => first.result.current.actions.close());
+    open("apr-a", "r-done");
+    expect(first.result.current.reading).toMatchObject({ kind: "reading", learningId: "apr-a" });
+  });
+
+  it("con la Bitácora de aprendizajes, bloqueada y pendiente siguen mostrando su mensaje; «volver a la bitácora» y «ver insignia» abren sus ventanas", () => {
+    config = demoOf(real);
+    const r = setup();
+    act(() => bridge.emit("game:nearby-changed", { target: { kind: "learning", id: "apr-a" }, token }));
+    open("apr-b");
+    expect(r.result.current.reading).toEqual({ kind: "message", learningId: "apr-b", event: "locked" });
+    act(() => r.result.current.actions.close());
+    open("apr-a");
+    act(() => r.result.current.actions.backToList());
+    expect(r.result.current.reading).toBeNull();
+    expect(r.result.current.overlay).toEqual({ kind: "list" });
+    expect(log.controls.at(-1)).toEqual(["overlay"]); // el mapa sigue detenido, sin un instante libre
+    act(() => r.result.current.overlayActions.openFromList("apr-a"));
+    expect(r.result.current.reading).toMatchObject({ kind: "reading", learningId: "apr-a" });
+    act(() => r.result.current.actions.openBadge());
+    expect(r.result.current.reading).toBeNull();
+    expect(r.result.current.overlay).toEqual({ kind: "collection", completion: false, learningId: "apr-a" });
+    expect(log.controls.at(-1)).toEqual(["overlay"]);
+    // Ninguna de las dos concede nada ni marca lecturas.
+    expect(Object.values(r.store.getState().entries).every((e) => e.completedAt === undefined && e.readSectionIds.length === 0)).toBe(true);
   });
 
   it("una estación bloqueada se deniega con su mensaje y no abre contenido", () => {
@@ -262,6 +307,8 @@ describe("useProgressController", () => {
   describe("lista accesible (SPEC 14, AC-11)", () => {
     const openList = (r: ReturnType<typeof setup>) => act(() => r.result.current.overlayActions.openList());
     const fromList = (r: ReturnType<typeof setup>, id: string) => act(() => r.result.current.overlayActions.openFromList(id));
+    /** Vanessa está junto a la estación (lo que avisa el mapa); `null`, lejos de todas. */
+    const near = (id: string | null) => act(() => bridge.emit("game:nearby-changed", { target: id ? { kind: "learning", id } : null, token }));
 
     it("abre la lista, detiene el mapa y se cierra devolviendo el control", () => {
       const r = setup();
@@ -275,6 +322,7 @@ describe("useProgressController", () => {
 
     it("abrir el aprendizaje disponible muestra su introducción igual que junto a la estación, sin mover al personaje", () => {
       const r = setup();
+      near("apr-a");
       openList(r);
       fromList(r, "apr-a");
       expect(r.result.current.reading).toEqual({ kind: "intro", learningId: "apr-a", event: "open" });
@@ -298,6 +346,7 @@ describe("useProgressController", () => {
     it("en modo final un contenido sin aprobar se muestra como pendiente, no se abre", () => {
       config.mode = "final";
       const r = setup();
+      near("apr-a");
       openList(r);
       fromList(r, "apr-a");
       expect(r.result.current.reading).toEqual({ kind: "message", learningId: "apr-a", event: "pending" });
@@ -305,6 +354,7 @@ describe("useProgressController", () => {
 
     it("al cerrar la lectura vuelve a la lista (sin parpadeo de controles) y se puede cerrar con otro cierre", () => {
       const r = setup();
+      near("apr-a");
       openList(r);
       fromList(r, "apr-a");
       const before = log.controls.length;
@@ -317,8 +367,95 @@ describe("useProgressController", () => {
       expect(log.controls.at(-1)).toEqual([]);
     });
 
+    it("lejos de su estación, un aprendizaje sin completar NO se explora desde la Bitácora: muestra su aviso, no marca nada y vuelve a la lista", () => {
+      const r = setup();
+      near(null);
+      openList(r);
+      fromList(r, "apr-a");
+      expect(r.result.current.reading).toEqual({ kind: "message", learningId: "apr-a", event: "away" });
+      act(() => r.result.current.actions.markRead("learning"));
+      act(() => r.result.current.actions.claimBadge());
+      expect(r.store.getState().entries["apr-a"].readSectionIds).toEqual([]);
+      expect(r.store.getState().entries["apr-a"].completedAt).toBeUndefined();
+      act(() => r.result.current.actions.close());
+      expect(r.result.current.overlay).toEqual({ kind: "list" });
+      near("apr-b"); // junto a otra estación tampoco vale
+      act(() => r.result.current.overlayActions.closeOverlay());
+      near("apr-b");
+      openList(r);
+      fromList(r, "apr-a");
+      expect(r.result.current.reading).toEqual({ kind: "message", learningId: "apr-a", event: "away" });
+    });
+
+    it("junto a su estación sí se explora, aunque al abrir la Bitácora el mapa «limpie» lo cercano al detenerse", () => {
+      const r = setup();
+      near("apr-a");
+      openList(r);
+      near(null); // la escena pausada avisa que ya no hay nada cercano: no cuenta como alejarse
+      fromList(r, "apr-a");
+      expect(r.result.current.reading).toMatchObject({ learningId: "apr-a" });
+      expect(r.result.current.reading?.kind).not.toBe("message");
+    });
+
+    it("al alejarse con el mapa libre se pierde la presencia: hay que volver a la estación", () => {
+      const r = setup();
+      near("apr-a");
+      near(null);
+      openList(r);
+      fromList(r, "apr-a");
+      expect(r.result.current.reading).toEqual({ kind: "message", learningId: "apr-a", event: "away" });
+    });
+
+    it("un aprendizaje completado se relee desde cualquier sitio (lejos de su estación)", () => {
+      const store = newStore();
+      ALL.forEach((s) => store.markSection("apr-a", s));
+      store.claimBadge("apr-a");
+      const r = setup(store);
+      near(null);
+      openList(r);
+      fromList(r, "apr-a");
+      expect(r.result.current.reading).toMatchObject({ learningId: "apr-a" });
+      expect(r.result.current.reading?.kind).not.toBe("message");
+      // …y el siguiente, que sigue sin completar, sigue exigiendo su estación.
+      act(() => r.result.current.actions.close());
+      fromList(r, "apr-b");
+      expect(r.result.current.reading).toEqual({ kind: "message", learningId: "apr-b", event: "away" });
+    });
+
+    it("«Ver aprendizaje» desde el detalle de una insignia abre ese aprendizaje con las mismas reglas y, al cerrar, vuelve a la insignia", () => {
+      config = demoOf(real);
+      const store = newStore();
+      ALL.forEach((s) => store.markSection("apr-a", s));
+      store.claimBadge("apr-a");
+      const r = setup(store);
+      near(null);
+      act(() => r.result.current.overlayActions.openCollection());
+      expect(r.result.current.overlay).toEqual({ kind: "collection", completion: false });
+      fromList(r, "apr-a"); // completado: se relee aunque esté lejos
+      expect(r.result.current.overlay).toBeNull();
+      expect(r.result.current.reading).toMatchObject({ kind: "reading", learningId: "apr-a" });
+      act(() => r.result.current.actions.close());
+      expect(r.result.current.overlay).toEqual({ kind: "collection", completion: false, learningId: "apr-a" });
+      // El siguiente, sin completar y lejos de su estación, muestra el aviso y vuelve a la colección.
+      fromList(r, "apr-b");
+      expect(r.result.current.reading).toEqual({ kind: "message", learningId: "apr-b", event: "away" });
+      act(() => r.result.current.actions.close());
+      expect(r.result.current.overlay).toEqual({ kind: "collection", completion: false, learningId: "apr-b" });
+      // Uno bloqueado muestra su mensaje de siempre.
+      fromList(r, "apr-d");
+      expect(r.result.current.reading).toEqual({ kind: "message", learningId: "apr-d", event: "locked" });
+      // Y junto a su estación, el siguiente sí se abre.
+      act(() => r.result.current.actions.close());
+      act(() => r.result.current.overlayActions.closeOverlay());
+      near("apr-b");
+      act(() => r.result.current.overlayActions.openCollection());
+      fromList(r, "apr-b");
+      expect(r.result.current.reading).toMatchObject({ kind: "reading", learningId: "apr-b" });
+    });
+
     it("ganar la insignia desde la lista cierra la lectura en el mapa y celebra (no vuelve a la lista)", () => {
       const r = setup();
+      near("apr-a");
       openList(r);
       fromList(r, "apr-a");
       act(() => r.result.current.actions.continueReading());
@@ -334,6 +471,7 @@ describe("useProgressController", () => {
 
     it("no abre con otra ventana abierta, ignora IDs ajenos y no deja bloqueos colgados", () => {
       const r = setup();
+      near("apr-a");
       toReading(r);
       openList(r);
       expect(r.result.current.overlay).toBeNull(); // hay una lectura abierta

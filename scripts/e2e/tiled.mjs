@@ -1,13 +1,15 @@
 // E2E de la integración con Tiled: una edición hecha en los mapas de Tiled, importada con tiled:import, cambia el juego como
 // se espera (estación, gallina, planta y colisión) en las dos zonas y en escritorio y móvil; y en desarrollo el cambio de
-// bitacora.json recarga la página. El ejemplo se ejecuta sobre una copia temporal: no toca los archivos del repositorio.
+// maps.json (o bitacora.json) recarga la página. El ejemplo se ejecuta sobre una copia temporal: no toca los archivos del repositorio.
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { configJson, harness } from "./helpers.mjs";
 
 const out = execFileSync("npx", ["tsx", "scripts/tools/tiled-example.ts"], { encoding: "utf8", timeout: 180000 }).trim().split("\n").pop();
 const example = JSON.parse(out);
-const edited = JSON.parse(readFileSync(example.config, "utf8"));
+// Lo que importó el ejemplo: el maps.json resultante (`maps` y `placements`); el bitacora.json de la copia debe seguir idéntico al real.
+const edited = JSON.parse(readFileSync(example.maps, "utf8"));
+const contentUntouched = readFileSync(example.config).equals(readFileSync("public/config/bitacora.json"));
 
 const h = await harness();
 const { check } = h;
@@ -20,7 +22,7 @@ const obstacles = (t) => t.page.evaluate(() => window.__PHASER_GAME__.scene.getS
 const flowers = (t) => t.page.evaluate(() => window.__PHASER_GAME__.scene.getScene("ExplorationScene").children.list.filter((o) => o.texture?.key === "animation.flora.sunflowers").map((o) => ({ x: o.x, y: o.y, sx: o.scaleX })));
 
 try {
-  // ---- Antes: el juego con el bitacora.json de siempre; después: con lo que importó el ejemplo.
+  // ---- Antes: el juego con los archivos de siempre; después: con lo que importó el ejemplo.
   const before = await h.open();
   await before.start();
   const stBefore = (await before.stations()).find((s) => s.id === "apr-a").interaction;
@@ -37,7 +39,7 @@ try {
   check("T3 el girasol agrandado un 50 % se dibuja con esa escala en el juego", (await flowers(after)).some((f, i) => Math.abs(f.sx - fBefore[i].sx * 1.5) < 1e-6) && (await flowers(after)).length === fBefore.length, JSON.stringify({ fBefore, now: await flowers(after) }));
   check("T4 la colisión nueva es un cuerpo más del mundo", (await obstacles(after)) === oBefore + 1, `${oBefore} → ${await obstacles(after)}`);
   check("T5 sin errores en la consola con la configuración importada", after.errors.length === 0, after.errors.join(" | "));
-  check("T6 el resto de la configuración no cambió (route, textos, insignias)", JSON.stringify(edited.route) === JSON.stringify(configJson.route) && JSON.stringify(edited.learnings) === JSON.stringify(configJson.learnings) && JSON.stringify(edited.badges) === JSON.stringify(configJson.badges));
+  check("T6 el resto de la configuración no cambió: bitacora.json (route, textos, insignias) queda byte a byte igual", contentUntouched);
   await after.page.screenshot({ path: "/tmp/tiled-after-desktop.png" });
   // El jugador puede llegar a la estación movida (la zona sigue conectada).
   await after.place(stAfter.x, stAfter.y);
@@ -55,16 +57,18 @@ try {
   const zb = JSON.stringify(edited.maps["zona-b"]) === JSON.stringify(configJson.maps["zona-b"]);
   check("T9 la zona-b queda exactamente igual (la edición solo afectó a zona-a)", zb);
 
-  // ---- Desarrollo: cambiar bitacora.json recarga la página (recarga completa; la escena no se actualiza en caliente).
-  const dev = await h.open();
-  await dev.page.evaluate(() => { window.__marca = 1; });
-  const same = readFileSync("public/config/bitacora.json");
-  writeFileSync("public/config/bitacora.json", same); // mismo contenido, nueva fecha: lo que ve el observador de archivos
-  await dev.page.waitForFunction(() => window.__marca === undefined, null, { timeout: 8000 }).then(
-    () => check("T10 en desarrollo, un cambio en public/config/bitacora.json recarga la página", true),
-    () => check("T10 en desarrollo, un cambio en public/config/bitacora.json recarga la página", false, "la página no se recargó"),
-  );
-  await dev.close();
+  // ---- Desarrollo: cambiar maps.json (lo que escribe la importación) o bitacora.json recarga la página (recarga completa; la escena no se actualiza en caliente).
+  for (const file of ["maps.json", "bitacora.json"]) {
+    const dev = await h.open();
+    await dev.page.evaluate(() => { window.__marca = 1; });
+    const same = readFileSync(`public/config/${file}`);
+    writeFileSync(`public/config/${file}`, same); // mismo contenido, nueva fecha: lo que ve el observador de archivos
+    await dev.page.waitForFunction(() => window.__marca === undefined, null, { timeout: 8000 }).then(
+      () => check(`T10 en desarrollo, un cambio en public/config/${file} recarga la página`, true),
+      () => check(`T10 en desarrollo, un cambio en public/config/${file} recarga la página`, false, "la página no se recargó"),
+    );
+    await dev.close();
+  }
 } catch (e) {
   console.error(`✖ la prueba falló con una excepción: ${e.stack ?? e}`);
   process.exitCode = 1;

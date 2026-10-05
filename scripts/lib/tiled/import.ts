@@ -6,7 +6,7 @@ import { classDefaults } from "./project";
 import type { Source, TiledImageLayer, TiledIssue, TiledLayer, TiledMap, TiledObject, TiledObjectLayer, TiledProject, TiledTile, TiledTileset } from "./types";
 import { alignmentOf, classOf, clean, decodeGid, near, propsOf, TOLERANCE, type Prop, type PropMap } from "./util";
 
-// Lectura de un mapa de Tiled (.tmj) y conversión a los datos espaciales de bitacora.json: la operación inversa de export.ts.
+// Lectura de un mapa de Tiled (.tmj) y conversión a los datos espaciales de maps.json: la operación inversa de export.ts.
 // Todo lo que el contrato del juego no puede representar se rechaza con un error que señala el archivo, la capa y el objeto.
 
 export interface ImportContext {
@@ -32,7 +32,7 @@ export interface ZoneImport {
   file: string;
   zone: MapZone;
   stations: StationImport[];
-  /** Origen en Tiled de cada elemento importado, por su ruta en bitacora.json (`maps.zona-a.ambient[3]`). */
+  /** Origen en Tiled de cada elemento importado, por su ruta en maps.json (`maps.zona-a.ambient[3]`). */
   sources: Map<string, Source>;
 }
 
@@ -103,6 +103,15 @@ class Reader {
   }
 }
 
+/**
+ * Diferencia máxima (relativa) entre la escala horizontal y la vertical de un objeto para aceptarlo como uniforme con un aviso
+ * (lo que deja arrastrar una esquina sin Mayús). Por encima es un estiramiento y se rechaza.
+ */
+export const UNIFORM_LENIENCY = 0.05;
+
+/** Límites de las gallinas en maps.schema.json (una prueba comprueba que siguen coincidiendo): se avisan aquí con su objeto. */
+export const CRITTER_LIMITS = { scale: 4, radius: 120, chicks: 8, chickScale: 4 } as const;
+
 const MAP_CLASSES = new Set(["Station", "Decoration", "Ambient", "Critter", "Particles", "Swim", "Collision", "Spawn", "Portal"]);
 
 /** Resuelve las propiedades de un objeto: valores por defecto de su clase < propiedades del tile < propiedades del propio objeto. */
@@ -126,8 +135,9 @@ interface Walked {
  * Importa un mapa. Devuelve `result` solo si no hubo errores de lectura o de conversión; la validación posterior del proyecto
  * completo (esquemas, referencias, alcanzabilidad) la hace el llamador con la configuración candidata.
  */
-export function importMap(file: string, map: TiledMap, ctx: ImportContext): { result?: ZoneImport; issues: TiledIssue[] } {
+export function importMap(file: string, map: TiledMap, ctx: ImportContext): { result?: ZoneImport; issues: TiledIssue[]; warnings: TiledIssue[] } {
   const issues: TiledIssue[] = [];
+  const warnings: TiledIssue[] = [];
   const fileName = basename(file);
   const here = (extra: Partial<Source> = {}): Source => ({ file: fileName, ...extra });
   const fail = (message: string, extra: Partial<Source> = {}) => issues.push({ source: here(extra), message });
@@ -313,11 +323,19 @@ export function importMap(file: string, map: TiledMap, ctx: ImportContext): { re
       }
       if (native) return 1;
       const dev = Math.abs(w - (h * baseW) / baseH);
-      if (dev > TOLERANCE) {
-        r.fail(undefined, `la escala no es uniforme (${clean(w)} × ${clean(h)} px frente a una proporción de ${clean(g.logicalW)} × ${clean(g.logicalH)}): redimensiona manteniendo la proporción`);
-        return undefined;
+      if (dev <= TOLERANCE) return clean(w / baseW);
+      // Un arrastre de esquina sin Mayús deja una diferencia pequeña entre las dos escalas: se importa la media y se avisa. Una
+      // diferencia grande es un estiramiento de verdad, que el juego no puede dibujar, y se rechaza.
+      const sx = w / baseW;
+      const sy = h / baseH;
+      const relative = Math.abs(sx - sy) / Math.max(sx, sy);
+      if (relative <= UNIFORM_LENIENCY) {
+        const mean = clean((sx + sy) / 2);
+        warnings.push({ source, message: `la escala no era del todo uniforme (${clean(w)} × ${clean(h)} px: ${clean(sx)} y ${clean(sy)}, ${(relative * 100).toFixed(1)} % de diferencia): se usó la media, ${mean}. Para evitarlo, redimensiona manteniendo la proporción (Mayús)` });
+        return mean;
       }
-      return clean(w / baseW);
+      r.fail(undefined, `la escala no es uniforme (${clean(w)} × ${clean(h)} px, ${(relative * 100).toFixed(0)} % de diferencia entre el ancho y el alto frente a una proporción de ${clean(g.logicalW)} × ${clean(g.logicalH)}): redimensiona manteniendo la proporción (Mayús)`);
+      return undefined;
     };
     const noFlip = () => {
       if (flipH) r.fail("gid", `«${className}» no admite reflejo horizontal (no tiene el campo flipX). Deshaz el volteo en Tiled (Objects › Flip Horizontally, tecla X).`);
@@ -452,7 +470,7 @@ export function importMap(file: string, map: TiledMap, ctx: ImportContext): { re
         if (!checkRole("critter")) break;
         const assetId = tileAsset();
         const type = r.str("critterType");
-        const radius = r.num("radius", true, { exclusiveMin: 0 });
+        const radius = r.num("radius", true, { exclusiveMin: 0, max: CRITTER_LIMITS.radius });
         if (assetId === undefined || type === undefined || radius === undefined || !kindIn(assetId, ["critter-sheet"])) break;
         if (type !== "wander" && type !== "family") {
           r.fail("critterType", `debe ser «wander» o «family» (es «${type}»)`);
@@ -471,10 +489,13 @@ export function importMap(file: string, map: TiledMap, ctx: ImportContext): { re
         if (type === "family") {
           if (flipH) r.fail("gid", "una familia no admite reflejo horizontal (no tiene el campo flipX). Deshaz el volteo en Tiled (Objects › Flip Horizontally, tecla X).");
           chickAssetId = r.str("chickAssetId");
-          chicks = r.num("chicks", true, { int: true, min: 1 });
+          chicks = r.num("chicks", true, { int: true, min: 1, max: CRITTER_LIMITS.chicks });
           if (chickAssetId !== undefined && !manifest.assets[chickAssetId]) r.fail("chickAssetId", `asset ID no encontrado en assets.json: «${chickAssetId}»`);
           else if (chickAssetId !== undefined) kindIn(chickAssetId, ["critter-sheet"], "chickAssetId");
-          if (r.has("chickScale")) chickScale = r.num("chickScale", true, { exclusiveMin: 0 });
+          if (r.has("chickScale")) chickScale = r.num("chickScale", true, { exclusiveMin: 0, max: CRITTER_LIMITS.chickScale });
+        }
+        if (k !== undefined && k > CRITTER_LIMITS.scale) {
+          r.fail(undefined, `el animal mide ${clean(k)} veces su tamaño recomendado y el máximo es ${CRITTER_LIMITS.scale} (≈ ${Math.round(CRITTER_LIMITS.scale * g.baseW)} × ${Math.round(CRITTER_LIMITS.scale * g.baseH)} px; ahora ${clean(w)} × ${clean(h)} px): hazlo más pequeño`);
         }
         if (k === undefined || r.failed) break;
         const position = { x: clean(left + g.origin.x * w), y: clean(top + g.origin.y * h) };
@@ -570,9 +591,9 @@ export function importMap(file: string, map: TiledMap, ctx: ImportContext): { re
     }
   }
 
-  if (issues.length > 0 || zoneId === undefined || label === undefined || initialSpawnId === undefined) return { issues };
+  if (issues.length > 0 || zoneId === undefined || label === undefined || initialSpawnId === undefined) return { issues, warnings };
   const zone: MapZone = { label, width, height, layers, initialSpawnId, spawns, obstacles, decorations, ambient, ...(critters.length ? { critters } : {}), portals };
-  return { result: { zoneId, file: fileName, zone, stations, sources }, issues };
+  return { result: { zoneId, file: fileName, zone, stations, sources }, issues, warnings };
 }
 
 const resolve_ = (dir: string, rel: string): string => resolvePath(dir, rel);

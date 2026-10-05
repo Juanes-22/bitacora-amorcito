@@ -1,0 +1,34 @@
+{
+  "tool": "built-in ImageGen",
+  "reference": "references/presentation-reference.png",
+  "assets": [
+    {
+      "name": "panel-parchment",
+      "prompt": "Edit/extraction target reference welcome UI. Recreate/extract ONLY the large cream parchment panel with thick stepped ivory inner border, honey WOOD outer rim and ornate GOLD CORNER BRACKETS at all FOUR corners. Match the reference exactly in colors and thickness. Remove ALL content from inside: title sign, all text, Vanessa and dog, book, leaves, button, icons, divider. Interior must be uniformly warm cream #fff5df with a very subtle paper texture, blank. Outside the rectangular frame genuinely transparent, no map/background. Rectangular panel aspect ratio 1.47:1, large border width about 24px at a panel width 1040px, chunky pixel-art edging particularly corners. Output single isolated full panel frame blank with opaque cream center, NO text. Front view pixel art, no perspective. Reuse exact reference frame design, do not invent a thin modern gold outline. Intended to be nine-sliced."
+    },
+    {
+      "name": "title-wood-flowers",
+      "prompt": "Edit/extraction target attached reference. Extract/recreate ONLY the wooden title sign at TOP CENTER exactly as it looks in reference, with attached green leaves and tiny white daisies on left and right. Erase the two lines of title text, replace with matching pale honey wood grain. Everything else removed to genuine transparent alpha. Sign proportions match reference: overall 690 wide 174 high approx ratio4:1, very pale cream peach wood, rounded stepped wood ends, dark brown lower bevel, leaf groups mainly at the sides with small flowers. Keep all visual details and colors; do not expand foliage or darken sign. Large empty center for HTML title. No words letters or other assets. Single transparent PNG."
+    },
+    {
+      "name": "welcome-vanessa-jerry",
+      "prompt": "Edit/extraction target reference image. Extract/recreate precisely ONLY the RIGHT-SIDE Vanessa and white chihuahua Jerry illustration above open book, including original pale SAGE SOLID CIRCULAR HALO and its leafy botanical branches behind them, daisies, book, central tiny sprout and wooden base, a few gold sparkles and tiny peach heart. Keep EXACT reference face shape, pose, hairstyle, clothing, dog and composition, same original proportions: 465x420 approx. Do not reinterpret into another illustration. Crucial halo is a pale filled circle, not a transparent laurel wreath. Vanessa's hair reference brown bob, near-black jacket, earrings. One correction: side labret stud must be a very tiny subtle silver pixel beside LEFT CORNER OF MOUTH AS VIEWED, never centered below lower lip. Remove all text, frame, map, title, buttons, cream rectangular background. Genuine alpha outside the complete illustration and pale sage circular halo. Match reference as closely as possible."
+    },
+    {
+      "name": "button-continue",
+      "prompt": "Reference extraction. Create ONLY the large jade green button background from bottom center of attached image, remove all words and chevron so blank inside. Same stepped pixel-art silhouette, chamfered stepped corners, golden thin bottom edge, dark green border 6px, lighter mint inner top lip, rich soft jade center. Match original shape dimensions about 410x76 (5.4:1), no extra decorations attached. True transparency outside the button. Front view not perspective. Single wide PNG; no other assets, no letters."
+    },
+    {
+      "name": "leaf-sprig",
+      "prompt": "Reference extraction. Recreate ONLY the tiny green leafy decoration just LEFT of the Continue button in reference. Three leaves with thin brown-green stem, curved sprig leaning toward button, small horizontal green leaf near base, larger upper leaf, olive lighter pixel highlights dark outline. Absolutely NO SOIL NO SEED NO ROOTS NO POT. This is a detached decorative leafy SPRIG, not a growing seedling in soil. True transparent alpha. Single icon, exact reference pixel-art style. Shape about45x43 at final display, center with generous transparent margin."
+    },
+    {
+      "name": "sprout-flat",
+      "prompt": "Reference extraction. Recreate ONLY the tiny two-leaf green sprout used before ASIGNATURA in the attached image. Two little upright leaves and short thin brown-green stem, no soil mound no pot no seed no roots. Color olive jade pixel highlights and dark pixel outlines, no shadow. Single isolated icon on true transparent alpha, intended32x30 display. Match exact reference, restrained simple pixel-art. No text or other elements."
+    },
+    {
+      "name": "divider-seed",
+      "prompt": "Reference extraction. Recreate ONLY the horizontal divider between subject and student name in attached image. Very thin warm tan gold lines extend on both sides; a small light tan two-leaf seed motif in exact CENTER. Tiny diamond endpoints at left and right. Fine restrained pixel-art, not heavy jewel, no star no ornate gold large diamond. Proportions about450 wide22 tall. The center looks like two tiny pale leaves of a seed, warm muted khaki. True transparent alpha all around and between lines/leaves; no text no other assets."
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import assetsJson from "../../public/assets/assets.json";
-import bitacoraJson from "../../public/config/bitacora.json";
+import bitacoraJson from "./fixtures/realConfig";
 import type { BitacoraConfig } from "../config/types";
 import { zoneAssetIds, zoneAssetPlan } from "../game/systems/zoneAssets";
 

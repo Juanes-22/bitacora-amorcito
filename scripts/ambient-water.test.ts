@@ -5,11 +5,11 @@ import { PNG } from "pngjs";
 import type { AssetManifest, BitacoraConfig } from "../src/config/types";
 
 // AC-45: las ondas quedan dentro del agua y la espuma y las cascadas nacen en ella. «Agua» es el azul saturado del
-// terreno que ninguna capa de profundidad intermedia tapa. Es una auditoría estática del bitacora.json real.
+// terreno que ninguna capa de profundidad intermedia tapa. Es una auditoría estática del maps.json real.
 
 const manifestPath = resolve("public/assets/assets.json");
 const manifest = JSON.parse(readFileSync(manifestPath, "utf8")) as AssetManifest;
-const config = JSON.parse(readFileSync(resolve("public/config/bitacora.json"), "utf8")) as BitacoraConfig;
+const config = JSON.parse(readFileSync(resolve("public/config/maps.json"), "utf8")) as Pick<BitacoraConfig, "maps">;
 const root = dirname(manifestPath);
 
 const water = (terrainId: string) => {

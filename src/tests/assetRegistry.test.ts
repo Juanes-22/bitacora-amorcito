@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import manifestJson from "../../public/assets/assets.json";
-import bitacoraJson from "../../public/config/bitacora.json";
+import bitacoraJson from "./fixtures/realConfig";
 import { AssetError, createAssetRegistry, resolveAssetBase } from "../config/assetRegistry";
 import type { AssetManifest } from "../config/types";
 import { validateAssetManifest } from "../config/validateAssets";

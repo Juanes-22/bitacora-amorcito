@@ -15,7 +15,6 @@ export function releaseBlockers(config: BitacoraConfig, manifest?: AssetManifest
     const status = config.learnings[id]?.editorialStatus;
     if (status !== "ready") add(`learnings.${id}.editorialStatus`, `«${status}»: contenido sin aprobar por la autora`);
   }
-  if (config.project.finalReflection.length === 0) add("project.finalReflection", "la reflexión final de la autora está vacía");
   if (config.editorNotes?.trim()) add("editorNotes", "hay notas del editor: confirma que ya no queda geometría ni contenido provisional");
   // Música (SPEC 6.4): una pista sin atribución o licencia verificada no puede salir en la entrega final.
   if (manifest && config.audio.music.active) {

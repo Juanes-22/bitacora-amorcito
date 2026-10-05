@@ -4,6 +4,7 @@ import { Cover } from "../components/ui/Cover";
 import { LearningDialog } from "../components/reading/LearningDialog";
 import { BadgeCollection } from "../components/ui/BadgeCollection";
 import { BadgePanel } from "../components/ui/BadgePanel";
+import { JournalIndex } from "../components/ui/JournalIndex";
 import { ConfirmDialog } from "../components/ui/ConfirmDialog";
 import { LearningList } from "../components/ui/LearningList";
 import { IconButton } from "../components/ui/IconButton";
@@ -13,6 +14,7 @@ import { ProgressHUD } from "../components/ui/ProgressHUD";
 import { NearbyPrompt, type PromptHint } from "../components/ui/NearbyPrompt";
 import type { AssetRegistry } from "../config/assetRegistry";
 import { createLoader, describeFailure, type LoadResult } from "../config/loadApp";
+import { fullTitle } from "../domain/projectTitle";
 import type { BitacoraConfig } from "../config/types";
 import { GameBridge } from "../game/bridge/GameBridge";
 import type { AssetFailure } from "../game/bridge/events";
@@ -83,10 +85,12 @@ function Loaded({ config, assets }: { config: BitacoraConfig; assets: AssetRegis
   const { nearby, reading, actions, overlay, overlayActions } = useProgressController(bridge, config, store, hostRef);
 
   useEffect(() => {
-    document.title = `${config.project.title} | ${config.project.studentName}`;
+    document.title = `${fullTitle(config.project)} | ${config.project.studentName}`;
   }, [config]);
   useEffect(() => {
-    if (!started) startRef.current?.focus();
+    // El foco inicial va al botón de la portada sin anillo (no es una pulsación de teclado) y sin desplazar la portada (en un móvil
+    // es más alta que la pantalla y debe verse desde el título): el anillo sale al usar el teclado.
+    if (!started) startRef.current?.focus({ preventScroll: true, focusVisible: false } as FocusOptions);
   }, [started]);
   // El mapa es `inert` con la portada o la lectura abiertas: el foco vuelve a él cuando ya dejó de serlo.
   const readingWasOpen = useRef(false);
@@ -122,12 +126,18 @@ function Loaded({ config, assets }: { config: BitacoraConfig; assets: AssetRegis
           {reading ? <LearningDialog reading={reading} actions={actions} /> : null}
           {overlay?.kind === "collection" ? (
             config.ui.badgePanel ? (
-              <BadgePanel completion={overlay.completion} onClose={overlayActions.closeOverlay} onReset={overlayActions.askReset} onOpenLearning={overlayActions.openFromList} />
+              <BadgePanel completion={overlay.completion} onClose={overlayActions.closeOverlay} onReset={overlayActions.askReset} onOpenLearning={overlayActions.openFromList} initialLearningId={overlay.learningId} />
             ) : (
               <BadgeCollection completion={overlay.completion} onClose={overlayActions.closeOverlay} onReset={overlayActions.askReset} />
             )
           ) : null}
-          {overlay?.kind === "list" ? <LearningList onOpen={overlayActions.openFromList} onClose={overlayActions.closeOverlay} /> : null}
+          {overlay?.kind === "list" ? (
+            config.ui.journalPanel && config.ui.badgePanel ? (
+              <JournalIndex onOpen={overlayActions.openFromList} onClose={overlayActions.closeOverlay} />
+            ) : (
+              <LearningList onOpen={overlayActions.openFromList} onClose={overlayActions.closeOverlay} />
+            )
+          ) : null}
           {overlay?.kind === "confirm-reset" ? <ConfirmDialog onConfirm={overlayActions.confirmReset} onCancel={overlayActions.cancelReset} /> : null}
           {!started ? <Cover hasProgress={hasProgress(store)} onStart={() => { music?.start(); setStarted(true); }} startRef={startRef} /> : null}
           {assetFailures.length ? (

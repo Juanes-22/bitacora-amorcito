@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import bitacoraJson from "../../public/config/bitacora.json";
+import bitacoraJson from "./fixtures/realConfig";
 import type { BitacoraConfig } from "../config/types";
 import { IdleTimeline, type Facing } from "../game/systems/IdleTimeline";
 

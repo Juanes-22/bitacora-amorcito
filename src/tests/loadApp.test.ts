@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import manifestJson from "../../public/assets/assets.json";
-import bitacoraJson from "../../public/config/bitacora.json";
+import realConfig from "./fixtures/realConfig";
+import { splitConfig } from "../config/mapsFile";
 import { describeFailure, documentUrls, createLoader, loadApp } from "../config/loadApp";
 import type { Fetcher } from "../config/fetchJson";
 
@@ -18,15 +19,18 @@ function server(routes: Record<string, () => Response | Promise<Response>>) {
   };
   return { fetcher, calls };
 }
+const { content: contentFile, mapsFile } = splitConfig(realConfig);
 const good = () => ({
   "assets/assets.json": () => json(manifestJson),
-  "config/bitacora.json": () => json(bitacoraJson),
+  "config/bitacora.json": () => json(contentFile),
+  "config/maps.json": () => json(mapsFile),
 });
 
 describe("documentUrls: base de despliegue", () => {
-  it("resuelve ambos documentos bajo cualquier base de Vite", () => {
+  it("resuelve los documentos bajo cualquier base de Vite", () => {
     expect(documentUrls({ baseUrl: "./", documentBase: "http://h/app/" })).toEqual({
       config: "http://h/app/config/bitacora.json",
+      maps: "http://h/app/config/maps.json",
       assets: "http://h/app/assets/assets.json",
     });
     expect(documentUrls({ baseUrl: "/bitacora/", documentBase: "http://h/bitacora/index.html" }).assets).toBe("http://h/bitacora/assets/assets.json");
@@ -43,11 +47,14 @@ describe("loadApp", () => {
     expect(r.config.route).toHaveLength(6);
     expect(r.assets.url("ui.icon.xp-star")).toBe("http://localhost:5173/assets/ui/icons/xp-star.png");
     expect(r.urls.config).toBe("http://localhost:5173/config/bitacora.json");
-    expect(s.calls.map((c) => c.init?.cache)).toEqual(["no-cache", "no-cache"]);
+    expect(r.urls.maps).toBe("http://localhost:5173/config/maps.json");
+    expect(Object.keys(r.config.maps)).toEqual(Object.keys(realConfig.maps)); // la geometría viene de maps.json
+    expect(r.config.placements["apr-a"]).toEqual(realConfig.placements["apr-a"]);
+    expect(s.calls.map((c) => c.init?.cache)).toEqual(["no-cache", "no-cache", "no-cache"]);
   });
 
   it("HTTP 404 en assets.json: falla de red con la URL y sin pedir bitacora.json", async () => {
-    const s = server({ "config/bitacora.json": () => json(bitacoraJson) });
+    const s = server({ "config/bitacora.json": () => json(contentFile), "config/maps.json": () => json(mapsFile) });
     const r = await loadApp({ ...BASE, fetcher: s.fetcher });
     expect(r).toMatchObject({ ok: false, failure: { stage: "network", url: "http://localhost:5173/assets/assets.json" } });
     expect(s.calls).toHaveLength(1);
@@ -64,6 +71,13 @@ describe("loadApp", () => {
     expect(r).toMatchObject({ ok: false, failure: { stage: "parse", url: "http://localhost:5173/config/bitacora.json" } });
   });
 
+  it("maps.json mal formado o ausente: falla la carga con la URL de ese archivo", async () => {
+    const parse = await loadApp({ ...BASE, fetcher: server({ ...good(), "config/maps.json": () => new Response("{ no es json") }).fetcher });
+    expect(parse).toMatchObject({ ok: false, failure: { stage: "parse", url: "http://localhost:5173/config/maps.json" } });
+    const missing = await loadApp({ ...BASE, fetcher: server({ "assets/assets.json": () => json(manifestJson), "config/bitacora.json": () => json(contentFile) }).fetcher });
+    expect(missing).toMatchObject({ ok: false, failure: { stage: "network", url: "http://localhost:5173/config/maps.json" } });
+  });
+
   it("manifiesto incoherente: etapa assets con la ruta del problema", async () => {
     const bad = { ...manifestJson, assetCount: 1 };
     const s = server({ ...good(), "assets/assets.json": () => json(bad) });
@@ -74,7 +88,7 @@ describe("loadApp", () => {
   });
 
   it("manifiesto válido pero bitácora inválida: etapa bitacora, sin mundo parcial", async () => {
-    const bad = structuredClone(bitacoraJson) as unknown as { route: string[] };
+    const bad = structuredClone(contentFile) as unknown as { route: string[] };
     bad.route.push("fantasma");
     const s = server({ ...good(), "config/bitacora.json": () => json(bad) });
     const r = await loadApp({ ...BASE, fetcher: s.fetcher });
@@ -82,6 +96,20 @@ describe("loadApp", () => {
     if (r.ok || r.failure.stage !== "bitacora") throw new Error("se esperaba stage bitacora");
     expect(r.failure.issues[0].path).toBe("route[6]");
     expect("config" in r).toBe(false);
+  });
+
+  it("maps.json inválido: etapa bitacora con las rutas de ese archivo (forma y referencias cruzadas)", async () => {
+    const badShape = structuredClone(mapsFile) as unknown as { maps: Record<string, { width: unknown }>; sobra: number };
+    badShape.sobra = 1;
+    badShape.maps["zona-a"].width = "ancho";
+    const shape = await loadApp({ ...BASE, fetcher: server({ ...good(), "config/maps.json": () => json(badShape) }).fetcher });
+    if (shape.ok || shape.failure.stage !== "bitacora") throw new Error("se esperaba stage bitacora");
+    expect(shape.failure.issues.map((i) => i.path)).toEqual(expect.arrayContaining(["sobra", "maps.zona-a.width"]));
+    const badRef = structuredClone(mapsFile) as unknown as { placements: Record<string, { zoneId: string }> };
+    badRef.placements["apr-a"].zoneId = "zona-fantasma";
+    const ref = await loadApp({ ...BASE, fetcher: server({ ...good(), "config/maps.json": () => json(badRef) }).fetcher });
+    if (ref.ok || ref.failure.stage !== "bitacora") throw new Error("se esperaba stage bitacora");
+    expect(ref.failure.issues.some((i) => i.path.startsWith("placements.apr-a"))).toBe(true);
   });
 });
 
@@ -92,7 +120,7 @@ describe("createLoader: una sola carga y reintento", () => {
     const [a, b] = await Promise.all([load(), load()]);
     expect(a).toBe(b);
     await load();
-    expect(s.calls).toHaveLength(2);
+    expect(s.calls).toHaveLength(3);
   });
 
   it("un fallo no se guarda: reintentar vuelve a pedir los documentos", async () => {
@@ -103,7 +131,7 @@ describe("createLoader: una sola carga y reintento", () => {
     expect((await load()).ok).toBe(false);
     online = true;
     expect((await load()).ok).toBe(true);
-    expect(base.calls).toHaveLength(2);
+    expect(base.calls).toHaveLength(3); // assets, bitacora y maps, solo de la segunda carga (la primera falló sin conexión)
   });
 });
 
@@ -111,6 +139,8 @@ describe("describeFailure", () => {
   it("formatea cada etapa", () => {
     expect(describeFailure({ stage: "network", url: "u", message: "HTTP 404" })).toBe("No se pudo cargar u: HTTP 404");
     expect(describeFailure({ stage: "parse", url: "u", message: "x" })).toContain("no es JSON válido");
-    expect(describeFailure({ stage: "bitacora", url: "u", issues: [{ path: "route[0]", message: "m" }] })).toBe("bitacora.json no es válido:\n  route[0]: m");
+    expect(describeFailure({ stage: "bitacora", url: "u", issues: [{ path: "route[0]", message: "m" }, { path: "maps.zona-a.width", message: "n" }, { path: "placements.apr-a", message: "o" }] })).toBe(
+      "bitacora.json o maps.json no es válido:\n  bitacora.json › route[0]: m\n  maps.json › maps.zona-a.width: n\n  maps.json › placements.apr-a: o",
+    );
   });
 });

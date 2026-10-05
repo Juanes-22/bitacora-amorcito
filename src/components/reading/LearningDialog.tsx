@@ -9,6 +9,7 @@ import type { SectionId } from "../../config/types";
 import { PixelButton } from "../ui/PixelButton";
 import { WindowPanel } from "../ui/WindowPanel";
 import { ContentRenderer } from "./ContentRenderer";
+import { JournalReader } from "./JournalReader";
 import { LearningTabs, panelId, tabId } from "./LearningTabs";
 import { useFocusTrap } from "./useFocusTrap";
 
@@ -22,7 +23,14 @@ const REWARD_GUARD_MS = 450;
  * seleccionable y accesible, nunca texto de Phaser. Modal: título, cierre visible, foco inicial coherente,
  * foco contenido y Escape; quien la cierra devuelve el foco al mapa.
  */
-export function LearningDialog({ reading, actions }: { reading: ReadingState; actions: ReadingActions }) {
+export function LearningDialog(props: { reading: ReadingState; actions: ReadingActions }) {
+  const { config } = useBitacora();
+  // Con el kit de la Bitácora de aprendizajes, la lectura es su lector; la apertura, los mensajes y la recompensa conservan su ventana.
+  if (props.reading.kind === "reading" && config.ui.journalPanel && config.ui.badgePanel) return <JournalReader reading={props.reading} actions={props.actions} />;
+  return <ClassicLearningDialog {...props} />;
+}
+
+function ClassicLearningDialog({ reading, actions }: { reading: ReadingState; actions: ReadingActions }) {
   const { config, assets } = useBitacora();
   const { state, summary } = useProgress();
   const ref = useRef<HTMLDivElement>(null);
@@ -74,12 +82,20 @@ export function LearningDialog({ reading, actions }: { reading: ReadingState; ac
 
   let body: React.ReactNode;
   if (reading.kind === "message") {
-    const lines = reading.event === "pending" ? [{ speaker: "narrator" as const, text: labels.pending }] : dialogueLines(config, state, reading.learningId, "locked");
+    const away = renderTemplate(labels.awayFromStationTemplate ?? "Ve a la estación de «{title}» en {zone} para explorarlo.", {
+      number: stationNumber(config.route, reading.learningId),
+      title: learning.title,
+      zone: config.maps[config.placements[reading.learningId]?.zoneId]?.label ?? "",
+    });
+    const lines =
+      reading.event === "pending" ? [{ speaker: "narrator" as const, text: labels.pending }]
+      : reading.event === "away" ? [{ speaker: "narrator" as const, text: away }]
+      : dialogueLines(config, state, reading.learningId, "locked");
     body = (
       <>
         <div className="reading__body">
           <Lines lines={lines} />
-          {config.mode === "demo" ? <p className="reading__demo">{labels.demo}</p> : null}
+          {config.mode === "demo" && labels.demo ? <p className="reading__demo">{labels.demo}</p> : null}
         </div>
         <div className="reading__footer">
           <PixelButton data-autofocus onClick={actions.close}>{labels.close}</PixelButton>
@@ -91,7 +107,7 @@ export function LearningDialog({ reading, actions }: { reading: ReadingState; ac
       <>
         <div className="reading__body">
           <Lines lines={dialogueLines(config, state, reading.learningId, reading.event)} />
-          {config.mode === "demo" ? <p className="reading__demo">{labels.demo}</p> : null}
+          {config.mode === "demo" && labels.demo ? <p className="reading__demo">{labels.demo}</p> : null}
         </div>
         <div className="reading__footer">
           <PixelButton data-autofocus onClick={actions.continueReading}>{labels.next}</PixelButton>
@@ -138,7 +154,7 @@ export function LearningDialog({ reading, actions }: { reading: ReadingState; ac
           tabIndex={0}
           className="reading__body reading__panel"
         >
-          {config.mode === "demo" ? <p className="reading__demo">{labels.demo}</p> : null}
+          {config.mode === "demo" && labels.demo ? <p className="reading__demo">{labels.demo}</p> : null}
           <ContentRenderer blocks={learning.sections[active]} />
           <div className="reading__section-actions">
             <p className={`reading__status${activeRead ? " reading__status--read" : ""}`} role="status">

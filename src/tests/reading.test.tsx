@@ -3,7 +3,7 @@ import { act, cleanup, fireEvent, render, screen, within } from "@testing-librar
 import { useState } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import manifestJson from "../../public/assets/assets.json";
-import bitacoraJson from "../../public/config/bitacora.json";
+import bitacoraJson from "./fixtures/realConfig";
 import { BitacoraProvider } from "../app/BitacoraProvider";
 import { dialogueLines } from "../app/dialogues";
 import { ProgressStore } from "../app/progressStore";
@@ -17,10 +17,11 @@ import { createAssetRegistry } from "../config/assetRegistry";
 import type { AssetManifest, BitacoraConfig, ContentBlock, SectionId } from "../config/types";
 import { initialProgress } from "../domain/reconcileProgress";
 import { ProgressStorage, type StorageLike } from "../storage/progressStorage";
+import { classicOf, demoOf } from "./fixtures/demoConfig";
 
 afterEach(cleanup);
 const assets = createAssetRegistry(manifestJson as unknown as AssetManifest, "http://localhost:5173/assets/assets.json");
-const base = bitacoraJson as unknown as BitacoraConfig;
+const base = classicOf(demoOf(bitacoraJson as unknown as BitacoraConfig));
 const ALL: SectionId[] = ["learning", "reflection", "lived"];
 
 class MemoryStorage implements StorageLike {
@@ -44,6 +45,8 @@ function Harness({ config, store, initial, onClose }: { config: BitacoraConfig; 
     markRead: (s) => void store.markSection(id, s),
     claimBadge: () => { const r = store.claimBadge(id); if (r.ok && r.changed) setReading({ kind: "reward", learningId: id }); },
     close: () => { setReading(null); onClose?.(); },
+    backToList: () => { setReading(null); onClose?.(); },
+    openBadge: () => { setReading(null); onClose?.(); },
   };
   return <LearningDialog reading={reading} actions={actions} />;
 }
@@ -234,6 +237,24 @@ describe("LearningDialog", () => {
     expect(screen.queryByText(/Para mí fue una experiencia muy bonita/)).toBeNull();
   });
 
+  it("lejos de su estación, un aprendizaje sin completar muestra el aviso con su título y su zona (y sin pestañas ni contenido)", () => {
+    open(base, { kind: "message", learningId: "apr-a", event: "away" });
+    const text = screen.getByRole("dialog").textContent ?? "";
+    expect(text).toContain("Para explorar «Las plantas y las semillas» ve a su estación en Pradera del cerezo");
+    expect(screen.queryByRole("tablist")).toBeNull();
+    expect(screen.queryByText(/Por medio de una exploración/)).toBeNull();
+    cleanup();
+    const edited = structuredClone(base);
+    edited.ui.labels.awayFromStationTemplate = "Ve a {zone} ({number}: {title}).";
+    open(edited, { kind: "message", learningId: "apr-d", event: "away" });
+    expect(screen.getByRole("dialog").textContent).toContain("Ve a Jardín del pabellón (4: Pingüinos: cómo se adaptan los seres vivos).");
+    cleanup();
+    const defaults = structuredClone(base);
+    delete defaults.ui.labels.awayFromStationTemplate;
+    open(defaults, { kind: "message", learningId: "apr-a", event: "away" });
+    expect(screen.getByRole("dialog").textContent).toContain("Ve a la estación de «Las plantas y las semillas» en Pradera del cerezo");
+  });
+
   it("en la fase de mensaje el foco entra en la ventana (en «Cerrar»): si no, Escape no la cerraría", () => {
     const onClose = vi.fn();
     open(base, { kind: "message", learningId: "apr-b", event: "locked" }, undefined, onClose);
@@ -285,15 +306,33 @@ describe("LearningDialog", () => {
     expect(screen.getByRole("status").textContent).toBe("Pendiente");
   });
 
-  it("modo final: sin la etiqueta de demostración; modo demo: la muestra", () => {
-    open(base, { kind: "reading", learningId: "apr-a", active: "lived" });
+  it("modo final: sin la etiqueta de demostración; modo demo: la muestra (si la configuración la define)", () => {
+    const withLabel = structuredClone(base);
+    withLabel.ui.labels.demo = "Contenido de demostración";
+    open(withLabel, { kind: "reading", learningId: "apr-a", active: "lived" });
     expect(screen.getByText("Contenido de demostración")).toBeTruthy();
     cleanup();
-    const final = structuredClone(base);
+    const final = structuredClone(withLabel);
     final.mode = "final";
     final.learnings["apr-a"].editorialStatus = "ready";
     open(final, { kind: "reading", learningId: "apr-a", active: "lived" });
     expect(screen.queryByText("Contenido de demostración")).toBeNull();
+  });
+
+  it("sin la etiqueta `demo` (la configuración real) ninguna ventana de un aprendizaje muestra «de demostración» aunque el modo sea demo", () => {
+    const real = structuredClone(base);
+    delete real.ui.labels.demo;
+    expect(real.mode).toBe("demo");
+    for (const reading of [
+      { kind: "intro", learningId: "apr-a", event: "open" },
+      { kind: "reading", learningId: "apr-a", active: "learning" },
+      { kind: "message", learningId: "apr-b", event: "locked" },
+    ] as const) {
+      open(real, reading as never);
+      expect(document.querySelector(".reading__demo"), reading.kind).toBeNull();
+      expect(screen.queryByText(/demostración/i), reading.kind).toBeNull();
+      cleanup();
+    }
   });
 });
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import bitacoraJson from "../../public/config/bitacora.json";
+import bitacoraJson from "./fixtures/realConfig";
 import { frameDefinitions } from "../assets/frameDefinitions";
 import type { BitacoraConfig } from "../config/types";
 import { cameraBounds, effectiveZoom } from "../game/systems/framing";

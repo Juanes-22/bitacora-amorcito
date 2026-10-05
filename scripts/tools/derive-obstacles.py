@@ -2,7 +2,7 @@
 """Deriva obstáculos PROVISIONALES de las capas reales de public/assets y verifica alcanzabilidad.
 
 No forma parte de la aplicación ni del build: es una herramienta puntual de edición que ayudó a
-escribir `maps.*.obstacles` de public/config/bitacora.json. Requiere Pillow y numpy.
+escribir `maps.*.obstacles` (hoy en public/config/maps.json; entonces estaba en bitacora.json). Requiere Pillow y numpy.
 
 Criterio (revisable): se bloquea lo que no es suelo en la capa `terrain` (alpha), el agua y las rocas
 (por color) y lo que dibujan `midground` y `foreground`. Después se abren corredores explícitos donde el

@@ -5,6 +5,7 @@ import { renderTemplate } from "../../domain/templates";
 import type { GameBridge } from "../../game/bridge/GameBridge";
 import { AvatarPortrait } from "./AvatarPortrait";
 import { IconButton } from "./IconButton";
+import { fullTitle } from "../../domain/projectTitle";
 
 /**
  * Cabecera compacta (SPEC 14): el panel con el avatar —nombre y nivel, barra de XP con su valor y «1 de 6 aprendizajes»—, la
@@ -40,7 +41,7 @@ export function ProgressHUD({ onOpenBadges, tools, bridge }: { onOpenBadges?: ()
   const xpText = renderTemplate(labels.xpTemplate, { xp: summary.xp, maxXp: summary.maxXp });
 
   return (
-    <section className="hud" aria-label={config.project.title}>
+    <section className="hud" aria-label={fullTitle(config.project)}>
       <div className="hud__stack">
       <div className="hud__panel hud--panel" style={panelStyle}>
         <AvatarPortrait bridge={bridge} />

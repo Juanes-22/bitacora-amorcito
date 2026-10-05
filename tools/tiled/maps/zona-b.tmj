@@ -474,40 +474,6 @@
                 }, 
                 {
                  "gid":13,
-                 "height":134.534763,
-                 "id":12,
-                 "name":"bush",
-                 "opacity":1,
-                 "properties":[
-                        {
-                         "name":"ambientType",
-                         "type":"string",
-                         "value":"sway"
-                        }, 
-                        {
-                         "name":"assetId",
-                         "type":"string",
-                         "value":"decoration.plant.bush"
-                        }, 
-                        {
-                         "name":"depth",
-                         "type":"int",
-                         "value":0
-                        }, 
-                        {
-                         "name":"depthMode",
-                         "type":"string",
-                         "value":"y"
-                        }],
-                 "rotation":0,
-                 "type":"Ambient",
-                 "visible":true,
-                 "width":134.534763,
-                 "x":760.64060293535,
-                 "y":472.201630586726
-                }, 
-                {
-                 "gid":13,
                  "height":149.48307,
                  "id":13,
                  "name":"bush",
@@ -542,8 +508,8 @@
                  "type":"Ambient",
                  "visible":true,
                  "width":149.48307,
-                 "x":622.9340032615,
-                 "y":599.11292287414
+                 "x":789.174412468661,
+                 "y":677.260123783489
                 }, 
                 {
                  "gid":13,
@@ -1376,7 +1342,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -1600,7 +1566,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -1611,7 +1577,7 @@
          "objects":[],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -1724,7 +1690,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -1813,11 +1779,12 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
         {
+         "color":"#ff2600",
          "draworder":"topdown",
          "id":10,
          "name":"colisiones",
@@ -3246,20 +3213,20 @@
                  "rotation":0,
                  "type":"Collision",
                  "visible":true,
-                 "width":376,
+                 "width":384.772699359593,
                  "x":0,
                  "y":712
                 }, 
                 {
-                 "height":8,
+                 "height":27.2999385911045,
                  "id":168,
                  "name":"",
                  "opacity":1,
                  "rotation":0,
                  "type":"Collision",
                  "visible":true,
-                 "width":16,
-                 "x":440,
+                 "width":26.5272392315115,
+                 "x":429.472760768488,
                  "y":720
                 }, 
                 {
@@ -3294,7 +3261,7 @@
                  "rotation":0,
                  "type":"Collision",
                  "visible":true,
-                 "width":384,
+                 "width":430.495306605843,
                  "x":0,
                  "y":728
                 }, 
@@ -3330,7 +3297,7 @@
                  "rotation":0,
                  "type":"Collision",
                  "visible":true,
-                 "width":392,
+                 "width":430.599877182209,
                  "x":0,
                  "y":736
                 }, 
@@ -3474,7 +3441,7 @@
                  "rotation":0,
                  "type":"Collision",
                  "visible":true,
-                 "width":432,
+                 "width":453.054478463023,
                  "x":0,
                  "y":744
                 }, 
@@ -4775,7 +4742,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":294,
+ "nextobjectid":295,
  "orientation":"orthogonal",
  "properties":[
         {

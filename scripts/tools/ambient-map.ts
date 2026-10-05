@@ -5,13 +5,17 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { PNG } from "pngjs";
 import { reachableCells } from "../../src/config/reachability";
-import type { AssetManifest, BitacoraConfig } from "../../src/config/types";
+import { mergeConfig } from "../../src/config/mapsFile";
+import type { AssetManifest, BitacoraConfig, BitacoraContent, MapsFile } from "../../src/config/types";
 
 const out = process.argv[2];
 if (!out) throw new Error("Indica el directorio de salida");
 mkdirSync(out, { recursive: true });
 const manifest = JSON.parse(readFileSync("public/assets/assets.json", "utf8")) as AssetManifest;
-const config = JSON.parse(readFileSync("public/config/bitacora.json", "utf8")) as BitacoraConfig;
+const config: BitacoraConfig = mergeConfig(
+  JSON.parse(readFileSync("public/config/bitacora.json", "utf8")) as BitacoraContent,
+  JSON.parse(readFileSync("public/config/maps.json", "utf8")) as MapsFile,
+);
 
 for (const [zoneId, zone] of Object.entries(config.maps)) {
   const canvas = new PNG({ width: zone.width, height: zone.height });

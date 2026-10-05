@@ -15,9 +15,11 @@ interface Props {
   onReset: () => void;
   /** «Ver aprendizaje»: cierra el panel y abre ese aprendizaje con las mismas reglas que el mapa. */
   onOpenLearning: (learningId: string) => void;
+  /** Abre directamente el detalle de la insignia de este aprendizaje (desde «Ver insignia» del lector). */
+  initialLearningId?: string;
 }
 
-/** Una insignia lista para pintar: la de un aprendizaje (con su posición en la ruta) o una de recorrido (la de Jerry). */
+/** Una insignia lista para pintar: la de un aprendizaje (con su posición en la ruta) o una de recorrido (la de Jerry y, si es secreta, la de Rocky solo al terminar). */
 interface Item {
   key: string;
   badge: Badge;
@@ -39,13 +41,13 @@ const pad = (n: number) => String(n).padStart(2, "0");
  * colección y, desde la colección, la cierra; el foco queda dentro del panel. «Lo que me llevo» solo aparece si la autora
  * la escribió (`badges[id].takeaway`): nunca se inventa.
  */
-export function BadgePanel({ completion, onClose, onReset, onOpenLearning }: Props) {
+export function BadgePanel({ completion, onClose, onReset, onOpenLearning, initialLearningId }: Props) {
   const { config, assets } = useBitacora();
   const { state, summary } = useProgress();
   const panel = config.ui.badgePanel as BadgePanelConfig;
   const t = panel.labels;
   const { labels } = config.ui;
-  const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [selectedKey, setSelectedKey] = useState<string | null>(initialLearningId && config.route.includes(initialLearningId) ? initialLearningId : null);
   const dialog = useRef<HTMLDivElement>(null);
   const headingId = useId();
 
@@ -59,7 +61,10 @@ export function BadgePanel({ completion, onClose, onReset, onOpenLearning }: Pro
   }, [config, state.entries]);
   const finishedAt = config.route.map((id) => state.entries[id]?.completedAt).filter((d): d is string => !!d).sort().at(-1);
   const special = useMemo<Item[]>(
-    () => Object.entries(config.badges).filter(([, b]) => b.awardedFor === "route-complete").map(([id, badge]) => ({ key: id, badge, earned: summary.finished, earnedAt: summary.finished ? finishedAt : undefined })),
+    () =>
+      Object.entries(config.badges)
+        .filter(([, b]) => b.awardedFor === "route-complete" && (!b.secret || summary.finished))
+        .map(([id, badge]) => ({ key: id, badge, earned: summary.finished, earnedAt: summary.finished ? finishedAt : undefined })),
     [config.badges, summary.finished, finishedAt],
   );
   const all = [...items, ...special];
@@ -88,6 +93,8 @@ export function BadgePanel({ completion, onClose, onReset, onOpenLearning }: Pro
     dialog.current?.querySelector<HTMLElement>("button")?.focus();
   }, [selectedKey]);
 
+  /** Los textos de una insignia de recuerdo (`specialType: "memorial"`); el validador garantiza que existen si hay alguna. */
+  const memorialOf = (it: Item) => (it.badge.specialType === "memorial" ? t.memorial : undefined);
   const status = (it: Item, expanded = false) => (
     <span className={`bpk-status ${it.earned ? "bpk-status--earned" : "bpk-status--pending"}`}>
       {it.earned ? icon("check-white") : null}
@@ -176,13 +183,14 @@ export function BadgePanel({ completion, onClose, onReset, onOpenLearning }: Pro
                 key={it.key}
                 className="bpk-special"
                 data-route-badge={it.key}
-                aria-label={`${it.badge.title}. ${it.earned ? t.obtained : t.pending}. ${t.special}. ${t.viewBadge}`}
+                aria-label={`${it.badge.title}. ${it.badge.subtitle ? `${it.badge.subtitle}. ` : ""}${it.earned ? t.obtained : t.pending}. ${t.special}. ${t.viewBadge}`}
                 onClick={() => setSelectedKey(it.key)}
               >
                 {icon("paw-lavender")}
                 <img src={assets.url(it.badge.assetId)} className={`bpk-medal${it.earned ? "" : " bpk-medal--pending"}`} alt="" />
                 <div>
                   <p className="bpk-special-title">{it.badge.title}</p>
+                  {it.badge.subtitle ? <p className="bpk-special-subtitle">{it.badge.subtitle}</p> : null}
                   <span className="bpk-status bpk-status--special">
                     {icon("paw-lavender")}
                     {t.special}
@@ -194,10 +202,10 @@ export function BadgePanel({ completion, onClose, onReset, onOpenLearning }: Pro
                 {icon("chevron-right")}
               </button>
             ))}
-            {summary.finished ? (
+            {summary.finished && config.project.finalReflection.length > 0 ? (
               <section className="bpk-reflection" aria-labelledby="bpk-reflection-title">
                 <h3 id="bpk-reflection-title">{labels.finalReflectionTitle}</h3>
-                {config.project.finalReflection.length > 0 ? <ContentRenderer blocks={config.project.finalReflection} /> : <p>{labels.finalReflectionPending}</p>}
+                <ContentRenderer blocks={config.project.finalReflection} />
               </section>
             ) : null}
             <footer className="bpk-footer">
@@ -231,11 +239,15 @@ export function BadgePanel({ completion, onClose, onReset, onOpenLearning }: Pro
                 {icon("flowers-bottom-right", "bpk-hero-flower bpk-hero-flower--right")}
               </div>
               <article className="bpk-detail-copy">
-                <p className="bpk-eyebrow">{selected.number ? t.eyebrowLearning : t.eyebrowSpecial}</p>
+                <p className="bpk-eyebrow">{selected.number ? t.eyebrowLearning : (memorialOf(selected)?.eyebrow ?? t.eyebrowSpecial)}</p>
                 <h2 id={headingId}>{selected.badge.title}</h2>
+                {selected.badge.subtitle && !memorialOf(selected) ? <p className="bpk-detail-subtitle">{selected.badge.subtitle}</p> : null}
                 <p className="bpk-date">
-                  {icon(selected.earned ? "calendar" : "lock-seal")}
-                  {selected.earned ? (selected.earnedAt ? renderTemplate(labels.earnedOnTemplate, { date: formatDate(selected.earnedAt) }) : labels.badgeEarned) : t.stillPending}
+                  {icon(!selected.earned ? "lock-seal" : memorialOf(selected) ? "heart-green" : "calendar")}
+                  {!selected.earned
+                    ? (selected.number ? t.stillPending : (t.unlocksAtEnd ?? t.stillPending))
+                    : memorialOf(selected) ? (selected.badge.subtitle ?? labels.badgeEarned)
+                    : selected.earnedAt ? renderTemplate(labels.earnedOnTemplate, { date: formatDate(selected.earnedAt) }) : labels.badgeEarned}
                 </p>
                 <div className="bpk-divider" aria-hidden="true">
                   {icon("divider-line-left", "bpk-divider-line")}
@@ -247,18 +259,20 @@ export function BadgePanel({ completion, onClose, onReset, onOpenLearning }: Pro
                   <p>{selected.badge.description}</p>
                 </section>
                 <section className="bpk-detail-section">
-                  <h3>{icon("book-brown")}{selected.earned ? t.howEarned : t.howToEarn}</h3>
+                  <h3>{icon("book-brown")}{selected.earned ? (memorialOf(selected)?.place ?? t.howEarned) : t.howToEarn}</h3>
                   <p>
                     {selected.number
                       ? renderTemplate(selected.earned ? t.completingTemplate : t.completeTemplate, { number: learningNumber(selected) })
-                      : selected.earned ? t.routeEarned : t.completeRoute}
+                      : !selected.earned ? (selected.badge.unlockCondition ?? t.completeRoute)
+                      : memorialOf(selected) ? renderTemplate(memorialOf(selected)?.placeTemplate ?? "", { name: selected.badge.title })
+                      : t.routeEarned}
                   </p>
                   {selected.learningTitle ? <div className="bpk-lesson-callout">{icon("sprout")}{selected.learningTitle}</div> : null}
                 </section>
                 {selected.earned && selected.badge.takeaway ? (
                   <section className="bpk-detail-section">
-                    <h3>{icon("heart-green")}{t.takeaway}</h3>
-                    <div className="bpk-reflection-callout">{icon("sprout")}<span>{selected.badge.takeaway}</span></div>
+                    <h3>{icon("heart-green")}{memorialOf(selected)?.takeaway ?? t.takeaway}</h3>
+                    <div className="bpk-reflection-callout">{icon(memorialOf(selected) ? "paw-lavender" : "sprout")}<span>{selected.badge.takeaway}</span></div>
                   </section>
                 ) : null}
               </article>

@@ -3,6 +3,7 @@ import { useBitacora } from "../../app/BitacoraProvider";
 import { renderTemplate } from "../../domain/templates";
 import { unapprovedIds } from "../../domain/progression";
 import { PixelButton } from "./PixelButton";
+import { Presentation } from "./Presentation";
 import { WindowPanel } from "./WindowPanel";
 
 interface Props {
@@ -15,6 +16,8 @@ interface Props {
 /** Portada: todo el texto sale de `project` y `ui.labels`; nada se copia en el componente. */
 export function Cover({ hasProgress, onStart, startRef }: Props) {
   const { config, assets } = useBitacora();
+  // Con `ui.presentation` la portada es la presentación del kit; sin ella, la portada sencilla de siempre.
+  if (config.ui.presentation) return <Presentation hasProgress={hasProgress} onStart={onStart} startRef={startRef} />;
   const { project, ui, mode } = config;
   const title = assets.get(ui.assets.titleSign);
   const titleStyle = {
@@ -37,7 +40,7 @@ export function Cover({ hasProgress, onStart, startRef }: Props) {
           {project.teacherName ? <li>{ui.labels.teacher} {project.teacherName}</li> : null}
         </ul>
         <p className="cover__welcome">{project.welcomeText}</p>
-        {mode === "demo" ? <span className="cover__demo">{ui.labels.demo}</span> : null}
+        {mode === "demo" && ui.labels.demo ? <span className="cover__demo">{ui.labels.demo}</span> : null}
         {mode === "final" && unapprovedIds(config).length > 0 ? (
           <span className="cover__demo">{renderTemplate(ui.labels.preparationTemplate, { pending: unapprovedIds(config).length })}</span>
         ) : null}

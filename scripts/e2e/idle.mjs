@@ -1,7 +1,7 @@
 // E2E del reposo de Vanessa y Jerry (SPEC 6.2; AC-62, AC-63, AC-64) en un navegador real.
 // Uso: npm run test:e2e
 import { readFileSync } from "node:fs";
-import { configJson, harness, SPOT_A, stationSpot } from "./helpers.mjs";
+import { configJson, harness, SPOT_A, stationSpot, START } from "./helpers.mjs";
 const manifest = JSON.parse(readFileSync("public/assets/assets.json", "utf8"));
 
 const { open, check, finish, browser } = await harness();
@@ -330,7 +330,7 @@ try {
     // Una hoja que no carga: la acción no existe, lo demás sigue
     const t = await open({ blockUrl: "**/vanessa-jerry-fetch-plush.png" });
     // El aviso de recurso que falta cubre la portada: se pulsa «Comenzar» sin pasar por el aviso.
-    await t.page.locator(".pixel-button").dispatchEvent("click");
+    await t.page.locator(START).dispatchEvent("click");
     await t.page.waitForTimeout(700);
     await t.page.waitForFunction(() => window.__PHASER_GAME__?.scene.getScene("ExplorationScene")?.fullyLoaded === true, null, { timeout: 20000 }); // las hojas de reposo llegan en la última etapa de carga
     await t.place(...SPOT_A);

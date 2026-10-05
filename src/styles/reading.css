@@ -368,10 +368,6 @@
   padding-top: 0.75rem;
   border-top: 0.125rem dashed var(--tan);
 }
-.collection__pending {
-  font-style: italic;
-  color: var(--ink-soft);
-}
 .confirm__danger {
   border-color: #8a2a1a;
   background: #f6d9d0;

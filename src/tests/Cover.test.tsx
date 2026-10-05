@@ -2,16 +2,18 @@
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import manifestJson from "../../public/assets/assets.json";
-import bitacoraJson from "../../public/config/bitacora.json";
+import bitacoraJson from "./fixtures/realConfig";
 import { BitacoraProvider } from "../app/BitacoraProvider";
 import { Cover } from "../components/ui/Cover";
 import { createAssetRegistry } from "../config/assetRegistry";
 import type { AssetManifest, BitacoraConfig } from "../config/types";
+import { classicOf, demoOf } from "./fixtures/demoConfig";
 
 afterEach(cleanup);
 
 const registry = createAssetRegistry(manifestJson as unknown as AssetManifest, "http://localhost:5173/assets/assets.json");
-const baseConfig = bitacoraJson as unknown as BitacoraConfig;
+// La portada sencilla (el respaldo); la presentación con el kit la prueba presentation.test.tsx.
+const baseConfig = classicOf(demoOf(bitacoraJson as unknown as BitacoraConfig));
 
 function renderCover(edit?: (c: BitacoraConfig) => void, props: Partial<Parameters<typeof Cover>[0]> = {}) {
   const config = structuredClone(baseConfig);
@@ -68,12 +70,19 @@ describe("Cover (AC-01)", () => {
     expect(screen.getByRole("button", { name: "Comenzar recorrido" })).toBeTruthy();
   });
 
-  it("identifica el contenido de demostración y no lo muestra en modo final", () => {
-    renderCover();
+  it("identifica el contenido de demostración (si la configuración define la etiqueta) y no lo muestra en modo final", () => {
+    renderCover((c) => { c.ui.labels.demo = "Contenido de demostración"; });
     expect(screen.getByText("Contenido de demostración")).toBeTruthy();
     cleanup();
-    renderCover((c) => { c.mode = "final"; });
+    renderCover((c) => { c.ui.labels.demo = "Contenido de demostración"; c.mode = "final"; });
     expect(screen.queryByText("Contenido de demostración")).toBeNull();
+  });
+
+  it("sin la etiqueta `demo` en la configuración (la real) la portada no muestra ningún aviso de demostración", () => {
+    renderCover((c) => { delete c.ui.labels.demo; });
+    expect(screen.queryByText(/demostración/i)).toBeNull();
+    expect(document.querySelector(".cover__demo")).toBeNull();
+    expect(screen.getByRole("button", { name: "Comenzar recorrido" })).toBeTruthy();
   });
 
   it("el botón inicia el recorrido y usa los assets del registro", () => {

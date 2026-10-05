@@ -35,7 +35,7 @@ function signature(paths: Paths): string {
 
 /**
  * Observa los mapas, tilesets y el proyecto de Tiled y, tras cada guardado completo, importa y valida. Agrupa los eventos
- * consecutivos, espera a que los archivos dejen de cambiar y no vigila bitacora.json (así no se produce ningún bucle).
+ * consecutivos, espera a que los archivos dejen de cambiar y no vigila maps.json (así no se produce ningún bucle).
  * Un error se informa y la sesión sigue: el siguiente guardado vuelve a intentarlo.
  */
 export function startWatch(paths: Paths, options: WatchOptions = {}): { stop(): void; run(): Promise<ImportReport> } {
@@ -67,13 +67,13 @@ export function startWatch(paths: Paths, options: WatchOptions = {}): { stop(): 
       report = { ok: false, inSync: false, written: false, errors: [(e as Error).message], warnings: [], changes: [], zones: [], info: [] };
     }
     if (!report.ok) {
-      log(`[${stamp}] ✖ ${report.errors.length} error(es); bitacora.json no se modificó:`);
+      log(`[${stamp}] ✖ ${report.errors.length} error(es); maps.json no se modificó:`);
       for (const e of report.errors) log(`  ✖ ${e}`);
     } else if (report.written) {
-      log(`[${stamp}] ✔ bitacora.json actualizado (${report.zones.join(", ")}): ${report.changes.length} cambio(s). Recarga la página para verlo.`);
+      log(`[${stamp}] ✔ maps.json actualizado (${report.zones.join(", ")}): ${report.changes.length} cambio(s). Recarga la página para verlo.`);
       for (const c of report.changes) log(`  • ${c}`);
     } else {
-      log(`[${stamp}] • sin cambios: los mapas coinciden con bitacora.json.`);
+      log(`[${stamp}] • sin cambios: los mapas coinciden con maps.json.`);
     }
     options.onReport?.(report);
     return report;

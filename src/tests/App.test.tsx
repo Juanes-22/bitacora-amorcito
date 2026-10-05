@@ -2,7 +2,7 @@
 import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import manifestJson from "../../public/assets/assets.json";
-import bitacoraJson from "../../public/config/bitacora.json";
+import bitacoraJson from "./fixtures/realConfig";
 import { App } from "../app/App";
 import { createAssetRegistry } from "../config/assetRegistry";
 import type { LoadResult } from "../config/loadApp";
@@ -32,7 +32,7 @@ const okResult = (): LoadResult => ({
   ok: true,
   config: structuredClone(bitacoraJson) as unknown as BitacoraConfig,
   assets,
-  urls: { config: "http://localhost:5173/config/bitacora.json", assets: "http://localhost:5173/assets/assets.json" },
+  urls: { config: "http://localhost:5173/config/bitacora.json", maps: "http://localhost:5173/config/maps.json", assets: "http://localhost:5173/assets/assets.json" },
 });
 
 describe("App", () => {

@@ -1,7 +1,7 @@
 // E2E de la carga por etapas (SPEC 11.4, AC-82): el mapa aparece cuando llega lo esencial, con una barra de carga mientras tanto;
 // el paisaje vivo y los extras llegan después sin bloquear; las insignias solo se cargan al celebrar; y la interfaz no se queda
 // sin sus imágenes mientras el mapa descarga. Las demoras se simulan en la red de la página.
-import { configJson, harness } from "./helpers.mjs";
+import { configJson, harness, START } from "./helpers.mjs";
 
 const h = await harness();
 const { check } = h;
@@ -35,7 +35,7 @@ try {
   {
     const ctx = await delayed("**/backgrounds/zone-01/*.png", 1800);
     const t = await h.open({ context: ctx });
-    await t.page.click(".pixel-button");
+    await t.page.click(START);
     await t.page.waitForSelector(".map-loading", { timeout: 4000 });
     const first = await t.page.evaluate(() => ({ text: document.querySelector(".map-loading__text")?.textContent, now: Number(document.querySelector(".map-loading [role=progressbar]")?.getAttribute("aria-valuenow")) }));
     check("L1 mientras llega lo esencial se muestra «Cargando el mapa…» con una barra de progreso", first.text === configJson.ui.labels.loadingMap && first.now >= 0 && first.now < 100, JSON.stringify(first));
@@ -53,7 +53,7 @@ try {
     // Solo el paisaje vivo y los extras (no lo esencial: los destellos dorados de la estación sí son esenciales).
     const ctx = await delayed((url) => /\/assets\/(animations|particles|decorations\/(chickens|plants|lights)|backgrounds\/sky|characters)\//.test(url.pathname) && !/gold-sparkle|walk/.test(url.pathname), 2500);
     const t = await h.open({ context: ctx });
-    await t.page.click(".pixel-button");
+    await t.page.click(START);
     await t.page.waitForTimeout(900);
     const early = await state(t);
     check("L2 el mapa está listo antes de que llegue el paisaje vivo (sin plantas ni gallinas todavía)", early.ready && !early.fullyLoaded && early.ambientSprites === 0 && early.critters === 0, JSON.stringify(early));
@@ -87,7 +87,7 @@ try {
   // ---- L4: un archivo del paisaje que falta se avisa al terminar su etapa y el resto sigue.
   {
     const t = await h.open({ blockUrl: "**/hen-brown.png" });
-    await t.page.locator(".pixel-button").dispatchEvent("click");
+    await t.page.locator(START).dispatchEvent("click");
     await t.page.waitForFunction(() => window.__PHASER_GAME__.scene.getScene("ExplorationScene").fullyLoaded === true, null, { timeout: 20000 });
     await t.page.waitForTimeout(300);
     const alert = await t.page.locator(".asset-alert").innerText().catch(() => "");

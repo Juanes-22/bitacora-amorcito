@@ -2,7 +2,7 @@
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import manifestJson from "../../public/assets/assets.json";
-import bitacoraJson from "../../public/config/bitacora.json";
+import bitacoraJson from "./fixtures/realConfig";
 import { BitacoraProvider } from "../app/BitacoraProvider";
 import { ProgressStore } from "../app/progressStore";
 import { ProgressProvider } from "../app/ProgressProvider";
@@ -59,7 +59,8 @@ describe("BadgePanel: la colección", () => {
     expect(cards().map((c) => c.querySelector(".bpk-number")?.textContent)).toEqual(["01 / 06", "02 / 06", "03 / 06", "04 / 06", "05 / 06", "06 / 06"]);
     expect(cards().map((c) => c.querySelector(".bpk-card-title")?.textContent)).toEqual(["Curiosidad que florece", "Crear juntas", "Mirar de cerca", "Cuidar la vida", "Imaginar para comprender", "Detenerse a descubrir"]);
     const jerry = document.querySelector<HTMLElement>(".bpk-special") as HTMLElement;
-    expect(jerry.textContent).toContain("Compañero de aventuras");
+    expect(jerry.querySelector(".bpk-special-title")?.textContent).toBe("Jerry");
+    expect(jerry.querySelector(".bpk-special-subtitle")?.textContent).toBe("Compañero de aventuras");
     expect(jerry.textContent).toContain("Especial");
     expect(jerry.textContent).toContain("Por descubrir");
   });
@@ -112,18 +113,35 @@ describe("BadgePanel: la colección", () => {
     expect(document.querySelector(".bpk-subtitle")?.textContent).toContain("200 / 200 XP"); // ni suma
   });
 
-  it("al terminar muestra «¡Recorrido completo!» y el espacio de la reflexión final: un aviso mientras la autora no la aporte", () => {
+  it("al terminar muestra «¡Recorrido completo!» y, sin reflexión final escrita, no hay ni título ni aviso de ella", () => {
     const config = withRoute(["apr-a"]);
     const store = makeStore(config);
     complete(store, "apr-a");
     show(config, store, { completion: true });
     expect(screen.getByRole("heading", { level: 1, name: "¡Recorrido completo!" })).toBeTruthy();
-    expect(within(dialog()).getByRole("heading", { name: "Reflexión final" })).toBeTruthy();
-    expect(dialog().textContent).toContain("La reflexión final de Vanessa se añadirá aquí cuando la escriba.");
+    expect(dialog().textContent).not.toMatch(/reflexión final/i);
+    expect(document.querySelector(".bpk-reflection")).toBeNull();
     cleanup();
     const sin = withRoute(["apr-a"]);
     show(sin, makeStore(sin));
     expect(screen.queryByText("Reflexión final")).toBeNull();
+  });
+
+  it("si la autora escribe su reflexión final en el JSON, se muestra al terminar con su título", () => {
+    const config = withRoute(["apr-a"], (c) => {
+      c.project.finalReflection = [{ type: "paragraph", text: "Texto aportado por la autora." }];
+    });
+    const store = makeStore(config);
+    complete(store, "apr-a");
+    show(config, store, { completion: true });
+    expect(within(dialog()).getByRole("heading", { name: "Reflexión final" })).toBeTruthy();
+    expect(dialog().textContent).toContain("Texto aportado por la autora.");
+    cleanup();
+    const incompleto = withRoute(["apr-a", "apr-b"], (c) => { c.project.finalReflection = [{ type: "paragraph", text: "Texto aportado por la autora." }]; });
+    const parcial = makeStore(incompleto);
+    complete(parcial, "apr-a");
+    show(incompleto, parcial);
+    expect(dialog().textContent).not.toContain("Texto aportado por la autora."); // con el recorrido incompleto no se adelanta
   });
 
   it("«Volver al mapa» y la X cierran, «Reiniciar recorrido» pide reiniciar y Escape cierra", () => {
@@ -206,9 +224,69 @@ describe("BadgePanel: el detalle", () => {
     const text = dialog().textContent as string;
     expect(text).toContain("INSIGNIA DE AMISTAD");
     expect(text).toContain("ESPECIAL");
-    expect(text).toContain("Completa todo el recorrido de aprendizajes.");
+    expect(text).toContain("Completa todos los aprendizajes de la bitácora para desbloquear la insignia de Jerry.");
+    expect(text).toContain("Se desbloquea al finalizar la bitácora");
     expect(screen.queryByRole("button", { name: "Ver aprendizaje" })).toBeNull();
     expect(document.querySelector(".bpk-lesson-callout")).toBeNull();
+  });
+
+  it("la insignia de Rocky es secreta: no aparece ni se nombra mientras falte algún aprendizaje", () => {
+    const config = withRoute(["apr-a", "apr-c"]);
+    const store = makeStore(config);
+    complete(store, "apr-a");
+    show(config, store);
+    expect(document.querySelectorAll(".bpk-special")).toHaveLength(1); // solo la de Jerry, por descubrir
+    expect(dialog().textContent).not.toContain("Rocky");
+    expect(dialog().textContent).not.toContain("Siempre en nuestro corazón");
+    expect(document.querySelector(".bpk-progress")?.textContent).toContain("1 de 2 obtenidas");
+  });
+
+  it("al terminar toda la bitácora surge la de Rocky junto a la de Jerry: con su dedicatoria, la etiqueta «Obtenida» como cualquier otra y sin XP, fecha ni «Ver aprendizaje»", () => {
+    const config = withRoute(["apr-a", "apr-c"]);
+    const store = makeStore(config);
+    complete(store, "apr-a");
+    complete(store, "apr-c");
+    const { onOpenLearning } = show(config, store);
+    const specials = [...document.querySelectorAll<HTMLElement>(".bpk-special")];
+    expect(specials.map((x) => x.querySelector(".bpk-special-title")?.textContent)).toEqual(["Jerry", "Rocky"]);
+    expect(specials[1].querySelector(".bpk-special-subtitle")?.textContent).toBe("Siempre en nuestro corazón");
+    expect(specials[1].querySelector(".bpk-status--earned")?.textContent).toBe("Obtenida");
+    expect(specials[0].querySelector(".bpk-status--earned")?.textContent).toBe("Obtenida");
+    expect(specials[1].querySelector(".bpk-lock")).toBeNull();
+    expect(document.querySelector(".bpk-progress")?.textContent).toContain("2 de 2 obtenidas"); // no cuenta
+    expect(document.querySelector(".bpk-subtitle")?.textContent).toContain("200 / 200 XP"); // ni suma
+    fireEvent.click(specials[1]);
+    const text = dialog().textContent as string;
+    expect(text).toContain("UN RECUERDO LLENO DE AMOR");
+    expect(screen.getByRole("heading", { level: 2, name: "Rocky" })).toBeTruthy();
+    expect(text).toContain("Siempre en nuestro corazón");
+    expect(text).toContain("El amor y el cariño que sentimos por Rocky, un perrito muy especial en la vida de Vanessa.");
+    expect(text).toContain("Un lugar para recordarlo");
+    expect(text).toContain("Al completar esta bitácora, abrimos un espacio para recordar a Rocky con todo nuestro amor.");
+    expect(text).toContain("Con mucho cariño");
+    expect(text).toContain("Aunque ya no esté a nuestro lado, Rocky sigue siendo parte de nuestra historia.");
+    expect(text).not.toContain("Obtenida el");
+    expect(text).not.toContain("XP");
+    expect(text).not.toContain("INSIGNIA DE AMISTAD");
+    expect(screen.queryByRole("button", { name: "Ver aprendizaje" })).toBeNull();
+    expect(onOpenLearning).not.toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: "Volver a la colección" })).toBeTruthy();
+  });
+
+  it("la de Jerry conserva su ficha de amistad (con fecha) al terminar, distinta de la de recuerdo de Rocky", () => {
+    const config = withRoute(["apr-a"]);
+    const store = makeStore(config);
+    complete(store, "apr-a");
+    show(config, store);
+    fireEvent.click(document.querySelector(".bpk-special") as HTMLElement);
+    const text = dialog().textContent as string;
+    expect(text).toContain("INSIGNIA DE AMISTAD");
+    expect(text).toContain("Obtenida el");
+    expect(text).toContain("Terminando todo el recorrido de aprendizajes.");
+    expect(text).not.toContain("Siempre presente");
+    expect(screen.getByRole("heading", { level: 2, name: "Jerry" })).toBeTruthy();
+    expect(document.querySelector(".bpk-detail-subtitle")?.textContent).toBe("Compañero de aventuras");
+    expect(text).not.toContain("Un lugar para recordarlo");
   });
 
   it("«Volver a la colección», la flecha, «Mi colección» y Escape vuelven a la colección; Escape en la colección cierra", () => {

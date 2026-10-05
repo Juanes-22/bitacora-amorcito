@@ -2,7 +2,7 @@
 import { act, cleanup, fireEvent, render, renderHook, screen, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import manifestJson from "../../public/assets/assets.json";
-import bitacoraJson from "../../public/config/bitacora.json";
+import bitacoraJson from "./fixtures/realConfig";
 import { BitacoraProvider } from "../app/BitacoraProvider";
 import { ProgressStore } from "../app/progressStore";
 import { ProgressProvider } from "../app/ProgressProvider";
@@ -16,10 +16,12 @@ import type { AssetManifest, BitacoraConfig, SectionId } from "../config/types";
 import { GameBridge } from "../game/bridge/GameBridge";
 import type { BridgeEvents } from "../game/bridge/events";
 import { ProgressStorage, storageKey, type StorageLike } from "../storage/progressStorage";
+import { classicOf, demoOf } from "./fixtures/demoConfig";
+import { fullTitle } from "../domain/projectTitle";
 
 afterEach(cleanup);
 const assets = createAssetRegistry(manifestJson as unknown as AssetManifest, "http://localhost:5173/assets/assets.json");
-const base = bitacoraJson as unknown as BitacoraConfig;
+const base = classicOf(demoOf(bitacoraJson as unknown as BitacoraConfig));
 const ALL: SectionId[] = ["learning", "reflection", "lived"];
 
 class MemoryStorage implements StorageLike {
@@ -223,8 +225,9 @@ describe("BadgeCollection", () => {
     const items = screen.getAllByRole("listitem");
     expect(items).toHaveLength(7); // los seis aprendizajes y la insignia de Jerry (se concede al terminar)
     expect(items.every((li) => li.textContent?.includes("Por obtener"))).toBe(true);
-    expect(items[6].textContent).toContain("Insignia de Jerry: al completar el recorrido");
+    expect(items[6].textContent).toContain("Insignia especial: al completar el recorrido");
     expect(within(items[6]).queryByRole("img")).toBeNull();
+    expect(screen.getByRole("dialog").textContent).not.toContain("Rocky"); // la de Rocky es secreta: ni se nombra hasta terminar
     expect(screen.getByRole("dialog").textContent).toContain("0 de 6 insignias · 0 / 600 XP · Nivel 0");
     expect(screen.queryByText("Reflexión final")).toBeNull();
   });
@@ -259,29 +262,34 @@ describe("BadgeCollection", () => {
     complete(store, "apr-a");
     show(config, store);
     const jerry = () => document.querySelector("[data-route-badge]") as HTMLElement;
-    expect(jerry().textContent).toContain("Insignia de Jerry: al completar el recorrido");
+    expect(jerry().textContent).toContain("Insignia especial: al completar el recorrido");
     expect(jerry().textContent).toContain("Por obtener");
+    expect(document.querySelectorAll("[data-route-badge]")).toHaveLength(1); // Rocky, secreta, aún no está
     cleanup();
     complete(store, "apr-c");
     show(config, store);
-    expect(jerry().textContent).toContain("Compañero de aventuras");
+    expect(jerry().textContent).toContain("Jerry");
     expect(jerry().textContent).toContain("Celebrar a Jerry");
     expect(jerry().textContent).toMatch(/Insignia obtenida · Obtenida el .*20\d\d/);
-    expect(within(jerry()).getByRole("img", { name: "Compañero de aventuras" })).toBeTruthy();
+    expect(within(jerry()).getByRole("img", { name: "Jerry" })).toBeTruthy();
     expect(screen.getByRole("dialog").textContent).toContain("2 de 2 insignias · 200 / 200 XP"); // Jerry no cuenta ni suma
+    // Y al terminar aparece la de Rocky, la secreta, también sin contar ni sumar.
+    const rocky = document.querySelector("[data-route-badge=rocky-siempre-contigo]") as HTMLElement;
+    expect(document.querySelectorAll("[data-route-badge]")).toHaveLength(2);
+    expect(rocky.textContent).toContain("Rocky");
+    expect(rocky.textContent).toMatch(/Insignia obtenida · Obtenida el .*20\d\d/);
   });
 
-  it("al terminar el recorrido muestra el espacio de la reflexión final: un aviso mientras la autora no la aporte", () => {
+  it("al terminar el recorrido, sin reflexión final escrita, no hay título ni aviso de ella", () => {
     const config = withRoute(["apr-a"]);
     const store = makeStore(config);
     complete(store, "apr-a");
     show(config, store, { completion: true });
     const dialog = screen.getByRole("dialog", { name: "¡Recorrido completo!" });
-    expect(within(dialog).getByRole("heading", { name: "Reflexión final" })).toBeTruthy();
-    expect(dialog.textContent).toContain("La reflexión final de Vanessa se añadirá aquí cuando la escriba.");
+    expect(dialog.textContent).not.toMatch(/reflexión final/i);
   });
 
-  it("la reflexión final es editable en el JSON: sus bloques se muestran y reemplazan al aviso", () => {
+  it("la reflexión final es editable en el JSON: si la autora la escribe, sus bloques se muestran con su título", () => {
     const config = withRoute(["apr-a"], (c) => {
       c.project.finalReflection = [{ type: "heading", text: "Cierre" }, { type: "paragraph", text: "Texto aportado por la autora." }];
     });
@@ -289,8 +297,8 @@ describe("BadgeCollection", () => {
     complete(store, "apr-a");
     show(config, store, { completion: true });
     const dialog = screen.getByRole("dialog");
+    expect(within(dialog).getByRole("heading", { name: "Reflexión final" })).toBeTruthy();
     expect(dialog.textContent).toContain("Texto aportado por la autora.");
-    expect(dialog.textContent).not.toContain("se añadirá aquí");
   });
 
   it("no inventa una conclusión: con el recorrido incompleto no hay reflexión final", () => {
@@ -347,7 +355,7 @@ describe("cabecera y portada en modo final", () => {
   it("la cabecera presenta el recorrido «en preparación» mientras haya contenido sin aprobar", () => {
     const c = finalConfig();
     wrap(c, makeStore(c), <ProgressHUD />);
-    const hud = screen.getByRole("region", { name: c.project.title });
+    const hud = screen.getByRole("region", { name: fullTitle(c.project) });
     expect(hud.textContent).toContain("Recorrido en preparación: faltan 6 por aprobar");
   });
 
@@ -355,7 +363,7 @@ describe("cabecera y portada en modo final", () => {
     const c = finalConfig();
     for (const id of c.route) c.learnings[id].editorialStatus = "ready";
     wrap(c, makeStore(c), <ProgressHUD />);
-    const text = screen.getByRole("region", { name: c.project.title }).textContent;
+    const text = screen.getByRole("region", { name: fullTitle(c.project) }).textContent;
     expect(text).not.toContain("en preparación");
     expect(text).not.toContain("Continúa en Aprendizaje");
     expect(document.querySelector(".hud__objective")).toBeNull();
@@ -372,11 +380,14 @@ describe("cabecera y portada en modo final", () => {
 
   it("la portada identifica el contenido en preparación (final) o de demostración (demo), sin mezclarlos", () => {
     const c = finalConfig();
+    c.ui.labels.demo = "Contenido de demostración";
     const { unmount } = wrap(c, makeStore(c), <Cover hasProgress={false} onStart={() => {}} />);
     expect(screen.getByText("Recorrido en preparación: faltan 6 por aprobar")).toBeTruthy();
     expect(screen.queryByText("Contenido de demostración")).toBeNull();
     unmount();
-    wrap(base, makeStore(base), <Cover hasProgress={false} onStart={() => {}} />);
+    const demo = structuredClone(base);
+    demo.ui.labels.demo = "Contenido de demostración";
+    wrap(demo, makeStore(demo), <Cover hasProgress={false} onStart={() => {}} />);
     expect(screen.getByText("Contenido de demostración")).toBeTruthy();
     expect(screen.queryByText(/en preparación/)).toBeNull();
   });

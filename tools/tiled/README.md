@@ -5,10 +5,10 @@ están las plantas animadas, las gallinas, las estaciones, los puntos de aparici
 herramienta de autoría: el juego, el build y el importador **no necesitan Tiled instalado**.
 
 ```text
-editar en Tiled  →  npm run tiled:import  →  bitacora.json (solo maps y placements)  →  recargar la página
+editar en Tiled  →  npm run tiled:import  →  public/config/maps.json (maps y placements)  →  recargar la página
 ```
 
-El contenido (textos, `route`, insignias, diálogos, interfaz) sigue en `public/config/bitacora.json` y los recursos en
+El contenido (textos, `route`, insignias, diálogos, interfaz) sigue en `public/config/bitacora.json` —que la importación no toca nunca— y los recursos en
 `public/assets/assets.json`; Tiled no los toca. Las decisiones de diseño están en `.claude/SPEC.md` §12.9.
 
 ## 1. Abrir el proyecto y elegir la zona
@@ -24,7 +24,7 @@ nada depende de una carpeta personal.
 
 | Capa | Qué contiene | Se edita |
 | --- | --- | --- |
-| `horizonte`, `terreno`, `medio`, `primer-plano` | Capas de imagen del paisaje (propiedades `assetId` y `depth`) | Bloqueadas. Cambiar de imagen se hace con `assetId` en `bitacora.json`. No las muevas ni les cambies la opacidad: se rechaza. |
+| `horizonte`, `terreno`, `medio`, `primer-plano` | Capas de imagen del paisaje (propiedades `assetId` y `depth`) | Bloqueadas. Cambiar de imagen se hace con `assetId` en `maps.json`. No las muevas ni les cambies la opacidad: se rechaza. |
 | `ambiente` | Plantas y luces animadas, nubes, patos (`Swim`) y áreas de partículas (`Particles`) | Sí |
 | `animales` | Gallinas y familias | Sí |
 | `decoraciones` | Imágenes estáticas (`maps[zona].decorations`; hoy vacía) | Sí |
@@ -48,8 +48,9 @@ de las estaciones los dibuja el juego; en Tiled solo se ve el letrero y el nombr
   letrero) lo calcula el importador a partir del origen del manifiesto: no hay que hacer nada.
 - **Duplicar:** copiar y pegar (**Ctrl/Cmd+C, V**) o *Duplicate Objects*. La copia conserva clase, propiedades y tamaño.
 - **Eliminar:** *Delete*. Quitar un efecto o una gallina quita la instancia, no el asset del catálogo.
-- **Escalar:** redimensiona el objeto-tile manteniendo la proporción (mantén **Mayús**); la escala se deduce del tamaño. Una escala no
-  uniforme se rechaza. Los letreros **no** se redimensionan uno a uno (escala global `gameplay.signScale`). No uses rotación ni
+- **Escalar:** redimensiona el objeto-tile manteniendo la proporción (mantén **Mayús**); la escala se deduce del tamaño. Si el ancho y el
+  alto difieren menos de un 5 % se importa la media con un aviso; más que eso es un estiramiento y se rechaza. Las gallinas (y sus pollitos)
+  no pasan de 4× su tamaño recomendado (≈ 192 px), con un radio de hasta 120 px y hasta 8 pollitos. Los letreros **no** se redimensionan uno a uno (escala global `gameplay.signScale`). No uses rotación ni
   reflejo vertical; el reflejo horizontal solo vale en animaciones y gallinas sueltas (equivale a `flipX`).
 - **Estaciones:** mover una estación mueve también su punto de interacción (`position` + desplazamiento). Si quieres retirar un
   aprendizaje del recorrido, **primero archívalo**: quítalo de `route` en `bitacora.json` (sus textos e insignia se conservan) y después borra su
@@ -79,27 +80,34 @@ Propiedades del mapa: `zoneId`, `label`, `initialSpawnId`. ¹ El juego conserva 
 pero hoy no los dibuja.
 
 `explicit` (texto, p. ej. `scale,flipX`): la escala y el reflejo salen del tamaño y del tile, así que un `scale: 1` o un `flipX: false`
-*explícitos* en `bitacora.json` se anotan aquí para no perderse. No hace falta tocarla.
+*explícitos* en `maps.json` se anotan aquí para no perderse. No hace falta tocarla.
 
 ## 5. Guardar, importar, resolver errores y probar en la web
 
 ```bash
-npm run tiled:import      # lee los mapas, valida y actualiza maps y placements en bitacora.json
-npm run tiled:check       # lo mismo sin escribir; falla si los mapas y bitacora.json difieren (el build lo ejecuta antes)
-npm run tiled:watch       # importa solo cada vez que guardas en Tiled (en otra terminal junto a npm run dev)
+npm run dev               # importa SOLO al guardar en Tiled y recarga la página; los errores salen sobre la página
+npm run tiled:import      # lee los mapas, valida y reescribe maps.json (maps y placements)
+npm run tiled:check       # lo mismo sin escribir; falla si los mapas y maps.json difieren (el build lo ejecuta antes)
+npm run tiled:watch       # el mismo importador automático, sin servidor de desarrollo (en otra terminal)
 ```
 
-1. Guarda en Tiled (**Ctrl/Cmd+S**) y ejecuta `npm run tiled:import` (o deja `tiled:watch` abierto).
-2. Con `npm run dev` abierto, la página **se recarga sola** cuando cambia `bitacora.json`. La escena no se actualiza en caliente.
+**Con `npm run dev` abierto no hace falta ejecutar nada**: al guardar en Tiled se importa y la página se recarga sola, igual que la
+«exportación automática al guardar» de un flujo normal de Phaser y Tiled. Si hay un error, aparece como aviso sobre la página (y en la
+terminal) y desaparece al corregirlo; `maps.json` no se toca mientras tanto. Al arrancar el servidor también se importa lo que hayas
+guardado con él apagado. Se desactiva con `TILED_WATCH=0`.
+
+1. Guarda en Tiled (**Ctrl/Cmd+S**). Con `npm run dev` abierto se importa solo; sin él, ejecuta `npm run tiled:import` (o deja `tiled:watch`).
+2. La página **se recarga sola** cuando cambia `maps.json` (o `bitacora.json`). La escena no se actualiza en caliente.
 3. Si algo no se puede representar, no se escribe nada y el mensaje dice dónde está:
    `zona-a.tmj › capa «animales» › objeto #57 «white» › propiedad «radius»: debe ser un número (es string)`.
    Corrígelo en Tiled y vuelve a importar. Los errores de validación del proyecto (portal que apunta a un spawn inexistente, objeto fuera de la
-   zona, colocación sobre suelo transitable…) llevan además la ruta de `bitacora.json`.
-4. **Si no ves el cambio en el juego**, la importación probablemente falló: ejecuta `npm run tiled:import` y lee el mensaje. La causa más
-   común es un reflejo accidental al mover un objeto (la tecla **X** en Tiled lo voltea horizontalmente): una familia de gallinas, una planta
+   zona, colocación sobre suelo transitable…) llevan además la ruta de `maps.json`.
+4. **Si no ves el cambio en el juego**, la importación probablemente falló: con `npm run dev` el error aparece sobre la página; si no, ejecuta
+   `npm run tiled:import` y lee el mensaje (guardar en Tiled no actualiza `maps.json` si no corre `npm run dev`, `tiled:watch` o `tiled:import`). Las causas más comunes: un tamaño
+   por encima del máximo (una gallina no pasa de 4×) o un reflejo accidental al mover un objeto (la tecla **X** en Tiled lo voltea horizontalmente): una familia de gallinas, una planta
    que se balancea o un letrero no admiten reflejo; se deshace con *Objects › Flip Horizontally* (**X** otra vez). Mientras haya un error, nada se
-   escribe en `bitacora.json`.
-5. Cada importación que escribe deja una copia del `bitacora.json` anterior en `tools/tiled/backups/` (se conservan las últimas 20).
+   escribe en `maps.json`.
+5. Cada importación que escribe deja una copia del `maps.json` anterior en `tools/tiled/backups/` (`<fecha>-maps.json`) (se conservan las últimas 20).
 
 Un guardado sin cambios no escribe nada. Importar solo toca `maps` y `placements` y deja el resto del archivo igual, byte a byte.
 
@@ -113,7 +121,7 @@ Mover la estación `apr-a` (Plantas y semillas) hacia la derecha:
 4. Recarga la página: el letrero y su punto de interacción están 60 px más a la derecha; `route`, textos y progreso siguen igual.
 
 Sin abrir Tiled, `npx tsx scripts/tools/tiled-example.ts` hace sobre una copia temporal esta edición (y duplicar una gallina, agrandar un
-girasol y añadir una colisión), importa y escribe el `bitacora.json` resultante; `node scripts/e2e/tiled.mjs` lo comprueba en el navegador.
+girasol y añadir una colisión), importa y escribe el `maps.json` resultante; `node scripts/e2e/tiled.mjs` lo comprueba en el navegador.
 
 ## 6. Actualizar el catálogo al añadir assets
 
@@ -130,12 +138,12 @@ animales) también se actualizan; los tipos propios que añadas al proyecto se r
 
 ## 7. Recuperar la migración inicial y evitar sobrescribir ediciones
 
-- `npm run tiled:generate` **solo crea** los mapas que no existen. Para regenerar uno desde `bitacora.json` hay que pedirlo
+- `npm run tiled:generate` **solo crea** los mapas que no existen. Para regenerar uno desde `maps.json` hay que pedirlo
   (`npm run tiled:generate -- --force --zone zona-a`), y antes se guarda una copia en `tools/tiled/backups/<fecha>-mapas/`.
-- Mientras `bitacora.json` y los mapas estén sincronizados, `--force` reproduce lo mismo. Si editaste en Tiled **sin importar**, lo que
+- Mientras `maps.json` y los mapas estén sincronizados, `--force` reproduce lo mismo. Si editaste en Tiled **sin importar**, lo que
   no se importó se pierde al regenerar (queda la copia).
 - La migración inicial vive en el historial de Git: `git log -- tools/tiled/maps` y
-  `git checkout <commit> -- tools/tiled/maps public/config/bitacora.json`.
+  `git checkout <commit> -- tools/tiled/maps public/config/maps.json`.
 - `tools/tiled/legacy/` guarda el trabajo manual anterior a la integración (TMX de `zona-a` y un catálogo de prueba cuyo único tile tenía
   un `assetId` mal escrito, `decoration.plant.busht`). No se importa.
 - `*.tiled-session` es estado personal del editor y está en `.gitignore`.

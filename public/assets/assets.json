@@ -3,7 +3,7 @@
   "project": "Bitácora Amorcito",
   "basePath": ".",
   "pathConvention": "Paths are relative to the directory containing this assets.json.",
-  "assetCount": 173,
+  "assetCount": 192,
   "categoryCounts": {
     "audio": 3,
     "backgrounds": 17,
@@ -12,7 +12,7 @@
     "effects": 18,
     "references": 2,
     "stations": 10,
-    "ui": 91
+    "ui": 110
   },
   "assets": {
     "background.complete.garden": {
@@ -5517,6 +5517,398 @@
         "width": 28,
         "height": 28
       }
+    },
+    "ui.journal-panel.learning-plants-seeds": {
+      "path": "ui/journal-panel/illustrations/learning-plants-seeds.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de aprendizajes · ilustración: learning-plants-seeds",
+      "kind": "journal-panel-part",
+      "group": "illustrations",
+      "width": 1470,
+      "height": 632,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 998734,
+      "sha256": "619490b2ed41a525f03e4ff4acdd7a285fe675f89def2fbc70d0d4a6c961dae7",
+      "originalPath": "bitacora-panel-aprendizajes/public/assets/ui/journal-panel/illustrations/learning-plants-seeds.png",
+      "recommendedDisplay": {
+        "width": 238,
+        "height": 144
+      }
+    },
+    "ui.journal-panel.learning-homemade-dough": {
+      "path": "ui/journal-panel/illustrations/learning-homemade-dough.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de aprendizajes · ilustración: learning-homemade-dough",
+      "kind": "journal-panel-part",
+      "group": "illustrations",
+      "width": 1213,
+      "height": 594,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 763420,
+      "sha256": "8394598fa83cdd93ecc747feadb0345f238a5f415d6329133f45291eb9f2cd57",
+      "originalPath": "bitacora-panel-aprendizajes/public/assets/ui/journal-panel/illustrations/learning-homemade-dough.png",
+      "recommendedDisplay": {
+        "width": 238,
+        "height": 144
+      }
+    },
+    "ui.journal-panel.learning-taxidermy-museum": {
+      "path": "ui/journal-panel/illustrations/learning-taxidermy-museum.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de aprendizajes · ilustración: learning-taxidermy-museum",
+      "kind": "journal-panel-part",
+      "group": "illustrations",
+      "width": 1274,
+      "height": 611,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 890192,
+      "sha256": "5d8a7c1e88329543cbfe3011522b7854bb851a1412c108d77ab9601e3dd0ecc9",
+      "originalPath": "bitacora-panel-aprendizajes/public/assets/ui/journal-panel/illustrations/learning-taxidermy-museum.png",
+      "recommendedDisplay": {
+        "width": 238,
+        "height": 144
+      }
+    },
+    "ui.journal-panel.learning-penguin-adaptation": {
+      "path": "ui/journal-panel/illustrations/learning-penguin-adaptation.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de aprendizajes · ilustración: learning-penguin-adaptation",
+      "kind": "journal-panel-part",
+      "group": "illustrations",
+      "width": 1439,
+      "height": 653,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 756352,
+      "sha256": "4ac0ace00d340fe7b98f94cadf3f70718fbee42db50588199f9c4204966eed88",
+      "originalPath": "bitacora-panel-aprendizajes/public/assets/ui/journal-panel/illustrations/learning-penguin-adaptation.png",
+      "recommendedDisplay": {
+        "width": 238,
+        "height": 144
+      }
+    },
+    "ui.journal-panel.learning-earth-movements": {
+      "path": "ui/journal-panel/illustrations/learning-earth-movements.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de aprendizajes · ilustración: learning-earth-movements",
+      "kind": "journal-panel-part",
+      "group": "illustrations",
+      "width": 1367,
+      "height": 775,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1073312,
+      "sha256": "d69e36eb69bc69a0fab4bee6debf28423836110194472e3285901ed0fbaeecdc",
+      "originalPath": "bitacora-panel-aprendizajes/public/assets/ui/journal-panel/illustrations/learning-earth-movements.png",
+      "recommendedDisplay": {
+        "width": 238,
+        "height": 144
+      }
+    },
+    "ui.journal-panel.learning-plants-origin": {
+      "path": "ui/journal-panel/illustrations/learning-plants-origin.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de aprendizajes · ilustración: learning-plants-origin",
+      "kind": "journal-panel-part",
+      "group": "illustrations",
+      "width": 1301,
+      "height": 617,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 829322,
+      "sha256": "543d004182dbe9e47e3069177cc62764ebed310adf5a0d6db2332ce7b0d9101d",
+      "originalPath": "bitacora-panel-aprendizajes/public/assets/ui/journal-panel/illustrations/learning-plants-origin.png",
+      "recommendedDisplay": {
+        "width": 238,
+        "height": 144
+      }
+    },
+    "ui.journal-panel.journal-book-sprout": {
+      "path": "ui/journal-panel/icons/journal-book-sprout.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de aprendizajes · icono: journal-book-sprout",
+      "kind": "journal-panel-part",
+      "group": "icons",
+      "width": 783,
+      "height": 587,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 368812,
+      "sha256": "8a0425c7661b90c16de9a9e0ff43ecdcfa0e925e8dc7fa60ebf30db3eae9127f",
+      "originalPath": "bitacora-panel-aprendizajes/public/assets/ui/journal-panel/icons/journal-book-sprout.png",
+      "recommendedDisplay": {
+        "width": 64,
+        "height": 54
+      }
+    },
+    "ui.journal-panel.zone-cherry-tree": {
+      "path": "ui/journal-panel/icons/zone-cherry-tree.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de aprendizajes · icono: zone-cherry-tree",
+      "kind": "journal-panel-part",
+      "group": "icons",
+      "width": 678,
+      "height": 646,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 389897,
+      "sha256": "79f9f9ea2195522d94b50e11a883e21dbfabdd5badd345d2007a4dd47ad9e6f3",
+      "originalPath": "bitacora-panel-aprendizajes/public/assets/ui/journal-panel/icons/zone-cherry-tree.png",
+      "recommendedDisplay": {
+        "width": 36,
+        "height": 36
+      }
+    },
+    "ui.journal-panel.zone-white-flowers": {
+      "path": "ui/journal-panel/icons/zone-white-flowers.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de aprendizajes · icono: zone-white-flowers",
+      "kind": "journal-panel-part",
+      "group": "icons",
+      "width": 686,
+      "height": 568,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 355305,
+      "sha256": "36090e50e72df7dfe86c70ff2b1ea51d5027f580fe9e2ea9c7b912e790adf5da",
+      "originalPath": "bitacora-panel-aprendizajes/public/assets/ui/journal-panel/icons/zone-white-flowers.png",
+      "recommendedDisplay": {
+        "width": 36,
+        "height": 36
+      }
+    },
+    "ui.journal-panel.tab-reflection-bubble": {
+      "path": "ui/journal-panel/icons/tab-reflection-bubble.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de aprendizajes · icono: tab-reflection-bubble",
+      "kind": "journal-panel-part",
+      "group": "icons",
+      "width": 590,
+      "height": 500,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 223668,
+      "sha256": "c744603a55c12dd5e4234a4c82b8a06b7d76cb0812a11fa70ca85d34e0e0ae01",
+      "originalPath": "bitacora-panel-aprendizajes/public/assets/ui/journal-panel/icons/tab-reflection-bubble.png",
+      "recommendedDisplay": {
+        "width": 36,
+        "height": 36
+      }
+    },
+    "ui.journal-panel.ribbon-next-blank": {
+      "path": "ui/journal-panel/labels/ribbon-next-blank.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Panel de aprendizajes · etiqueta: ribbon-next-blank",
+      "kind": "journal-panel-part",
+      "group": "labels",
+      "width": 1647,
+      "height": 308,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 261233,
+      "sha256": "ca704b98a1727c69ea0cefe2501f17ace6ac6c53aa4de9a88cae7b3fc841581a",
+      "originalPath": "bitacora-panel-aprendizajes/public/assets/ui/journal-panel/labels/ribbon-next-blank.png",
+      "recommendedDisplay": {
+        "width": 126,
+        "height": 30
+      }
+    },
+    "ui.badge.rocky": {
+      "path": "ui/badges/badge-rocky.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Insignia «Siempre contigo»: Rocky con aureola, camisa azul y un corazón",
+      "kind": "badge",
+      "width": 1254,
+      "height": 1254,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1067917,
+      "sha256": "11dc052f4e4788cb378fdfa0e589de44078278b34d6a79492244e972971e45f6",
+      "originalPath": "bitacora-insignias/assets/ui/badges/badge-rocky.png",
+      "contentBounds": {
+        "x": 39,
+        "y": 43,
+        "width": 1181,
+        "height": 1178
+      },
+      "meaning": "Recordar a Rocky con cariño como compañero de la aventura.",
+      "recommendedDisplay": {
+        "width": 64,
+        "height": 64
+      }
+    },
+    "ui.presentation.panel-parchment": {
+      "path": "ui/presentation/panel-parchment.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Presentación · pergamino: panel-parchment",
+      "kind": "presentation-part",
+      "group": "frames",
+      "width": 1422,
+      "height": 904,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1117498,
+      "sha256": "c94980162034e4c8578aedfd705aa83b3ada81fb079c648b3501ffc2befc69fc",
+      "originalPath": "bitacora-panel-presentacion/public/assets/ui/presentation/panel-parchment.png",
+      "recommendedDisplay": {
+        "width": 1040,
+        "height": 716
+      },
+      "nineSlice": {
+        "top": 160,
+        "right": 160,
+        "bottom": 160,
+        "left": 160
+      }
+    },
+    "ui.presentation.title-wood-flowers": {
+      "path": "ui/presentation/title-wood-flowers.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Presentación · letrero de madera: title-wood-flowers",
+      "kind": "presentation-part",
+      "group": "titles",
+      "width": 1909,
+      "height": 470,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 783533,
+      "sha256": "5e0326290064139f757e3625f1b2544822f907e106b086e40b68d2cbf9638867",
+      "originalPath": "bitacora-panel-presentacion/public/assets/ui/presentation/title-wood-flowers.png",
+      "recommendedDisplay": {
+        "width": 700,
+        "height": 176
+      }
+    },
+    "ui.presentation.welcome-vanessa-jerry": {
+      "path": "ui/presentation/welcome-vanessa-jerry.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Presentación · ilustración: welcome-vanessa-jerry",
+      "kind": "presentation-part",
+      "group": "illustrations",
+      "width": 1184,
+      "height": 991,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 1622696,
+      "sha256": "a4dc92db871548e5a74ba3ab234f1c1b3e16ecd8db29a1f44686271d2809cb42",
+      "originalPath": "bitacora-panel-presentacion/public/assets/ui/presentation/welcome-vanessa-jerry.png",
+      "recommendedDisplay": {
+        "width": 458,
+        "height": 410
+      }
+    },
+    "ui.presentation.button-continue": {
+      "path": "ui/presentation/button-continue.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Presentación · botón: button-continue",
+      "kind": "presentation-part",
+      "group": "buttons",
+      "width": 1894,
+      "height": 357,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 536849,
+      "sha256": "65cc3d1395d0734a330f3320ef6c8397d5efa7002c78adb313addd2942fd0523",
+      "originalPath": "bitacora-panel-presentacion/public/assets/ui/presentation/button-continue.png",
+      "recommendedDisplay": {
+        "width": 412,
+        "height": 76
+      }
+    },
+    "ui.presentation.leaf-sprig": {
+      "path": "ui/presentation/leaf-sprig.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Presentación · ramita: leaf-sprig",
+      "kind": "presentation-part",
+      "group": "decorations",
+      "width": 648,
+      "height": 573,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 172551,
+      "sha256": "d2cdd44e61f3add9e5d9a711e4734aa4034fda5a8a10bf48601e510e0212c019",
+      "originalPath": "bitacora-panel-presentacion/public/assets/ui/presentation/leaf-sprig.png",
+      "recommendedDisplay": {
+        "width": 46,
+        "height": 46
+      }
+    },
+    "ui.presentation.sprout-flat": {
+      "path": "ui/presentation/sprout-flat.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Presentación · brote: sprout-flat",
+      "kind": "presentation-part",
+      "group": "icons",
+      "width": 593,
+      "height": 429,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 137980,
+      "sha256": "ed41ef775607f5bd7f55cf19ec773101fe2b4d1e8ecdf6e862917238ff71ca27",
+      "originalPath": "bitacora-panel-presentacion/public/assets/ui/presentation/sprout-flat.png",
+      "recommendedDisplay": {
+        "width": 30,
+        "height": 30
+      }
+    },
+    "ui.presentation.divider-seed": {
+      "path": "ui/presentation/divider-seed.png",
+      "type": "image",
+      "format": "png",
+      "category": "ui",
+      "label": "Presentación · separador: divider-seed",
+      "kind": "presentation-part",
+      "group": "decorations",
+      "width": 1810,
+      "height": 70,
+      "hasAlphaChannel": true,
+      "transparent": true,
+      "sizeBytes": 48564,
+      "sha256": "d0052056ef12df83c09d49996719ca3e16b5a91a81597d1bc59a22f142e41198",
+      "originalPath": "bitacora-panel-presentacion/public/assets/ui/presentation/divider-seed.png",
+      "recommendedDisplay": {
+        "width": 442,
+        "height": 24
+      }
     }
   },
   "sourceDocuments": [
@@ -5747,6 +6139,60 @@
       "originalPath": "bitacora-panel-insignias/generation-prompts.json",
       "sizeBytes": 18041,
       "sha256": "3b5c3a0cbb30967e28918d9f7379dadf5b2094ece38d5bbc3fd390031323736e"
+    },
+    {
+      "path": "docs/source/journal-panel/readme.md",
+      "originalPath": "bitacora-panel-aprendizajes/README.md",
+      "sizeBytes": 2591,
+      "sha256": "e814eb3a0fd629de39996bc26568ed5e7f72e6ae35efb2f409d654353340a223"
+    },
+    {
+      "path": "docs/source/journal-panel/integracion.md",
+      "originalPath": "bitacora-panel-aprendizajes/docs/INTEGRACION.md",
+      "sizeBytes": 6941,
+      "sha256": "849cd30b8c6bcb0f6789ea44e3839acc9789b207a38071b758f208d6ccdb6ff5"
+    },
+    {
+      "path": "docs/source/journal-panel/generation-prompts.json",
+      "originalPath": "bitacora-panel-aprendizajes/generation-prompts.json",
+      "sizeBytes": 18642,
+      "sha256": "e080448e37c1dfdee5b4862b31f95c933daff18905905e84de8774dd819d9afd"
+    },
+    {
+      "path": "docs/source/badges/readme-v1.1.0.md",
+      "originalPath": "bitacora-insignias/README.md",
+      "sizeBytes": 6515,
+      "sha256": "ff19a926ac2ea7b6cbdb258ab02c520304197e87a69b3a844d72d43515bceb61"
+    },
+    {
+      "path": "docs/source/badges/generation-prompts-v1.1.0.json",
+      "originalPath": "bitacora-insignias/generation-prompts.json",
+      "sizeBytes": 27135,
+      "sha256": "e97a6145a1b973b56b6595e915cb5ae0e09b64c27c2f424bdf8cf20d93ed22d1"
+    },
+    {
+      "path": "docs/source/badge-panel/readme-v1.1.0.md",
+      "originalPath": "bitacora-panel-insignias/README.md",
+      "sizeBytes": 11204,
+      "sha256": "ba86abef72c0e5e36dda42e677641ae6f712a6f3df6251b0937d2667910be8c0"
+    },
+    {
+      "path": "docs/source/presentation/readme.md",
+      "originalPath": "bitacora-panel-presentacion/README.md",
+      "sizeBytes": 3825,
+      "sha256": "a8a73ec0d7b193c4b6196640d88fe318170aac5fd70e5ed90e009e721e411f0c"
+    },
+    {
+      "path": "docs/source/presentation/assets.json",
+      "originalPath": "bitacora-panel-presentacion/assets.json",
+      "sizeBytes": 8226,
+      "sha256": "5d5d7e7a73be014947cfff915133e5bc1281de2aec9c9eeb3ec63d66debd3049"
+    },
+    {
+      "path": "docs/source/presentation/generation-prompts.json",
+      "originalPath": "bitacora-panel-presentacion/generation-prompts.json",
+      "sizeBytes": 5185,
+      "sha256": "ddd8849bf5f59c5fd81c27451d81ca2362fbd4bf695012f5ed76b6c03f0b5fd6"
     }
   ],
   "notes": [
@@ -5763,6 +6209,9 @@
     "Añadidos los assets del paquete bitacora-ui-assets (letrero de estación, señal de cambio de mapa, insignia «Completado», botones con etiqueta y brillo de la próxima estación): ver docs/source/ui-assets. Los textos no vienen en los PNG: `labelZones` y `attachments` dicen dónde ponerlos. Las entradas anteriores no se modificaron.",
     "Añadidas cinco gallinas y un pollito animados (hojas con atlas, `critterAnimations`): ver docs/source/chickens. Las entradas anteriores no se modificaron.",
     "Añadidas las siete insignias del paquete bitacora-insignias (seis de aprendizaje y la de Jerry): ver docs/source/badges. Las entradas anteriores no se modificaron.",
-    "Añadidos los 60 recursos de interfaz del panel de insignias (kit bitacora-panel-insignias): ver docs/source/badge-panel. Las siete insignias del kit no se copian porque ya están en el catálogo. Las entradas anteriores no se modificaron."
+    "Añadidos los 60 recursos de interfaz del panel de insignias (kit bitacora-panel-insignias): ver docs/source/badge-panel. Las siete insignias del kit no se copian porque ya están en el catálogo. Las entradas anteriores no se modificaron.",
+    "Añadidas las 11 piezas nuevas del panel de aprendizajes (kit bitacora-panel-aprendizajes): ver docs/source/journal-panel. Las piezas compartidas con el panel de insignias y las insignias del kit no se copian porque ya están en el proyecto. Las entradas anteriores no se modificaron.",
+    "Añadida la insignia de Rocky (paquetes bitacora-insignias y bitacora-panel-insignias, versión 1.1.0): ver docs/source/badges y docs/source/badge-panel. Las entradas anteriores no se modificaron.",
+    "Añadidas las 7 piezas de la presentación del kit bitacora-panel-presentacion (v2.0.0): ver docs/source/presentation. Las entradas anteriores no se modificaron."
   ]
 }

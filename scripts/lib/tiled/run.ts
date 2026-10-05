@@ -6,7 +6,7 @@ import type { AssetManifest, BitacoraConfig } from "../../../src/config/types";
 import { annotate, buildCandidate, describeChanges, jsonEqual } from "./apply";
 import { buildTileset, catalogEntries, CLASS_ROLE, previewSize, tileKey } from "./catalog";
 import { cellSizeFor, exportZone } from "./export";
-import { backupFile, backupMaps, defaultPaths, FileError, listMapFiles, readJsonFile, readMap, readProject, tilesetLoader, writeAtomic, type Paths } from "./files";
+import { backupFile, backupMaps, defaultPaths, FileError, listMapFiles, readConfig, readJsonFile, readMap, readProject, tilesetLoader, writeAtomic, type Paths } from "./files";
 import { importMap, type ZoneImport } from "./import";
 import { replaceTopLevel } from "./jsonStyle";
 import { mergeProject } from "./project";
@@ -25,9 +25,9 @@ const posix = (p: string): string => p.split("\\").join("/");
 export interface ImportReport {
   /** Sin errores: los mapas se leen, convierten y validan. */
   ok: boolean;
-  /** Los mapas coinciden con `bitacora.json` (nada que aplicar). */
+  /** Los mapas coinciden con `maps.json` (nada que aplicar). */
   inSync: boolean;
-  /** Se escribió `bitacora.json` en esta ejecución. */
+  /** Se escribió `maps.json` en esta ejecución. */
   written: boolean;
   errors: string[];
   warnings: string[];
@@ -38,25 +38,26 @@ export interface ImportReport {
 }
 
 export interface ImportOptions {
-  /** Escribe `bitacora.json` si hay cambios. Sin esto solo se comprueba (dry-run / check). */
+  /** Escribe `maps.json` si hay cambios. Sin esto solo se comprueba (dry-run / check). */
   apply: boolean;
 }
 
 /**
  * Lee los mapas de Tiled, construye la configuración candidata completa en memoria y la valida con el mismo `validateProject`
- * del build. Solo si todo pasa y se pide `apply`, reemplaza `maps` y `placements` en bitacora.json (archivo temporal + renombrado
- * atómico, con copia del anterior). Con cualquier error la configuración previa queda intacta.
+ * del build. Solo si todo pasa y se pide `apply`, reemplaza `maps` y `placements` en maps.json (archivo temporal + renombrado
+ * atómico, con copia del anterior); `bitacora.json` (el contenido) no se toca nunca. Con cualquier error la configuración previa
+ * queda intacta.
  */
 export function runImport(paths: Paths, options: ImportOptions): ImportReport {
   const report: ImportReport = { ok: false, inSync: false, written: false, errors: [], warnings: [], changes: [], zones: [], info: [] };
   let manifestJson: AssetManifest;
-  let configText: string;
+  let mapsText: string;
   let base: BitacoraConfig;
   let project: TiledProject | undefined;
   try {
     manifestJson = readJsonFile<AssetManifest>(paths.manifestFile, "assets.json");
-    configText = readFileSync(paths.configFile, "utf8");
-    base = readJsonFile<BitacoraConfig>(paths.configFile, "bitacora.json");
+    mapsText = readFileSync(paths.mapsFile, "utf8");
+    base = readConfig(paths);
     project = readProject(paths);
   } catch (e) {
     report.errors.push((e as Error).message);
@@ -82,6 +83,7 @@ export function runImport(paths: Paths, options: ImportOptions): ImportReport {
     }
     const r = importMap(file, map, { manifest: manifestJson, config: base, project, assetsDir: paths.assetsDir, mapDir: dirname(file), loadTileset: tilesetLoader(file) });
     issues.push(...r.issues);
+    report.warnings.push(...r.warnings.map(formatIssue));
     if (r.result) zones.push(r.result);
   }
   report.errors.push(...issues.map(formatIssue));
@@ -94,7 +96,7 @@ export function runImport(paths: Paths, options: ImportOptions): ImportReport {
   report.zones = candidate.managed;
 
   const validation = validateProject(manifestJson, candidate.config, paths.manifestFile);
-  report.errors.push(...validation.errors.filter((e) => e.path.startsWith("bitacora.json") || e.path.startsWith("assets.json")).map((e) => annotate({ path: e.path, message: e.message }, candidate.sources)));
+  report.errors.push(...validation.errors.filter((e) => /^(bitacora|maps|assets)\.json/.test(e.path)).map((e) => annotate({ path: e.path, message: e.message }, candidate.sources)));
   report.warnings.push(...validation.warnings.map((w) => `${w.path}: ${w.message}`));
   report.info.push(...validation.info);
   if (report.errors.length) return report;
@@ -104,12 +106,12 @@ export function runImport(paths: Paths, options: ImportOptions): ImportReport {
   report.ok = true;
   if (report.inSync || !options.apply) return report;
 
-  const text = replaceTopLevel(configText, { placements: candidate.config.placements, maps: candidate.config.maps });
+  const text = replaceTopLevel(mapsText, { placements: candidate.config.placements, maps: candidate.config.maps });
   if (text === null) {
-    report.warnings.push("no se localizaron `placements` y `maps` en bitacora.json: se reescribió el archivo entero con formato estándar");
+    report.warnings.push("no se localizaron `placements` y `maps` en maps.json: se reescribió el archivo entero con formato estándar");
   }
-  report.backup = backupFile(paths, paths.configFile);
-  writeAtomic(paths.configFile, text ?? `${JSON.stringify(candidate.config, null, 2)}\n`);
+  report.backup = backupFile(paths, paths.mapsFile);
+  writeAtomic(paths.mapsFile, text ?? `${JSON.stringify({ $schema: "./maps.schema.json", placements: candidate.config.placements, maps: candidate.config.maps }, null, 2)}\n`);
   report.written = true;
   return report;
 }
@@ -176,7 +178,7 @@ const sameBytes = (file: string, data: Uint8Array | string): boolean => {
 
 export function runGenerate(paths: Paths, options: GenerateOptions): GenerateReport {
   const manifest = readJsonFile<AssetManifest>(paths.manifestFile, "assets.json");
-  const config = readJsonFile<BitacoraConfig>(paths.configFile, "bitacora.json");
+  const config = readConfig(paths);
   const report: GenerateReport = { tileCount: 0, addedTiles: [], obsoleteTiles: [], previews: 0, written: [], skipped: [], backups: [], warnings: [] };
   const rel = (f: string) => posix(relative(paths.root, f));
 
@@ -219,7 +221,7 @@ export function runGenerate(paths: Paths, options: GenerateOptions): GenerateRep
   const zoneIds = options.zones ?? Object.keys(config.maps);
   for (const zoneId of zoneIds) {
     if (!config.maps[zoneId]) {
-      report.warnings.push(`la zona «${zoneId}» no existe en bitacora.json`);
+      report.warnings.push(`la zona «${zoneId}» no existe en maps.json`);
       continue;
     }
     const file = join(paths.mapsDir, `${zoneId}.tmj`);

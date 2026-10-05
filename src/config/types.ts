@@ -22,6 +22,13 @@ export interface ProjectConfig {
   courseName: string;
   teacherName: string | null;
   welcomeText: string;
+  /**
+   * Opcionales de la presentación (portada con el kit): `subtitle` va bajo el título en el letrero («Un recorrido de aprendizajes») y
+   * `welcomeTitle` es la frase destacada sobre el texto de bienvenida. Con `subtitle`, el título completo —el de la pestaña del
+   * navegador y el de la cabecera— es «título — subtítulo» (`fullTitle`).
+   */
+  subtitle?: string;
+  welcomeTitle?: string;
   finalReflection: ContentBlock[];
 }
 
@@ -30,6 +37,10 @@ export interface Learning {
   topic: string;
   /** Título corto que va en el letrero de la estación (cabe en dos líneas); sin él se usa `title`. */
   signTitle?: string;
+  /** Ilustración del aprendizaje en el índice y en el lector (`kind` «journal-panel-part»); sin ella no se muestra ninguna. */
+  illustrationAssetId?: string;
+  /** Palabras clave que se muestran junto a su ilustración en el lector (hasta cuatro). */
+  keywords?: string[];
   editorialStatus: "demo" | "draft" | "ready";
   contentRevision: number;
   badgeId: string;
@@ -51,6 +62,20 @@ export interface Badge {
   tone?: "jade" | "lavender" | "gold";
   /** «Lo que me llevo»: lo que la autora se queda de esta insignia, en primera persona. Sin él, el panel no muestra esa sección. */
   takeaway?: string;
+  /**
+   * Solo con `awardedFor`: el carácter de la insignia especial. `friendship` (por defecto) celebra una compañía (Jerry); `memorial`
+   * guarda el recuerdo de alguien (Rocky): su ficha usa los textos de `ui.badgePanel.labels.memorial`.
+   */
+  specialType?: "friendship" | "memorial";
+  /** Solo con `awardedFor`: una línea bajo el nombre en la colección y en el detalle (p. ej. «Siempre en nuestro corazón»). */
+  subtitle?: string;
+  /** Solo con `awardedFor`: cómo se desbloquea, mientras está por descubrir (sin él, el texto genérico `completeRoute`). */
+  unlockCondition?: string;
+  /**
+   * Solo con `awardedFor`: una insignia secreta no aparece en la colección (ni cuenta) hasta que se concede; no deja pistas de que existe.
+   * La de Rocky: surge al terminar todos los aprendizajes.
+   */
+  secret?: boolean;
 }
 
 /** Textos del panel de insignias (SPEC 7). Las plantillas solo admiten sus variables: `{completedCount}`, `{totalCount}`, `{number}`, `{xp}`. */
@@ -62,6 +87,33 @@ export interface BadgePanelLabels {
   represents: string; howEarned: string; howToEarn: string;
   completingTemplate: string; completeTemplate: string; completeRoute: string; routeEarned: string;
   takeaway: string; viewLearning: string; xpTemplate: string;
+  /** Línea del detalle de una insignia especial que aún no se ha desbloqueado (sin ella, `stillPending`). */
+  unlocksAtEnd?: string;
+  /** Textos de las insignias `specialType: "memorial"`: obligatorios si alguna existe. `placeTemplate` admite `{name}`. */
+  memorial?: BadgePanelMemorialLabels;
+}
+
+export interface BadgePanelMemorialLabels {
+  /** Sobre el nombre en el detalle (p. ej. «Un recuerdo lleno de amor»). */
+  eyebrow: string;
+  /** Título de la sección que sustituye a «Cómo la conseguí» y su texto, con `{name}` = título de la insignia. */
+  place: string; placeTemplate: string;
+  /** Título de la sección que sustituye a «Lo que me llevo» (p. ej. «Con mucho cariño»). */
+  takeaway: string;
+}
+
+/** Textos propios de la presentación; el resto sale de `project` y de `ui.labels` (semestre, docente, comenzar o continuar). */
+export interface PresentationLabels {
+  /** Rótulo sobre la asignatura («ASIGNATURA»). */
+  subjectLabel: string;
+  /** Texto alternativo de la ilustración de Vanessa y Jerry. */
+  heroAlt: string;
+}
+
+export interface PresentationConfig {
+  /** Prefijo de los IDs del kit en `assets.json` (p. ej. `ui.presentation.`). */
+  assetPrefix: string;
+  labels: PresentationLabels;
 }
 
 /** El panel de insignias hecho con el kit de interfaz `ui.badgePanel.*`. Sin él se usa la lista sencilla. */
@@ -69,6 +121,54 @@ export interface BadgePanelConfig {
   /** Prefijo de los IDs del kit en `assets.json` (p. ej. `ui.badgePanel.`). */
   assetPrefix: string;
   labels: BadgePanelLabels;
+}
+
+/**
+ * Textos de la Bitácora de aprendizajes (índice y lector, SPEC 7). Las plantillas solo admiten sus variables
+ * (`JOURNAL_PANEL_TEMPLATE_VARIABLES`); los nombres de las secciones salen de `ui.tabs`.
+ */
+export interface JournalPanelLabels {
+  title: string;
+  subtitle: string;
+  progressTemplate: string;
+  closePanel: string;
+  backToMap: string;
+  footerNote: string;
+  groupRangeTemplate: string;
+  groupSingleTemplate: string;
+  cardNumberTemplate: string;
+  nextRibbon: string;
+  statusCompleted: string;
+  statusAvailable: string;
+  statusLocked: string;
+  statusInProgress: string;
+  actionReread: string;
+  actionExplore: string;
+  requirementTemplate: string;
+  backToJournal: string;
+  readerSubtitleTemplate: string;
+  sectionsLabel: string;
+  sidebarTitle: string;
+  badgeObtained: string;
+  badgePending: string;
+  badgeInstructionTemplate: string;
+  viewBadge: string;
+  sectionsReadTemplate: string;
+  readingTemplate: string;
+  sectionRead: string;
+  markAndContinue: string;
+  continueReading: string;
+  seeSectionTemplate: string;
+  backToJournalAction: string;
+}
+
+/** La Bitácora de aprendizajes con el kit `ui.journal-panel.*`. Sin ella se usan la lista y la lectura sencillas. Requiere `ui.badgePanel` (comparte sus piezas). */
+export interface JournalPanelConfig {
+  /** Prefijo de los IDs propios del kit en `assets.json` (p. ej. `ui.journal-panel.`). */
+  assetPrefix: string;
+  /** Icono de cada zona junto a su título en el índice: nombre de una pieza propia (`zone-cherry-tree`…) por ID de zona. */
+  zoneIcons?: Record<string, string>;
+  labels: JournalPanelLabels;
 }
 
 export interface Dialogue {
@@ -183,19 +283,29 @@ export interface IdleConfig {
 export interface UiConfig {
   /** Panel de insignias con el kit de interfaz (opcional). */
   badgePanel?: BadgePanelConfig;
+  /** Índice y lector de la Bitácora de aprendizajes con su kit de interfaz (opcional; requiere `badgePanel`). */
+  journalPanel?: JournalPanelConfig;
+  /** La presentación (portada) con su kit de interfaz `ui.presentation.*`. Sin ella se usa la portada sencilla. */
+  presentation?: PresentationConfig;
   tabs: Array<{ id: SectionId; label: string; required: boolean }>;
   labels: {
     explore: string; markRead: string; claimBadge: string; close: string;
     index: string; reset: string; continueRoute: string; startRoute: string;
-    pending: string; demo: string; previous: string; next: string;
+    pending: string; previous: string; next: string;
+    /** Aviso de contenido de demostración (modo `demo`): opcional; sin él no se muestra ninguno. */
+    demo?: string;
     progressTemplate: string; stationTitleTemplate: string;
     semester: string; teacher: string; sectionRead: string; sectionUnread: string; badgeEarned: string;
     remainingTemplate: string; rewardTitle: string; xpTemplate: string; levelTemplate: string;
     emptyRouteLabel: string; mapLabel: string;
     /** Texto de la barra de carga del mapa (opcional; por defecto «Cargando el mapa…»). */
     loadingMap?: string;
+    /** Aviso al intentar explorar desde la Bitácora un aprendizaje sin completar estando lejos de su estación. Variables: {number}, {title} y {zone} (opcional; hay un texto por defecto). */
+    awayFromStationTemplate?: string;
     badges: string; notEarned: string; routeBadgeLocked: string; earnedOnTemplate: string; badgeCountTemplate: string; completionTitle: string;
-    finalReflectionTitle: string; finalReflectionPending: string; resetConfirmTitle: string; resetConfirmText: string;
+    finalReflectionTitle: string;
+    /** Ya no se muestra (sin reflexión final no hay aviso); se admite por compatibilidad con configuraciones anteriores. */
+    finalReflectionPending?: string; resetConfirmTitle: string; resetConfirmText: string;
     resetConfirm: string; cancel: string; preparationTemplate: string;
     musicMute: string; musicUnmute: string;
     stateLocked: string; stateAvailable: string; stateCompleted: string;
@@ -268,6 +378,19 @@ export interface BitacoraConfig {
   gameplay: GameplayConfig;
   audio: AudioConfig;
 }
+
+/**
+ * `maps.json`: la geometría del mundo —las zonas (`maps`) y dónde está la estación de cada aprendizaje (`placements`)—, que administra
+ * Tiled. Aparte del contenido (`bitacora.json`), para que una edición de un mapa no toque textos ni insignias y al revés.
+ */
+export interface MapsFile {
+  $schema?: string;
+  placements: Record<string, Placement>;
+  maps: Record<string, MapZone>;
+}
+
+/** `bitacora.json` tal como está en el archivo: todo menos la geometría. */
+export type BitacoraContent = Omit<BitacoraConfig, "placements" | "maps">;
 
 // ---- assets.json real ----------------------------------------------------
 
@@ -443,6 +566,8 @@ export interface AssetManifest {
 export interface ConfigIssue {
   path: string;
   message: string;
+  /** El archivo de la configuración al que pertenece, cuando no se deduce de la ruta (p. ej. una clave de más en maps.json). */
+  file?: "bitacora.json" | "maps.json";
 }
 
 export type ValidationResult<T> = { ok: true; value: T } | { ok: false; issues: ConfigIssue[] };

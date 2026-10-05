@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import bitacoraJson from "../../public/config/bitacora.json";
+import bitacoraJson from "./fixtures/realConfig";
 import type { BitacoraConfig, Point } from "../config/types";
 import { navigationGrid } from "../config/reachability";
 import { findPath, lineOfSight, type NavGrid } from "../domain/pathfinding";

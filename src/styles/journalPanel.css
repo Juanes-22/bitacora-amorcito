@@ -1,0 +1,186 @@
+/* Bitácora de aprendizajes (SPEC 7): índice por zonas y lector con pestañas, hechos con el kit `ui.journal-panel.*` y las piezas
+   que comparte con el panel de insignias. Los marcos de nueve zonas llegan como variables CSS desde el componente
+   (`--bpk-<pieza>` y `--bpk-<pieza>-slice`, resueltas con el registro de assets): aquí no hay rutas de archivos. */
+
+/* ---- Marcos de nueve zonas: el ancho del borde es fijo y solo se estira el centro ---- */
+.jp-dialog { border-style: solid; border-color: transparent; border-width: 1.375rem; border-image-source: var(--bpk-panel-frame); border-image-slice: var(--bpk-panel-frame-slice) fill; border-image-width: 1.375rem; border-image-repeat: stretch; }
+.jp-card, .jp-sidebar-card { border-style: solid; border-color: transparent; border-width: 0.75rem; border-image-source: var(--bpk-card-pending); border-image-slice: var(--bpk-card-pending-slice) fill; border-image-width: 0.75rem; border-image-repeat: stretch; }
+.jp-card--next { border-image-source: var(--bpk-card-earned-hover); border-image-slice: var(--bpk-card-earned-hover-slice) fill; }
+.jp-sidebar-card--earned { border-image-source: var(--bpk-card-earned); border-image-slice: var(--bpk-card-earned-slice) fill; }
+.jp-number, .jp-action--secondary, .jp-tab { border-style: solid; border-color: transparent; border-image-source: var(--bpk-button-secondary); border-image-slice: var(--bpk-button-secondary-slice) fill; border-image-repeat: stretch; }
+.jp-action--primary, .jp-tab--active { border-style: solid; border-color: transparent; border-image-source: var(--bpk-button-primary); border-image-slice: var(--bpk-button-primary-slice) fill; border-image-repeat: stretch; }
+.jp-status--completed { border-style: solid; border-color: transparent; border-image-source: var(--bpk-label-earned); border-image-slice: var(--bpk-label-earned-slice) fill; border-image-repeat: stretch; }
+.jp-status--locked, .jp-keyword { border-style: solid; border-color: transparent; border-image-source: var(--bpk-label-pending); border-image-slice: var(--bpk-label-pending-slice) fill; border-image-repeat: stretch; }
+.jp-status--in-course { border-style: solid; border-color: transparent; border-image-source: var(--bpk-label-xp); border-image-slice: var(--bpk-label-xp-slice) fill; border-image-repeat: stretch; }
+.jp-progress { border-style: solid; border-color: transparent; border-image-source: var(--bpk-progress-capsule); border-image-slice: var(--bpk-progress-capsule-slice) fill; border-image-repeat: stretch; }
+@media (hover: hover) {
+  .jp-action--primary:hover, .jp-tab--active:hover { border-image-source: var(--bpk-button-primary-hover); border-image-slice: var(--bpk-button-primary-hover-slice) fill; }
+  .jp-action--secondary:hover, .jp-tab:not(.jp-tab--active):hover { border-image-source: var(--bpk-button-secondary-hover); border-image-slice: var(--bpk-button-secondary-hover-slice) fill; }
+}
+
+/* ---- Disposición ---- */
+.jp-overlay, .jp-overlay * { box-sizing: border-box; }
+.jp-overlay {
+  position: absolute; inset: 0; z-index: 8; display: grid; place-items: center;
+  padding: 0.75rem; background: rgb(24 50 30 / 45%); color: #58331f;
+  font-family: var(--font-ui);
+}
+.jp-dialog {
+  --jp-ink: #58331f; --jp-green: #397d62; --jp-muted: #7b6244;
+  position: relative; width: min(91.25rem, 100%); max-height: calc(100dvh - 1.5rem);
+  display: flex; flex-direction: column; gap: 0.875rem; padding: 0.5rem 0.75rem 0.375rem;
+  filter: drop-shadow(0 0.75rem 1.5rem rgb(20 17 9 / 25%)); isolation: isolate; overflow: hidden;
+}
+.jp-dialog button { font: inherit; color: inherit; background: none; cursor: pointer; }
+.jp-dialog:focus { outline: none; }
+.jp-dialog button:focus-visible { outline: 0.1875rem solid #674398; outline-offset: 0.1875rem; }
+.jp-dialog img { image-rendering: pixelated; object-fit: contain; display: block; }
+.jp-icon { width: 1.375rem; height: 1.375rem; flex-shrink: 0; }
+.jp-scroll { min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; padding: 0.125rem 0.25rem 0.125rem 0.125rem; scrollbar-color: #c9b48b #efdfbd; scrollbar-width: thin; }
+.jp-header { display: flex; align-items: center; gap: 1rem; padding-right: 3.75rem; flex-wrap: wrap; }
+.jp-heading-icon { width: 4.125rem; height: 3.625rem; flex: none; }
+.jp-title-block { flex: 1; min-width: 13.75rem; }
+.jp-dialog h1 { margin: 0; font-size: 2.125rem; line-height: 1.15; letter-spacing: -.0.1875rem; color: #512a15; }
+.jp-subtitle { font-size: 1.0625rem; color: var(--jp-muted); margin: 0.375rem 0 0; }
+.jp-dialog .jp-close { position: absolute; top: 0.5rem; right: 0.625rem; z-index: 3; width: 2.875rem; height: 2.875rem; padding: 0; border: 0 !important; background-color: transparent !important; background-image: var(--bpk-button-close); background-size: 100% 100%; image-rendering: pixelated; }
+@media (hover: hover) { .jp-dialog .jp-close:hover { background-image: var(--bpk-button-close-hover); } }
+.jp-dialog .jp-close:focus-visible { background-image: var(--bpk-button-close-hover); }
+.jp-progress { min-height: 2.875rem; min-width: 18.125rem; display: flex; align-items: center; justify-content: center; gap: 0.875rem; padding: 0 0.5rem; border-width: 0.5625rem; border-image-width: 0.5625rem; font-size: 0.9375rem; font-weight: 700; white-space: nowrap; }
+.jp-progress-segments { display: flex; gap: 0.25rem; }
+.jp-segment { width: 1.25rem; height: 0.875rem; object-fit: fill !important; }
+.jp-empty { margin: 0.5rem 0; font-size: 1.125rem; }
+.jp-zone { display: flex; align-items: center; gap: 0.625rem; margin: 0.125rem 0 0.625rem; }
+.jp-zone img { width: 2.125rem; height: 2.25rem; }
+.jp-zone h2 { margin: 0; font-size: 1.3125rem; color: #512a15; }
+.jp-zone small { font-size: 0.875rem; color: #8d795b; margin-left: 0.375rem; }
+.jp-zone::after { content: ""; height: 0.125rem; flex: 1; background: #d1b77b; opacity: .55; margin-left: 0.25rem; }
+.jp-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.jp-card { position: relative; min-height: 15.75rem; padding: 0.25rem 0.5rem 0.375rem; display: flex; flex-direction: column; align-items: center; gap: 0.3125rem; text-align: center; }
+.jp-card--next { filter: drop-shadow(0 0.125rem 0 rgb(206 174 100 / 25%)); }
+.jp-number { position: absolute; top: 0.25rem; left: 0.25rem; z-index: 2; min-width: 2.125rem; min-height: 1.625rem; display: grid; place-items: center; border-width: 0.3125rem; border-image-width: 0.3125rem; font-size: 0.8125rem; font-weight: 800; }
+.jp-ribbon { position: absolute; right: 0; top: 0; z-index: 2; width: 7.5rem; height: 1.75rem; display: grid; place-items: center; font-size: 0.8125rem; font-weight: 800; }
+.jp-ribbon img { position: absolute; width: 100%; height: 100%; object-fit: fill !important; z-index: 0; }
+.jp-ribbon span { position: relative; z-index: 1; margin-left: 0.5rem; }
+.jp-card-illustration { width: 100%; max-width: 15rem; height: 6.75rem; }
+.jp-card--locked .jp-card-illustration { opacity: .73; }
+.jp-lesson-number { margin: 0; font-size: 0.8125rem; font-weight: 700; color: #9f8058; }
+.jp-card h3 { margin: 0; font-size: 1.125rem; line-height: 1.2; min-height: 2.6875rem; display: flex; align-items: center; justify-content: center; font-weight: 800; }
+.jp-status { min-height: 1.8125rem; padding: 0 0.5rem; border-width: 0.375rem; border-image-width: 0.375rem; display: inline-flex; align-items: center; justify-content: center; gap: 0.375rem; font-size: 0.8125rem; font-weight: 800; white-space: nowrap; }
+.jp-status .jp-icon { width: 1rem; height: 1rem; }
+.jp-status--completed { color: #fffaf0; }
+.jp-status--in-course { color: #785124; }
+.jp-status--available { background: #dce9d4; border: 1px solid #bac9a8; color: #3a7051; clip-path: polygon(0.25rem 0, calc(100% - 0.25rem) 0, 100% 0.25rem, 100% calc(100% - 0.25rem), calc(100% - 0.25rem) 100%, 0.25rem 100%, 0 calc(100% - 0.25rem), 0 0.25rem); }
+.jp-play { font-size: 0.75rem; color: var(--jp-green); }
+.jp-action { min-height: 2.625rem; padding: 0 0.875rem; border-width: 0.5625rem; border-image-width: 0.5625rem; font-size: 0.9375rem !important; font-weight: 800 !important; display: inline-flex; gap: 0.625rem; align-items: center; justify-content: center; }
+.jp-action--primary { color: #fffaf0 !important; }
+.jp-card .jp-action { width: 100%; margin-top: auto; }
+.jp-chevron { width: 0.625rem; height: 0.875rem; }
+.jp-requirement { width: 100%; margin-top: auto; min-height: 2.25rem; padding: 0.25rem 0.5rem; border: 0 !important; border-radius: 0.25rem; background: rgb(201 186 153 / 28%) !important; color: #6e5a3e !important; font-size: 0.8125rem !important; font-weight: 700; text-align: center; }
+.jp-footer { border-top: 1px solid #d8c49b; margin-top: auto; padding-top: 0.75rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.jp-footer-copy { font-size: 0.9375rem; color: #8a7252; display: flex; align-items: center; gap: 0.5625rem; }
+.jp-footer-copy .jp-icon { width: 1.25rem; height: 1.25rem; }
+.jp-footer .jp-action { min-width: 12.5rem; }
+.jp-back-link { align-self: flex-start; min-height: 2.5rem; margin-block: -0.4375rem; border: 0 !important; padding: 0; display: flex; align-items: center; gap: 0.625rem; font-size: 1.0625rem !important; font-weight: 800; text-decoration: underline; text-underline-offset: 0.25rem; }
+.jp-back-icon { width: 1.125rem; height: 1.5rem; }
+.jp-reader-title { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; padding-right: 3.5rem; }
+.jp-reader-title h1 { font-size: 2.375rem; }
+.jp-reader-title .jp-status { min-height: 2.375rem; padding: 0 0.75rem; font-size: 1rem; border-width: 0.5rem; border-image-width: 0.5rem; }
+.jp-reader-title .jp-status .jp-icon { width: 1.25rem; height: 1.25rem; }
+.jp-tabs { display: flex; gap: 0.75rem; align-items: end; border-bottom: 1px solid #d1b783; padding-bottom: 0.625rem; flex-wrap: wrap; }
+.jp-tablist { display: flex; gap: 0.75rem; align-items: end; flex-wrap: wrap; }
+.jp-tab { min-width: 10rem; min-height: 3.125rem; border-width: 0.625rem; border-image-width: 0.625rem; display: flex; align-items: center; justify-content: center; gap: 0.625rem; padding: 0 0.75rem; font-weight: 800 !important; font-size: 1.0625rem !important; }
+.jp-dialog .jp-tab--active { color: #fffaf0; }
+.jp-tab .jp-icon { width: 1.5625rem; height: 1.5rem; }
+.jp-tab .jp-tab-check { width: 0.9375rem; height: 0.9375rem; margin-left: 0.125rem; }
+.jp-tab:not(.jp-tab--active) .jp-tab-check { filter: brightness(.52) sepia(1) saturate(.7) hue-rotate(70deg); }
+.jp-section-count { font-size: 0.9375rem; color: #8a7252; display: flex; align-items: center; gap: 0.75rem; margin-left: auto; align-self: center; }
+.jp-section-dots { display: flex; gap: 0.3125rem; }
+.jp-section-dot { width: 0.6875rem; height: 0.6875rem; border: 1px solid #bea77e; border-radius: 50%; background: #efdfbe; }
+.jp-section-dot[data-read="true"] { background: var(--jp-green); border-color: var(--jp-green); }
+.jp-reader-body { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 21.75rem; gap: 1.875rem; }
+.jp-article { min-height: 0; overflow-y: auto; font: 1.3125rem/1.62 var(--font-reading); padding: 0.25rem 1rem 0.5rem 0.125rem; scrollbar-color: #c9b48b #efdfbd; scrollbar-width: thin; }
+.jp-article:focus-visible { outline: 0.1875rem solid #674398; outline-offset: -2px; }
+.jp-article .content { max-width: none; margin: 0; }
+.jp-article .content__block + .content__block { margin-top: 0; }
+.jp-article .content__block { margin: 0 0 1.375rem; }
+.jp-article .block-paragraph { margin: 0; font: inherit; }
+.jp-article .block-heading { margin: 0 0 0.5rem; font: 800 1.375rem/1.3 var(--font-ui); color: #512a15; }
+.jp-sidebar { min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; padding: 0.125rem 0.125rem 0.25rem; }
+.jp-sidebar-card { padding: 0.5rem 0.625rem 0.625rem; text-align: center; }
+.jp-sidebar-card h2 { font-size: 1.0625rem; margin: 0 0 0.5rem; color: #512a15; }
+.jp-sidebar-illustration { width: 100%; height: 7.5rem; }
+.jp-keywords { list-style: none; margin: 0.5rem 0 0; padding: 0; display: flex; justify-content: center; flex-wrap: wrap; gap: 0.375rem; }
+.jp-keyword { border-width: 0.3125rem; border-image-width: 0.3125rem; font-size: 0.75rem; font-weight: 700; padding: 0 0.4375rem; min-height: 1.625rem; display: grid; place-items: center; }
+/* La insignia se dibuja a partir de un solo tamaño (`--m`, el del medallón): el escenario, las ramitas, los destellos y el candado
+   se calculan de él, sin transformaciones ni márgenes negativos, de modo que nada se monta sobre el nombre. */
+.jp-medal-stage { --m: 7.4375rem; position: relative; width: calc(var(--m) * 1.48); max-width: 100%; height: calc(var(--m) + 0.875rem); margin: 0.25rem auto 0; }
+.jp-medal { position: absolute; width: var(--m); height: var(--m); left: calc(50% - var(--m) / 2); top: 0; }
+.jp-medal--pending { filter: grayscale(1); opacity: .64; }
+/* Todo lo que decora la insignia es solo dibujo: sin eventos del puntero (con el lateral desplazándose, un adorno fuera de su recorte no debe tapar el botón del pie). */
+.jp-medal, .jp-branch, .jp-sparkle, .jp-medal-lock { pointer-events: none; }
+.jp-branch { position: absolute; width: calc(var(--m) * .26); height: calc(var(--m) * .61); bottom: 0.75rem; }
+.jp-branch--left { left: calc(var(--m) * .04); }
+.jp-branch--right { right: calc(var(--m) * .04); }
+.jp-sparkle { position: absolute; width: calc(var(--m) * .13); height: calc(var(--m) * .13); top: calc(var(--m) * .2); }
+.jp-sparkle--left { left: calc(var(--m) * .07); }
+.jp-sparkle--right { right: calc(var(--m) * .08); top: calc(var(--m) * .37); }
+.jp-medal-lock { position: absolute; width: calc(var(--m) * .23); height: calc(var(--m) * .23); left: calc(50% - var(--m) * .115); bottom: 0; }
+.jp-badge-name { font-size: 1rem; font-weight: 800; margin: 0.625rem 0 0; line-height: 1.25; }
+.jp-badge-instruction { font-size: 0.8125rem; color: #6e5a3e; line-height: 1.45; margin: 0.375rem 0 0; }
+.jp-link { border: 0 !important; padding: 0; min-height: 2.5rem; margin-bottom: -0.7rem; font-size: 0.875rem !important; font-weight: 800 !important; color: #5c3b1f !important; display: inline-flex; align-items: center; gap: 0.5rem; margin-top: -0.2rem; text-decoration: underline; text-underline-offset: 0.1875rem; }
+.jp-link .jp-chevron { width: 0.5rem; height: 0.75rem; }
+.jp-reader-footer .jp-action { min-width: 16.875rem; min-height: 3rem; font-size: 1rem !important; }
+.jp-reader-footer .jp-footer-copy { font-size: 1rem; color: #73583b; }
+.jp-reader-footer .jp-footer-copy--read { color: var(--jp-green); }
+.jp-reader-footer .jp-footer-copy--read .jp-icon { filter: brightness(.52) sepia(1) saturate(.7) hue-rotate(70deg); }
+
+/* Pantallas bajas (un portátil): la cabecera y las tarjetas del índice se compactan. El lateral del lector no: conserva su tamaño y se desplaza. */
+@media (max-height: 800px) {
+  .jp-dialog { gap: 0.625rem; }
+  .jp-dialog h1 { font-size: 1.875rem; }
+  .jp-reader-title h1 { font-size: 2rem; }
+  .jp-subtitle { margin-top: 0.1875rem; font-size: 0.9375rem; }
+  .jp-card { min-height: 14.5rem; }
+  .jp-card-illustration { height: 5.625rem; }
+}
+
+@media (max-width: 1050px) {
+  .jp-reader-body { grid-template-columns: minmax(0, 1fr) 17rem; gap: 1.125rem; }
+  .jp-article { font-size: 1.1875rem; }
+  .jp-tab { min-width: 8.625rem; }
+  .jp-section-count { margin-left: 0; }
+  .jp-dialog h1 { font-size: 1.8125rem; }
+  .jp-reader-title h1 { font-size: 1.9375rem; }
+}
+@media (max-width: 740px) {
+  .jp-overlay { padding: 0.25rem; }
+  .jp-dialog { border-width: 1rem; border-image-width: 1rem; padding: 0.25rem 0.25rem 0.125rem; gap: 0.6875rem; max-height: calc(100dvh - 0.5rem); }
+  .jp-heading-icon { width: 2.875rem; height: 2.625rem; }
+  .jp-dialog h1, .jp-reader-title h1 { font-size: 1.5rem; }
+  .jp-header { padding-right: 2.375rem; gap: 0.625rem; }
+  .jp-progress { min-width: 0; width: 100%; }
+  .jp-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+  .jp-card { min-height: 14.875rem; }
+  .jp-zone { flex-wrap: wrap; }
+  .jp-zone small { margin-left: 0; }
+  .jp-close { width: 2.375rem; height: 2.375rem; top: 0.375rem; right: 0.375rem; }
+  .jp-reader-body { display: flex; flex-direction: column; gap: 0.75rem; overflow-y: auto; scrollbar-width: thin; }
+  .jp-article { flex: none; overflow: visible; font-size: 1.125rem; padding-right: 0.25rem; }
+  .jp-sidebar { flex: none; overflow: visible; display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  .jp-sidebar-card { padding: 0.375rem 0.25rem 0.5rem; }
+  .jp-tab { min-width: 0; flex: 1; padding: 0 0.1875rem; font-size: 0.8125rem !important; gap: 0.25rem; white-space: nowrap; }
+  .jp-tab .jp-tab-check { width: 0.75rem; height: 0.75rem; margin-left: 0; }
+  .jp-tab .jp-icon { width: 1.25rem; height: 1.25rem; }
+  .jp-section-count { width: 100%; font-size: 0.8125rem; }
+  .jp-reader-title { padding-right: 2.5rem; }
+  .jp-footer { flex-direction: column; align-items: stretch; }
+  .jp-reader-footer .jp-action, .jp-footer .jp-action { min-width: 0; width: 100%; }
+  .jp-medal-stage { --m: 6rem; }
+}
+/* Lateral del lector (escritorio y portátil): la ilustración, las palabras clave y la insignia conservan su tamaño natural; si la altura no
+   alcanza, el lateral se desplaza dentro de sí mismo (nada se omite ni se sale de su recuadro). */
+@media (min-width: 741px) {
+  .jp-reader-body { grid-template-rows: minmax(0, 1fr); }
+  .jp-sidebar-card { flex: none; }
+}
+@media (prefers-reduced-motion: reduce) { .jp-dialog * { scroll-behavior: auto; } }

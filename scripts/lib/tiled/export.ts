@@ -32,7 +32,7 @@ function depthProps(d: { mode: "fixed"; value: number } | { mode: "y"; offset: n
 export const cellSizeFor = (width: number, height: number): number => (Number.isInteger(width / 2) && Number.isInteger(height / 2) ? 2 : 1);
 
 /**
- * Mapa de Tiled de una zona de `bitacora.json`: las capas del paisaje y un objeto por cada elemento colocado, con sus
+ * Mapa de Tiled de una zona de `maps.json`: las capas del paisaje y un objeto por cada elemento colocado, con sus
  * posiciones, tamaños y propiedades convertidos (SPEC: «Tiled»). Cada objeto lleva todas las propiedades explícitas; lo que
  * no se escribe es porque el dato también falta en la configuración (un opcional omitido sigue omitido).
  */

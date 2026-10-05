@@ -1,5 +1,5 @@
-// Escritura de bitacora.json que respeta el estilo con el que está mantenido a mano: solo se reescriben las regiones
-// `placements` y `maps` (lo único que administra Tiled) y el resto del archivo queda byte a byte igual.
+// Escritura de maps.json que respeta el estilo con el que está mantenido a mano: solo se reescriben las regiones
+// `placements` y `maps` (lo único que administra Tiled) y el resto del archivo (`$schema`...) queda byte a byte igual.
 
 const isPrim = (v: unknown): boolean => v === null || typeof v !== "object";
 

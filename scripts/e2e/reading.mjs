@@ -1,13 +1,16 @@
 // E2E de lectura, recompensa, persistencia y casos límite (SPEC 7, 8, 9 y 13) en un navegador real.
 // Uso: npm run test:e2e
-import { configJson, dist, harness, SPOT_A, stationSpot } from "./helpers.mjs";
+import { configJson, dist, harness, SPOT_A, stationSpot, START, startLabel } from "./helpers.mjs";
 
-const { open, check, finish } = await harness();
+const { open: openPage, check, finish } = await harness();
+// Esta suite prueba la lectura sencilla (el respaldo, con su ventana de apertura y sus pestañas): se abre sin la Bitácora de
+// aprendizajes. La Bitácora (índice y lector) la prueba journal.mjs.
+const open = (options = {}) => openPage({ ...options, edit: (c) => { delete c.ui.journalPanel; options.edit?.(c); } });
 
-const KEY = (mode = "demo") => `bitacora:progress:v3:${configJson.contentSetId}:${mode}`;
+const KEY = (mode = configJson.mode) => `bitacora:progress:v3:${configJson.contentSetId}:${mode}`;
 const DONE = { contentRevision: 1, readSectionIds: ["learning", "reflection", "lived"], completedAt: "2026-09-30T10:00:00.000Z" };
 /** Guardado v3 válido para sembrar localStorage antes de cargar la página. */
-const saved = ({ entries = {}, zone = "zona-a", player = { x: 200, y: 1030 }, mode = "demo" } = {}) => ({
+const saved = ({ entries = {}, zone = "zona-a", player = { x: 200, y: 1030 }, mode = configJson.mode } = {}) => ({
   [KEY(mode)]: JSON.stringify({
     schemaVersion: 3, contentSetId: configJson.contentSetId, mode, currentZoneId: zone, player, checkpoints: {},
     entries: Object.fromEntries(configJson.route.map((id) => [id, entries[id] ?? { contentRevision: 1, readSectionIds: [] }])),
@@ -83,9 +86,9 @@ try {
     // recarga
     await t.page.reload();
     await t.page.waitForSelector(".cover");
-    check("A21 tras recargar la portada ofrece «Continuar recorrido»", (await t.page.locator(".pixel-button").innerText()) === "Continuar recorrido");
+    check("A21 tras recargar la portada ofrece «Continuar recorrido»", (await startLabel(t.page)) === "Continuar recorrido");
     await t.page.evaluate(() => { window.__celebrations = 0; });
-    await t.page.click(".pixel-button");
+    await t.page.click(START);
     await t.watch();
     await t.page.waitForTimeout(1500);
     check("A22 recargar restaura el avance y pinta las estaciones correctas sin celebrar lo histórico", (await hud(t)).includes("1 de 6 aprendizajes") && JSON.stringify((await t.stations()).map((s) => s.state)) === JSON.stringify(["completed", "available", "locked"]) && (await t.log()).filter((e) => e[0] === "app:celebrate").length === 0);
@@ -185,7 +188,8 @@ try {
     check("Z7 confirmación de reinicio (alertdialog) sin violaciones", confirm.length === 0, confirm.join(" | "));
     await t.close();
 
-    const final = await open({ edit: (c) => { c.mode = "final"; } });
+    // La configuración real ya está en final con los seis aprobados: el aviso «en preparación» se prueba con los textos sin aprobar.
+    const final = await open({ edit: (c) => { c.mode = "final"; for (const id of c.route) c.learnings[id].editorialStatus = "draft"; } });
     await final.start();
     await final.page.waitForTimeout(300);
     const finalMap = await final.axe();
@@ -253,7 +257,7 @@ try {
     await blocked.close();
 
     const corrupt = await open({ seed: { [KEY()]: "{ esto no es json", [KEY("final")]: JSON.stringify({ schemaVersion: 2 }) } });
-    check("D3 un guardado corrupto se ignora: portada de primera visita y sin errores", (await corrupt.page.locator(".pixel-button").innerText()) === "Comenzar recorrido" && corrupt.errors.length === 0, corrupt.errors.join(" | "));
+    check("D3 un guardado corrupto se ignora: portada de primera visita y sin errores", (await startLabel(corrupt.page)) === "Comenzar recorrido" && corrupt.errors.length === 0, corrupt.errors.join(" | "));
     await corrupt.start();
     check("D4 con un guardado corrupto se parte de cero", (await hud(corrupt)).includes("0 de 6 aprendizajes"));
     await corrupt.close();
@@ -327,8 +331,8 @@ try {
 
   // ---- H. Demo y final no se mezclan (AC-13) -------------------------------------------------------------
   {
-    const t = await open({ seed: saved({ entries: { "apr-a": DONE } }), edit: (c) => { c.mode = "final"; } });
-    check("H1 el progreso de demostración no pasa al modo final", (await t.page.locator(".pixel-button").innerText()) === "Comenzar recorrido");
+    const t = await open({ seed: saved({ entries: { "apr-a": DONE }, mode: "demo" }), edit: (c) => { c.mode = "final"; for (const id of c.route) c.learnings[id].editorialStatus = "draft"; } });
+    check("H1 el progreso de demostración no pasa al modo final", (await startLabel(t.page)) === "Comenzar recorrido");
     await t.start();
     check("H2 en final, sin heredar insignias: 0 de 6", (await hud(t)).includes("0 de 6 aprendizajes"));
     await openStation1(t);

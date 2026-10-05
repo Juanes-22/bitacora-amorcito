@@ -1,18 +1,25 @@
 import bitacoraSchema from "../../public/config/bitacora.schema.json";
+import mapsSchema from "../../public/config/maps.schema.json";
 import { DIALOGUE_VARIABLES, LABEL_TEMPLATE_VARIABLES, variablesIn } from "../domain/templates";
 import { ajvIssues, compileSchema } from "./schemaValidation";
 import { BADGE_PANEL_PARTS, BADGE_PANEL_TEMPLATE_VARIABLES } from "./badgePanelParts";
+import { JOURNAL_PANEL_PARTS, JOURNAL_PANEL_SHARED_PARTS, JOURNAL_PANEL_TEMPLATE_VARIABLES } from "./journalPanelParts";
+import { CONTENT_FILE, MAPS_FILE, mergeConfig } from "./mapsFile";
+import { PRESENTATION_PARTS } from "./presentationParts";
 import type {
   AssetManifest,
   BitacoraConfig,
+  BitacoraContent,
   ConfigIssue,
   ContentBlock,
   FrameDefinitions,
+  MapsFile,
   MapZone,
   ValidationResult,
 } from "./types";
 
-const validateShape = compileSchema(bitacoraSchema);
+const validateContentShape = compileSchema(bitacoraSchema);
+const validateMapsShape = compileSchema(mapsSchema);
 
 const DIALOGUE_VARIABLE_SET = new Set<string>(DIALOGUE_VARIABLES);
 const ALLOWED_URL_PROTOCOLS = new Set(["http:", "https:", "mailto:"]);
@@ -67,16 +74,35 @@ function inObstacle(zone: MapZone, x: number, y: number): boolean {
 }
 
 /**
- * Forma (bitacora.schema.json) y después integridad de referencias cruzadas contra el
- * manifiesto real. No corrige ni descarta nada: devuelve todos los errores con su ruta.
+ * La configuración completa en su forma de un solo objeto (`maps` y `placements` en el primer nivel): la que usan el juego, los
+ * scripts y las pruebas. Se separa en los dos archivos y se valida como ellos (`validateBitacoraFiles`).
  */
 export function validateBitacora(
   data: unknown,
   manifest: AssetManifest,
   options: ValidateOptions = {},
 ): ValidationResult<BitacoraConfig> {
-  if (!validateShape(data)) return { ok: false, issues: ajvIssues(validateShape.errors) };
-  const c = data as unknown as BitacoraConfig;
+  if (typeof data !== "object" || data === null || Array.isArray(data)) return validateBitacoraFiles(data, undefined, manifest, options);
+  const { placements, maps, ...content } = data as Record<string, unknown>;
+  return validateBitacoraFiles(content, { placements, maps }, manifest, options);
+}
+
+/**
+ * Forma de cada archivo (bitacora.schema.json y maps.schema.json) y después integridad de referencias cruzadas sobre ambos juntos
+ * contra el manifiesto real. No corrige ni descarta nada: devuelve todos los errores con su ruta (las de `maps.json` empiezan por
+ * `maps` o `placements`: `configFileOf` dice a qué archivo pertenece cada una).
+ */
+export function validateBitacoraFiles(
+  content: unknown,
+  mapsFile: unknown,
+  manifest: AssetManifest,
+  options: ValidateOptions = {},
+): ValidationResult<BitacoraConfig> {
+  const shape: ConfigIssue[] = [];
+  if (!validateContentShape(content)) shape.push(...ajvIssues(validateContentShape.errors).map((i) => ({ ...i, file: CONTENT_FILE })));
+  if (mapsFile !== undefined && !validateMapsShape(mapsFile)) shape.push(...ajvIssues(validateMapsShape.errors).map((i) => ({ ...i, file: MAPS_FILE })));
+  if (shape.length) return { ok: false, issues: shape };
+  const c = mergeConfig(content as unknown as BitacoraContent, mapsFile as MapsFile);
   const issues: ConfigIssue[] = [];
   const err = (path: string, message: string) => issues.push({ path, message });
 
@@ -152,6 +178,13 @@ export function validateBitacora(
       if (b.xp !== 0) err(`badges.${id}.xp`, "una insignia que se concede al terminar el recorrido no suma XP: debe ser 0");
       const user = Object.entries(c.learnings).find(([, l]) => l.badgeId === id);
       if (user) err(`learnings.${user[0]}.badgeId`, `«${id}» se concede al terminar el recorrido y no puede ser la insignia de un aprendizaje`);
+    } else {
+      for (const key of ["specialType", "subtitle", "unlockCondition", "secret"] as const) {
+        if (b[key] !== undefined) err(`badges.${id}.${key}`, "solo tiene sentido en una insignia que se concede al terminar el recorrido (`awardedFor`)");
+      }
+    }
+    if (b.specialType === "memorial" && c.ui.badgePanel && !c.ui.badgePanel.labels.memorial) {
+      err("ui.badgePanel.labels.memorial", `la insignia «${id}» es de recuerdo (\`memorial\`): el panel necesita sus textos`);
     }
   }
 
@@ -176,7 +209,9 @@ export function validateBitacora(
     if (!c.dialogues[dId]) err(`ui.defaultDialogueIds.${ev}`, `diálogo «${dId}» no existe en dialogues`);
   }
   for (const [key, allowed] of Object.entries(LABEL_TEMPLATE_VARIABLES)) {
-    for (const v of variablesIn(c.ui.labels[key as keyof typeof LABEL_TEMPLATE_VARIABLES])) {
+    const template = c.ui.labels[key as keyof typeof LABEL_TEMPLATE_VARIABLES];
+    if (template === undefined) continue; // las plantillas opcionales pueden faltar
+    for (const v of variablesIn(template)) {
       if (!(allowed as readonly string[]).includes(v)) err(`ui.labels.${key}`, `variable «{${v}}» no permitida`);
     }
   }
@@ -190,6 +225,36 @@ export function validateBitacora(
         if (!(allowed as readonly string[]).includes(v)) err(`ui.badgePanel.labels.${key}`, `variable «{${v}}» no permitida`);
       }
     }
+    for (const v of variablesIn(panel.labels.memorial?.placeTemplate ?? "")) {
+      if (v !== "name") err("ui.badgePanel.labels.memorial.placeTemplate", `variable «{${v}}» no permitida`);
+    }
+  }
+
+  // Presentación (portada) con su kit: todas sus piezas existen.
+  const presentation = c.ui.presentation;
+  if (presentation) {
+    for (const name of PRESENTATION_PARTS) checkAsset("ui.presentation.assetPrefix", `${presentation.assetPrefix}${name}`, ["presentation-part"]);
+  }
+
+  // Bitácora de aprendizajes con su kit: sus piezas (y las que comparte con el panel de insignias) existen, los textos usan solo sus
+  // variables, y las ilustraciones y los iconos de zona de la configuración son piezas del kit.
+  const journal = c.ui.journalPanel;
+  if (journal) {
+    if (!c.ui.badgePanel) err("ui.journalPanel", "necesita `ui.badgePanel`: comparte sus marcos, botones e iconos");
+    else for (const name of JOURNAL_PANEL_SHARED_PARTS) checkAsset("ui.badgePanel.assetPrefix", `${c.ui.badgePanel.assetPrefix}${name}`, ["badge-panel-part"]);
+    for (const name of JOURNAL_PANEL_PARTS) checkAsset("ui.journalPanel.assetPrefix", `${journal.assetPrefix}${name}`, ["journal-panel-part"]);
+    for (const [key, allowed] of Object.entries(JOURNAL_PANEL_TEMPLATE_VARIABLES)) {
+      for (const v of variablesIn(journal.labels[key as keyof typeof JOURNAL_PANEL_TEMPLATE_VARIABLES])) {
+        if (!(allowed as readonly string[]).includes(v)) err(`ui.journalPanel.labels.${key}`, `variable «{${v}}» no permitida`);
+      }
+    }
+    for (const [zoneId, part] of Object.entries(journal.zoneIcons ?? {})) {
+      if (!c.maps[zoneId]) err(`ui.journalPanel.zoneIcons.${zoneId}`, `zona «${zoneId}» no existe en maps`);
+      if (!part.startsWith("zone-") || !(JOURNAL_PANEL_PARTS as readonly string[]).includes(part)) err(`ui.journalPanel.zoneIcons.${zoneId}`, `«${part}» no es una pieza del kit (${JOURNAL_PANEL_PARTS.filter((p) => p.startsWith("zone-")).join(", ")})`);
+    }
+  }
+  for (const [id, l] of Object.entries(c.learnings)) {
+    if (l.illustrationAssetId) checkAsset(`learnings.${id}.illustrationAssetId`, l.illustrationAssetId, ["journal-panel-part"]);
   }
 
   // -- maps ---------------------------------------------------------------------

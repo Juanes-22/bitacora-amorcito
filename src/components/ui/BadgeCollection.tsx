@@ -17,7 +17,7 @@ const formatDate = (iso: string) => new Date(iso).toLocaleDateString("es", { yea
 
 /**
  * Colección de insignias del recorrido ACTIVO (los archivados no aparecen) y, cuando el recorrido está
- * completo, el espacio para la reflexión final editable de la autora (`project.finalReflection`). Si todavía
+ * completo, la reflexión final de la autora si la escribió (`project.finalReflection`; sin ella no se muestra nada). Si todavía
  * está vacío se muestra un aviso: nunca se inventa un texto por ella (SPEC 5).
  */
 export function BadgeCollection({ completion, onClose, onReset }: Props) {
@@ -25,8 +25,9 @@ export function BadgeCollection({ completion, onClose, onReset }: Props) {
   const { state, summary } = useProgress();
   const { labels } = config.ui;
   const title = completion ? labels.completionTitle : labels.badges;
-  // Insignias de recorrido (la de Jerry): se obtienen al terminar todo y llevan la fecha del último aprendizaje.
-  const routeBadges = Object.entries(config.badges).filter(([, b]) => b.awardedFor === "route-complete");
+  // Insignias de recorrido (la de Jerry y la de Rocky): se obtienen al terminar todo y llevan la fecha del último aprendizaje. Las secretas
+  // no aparecen hasta entonces.
+  const routeBadges = Object.entries(config.badges).filter(([, b]) => b.awardedFor === "route-complete" && (!b.secret || summary.finished));
   const finishedAt = config.route.map((id) => state.entries[id]?.completedAt).filter((d): d is string => !!d).sort().at(-1);
 
   return (
@@ -81,14 +82,10 @@ export function BadgeCollection({ completion, onClose, onReset }: Props) {
             </li>
           ))}
         </ul>
-        {summary.finished ? (
+        {summary.finished && config.project.finalReflection.length > 0 ? (
           <section className="collection__reflection" aria-labelledby="reflection-title">
             <h3 id="reflection-title" className="block-heading">{labels.finalReflectionTitle}</h3>
-            {config.project.finalReflection.length > 0 ? (
-              <ContentRenderer blocks={config.project.finalReflection} />
-            ) : (
-              <p className="reading__line collection__pending">{labels.finalReflectionPending}</p>
-            )}
+            <ContentRenderer blocks={config.project.finalReflection} />
           </section>
         ) : null}
       </div>

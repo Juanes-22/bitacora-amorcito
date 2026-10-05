@@ -1,17 +1,17 @@
 // E2E del aro de «próxima estación», la estrella de XP y el panel de la cabecera (SPEC 4.3 y 14; AC-68, AC-69) en un navegador real.
 // Uso: npm run test:e2e
-import { configJson, harness } from "./helpers.mjs";
+import { configJson, harness, START } from "./helpers.mjs";
 
 const { open, check, finish } = await harness();
 const L = configJson.ui.labels;
 const GLOW = configJson.ui.assets.nextStationGlow;
 const XP = configJson.ui.assets.xpStarEffect;
 const STATIC_STAR = configJson.ui.assets.xpStar;
-const KEY = `bitacora:progress:v3:${configJson.contentSetId}:demo`;
+const KEY = `bitacora:progress:v3:${configJson.contentSetId}:${configJson.mode}`;
 const DONE = { contentRevision: 1, readSectionIds: ["learning", "reflection", "lived"], completedAt: "2026-09-30T10:00:00.000Z" };
 const saved = (completed) => ({
   [KEY]: JSON.stringify({
-    schemaVersion: 3, contentSetId: configJson.contentSetId, mode: "demo", currentZoneId: "zona-a", player: { x: 200, y: 1030 }, checkpoints: {},
+    schemaVersion: 3, contentSetId: configJson.contentSetId, mode: configJson.mode, currentZoneId: "zona-a", player: { x: 200, y: 1030 }, checkpoints: {},
     entries: Object.fromEntries(configJson.route.map((id) => [id, completed.includes(id) ? DONE : { contentRevision: 1, readSectionIds: [] }])),
   }),
 });
@@ -71,17 +71,8 @@ try {
   {
     const t = await open();
     await t.start();
-    await t.page.getByRole("button", { name: L.index }).click();
-    await t.page.waitForTimeout(250);
-    await t.page.getByRole("button", { name: new RegExp(`${L.explore}: Aprendizaje 1:`) }).click();
-    await t.page.waitForTimeout(250);
-    await t.page.click("text=Siguiente");
-    for (let s = 0; s < 3; s++) {
-      await t.page.click("text=Marcar sección como leída");
-      await t.page.waitForTimeout(80);
-      if (s < 2) await t.page.getByRole("tab").nth(s + 1).click();
-    }
-    await t.page.click("text=Recoger insignia y continuar");
+    await t.exploreFromIndex("apr-a");
+    await t.readAndClaim();
     await t.page.waitForTimeout(700);
     check("AC-69: mientras se muestra la recompensa aún no hay estrella (el mapa está detenido)", (await sprites(t, XP)).length === 0);
     await t.page.click("[role=dialog] >> text=Cerrar");
@@ -163,7 +154,7 @@ try {
   // ---- Una hoja que no carga: se conserva el brillo de siempre y el juego sigue -------------------------------
   {
     const t = await open({ seed: saved([]), blockUrl: "**/station-glow-sheet.png" });
-    await t.page.locator(".pixel-button").dispatchEvent("click"); // el aviso de recurso cubre la portada
+    await t.page.locator(START).dispatchEvent("click"); // el aviso de recurso cubre la portada
     await t.page.waitForTimeout(700);
     check("si el aro animado no carga, la estación conserva su brillo estático y el juego sigue", (await sprites(t, GLOW)).length === 0 && (await t.page.locator("canvas:not(.hud__portrait canvas)").count()) === 1 && /station-glow-sheet|effect\.station-glow\.pulse/.test(await t.page.locator(".asset-alert").innerText()));
     await t.close();

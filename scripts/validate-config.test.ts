@@ -8,7 +8,10 @@ import type { AssetManifest } from "../src/config/types";
 
 const manifestPath = resolve("public/assets/assets.json");
 const manifestJson = JSON.parse(readFileSync(manifestPath, "utf8"));
-const configJson = JSON.parse(readFileSync(resolve("public/config/bitacora.json"), "utf8"));
+const contentJson = JSON.parse(readFileSync(resolve("public/config/bitacora.json"), "utf8"));
+const mapsJson = JSON.parse(readFileSync(resolve("public/config/maps.json"), "utf8"));
+/** La configuración en un solo objeto, como la usa el juego. */
+const configJson = { ...contentJson, placements: mapsJson.placements, maps: mapsJson.maps };
 const clone = <T>(v: T): T => structuredClone(v);
 const paths = (list: Array<{ path: string }>) => list.map((i) => i.path);
 
@@ -16,11 +19,34 @@ const paths = (list: Array<{ path: string }>) => list.map((i) => i.path);
 const PNG_1X1 = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==", "base64");
 
 describe("validateProject sobre los archivos reales", () => {
-  it("el proyecto actual valida sin errores ni avisos", () => {
+  it("el proyecto actual (modo final) valida sin errores; solo avisa de lo que falta confirmar antes de publicar", () => {
     const r = validateProject(manifestJson, configJson, manifestPath);
     expect(r.errors).toEqual([]);
-    expect(r.warnings).toEqual([]);
+    // Pendientes de la autora para la entrega: las notas del editor (geometría provisional) y la atribución de la música.
+    expect(r.warnings.map((w) => w.path)).toEqual(["bitacora.json › editorNotes", "bitacora.json › audio.music.tracks.audio.music.little-town-orchestral"]);
+    expect(r.warnings.every((w) => w.message.startsWith("bloquea la publicación"))).toBe(true);
     expect(r.info.join("\n")).toContain("alcanzabilidad: estaciones, portales y spawns alcanzables");
+  });
+
+  it("los dos archivos reales por separado (bitacora.json y maps.json) validan igual que unidos", () => {
+    const separate = validateProject(manifestJson, contentJson, manifestPath, { mapsJson });
+    const joined = validateProject(manifestJson, configJson, manifestPath);
+    expect(separate.errors).toEqual([]);
+    expect(separate.warnings).toEqual(joined.warnings);
+    expect(separate.info.join("\n")).toContain("bitacora.json y maps.json: válidos");
+  });
+
+  it("cada error dice en qué archivo está: lo de maps.json, aunque sea una clave de más que al unir se perdería", () => {
+    const badMaps = clone(mapsJson);
+    badMaps.sobra = 1;
+    badMaps.maps["zona-a"].width = "ancho";
+    const badContent = clone(contentJson);
+    badContent.route = ["apr-fantasma"];
+    const r = validateProject(manifestJson, badContent, manifestPath, { mapsJson: badMaps });
+    expect(paths(r.errors)).toEqual(expect.arrayContaining(["maps.json › sobra", "maps.json › maps.zona-a.width"]));
+    const onlyContent = validateProject(manifestJson, badContent, manifestPath, { mapsJson });
+    expect(paths(onlyContent.errors).every((p) => p.startsWith("bitacora.json › "))).toBe(true);
+    expect(onlyContent.errors.length).toBeGreaterThan(0);
   });
 
   it("un path roto es un error con el ID del asset", () => {
@@ -45,11 +71,11 @@ describe("validateProject sobre los archivos reales", () => {
     expect(paths(r.errors)).toEqual(["assets.json › assetCount"]);
   });
 
-  it("referencias cruzadas inválidas en bitacora.json", () => {
+  it("referencias cruzadas inválidas (aquí, en maps.json)", () => {
     const c = clone(configJson);
     c.placements["apr-c"].decorationAssetId = "station.item.no-existe";
     const r = validateProject(manifestJson, c, manifestPath);
-    expect(paths(r.errors)).toEqual(["bitacora.json › placements.apr-c.decorationAssetId"]);
+    expect(paths(r.errors)).toEqual(["maps.json › placements.apr-c.decorationAssetId"]);
   });
 
   it("un obstáculo sobre el punto de interacción se informa como referencia inválida", () => {
@@ -59,7 +85,7 @@ describe("validateProject sobre los archivos reales", () => {
     const y = p.position.y + p.interactionOffset.y;
     c.maps[p.zoneId].obstacles.push({ type: "rect", x: x - 150, y: y - 150, width: 300, height: 300 });
     const r = validateProject(manifestJson, c, manifestPath);
-    expect(paths(r.errors)).toEqual(["bitacora.json › placements.apr-b.interactionOffset"]);
+    expect(paths(r.errors)).toEqual(["maps.json › placements.apr-b.interactionOffset"]);
   });
 
   it("una estación rodeada por muros (con su punto libre) se informa como inalcanzable", () => {
@@ -75,7 +101,7 @@ describe("validateProject sobre los archivos reales", () => {
       { type: "rect", x: x + 80, y: y - 100, width: 20, height: 200 },
     );
     const r = validateProject(manifestJson, c, manifestPath);
-    expect(paths(r.errors)).toContain("bitacora.json › placements.apr-b.interactionRadius");
+    expect(paths(r.errors)).toContain("maps.json › placements.apr-b.interactionRadius");
   });
 });
 

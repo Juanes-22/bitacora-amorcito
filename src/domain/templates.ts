@@ -15,6 +15,7 @@ export const LABEL_TEMPLATE_VARIABLES = {
   earnedOnTemplate: ["date"],
   badgeCountTemplate: ["completedCount", "totalCount"],
   preparationTemplate: ["pending"],
+  awayFromStationTemplate: ["number", "title", "zone"],
 } as const;
 
 /** Sustituye `{nombre}` solo si está en `values`; una variable desconocida se deja tal cual. */

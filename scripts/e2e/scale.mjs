@@ -79,7 +79,7 @@ try {
       await t.page.waitForTimeout(300);
       await t.page.keyboard.press("Enter");
       await t.page.waitForTimeout(300);
-      await t.page.click("text=Siguiente");
+      await t.skipIntro();
       await t.page.waitForTimeout(250);
       metrics.push(await t.page.evaluate(() => {
         const para = document.querySelector(".block-paragraph");

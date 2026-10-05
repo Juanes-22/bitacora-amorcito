@@ -56,7 +56,7 @@ export interface Candidate {
   config: BitacoraConfig;
   /** Zonas administradas por Tiled (las que tienen mapa). */
   managed: string[];
-  /** Origen en Tiled de cada elemento: por su ruta en bitacora.json. */
+  /** Origen en Tiled de cada elemento: por su ruta en maps.json. */
   sources: Map<string, Source>;
 }
 
@@ -167,7 +167,7 @@ export function describeChanges(before: BitacoraConfig, after: BitacoraConfig): 
 
 /** Anota un error de validación con el objeto de Tiled que lo causó, buscando el origen más específico de su ruta. */
 export function annotate(issue: ConfigIssue, sources: Map<string, Source>): string {
-  const path = issue.path.replace(/^bitacora\.json › /, "");
+  const path = issue.path.replace(/^(bitacora|maps)\.json › /, "");
   let best: { key: string; source: Source } | undefined;
   for (const [key, source] of sources) if ((path === key || path.startsWith(`${key}.`) || path.startsWith(`${key}[`)) && (!best || key.length > best.key.length)) best = { key, source };
   return best ? `${formatSource(best.source)} (${path}): ${issue.message}` : `${issue.path}: ${issue.message}`;

@@ -93,6 +93,8 @@
 .bpk-special:hover { transform: translateY(-2px); }
 .bpk-special .bpk-medal { width: 72px; height: 72px; }
 .bpk-special-title { margin: 0 0 5px; font-weight: 800; font-size: 18px; }
+.bpk-detail-subtitle { margin: -2px 0 6px; font-size: 14px; font-weight: 700; color: #70432a; }
+.bpk-special-subtitle { margin: 0 0 6px; font-size: 13px; line-height: 1.4; color: #70432a; }
 .bpk-special-status { display: flex; gap: 6px; align-items: center; font-weight: 700; font-size: 14px; }
 .bpk-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 12px; margin-top: 12px; border-top: 1px solid #d8b279; }
 .bpk-hint { margin: 0; font-size: 14px; color: #916347; }

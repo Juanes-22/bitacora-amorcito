@@ -7,13 +7,14 @@ import type { ProgressStore } from "./progressStore";
 
 /** Lo que muestra la ventana de lectura (SPEC 12.7): mensaje → lectura → recompensa, o solo un mensaje. */
 export type ReadingState =
-  | { kind: "message"; learningId: string; event: Extract<DialogueEvent, "locked"> | "pending" }
+  | { kind: "message"; learningId: string; event: Extract<DialogueEvent, "locked"> | "pending" | "away" }
   | { kind: "intro"; learningId: string; event: Extract<DialogueEvent, "open" | "completed"> }
   | { kind: "reading"; learningId: string; active: SectionId }
   | { kind: "reward"; learningId: string };
 
 /** Ventanas que no son una lectura: la colección de insignias (o el cierre del recorrido), la confirmación de reinicio y la lista accesible de aprendizajes. */
-export type OverlayState = { kind: "collection"; completion: boolean } | { kind: "confirm-reset" } | { kind: "list" };
+/** `learningId`: la colección se abre en el detalle de la insignia de ese aprendizaje (desde «Ver insignia» del lector). */
+export type OverlayState = { kind: "collection"; completion: boolean; learningId?: string } | { kind: "confirm-reset" } | { kind: "list" };
 
 export interface OverlayActions {
   openCollection: () => void;
@@ -32,6 +33,10 @@ export interface ReadingActions {
   markRead: (section: SectionId) => void;
   claimBadge: () => void;
   close: () => void;
+  /** Del lector a la lista de aprendizajes (la Bitácora): la lectura se cierra sin conceder nada. */
+  backToList: () => void;
+  /** Del lector al detalle de la insignia de ese aprendizaje en el panel de insignias. */
+  openBadge: () => void;
 }
 
 export interface ProgressController {
@@ -43,7 +48,7 @@ export interface ProgressController {
 }
 
 const NO_ACTIONS: ReadingActions = {
-  continueReading() {}, selectSection() {}, markRead() {}, claimBadge() {}, close() {},
+  continueReading() {}, selectSection() {}, markRead() {}, claimBadge() {}, close() {}, backToList() {}, openBadge() {},
 };
 const NO_OVERLAY_ACTIONS: OverlayActions = { openCollection() {}, openList() {}, openFromList() {}, closeOverlay() {}, askReset() {}, cancelReset() {}, confirmReset() {} };
 
@@ -79,8 +84,12 @@ export function useProgressController(
     let current: ReadingState | null = null;
     let currentOverlay: OverlayState | null = null;
     let celebration: { effectId: string; learningId: string } | null = null;
-    // La lectura se abrió desde la lista accesible: al cerrarla se vuelve a la lista (salvo que haya celebración).
-    let fromList = false;
+    // La lectura se abrió desde una ventana de la Bitácora (la lista o la colección de insignias): al cerrarla se vuelve a ella (salvo
+    // que haya celebración).
+    let origin: OverlayState | null = null;
+    // La estación junto a la que está Vanessa (la última que avisó el mapa antes de abrirse una ventana): un aprendizaje sin completar
+    // solo se explora y se completa estando en su estación; uno completado se relee desde cualquier sitio.
+    let stationHere: string | null = null;
     let completionTimer: ReturnType<typeof setTimeout> | undefined;
     const pending = unapprovedIds(config);
     const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
@@ -121,11 +130,17 @@ export function useProgressController(
       publishControls();
     };
 
+    /** La sección con la que se abre la lectura: donde se quedó la última vez, o la primera. */
+    const resumeSection = (learningId: string): SectionId => {
+      const entry = store.getState().entries[learningId];
+      return entry?.lastSectionId && config.ui.tabs.some((t) => t.id === entry.lastSectionId) ? entry.lastSectionId : config.ui.tabs[0].id;
+    };
+
     /**
      * Única regla para abrir un aprendizaje, la use el mapa (al pulsar Enter junto a una estación) o la lista accesible:
      * una estación bloqueada o pendiente solo muestra su mensaje; nunca se salta la secuencia (SPEC 8 y 14).
      */
-    const tryOpen = (learningId: string): { accepted: boolean; reason?: string } => {
+    const tryOpen = (learningId: string, source: "map" | "bitacora" = "map"): { accepted: boolean; reason?: string } => {
       if (!config.route.includes(learningId)) return { accepted: false, reason: "unknown-learning" };
       if (currentOverlay || current) return { accepted: false, reason: "busy" };
       const state = stationStatesOf(config, store.getState())[learningId];
@@ -136,6 +151,16 @@ export function useProgressController(
       if (state !== "completed" && !isAdmissible(config, learningId)) {
         open({ kind: "message", learningId, event: "pending" });
         return { accepted: false, reason: "not-admissible" };
+      }
+      // Desde la Bitácora, un aprendizaje sin completar exige estar en su estación (el mapa ya lo exige por sí mismo).
+      if (source === "bitacora" && state !== "completed" && stationHere !== learningId) {
+        open({ kind: "message", learningId, event: "away" });
+        return { accepted: false, reason: "away" };
+      }
+      // Con la Bitácora de aprendizajes (su lector), se entra directo a la lectura: sin ventana de apertura ni de relectura.
+      if (config.ui.journalPanel && config.ui.badgePanel) {
+        open({ kind: "reading", learningId, active: resumeSection(learningId) });
+        return { accepted: true };
       }
       open({ kind: "intro", learningId, event: state === "completed" ? "completed" : "open" });
       return { accepted: true };
@@ -152,7 +177,10 @@ export function useProgressController(
         publishControls();
       }),
       bridge.on("game:nearby-changed", ({ target, token }) => {
-        if (bridge.isActive(token)) setNearby(target);
+        if (!bridge.isActive(token)) return;
+        setNearby(target);
+        // Con una ventana abierta el mapa se detiene y «limpia» lo cercano: eso no cuenta como alejarse.
+        if (!reasons.has("overlay") && !reasons.has("reading")) stationHere = target?.kind === "learning" ? target.id : null;
       }),
       bridge.on("game:checkpoint", ({ zoneId: z, position, token }) => {
         if (bridge.isActive(token)) store.setLocation(z, position);
@@ -169,6 +197,7 @@ export function useProgressController(
         const target = portal ? config.maps[portal.targetZoneId] : undefined;
         if (!portal || !target?.spawns[portal.targetSpawnId]) return resolve(requestId, false, "invalid-portal");
         resolve(requestId, true);
+        stationHere = null;
         reasons.add("transition");
         publishControls();
         bridge.emit("app:zone-change", { zoneId: portal.targetZoneId, spawnId: portal.targetSpawnId });
@@ -184,10 +213,7 @@ export function useProgressController(
     actionsRef.current = {
       continueReading() {
         if (current?.kind !== "intro") return;
-        const entry = store.getState().entries[current.learningId];
-        const first = config.ui.tabs[0].id;
-        const last = entry?.lastSectionId && config.ui.tabs.some((t) => t.id === entry.lastSectionId) ? entry.lastSectionId : first;
-        show({ kind: "reading", learningId: current.learningId, active: last });
+        show({ kind: "reading", learningId: current.learningId, active: resumeSection(current.learningId) });
       },
       selectSection(section) {
         if (current?.kind !== "reading") return;
@@ -207,16 +233,31 @@ export function useProgressController(
           show({ kind: "reward", learningId: current.learningId });
         }
       },
+      backToList() {
+        if (current?.kind !== "reading") return;
+        origin = null;
+        show(null);
+        reasons.delete("reading");
+        openOverlay({ kind: "list" }); // el mapa sigue detenido, sin parpadeo de controles
+      },
+      openBadge() {
+        if (current?.kind !== "reading") return;
+        const learningId = current.learningId;
+        origin = null;
+        show(null);
+        reasons.delete("reading");
+        openOverlay({ kind: "collection", completion: false, learningId });
+      },
       close() {
         if (!current) return;
         const pending = celebration;
         celebration = null;
-        const backToList = fromList && !pending;
-        fromList = false;
+        const back = pending ? null : origin;
+        origin = null;
         show(null);
         reasons.delete("reading");
-        if (backToList) {
-          openOverlay({ kind: "list" }); // vuelve a la lista: el mapa sigue detenido, sin parpadeo de controles
+        if (back) {
+          openOverlay(back); // vuelve a la ventana de la que se vino: el mapa sigue detenido, sin parpadeo de controles
           return;
         }
         publishControls(); // la escena se reanuda antes de celebrar: la animación no queda tras la ventana
@@ -241,16 +282,19 @@ export function useProgressController(
       openList() {
         if (!current && !currentOverlay) openOverlay({ kind: "list" });
       },
+      /** Abre un aprendizaje desde una ventana de la Bitácora: la lista o el detalle de una insignia («Ver aprendizaje»). */
       openFromList(learningId) {
-        if (currentOverlay?.kind !== "list") return;
+        if (currentOverlay?.kind !== "list" && currentOverlay?.kind !== "collection") return;
+        const from = currentOverlay;
         showOverlay(null);
         reasons.delete("overlay");
-        fromList = true;
-        const result = tryOpen(learningId);
+        origin = from.kind === "collection" ? { kind: "collection", completion: false, learningId } : from;
+        const result = tryOpen(learningId, "bitacora");
         if (!result.accepted && !current) {
-          // Id desconocido o nada que abrir: se vuelve a la lista sin dejar bloqueos colgados.
-          fromList = false;
-          openOverlay({ kind: "list" });
+          // Id desconocido o nada que abrir: se vuelve a la ventana de origen sin dejar bloqueos colgados.
+          const back = origin;
+          origin = null;
+          openOverlay(back);
         }
       },
       closeOverlay,
@@ -298,6 +342,8 @@ export function useProgressController(
     markRead: useCallback((s) => actionsRef.current.markRead(s), []),
     claimBadge: useCallback(() => actionsRef.current.claimBadge(), []),
     close: useCallback(() => actionsRef.current.close(), []),
+    backToList: useCallback(() => actionsRef.current.backToList(), []),
+    openBadge: useCallback(() => actionsRef.current.openBadge(), []),
   };
   const overlayActions: OverlayActions = {
     openCollection: useCallback(() => overlayRef.current.openCollection(), []),

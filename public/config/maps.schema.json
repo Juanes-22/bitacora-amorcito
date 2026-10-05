@@ -1,0 +1,304 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bitacora.local/schemas/maps.schema.json",
+  "title": "Mapas y colocaciones de la bitácora (maps.json)",
+  "description": "La geometría del mundo: las zonas (`maps`) y dónde está la estación de cada aprendizaje (`placements`). Lo administra Tiled: `npm run tiled:import` reescribe este archivo a partir de tools/tiled/maps. Valida la forma; las referencias cruzadas (assets, portales, accesibilidad) las comprueba validateBitacora. Las definiciones `id`, `assetId`, `point` y `normalizedPoint` son las mismas de bitacora.schema.json (una prueba lo vigila).",
+  "type": "object",
+  "required": ["placements", "maps"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "placements": { "$ref": "#/$defs/registry-of-placement" },
+    "maps": { "$ref": "#/$defs/registry-of-mapZone" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "assetId": { "type": "string", "pattern": "^[a-z0-9]+(\\.[a-z0-9-]+)+$" },
+    "point": {
+      "type": "object",
+      "required": ["x", "y"],
+      "properties": { "x": { "type": "number" }, "y": { "type": "number" } },
+      "additionalProperties": false
+    },
+    "normalizedPoint": {
+      "type": "object",
+      "required": ["x", "y"],
+      "properties": {
+        "x": { "type": "number", "minimum": 0, "maximum": 1 },
+        "y": { "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "registry-of-placement": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/id" },
+      "additionalProperties": { "$ref": "#/$defs/placement" }
+    },
+    "registry-of-mapZone": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/id" },
+      "additionalProperties": { "$ref": "#/$defs/mapZone" }
+    },
+    "placement": {
+      "type": "object",
+      "required": ["zoneId", "position", "interactionOffset", "interactionRadius"],
+      "properties": {
+        "zoneId": { "$ref": "#/$defs/id" },
+        "position": { "$ref": "#/$defs/point" },
+        "interactionOffset": { "$ref": "#/$defs/point" },
+        "interactionRadius": { "type": "number", "exclusiveMinimum": 0 },
+        "signAssetId": { "$ref": "#/$defs/assetId" },
+        "decorationAssetId": { "$ref": "#/$defs/assetId" },
+        "decorationOffset": { "$ref": "#/$defs/point" }
+      },
+      "additionalProperties": false
+    },
+    "obstacle": {
+      "type": "object",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["type", "x", "y", "width", "height"],
+          "properties": {
+            "type": { "const": "rect" },
+            "x": { "type": "number" },
+            "y": { "type": "number" },
+            "width": { "type": "number", "exclusiveMinimum": 0 },
+            "height": { "type": "number", "exclusiveMinimum": 0 }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["type", "x", "y", "radius"],
+          "properties": {
+            "type": { "const": "circle" },
+            "x": { "type": "number" },
+            "y": { "type": "number" },
+            "radius": { "type": "number", "exclusiveMinimum": 0 }
+          },
+          "additionalProperties": false
+        }
+      ],
+      "discriminator": { "propertyName": "type" }
+    },
+    "depth": {
+      "type": "object",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["mode", "value"],
+          "properties": { "mode": { "const": "fixed" }, "value": { "type": "number" } },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["mode", "offset"],
+          "properties": { "mode": { "const": "y" }, "offset": { "type": "number" } },
+          "additionalProperties": false
+        }
+      ],
+      "discriminator": { "propertyName": "mode" }
+    },
+    "mapLayer": {
+      "type": "object",
+      "required": ["assetId", "depth"],
+      "properties": {
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "depth": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "decoration": {
+      "type": "object",
+      "required": ["assetId", "position", "origin", "scale", "depth"],
+      "properties": {
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "position": { "$ref": "#/$defs/point" },
+        "origin": { "$ref": "#/$defs/normalizedPoint" },
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "depth": { "$ref": "#/$defs/depth" }
+      },
+      "additionalProperties": false
+    },
+    "rect": {
+      "type": "object",
+      "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "width": { "type": "number", "exclusiveMinimum": 0 },
+        "height": { "type": "number", "exclusiveMinimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "critter": {
+      "type": "object",
+      "oneOf": [
+        {
+          "required": ["type", "assetId", "position", "radius"],
+          "properties": {
+            "type": { "const": "wander" },
+            "assetId": { "$ref": "#/$defs/assetId" },
+            "position": { "$ref": "#/$defs/point" },
+            "radius": { "type": "number", "minimum": 0, "maximum": 120 },
+            "scale": { "type": "number", "exclusiveMinimum": 0, "maximum": 4 },
+            "flipX": { "type": "boolean" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "required": ["type", "assetId", "chickAssetId", "chicks", "position", "radius"],
+          "properties": {
+            "type": { "const": "family" },
+            "assetId": { "$ref": "#/$defs/assetId" },
+            "chickAssetId": { "$ref": "#/$defs/assetId" },
+            "chicks": { "type": "integer", "minimum": 0, "maximum": 8 },
+            "position": { "$ref": "#/$defs/point" },
+            "radius": { "type": "number", "minimum": 0, "maximum": 120 },
+            "scale": { "type": "number", "exclusiveMinimum": 0, "maximum": 4 },
+            "chickScale": { "type": "number", "exclusiveMinimum": 0, "maximum": 4 }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "ambientEffect": {
+      "type": "object",
+      "oneOf": [
+        { "$ref": "#/$defs/ambient-animation" },
+        { "$ref": "#/$defs/ambient-sway" },
+        { "$ref": "#/$defs/ambient-drift" },
+        { "$ref": "#/$defs/ambient-particles" },
+        { "$ref": "#/$defs/ambient-glow" },
+        { "$ref": "#/$defs/ambient-swim" }
+      ],
+      "discriminator": { "propertyName": "type" }
+    },
+    "ambient-animation": {
+      "type": "object",
+      "required": ["type", "assetId", "position", "depth"],
+      "properties": {
+        "type": { "const": "animation" },
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "position": { "$ref": "#/$defs/point" },
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "flipX": { "type": "boolean" },
+        "alpha": { "type": "number", "minimum": 0, "maximum": 1 },
+        "speedFactor": { "type": "number", "exclusiveMinimum": 0 },
+        "depth": { "$ref": "#/$defs/depth" }
+      },
+      "additionalProperties": false
+    },
+    "ambient-sway": {
+      "type": "object",
+      "required": ["type", "assetId", "position", "depth"],
+      "properties": {
+        "type": { "const": "sway" },
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "position": { "$ref": "#/$defs/point" },
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "depth": { "$ref": "#/$defs/depth" }
+      },
+      "additionalProperties": false
+    },
+    "ambient-drift": {
+      "type": "object",
+      "required": ["type", "assetId", "position", "depth"],
+      "properties": {
+        "type": { "const": "drift" },
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "position": { "$ref": "#/$defs/point" },
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "depth": { "$ref": "#/$defs/depth" }
+      },
+      "additionalProperties": false
+    },
+    "ambient-particles": {
+      "type": "object",
+      "required": ["type", "assetId", "area", "frequencyMs", "depth"],
+      "properties": {
+        "type": { "const": "particles" },
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "area": { "$ref": "#/$defs/rect" },
+        "frequencyMs": { "type": "number", "minimum": 50 },
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "depth": { "$ref": "#/$defs/depth" }
+      },
+      "additionalProperties": false
+    },
+    "ambient-glow": {
+      "type": "object",
+      "required": ["type", "assetId", "position", "depth"],
+      "properties": {
+        "type": { "const": "glow" },
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "position": { "$ref": "#/$defs/point" },
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "alpha": { "type": "number", "minimum": 0, "maximum": 1 },
+        "depth": { "$ref": "#/$defs/depth" }
+      },
+      "additionalProperties": false
+    },
+    "ambient-swim": {
+      "type": "object",
+      "required": ["type", "assetId", "path", "depth"],
+      "properties": {
+        "type": { "const": "swim" },
+        "assetId": { "$ref": "#/$defs/assetId" },
+        "path": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/point" } },
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "speedFactor": { "type": "number", "exclusiveMinimum": 0 },
+        "depth": { "$ref": "#/$defs/depth" }
+      },
+      "additionalProperties": false
+    },
+    "portal": {
+      "type": "object",
+      "required": ["label", "interaction", "targetZoneId", "targetSpawnId"],
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "interaction": {
+          "type": "object",
+          "required": ["x", "y", "radius"],
+          "properties": {
+            "x": { "type": "number" },
+            "y": { "type": "number" },
+            "radius": { "type": "number", "exclusiveMinimum": 0 }
+          },
+          "additionalProperties": false
+        },
+        "targetZoneId": { "$ref": "#/$defs/id" },
+        "targetSpawnId": { "$ref": "#/$defs/id" }
+      },
+      "additionalProperties": false
+    },
+    "mapZone": {
+      "type": "object",
+      "required": ["label", "width", "height", "layers", "initialSpawnId", "spawns", "obstacles", "decorations", "ambient", "portals"],
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "width": { "type": "number", "exclusiveMinimum": 0 },
+        "height": { "type": "number", "exclusiveMinimum": 0 },
+        "layers": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/mapLayer" } },
+        "initialSpawnId": { "$ref": "#/$defs/id" },
+        "spawns": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "$ref": "#/$defs/id" },
+          "additionalProperties": { "$ref": "#/$defs/point" }
+        },
+        "obstacles": { "type": "array", "items": { "$ref": "#/$defs/obstacle" } },
+        "decorations": { "type": "array", "items": { "$ref": "#/$defs/decoration" } },
+        "ambient": { "type": "array", "items": { "$ref": "#/$defs/ambientEffect" } },
+        "critters": { "type": "array", "items": { "$ref": "#/$defs/critter" } },
+        "portals": {
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/id" },
+          "additionalProperties": { "$ref": "#/$defs/portal" }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

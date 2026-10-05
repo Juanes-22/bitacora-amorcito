@@ -1,13 +1,13 @@
 // E2E de las gallinas y los pollitos (SPEC 3.3; AC-78) en un navegador real.
 // Uso: npm run test:e2e
-import { configJson, harness } from "./helpers.mjs";
+import { configJson, harness, START } from "./helpers.mjs";
 
 const { open, check, finish } = await harness();
-const KEY = `bitacora:progress:v3:${configJson.contentSetId}:demo`;
+const KEY = `bitacora:progress:v3:${configJson.contentSetId}:${configJson.mode}`;
 const seedIn = (zone) => {
   const m = configJson.maps[zone];
   const p = m.spawns[m.initialSpawnId];
-  return { [KEY]: JSON.stringify({ schemaVersion: 3, contentSetId: configJson.contentSetId, mode: "demo", currentZoneId: zone, player: p, checkpoints: {}, entries: {} }) };
+  return { [KEY]: JSON.stringify({ schemaVersion: 3, contentSetId: configJson.contentSetId, mode: configJson.mode, currentZoneId: zone, player: p, checkpoints: {}, entries: {} }) };
 };
 const wanted = (zone) => (configJson.maps[zone].critters ?? []).reduce((n, k) => n + 1 + (k.type === "family" ? k.chicks : 0), 0);
 
@@ -104,7 +104,7 @@ try {
   // ---- Una hoja que no carga: el resto sigue y se avisa -----------------------------------------------------------
   {
     const t = await open({ seed: seedIn("zona-a"), blockUrl: "**/hen-brown.png" });
-    await t.page.locator(".pixel-button").dispatchEvent("click"); // el aviso de recurso cubre la portada
+    await t.page.locator(START).dispatchEvent("click"); // el aviso de recurso cubre la portada
     await t.page.waitForTimeout(1000);
     const all = await critters(t);
     const brown = (configJson.maps["zona-a"].critters ?? []).filter((k) => k.assetId === "fauna.hen.brown").length;

@@ -108,6 +108,8 @@ describe("auditoría estática del código fuente", () => {
       readFileSync("src/config/types.ts", "utf8").split("// ---- assets.json real")[0].replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, ""),
       readFileSync("public/config/bitacora.schema.json", "utf8"),
       readFileSync("public/config/bitacora.json", "utf8"),
+      readFileSync("public/config/maps.schema.json", "utf8"),
+      readFileSync("public/config/maps.json", "utf8"),
     ];
     for (const text of contract) expect(text).not.toMatch(/["\s](order|nextLearningId|totalStations|enabled)["\s]*[:?]/);
     // El guardado tampoco contiene derivados.

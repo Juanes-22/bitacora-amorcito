@@ -4,11 +4,12 @@ import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { frameDefinitions, toValidatedFrames } from "../../src/assets/frameDefinitions";
 import { createAssetRegistry, resolveAssetBase } from "../../src/config/assetRegistry";
+import { configFileOf } from "../../src/config/mapsFile";
 import { checkAmbientPlacement, checkWorldReachability } from "../../src/config/reachability";
 import { releaseBlockers } from "../../src/config/releaseBlockers";
 import type { AssetManifest, BitacoraConfig, ConfigIssue } from "../../src/config/types";
 import { validateAssetManifest } from "../../src/config/validateAssets";
-import { validateBitacora } from "../../src/config/validateConfig";
+import { validateBitacora, validateBitacoraFiles } from "../../src/config/validateConfig";
 import { checkAtlases } from "./validateAtlas";
 import { validateFrameDefinitions } from "./validateFrames";
 
@@ -91,13 +92,25 @@ export function checkAssetFiles(manifest: AssetManifest, manifestPath: string): 
   return { errors, warnings };
 }
 
-/** Validación completa del proyecto: manifiesto, archivos, bitácora, referencias y alcanzabilidad. */
-export function validateProject(manifestJson: unknown, configJson: unknown, manifestPath: string, options: { release?: boolean } = {}): ProjectReport {
+/** Una ruta de error de la configuración, con el archivo en el que está (`bitacora.json › route[2]`, `maps.json › maps.zona-a...`). */
+const inFile = (issue: ConfigIssue): string => `${configFileOf(issue)} › ${issue.path}`;
+
+/**
+ * Validación completa del proyecto: manifiesto, archivos, bitácora, referencias y alcanzabilidad.
+ * `configJson` es la configuración en un solo objeto o, si se da `options.mapsJson`, el contenido (bitacora.json) con la geometría
+ * (maps.json) aparte: así cada archivo se valida con su esquema y los extras que no se ven al unirlos tampoco pasan.
+ */
+export function validateProject(
+  manifestJson: unknown,
+  configJson: unknown,
+  manifestPath: string,
+  options: { release?: boolean; mapsJson?: unknown } = {},
+): ProjectReport {
   const report: ProjectReport = { errors: [], warnings: [], info: [] };
   const manifest = validateAssetManifest(manifestJson);
   if (!manifest.ok) {
     report.errors.push(...manifest.issues.map((i) => ({ path: `assets.json › ${i.path}`, message: i.message })));
-    report.info.push("assets.json: inválido; no se comprobaron archivos ni bitacora.json");
+    report.info.push("assets.json: inválido; no se comprobaron archivos ni la configuración (bitacora.json y maps.json)");
     return report;
   }
   report.info.push(`assets.json: válido (${Object.keys(manifest.value.assets).length} entradas, assetCount y categoryCounts coherentes)`);
@@ -117,23 +130,24 @@ export function validateProject(manifestJson: unknown, configJson: unknown, mani
     `frames: ${Object.keys(frameDefinitions).length} hoja(s) de poses ${frames.length === 0 ? "validadas contra la imagen real" : `con ${frames.length} error(es)`}`,
   );
 
-  const config = validateBitacora(configJson, manifest.value, { frameDefinitions: toValidatedFrames() });
+  const frameOptions = { frameDefinitions: toValidatedFrames() };
+  const config = options.mapsJson !== undefined ? validateBitacoraFiles(configJson, options.mapsJson, manifest.value, frameOptions) : validateBitacora(configJson, manifest.value, frameOptions);
   if (!config.ok) {
-    report.errors.push(...config.issues.map((i) => ({ path: `bitacora.json › ${i.path}`, message: i.message })));
-    report.info.push("bitacora.json: inválido; no se comprobó la alcanzabilidad");
+    report.errors.push(...config.issues.map((i) => ({ path: inFile(i), message: i.message })));
+    report.info.push("bitacora.json / maps.json: inválidos; no se comprobó la alcanzabilidad");
     return report;
   }
   const c: BitacoraConfig = config.value;
   report.info.push(
-    `bitacora.json: válido (modo ${c.mode}, ${c.route.length} aprendizajes activos, ${Object.keys(c.maps).length} zonas, ${Object.keys(c.learnings).length - c.route.length} archivados)`,
+    `bitacora.json y maps.json: válidos (modo ${c.mode}, ${c.route.length} aprendizajes activos, ${Object.keys(c.maps).length} zonas, ${Object.keys(c.learnings).length - c.route.length} archivados)`,
   );
   const reach = [...checkWorldReachability(c), ...checkAmbientPlacement(c)];
-  report.errors.push(...reach.map((i) => ({ path: `bitacora.json › ${i.path}`, message: i.message })));
+  report.errors.push(...reach.map((i) => ({ path: inFile(i), message: i.message })));
   report.info.push(`alcanzabilidad: ${reach.length === 0 ? "estaciones, portales y spawns alcanzables" : `${reach.length} problema(s)`}`);
 
   // Bloqueos de publicación: avisos en modo final (el contenido sin aprobar se muestra como pendiente), errores con --release.
   if (options.release || c.mode === "final") {
-    const blockers = releaseBlockers(c, manifest.value).map((i) => ({ path: `bitacora.json › ${i.path}`, message: `bloquea la publicación: ${i.message}` }));
+    const blockers = releaseBlockers(c, manifest.value).map((i) => ({ path: inFile(i), message: `bloquea la publicación: ${i.message}` }));
     (options.release ? report.errors : report.warnings).push(...blockers);
     report.info.push(`publicación: ${blockers.length === 0 ? "sin bloqueos" : `${blockers.length} bloqueo(s)`}`);
   }

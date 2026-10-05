@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import manifestJson from "../../public/assets/assets.json";
-import bitacoraJson from "../../public/config/bitacora.json";
+import bitacoraJson from "./fixtures/realConfig";
 import { findAnimation, frameDefinitions, toValidatedFrames } from "../assets/frameDefinitions";
 import { checkAmbientPlacement, checkWorldReachability } from "../config/reachability";
 import { validateAssetManifest } from "../config/validateAssets";
@@ -48,15 +48,15 @@ describe("public/config/bitacora.json (configuración inicial)", () => {
     expect(c.route.map((id) => c.badges[c.learnings[id].badgeId].xp).reduce((a, b) => a + b, 0)).toBe(600);
   });
 
-  it("carga los seis aprendizajes de Vanessa como borrador, sin presentarlos como aprobados", () => {
-    expect(c.mode).toBe("demo");
+  it("carga los seis aprendizajes de Vanessa, revisados y aprobados por ella: modo final con todos en `ready`", () => {
+    expect(c.mode).toBe("final");
     expect(c.route.map((id) => c.learnings[id].title)).toEqual([
       "Las plantas y las semillas", "La plastilina casera", "El museo y la taxidermia",
       "Pingüinos: cómo se adaptan los seres vivos", "La Tierra y sus movimientos", "Plantas: su origen",
     ]);
     for (const id of c.route) {
       const l = c.learnings[id];
-      expect(l.editorialStatus, id).toBe("draft");
+      expect(l.editorialStatus, id).toBe("ready");
       expect(Object.keys(l.sections).sort(), id).toEqual(["learning", "lived", "reflection"]);
       for (const blocks of Object.values(l.sections)) {
         expect(blocks.length, id).toBeGreaterThan(0);
@@ -64,7 +64,7 @@ describe("public/config/bitacora.json (configuración inicial)", () => {
       }
       expect(JSON.stringify(l.sections), id).not.toContain("Contenido de demostración");
     }
-    expect(c.editorNotes).toContain("PROVISIONALES");
+    expect(c.editorNotes).toContain("PROVISIONALES"); // la geometría sigue marcada como provisional hasta que la autora la confirme
   });
 
   it("cada aprendizaje tiene un título corto de letrero que cabe (hasta 40 caracteres)", () => {

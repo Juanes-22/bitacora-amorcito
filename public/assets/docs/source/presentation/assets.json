@@ -1,0 +1,265 @@
+{
+  "schemaVersion": "1.0",
+  "version": "2.0.0",
+  "name": "Bitácora Amorcito — Presentación corregida",
+  "counts": {
+    "new": 7,
+    "reused": 4,
+    "total": 11
+  },
+  "assets": {
+    "ui.badgePanel.button-close": {
+      "id": "ui.badgePanel.button-close",
+      "type": "image",
+      "path": "public/assets/ui/badge-panel/buttons/button-close.png",
+      "url": "/assets/ui/badge-panel/buttons/button-close.png",
+      "width": 152,
+      "height": 153,
+      "format": "png",
+      "transparent": true,
+      "recommendedDisplaySize": {
+        "width": 48,
+        "height": 48
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "textBakedIn": false,
+      "iconBakedIn": true,
+      "source": "imagegen-atlas-extraction",
+      "sourceAtlas": "source/atlases/controls.png",
+      "sourceRect": {
+        "left": 81,
+        "top": 118,
+        "width": 152,
+        "height": 153
+      },
+      "alphaCropThreshold": 48,
+      "reusedFrom": "bitacora-panel-insignias.zip",
+      "sha256": "13afaa30cdb17cdfa8c5a75efff19f466d45af8021fe17f7ec6307c3069c7acf"
+    },
+    "ui.badgePanel.button-close-hover": {
+      "id": "ui.badgePanel.button-close-hover",
+      "type": "image",
+      "path": "public/assets/ui/badge-panel/buttons/button-close-hover.png",
+      "url": "/assets/ui/badge-panel/buttons/button-close-hover.png",
+      "width": 155,
+      "height": 157,
+      "format": "png",
+      "transparent": true,
+      "recommendedDisplaySize": {
+        "width": 48,
+        "height": 48
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "textBakedIn": false,
+      "iconBakedIn": true,
+      "source": "imagegen-atlas-extraction",
+      "sourceAtlas": "source/atlases/controls.png",
+      "sourceRect": {
+        "left": 392,
+        "top": 117,
+        "width": 155,
+        "height": 157
+      },
+      "alphaCropThreshold": 48,
+      "reusedFrom": "bitacora-panel-insignias.zip",
+      "sha256": "3785ed466e8e48dc59683709c38818b9238c9f7a04c7c53ae46476954d8bcb74"
+    },
+    "ui.badgePanel.sparkle-gold": {
+      "id": "ui.badgePanel.sparkle-gold",
+      "type": "image",
+      "path": "public/assets/ui/badge-panel/icons/sparkle-gold.png",
+      "url": "/assets/ui/badge-panel/icons/sparkle-gold.png",
+      "width": 138,
+      "height": 137,
+      "format": "png",
+      "transparent": true,
+      "recommendedDisplaySize": {
+        "width": 28,
+        "height": 28
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "textBakedIn": false,
+      "iconBakedIn": false,
+      "source": "imagegen-atlas-extraction",
+      "sourceAtlas": "source/atlases/icons.png",
+      "sourceRect": {
+        "left": 397,
+        "top": 1032,
+        "width": 138,
+        "height": 137
+      },
+      "alphaCropThreshold": 48,
+      "reusedFrom": "bitacora-panel-insignias.zip",
+      "sha256": "d8e4e0d27467101b8828534f59942201d02f5f87351e4c67079af053c967a992"
+    },
+    "ui.badgePanel.starburst-gold": {
+      "id": "ui.badgePanel.starburst-gold",
+      "type": "image",
+      "path": "public/assets/ui/badge-panel/icons/starburst-gold.png",
+      "url": "/assets/ui/badge-panel/icons/starburst-gold.png",
+      "width": 171,
+      "height": 169,
+      "format": "png",
+      "transparent": true,
+      "recommendedDisplaySize": {
+        "width": 28,
+        "height": 28
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "textBakedIn": false,
+      "iconBakedIn": false,
+      "source": "imagegen-atlas-extraction",
+      "sourceAtlas": "source/atlases/icons.png",
+      "sourceRect": {
+        "left": 694,
+        "top": 1020,
+        "width": 171,
+        "height": 169
+      },
+      "alphaCropThreshold": 48,
+      "reusedFrom": "bitacora-panel-insignias.zip",
+      "sha256": "dc4d346f64c7fbff7c4f96faf8b127f5da4267382ee6674f7030f503d74e069b"
+    },
+    "ui.presentation.panel-parchment": {
+      "id": "ui.presentation.panel-parchment",
+      "path": "public/assets/ui/presentation/panel-parchment.png",
+      "url": "/assets/ui/presentation/panel-parchment.png",
+      "width": 1422,
+      "height": 904,
+      "type": "image",
+      "transparent": true,
+      "textBakedIn": false,
+      "source": "ImageGen reference recreation",
+      "recommendedDisplaySize": {
+        "width": 1040,
+        "height": 716
+      },
+      "scaleMode": "contain",
+      "nineSlice": {
+        "top": 160,
+        "right": 160,
+        "bottom": 160,
+        "left": 160,
+        "borderWidth": 60,
+        "center": "fill",
+        "repeat": "stretch",
+        "mobileBorderWidth": 40
+      },
+      "sha256": "c94980162034e4c8578aedfd705aa83b3ada81fb079c648b3501ffc2befc69fc"
+    },
+    "ui.presentation.title-wood-flowers": {
+      "id": "ui.presentation.title-wood-flowers",
+      "path": "public/assets/ui/presentation/title-wood-flowers.png",
+      "url": "/assets/ui/presentation/title-wood-flowers.png",
+      "width": 1909,
+      "height": 470,
+      "type": "image",
+      "transparent": true,
+      "textBakedIn": false,
+      "source": "ImageGen reference recreation",
+      "recommendedDisplaySize": {
+        "width": 700,
+        "height": 176
+      },
+      "scaleMode": "contain",
+      "sha256": "5e0326290064139f757e3625f1b2544822f907e106b086e40b68d2cbf9638867"
+    },
+    "ui.presentation.welcome-vanessa-jerry": {
+      "id": "ui.presentation.welcome-vanessa-jerry",
+      "path": "public/assets/ui/presentation/welcome-vanessa-jerry.png",
+      "url": "/assets/ui/presentation/welcome-vanessa-jerry.png",
+      "width": 1184,
+      "height": 991,
+      "type": "image",
+      "transparent": true,
+      "textBakedIn": false,
+      "source": "ImageGen reference recreation",
+      "recommendedDisplaySize": {
+        "width": 458,
+        "height": 410
+      },
+      "scaleMode": "contain",
+      "sha256": "a4dc92db871548e5a74ba3ab234f1c1b3e16ecd8db29a1f44686271d2809cb42"
+    },
+    "ui.presentation.button-continue": {
+      "id": "ui.presentation.button-continue",
+      "path": "public/assets/ui/presentation/button-continue.png",
+      "url": "/assets/ui/presentation/button-continue.png",
+      "width": 1894,
+      "height": 357,
+      "type": "image",
+      "transparent": true,
+      "textBakedIn": false,
+      "source": "ImageGen reference recreation",
+      "recommendedDisplaySize": {
+        "width": 412,
+        "height": 76
+      },
+      "scaleMode": "contain",
+      "sha256": "65cc3d1395d0734a330f3320ef6c8397d5efa7002c78adb313addd2942fd0523"
+    },
+    "ui.presentation.leaf-sprig": {
+      "id": "ui.presentation.leaf-sprig",
+      "path": "public/assets/ui/presentation/leaf-sprig.png",
+      "url": "/assets/ui/presentation/leaf-sprig.png",
+      "width": 648,
+      "height": 573,
+      "type": "image",
+      "transparent": true,
+      "textBakedIn": false,
+      "source": "ImageGen reference recreation",
+      "recommendedDisplaySize": {
+        "width": 46,
+        "height": 46
+      },
+      "scaleMode": "contain",
+      "sha256": "d2cdd44e61f3add9e5d9a711e4734aa4034fda5a8a10bf48601e510e0212c019"
+    },
+    "ui.presentation.sprout-flat": {
+      "id": "ui.presentation.sprout-flat",
+      "path": "public/assets/ui/presentation/sprout-flat.png",
+      "url": "/assets/ui/presentation/sprout-flat.png",
+      "width": 593,
+      "height": 429,
+      "type": "image",
+      "transparent": true,
+      "textBakedIn": false,
+      "source": "ImageGen reference recreation",
+      "recommendedDisplaySize": {
+        "width": 30,
+        "height": 30
+      },
+      "scaleMode": "contain",
+      "sha256": "ed41ef775607f5bd7f55cf19ec773101fe2b4d1e8ecdf6e862917238ff71ca27"
+    },
+    "ui.presentation.divider-seed": {
+      "id": "ui.presentation.divider-seed",
+      "path": "public/assets/ui/presentation/divider-seed.png",
+      "url": "/assets/ui/presentation/divider-seed.png",
+      "width": 1810,
+      "height": 70,
+      "type": "image",
+      "transparent": true,
+      "textBakedIn": false,
+      "source": "ImageGen reference recreation",
+      "recommendedDisplaySize": {
+        "width": 442,
+        "height": 24
+      },
+      "scaleMode": "contain",
+      "sha256": "d0052056ef12df83c09d49996719ca3e16b5a91a81597d1bc59a22f142e41198"
+    }
+  }
+}

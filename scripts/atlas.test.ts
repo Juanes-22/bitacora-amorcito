@@ -1,6 +1,8 @@
 import { readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { BADGE_PANEL_PARTS } from "../src/config/badgePanelParts";
+import { JOURNAL_PANEL_PARTS, JOURNAL_PANEL_SHARED_PARTS } from "../src/config/journalPanelParts";
+import { PRESENTATION_PARTS } from "../src/config/presentationParts";
 import { describe, expect, it } from "vitest";
 import { PNG } from "pngjs";
 import type { AssetEntry, AssetManifest } from "../src/config/types";
@@ -52,14 +54,14 @@ const issues = (id: string, mutate?: (atlas: any, entry: AssetEntry) => void) =>
 };
 
 describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)", () => {
-  it("el manifiesto con los dos kits y la música es válido: 173 entradas y recuentos coherentes", () => {
+  it("el manifiesto con los kits y la música es válido: 192 entradas y recuentos coherentes", () => {
     const r = validateAssetManifest(manifest);
     expect(r.ok ? "" : JSON.stringify(r.ok ? [] : r.issues)).toBe("");
-    expect(manifest.assetCount).toBe(173);
-    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, characters: 14, decorations: 18, effects: 18, stations: 10, ui: 91 });
+    expect(manifest.assetCount).toBe(192);
+    expect(manifest.categoryCounts).toMatchObject({ audio: 3, backgrounds: 17, characters: 14, decorations: 18, effects: 18, stations: 10, ui: 110 });
   });
 
-  it("las 45 entradas originales siguen en su sitio y con sus campos (el kit solo se añadió)", () => {
+  it("las 45 entradas originales siguen en su sitio y con sus campos (los kits solo se añadieron)", () => {
     const ids = Object.keys(manifest.assets);
     expect(ids.slice(0, 45)).toContain("ui.panel.cream.nine-slice");
     expect(manifest.assets["character.vanessa-jerry.walk.poses-v4"].requiresFrameDefinition).toBe(true);
@@ -76,8 +78,13 @@ describe("kit de animaciones del paisaje en el manifiesto real (SPEC 3.2, AC-40)
     expect(ids.slice(92, 100).sort()).toEqual(UI_V2_IDS);
     expect(ids.slice(100, 106).sort()).toEqual(CHICKEN_IDS);
     expect(ids.slice(106, 113).sort()).toEqual(BADGE_IDS);
-    expect(ids.slice(113)).toHaveLength(60);
-    expect(ids.slice(113).every((id) => id.startsWith("ui.badge-panel."))).toBe(true);
+    expect(ids.slice(113, 173)).toHaveLength(60);
+    expect(ids.slice(113, 173).every((id) => id.startsWith("ui.badge-panel."))).toBe(true);
+    expect(ids.slice(173, 184)).toHaveLength(11);
+    expect(ids.slice(173, 184).every((id) => id.startsWith("ui.journal-panel."))).toBe(true);
+    expect(ids.slice(184, 185)).toEqual(["ui.badge.rocky"]); // la insignia de Rocky (versión 1.1.0 de los kits de insignias) se añadió después
+    expect(ids.slice(185)).toHaveLength(7); // la presentación (kit bitacora-panel-presentacion) se añadió al final
+    expect(ids.slice(185).every((id) => id.startsWith("ui.presentation."))).toBe(true);
   });
 
   it("el kit conserva su metadata (origen, escala recomendada, animación y movimiento) sin duplicarla en otro sitio", () => {
@@ -181,6 +188,58 @@ describe("kit de interfaz del panel de insignias (SPEC 7, AC-80)", () => {
   it("todas las piezas que usa el componente existen, y no hay avisos de archivos", () => {
     for (const name of BADGE_PANEL_PARTS) expect(manifest.assets[`ui.badge-panel.${name}`], name).toBeDefined();
     expect(checkAssetFiles(manifest, manifestPath).warnings).toEqual([]);
+  });
+});
+
+describe("kit de interfaz de la Bitácora de aprendizajes (SPEC 7, AC-83)", () => {
+  const parts = () => Object.entries(manifest.assets).filter(([id]) => id.startsWith("ui.journal-panel."));
+
+  it("11 piezas de kind «journal-panel-part» con su grupo, tamaño, transparencia y archivo del kit", () => {
+    expect(parts()).toHaveLength(11);
+    const groups: Record<string, number> = {};
+    for (const [id, e] of parts()) {
+      expect(e, id).toMatchObject({ kind: "journal-panel-part", category: "ui", hasAlphaChannel: true, transparent: true });
+      groups[e.group as string] = (groups[e.group as string] ?? 0) + 1;
+      const png = PNG.sync.read(readFileSync(join(root, e.path)));
+      expect([png.width, png.height], id).toEqual([e.width, e.height]);
+      expect(e.path.startsWith(`ui/journal-panel/${e.group}/`), id).toBe(true);
+    }
+    expect(groups).toEqual({ illustrations: 6, icons: 4, labels: 1 });
+  });
+
+  it("todas las piezas que usa la interfaz existen: las propias y las que comparte con el panel de insignias", () => {
+    for (const name of JOURNAL_PANEL_PARTS) expect(manifest.assets[`ui.journal-panel.${name}`], name).toBeDefined();
+    for (const name of JOURNAL_PANEL_SHARED_PARTS) expect(manifest.assets[`ui.badge-panel.${name}`]?.kind, name).toBe("badge-panel-part");
+    expect(checkAssetFiles(manifest, manifestPath).warnings).toEqual([]);
+  });
+
+  it("los archivos copiados conservan sus bytes (huellas del kit) y el kit archiva su documentación", () => {
+    const docs = (manifest.sourceDocuments ?? []).filter((d) => d.path.startsWith("docs/source/journal-panel/"));
+    expect(docs.map((d) => d.path).sort()).toEqual(["docs/source/journal-panel/generation-prompts.json", "docs/source/journal-panel/integracion.md", "docs/source/journal-panel/readme.md"]);
+  });
+});
+
+describe("kit de interfaz de la presentación (SPEC 7, AC-87)", () => {
+  const parts = () => Object.entries(manifest.assets).filter(([id]) => id.startsWith("ui.presentation."));
+
+  it("7 piezas de kind «presentation-part» con su grupo, tamaño, transparencia, archivo y corte del pergamino", () => {
+    expect(parts()).toHaveLength(7);
+    expect(parts().map(([id]) => id.replace("ui.presentation.", "")).sort()).toEqual([...PRESENTATION_PARTS].sort());
+    for (const [id, e] of parts()) {
+      expect(e, id).toMatchObject({ kind: "presentation-part", category: "ui", hasAlphaChannel: true, transparent: true });
+      const png = PNG.sync.read(readFileSync(join(root, e.path)));
+      expect([png.width, png.height], id).toEqual([e.width, e.height]);
+      expect(e.path.startsWith("ui/presentation/"), id).toBe(true);
+    }
+    expect(manifest.assets["ui.presentation.panel-parchment"].nineSlice).toEqual({ top: 160, right: 160, bottom: 160, left: 160 });
+    expect(parts().filter(([, e]) => e.nineSlice)).toHaveLength(1);
+    expect(checkAssetFiles(manifest, manifestPath).warnings).toEqual([]);
+  });
+
+  it("el kit archiva su documentación y no repite las piezas que ya estaban en el panel de insignias", () => {
+    const docs = (manifest.sourceDocuments ?? []).filter((d) => d.path.startsWith("docs/source/presentation/"));
+    expect(docs.map((d) => d.path).sort()).toEqual(["docs/source/presentation/assets.json", "docs/source/presentation/generation-prompts.json", "docs/source/presentation/readme.md"]);
+    expect(Object.keys(manifest.assets).filter((id) => id.startsWith("ui.presentation.") && /close|sparkle|starburst/.test(id))).toEqual([]);
   });
 });
 

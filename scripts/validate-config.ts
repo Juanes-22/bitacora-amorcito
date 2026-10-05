@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { validateProject } from "./lib/validateProject";
 
-// Uso: npm run validate:config [-- --config ruta/bitacora.json --assets ruta/assets.json]
+// Uso: npm run validate:config [-- --config ruta/bitacora.json --maps ruta/maps.json --assets ruta/assets.json]
 //      npm run validate:release   (además exige que no quede ningún bloqueo de publicación)
 const args = process.argv.slice(2);
 const opt = (name: string, fallback: string) => {
@@ -10,6 +10,7 @@ const opt = (name: string, fallback: string) => {
   return resolve(i >= 0 && args[i + 1] ? args[i + 1] : fallback);
 };
 const configPath = opt("--config", "public/config/bitacora.json");
+const mapsPath = opt("--maps", "public/config/maps.json");
 const assetsPath = opt("--assets", "public/assets/assets.json");
 
 function readJson(path: string): unknown {
@@ -22,7 +23,7 @@ function readJson(path: string): unknown {
 }
 
 const release = args.includes("--release");
-const report = validateProject(readJson(assetsPath), readJson(configPath), assetsPath, { release });
+const report = validateProject(readJson(assetsPath), readJson(configPath), assetsPath, { release, mapsJson: readJson(mapsPath) });
 for (const line of report.info) console.log(`• ${line}`);
 for (const w of report.warnings) console.warn(`⚠ ${w.path}: ${w.message}`);
 for (const e of report.errors) console.error(`✖ ${e.path}: ${e.message}`);

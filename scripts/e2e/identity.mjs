@@ -5,11 +5,11 @@ import { readFileSync } from "node:fs";
 import { configJson, harness } from "./helpers.mjs";
 
 const { open, check, finish } = await harness();
-const KEY = `bitacora:progress:v3:${configJson.contentSetId}:demo`;
+const KEY = `bitacora:progress:v3:${configJson.contentSetId}:${configJson.mode}`;
 const DONE = { contentRevision: 1, readSectionIds: ["learning", "reflection", "lived"], completedAt: "2026-09-30T10:00:00.000Z" };
 const saved = (completed) => ({
   [KEY]: JSON.stringify({
-    schemaVersion: 3, contentSetId: configJson.contentSetId, mode: "demo", currentZoneId: "zona-a", player: { x: 200, y: 1030 }, checkpoints: {},
+    schemaVersion: 3, contentSetId: configJson.contentSetId, mode: configJson.mode, currentZoneId: "zona-a", player: { x: 200, y: 1030 }, checkpoints: {},
     entries: Object.fromEntries(configJson.route.map((id) => [id, completed.includes(id) ? DONE : { contentRevision: 1, readSectionIds: [] }])),
   }),
 });

@@ -1,6 +1,6 @@
 // Ejemplo reproducible de la integración con Tiled, sin tocar los archivos del repositorio: copia el proyecto a una carpeta
 // temporal, aplica sobre sus mapas tres ediciones reales (mover la estación apr-a, duplicar una gallina y agrandar una
-// planta), ejecuta el importador y escribe el bitacora.json resultante. Lo usa scripts/e2e/tiled.mjs para ver la edición en el juego.
+// planta), ejecuta el importador y escribe el maps.json resultante (bitacora.json se copia sin tocarlo). Lo usa scripts/e2e/tiled.mjs para ver la edición en el juego.
 // Uso: npx tsx scripts/tools/tiled-example.ts [directorio-de-salida]
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -24,8 +24,10 @@ const paths = {
   backupsDir: join(tiledDir, "backups"),
   projectFile: join(tiledDir, "bitacora.tiled-project"),
   configFile: join(dir, "bitacora.json"),
+  mapsFile: join(dir, "maps.json"),
 };
 cpSync(real.configFile, paths.configFile);
+cpSync(real.mapsFile, paths.mapsFile);
 cpSync(real.projectFile, paths.projectFile);
 cpSync(real.tilesetsDir, paths.tilesetsDir, { recursive: true });
 cpSync(real.previewsDir, paths.previewsDir, { recursive: true });
@@ -60,4 +62,4 @@ if (!report.ok) {
   console.error(report.errors.join("\n"));
   process.exit(1);
 }
-console.log(JSON.stringify({ config: paths.configFile, changes: report.changes, original: JSON.parse(readFileSync(real.configFile, "utf8")).placements["apr-a"].position }));
+console.log(JSON.stringify({ config: paths.configFile, maps: paths.mapsFile, changes: report.changes, original: JSON.parse(readFileSync(real.mapsFile, "utf8")).placements["apr-a"].position }));

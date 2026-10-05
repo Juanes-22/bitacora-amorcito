@@ -2,9 +2,12 @@
 // Cruceta táctil, lista accesible, tamaños y orientaciones, motivos de pausa y ciclos de apertura. Uso: npm run test:e2e
 import { configJson, harness, SPOT_A, stationSpot } from "./helpers.mjs";
 
-const { open, check, finish, browser } = await harness();
+const { open: openPage, check, finish, browser } = await harness();
+// Esta suite prueba en el móvil la portada, la lista y la lectura sencillas (el respaldo, con sus botones, su ventana de apertura y sus
+// pestañas): se abre sin la presentación ni la Bitácora de aprendizajes, cuyo móvil prueban presentation.mjs y journal.mjs.
+const open = (options = {}) => openPage({ ...options, edit: (c) => { delete c.ui.journalPanel; delete c.ui.presentation; options.edit?.(c); } });
 const L = configJson.ui.labels;
-const KEY = `bitacora:progress:v3:${configJson.contentSetId}:demo`;
+const KEY = `bitacora:progress:v3:${configJson.contentSetId}:${configJson.mode}`;
 
 /** Contexto táctil: puntero grueso, como un teléfono. */
 const touchCtx = async (width, height, opts = {}) => {
@@ -327,29 +330,32 @@ try {
     await t.page.waitForTimeout(250);
     check("y otro cierre devuelve el control al mapa", (await dialogs(t)) === 0 && (await reasons(t)).length === 0);
 
-    // Recorrido completo con la lista, sin mover a Vanessa
-    const start = (await t.scene()).pos;
+    // Lejos de su estación, un aprendizaje por completar no se abre desde la lista: aviso y nada cambia (AC-84)
+    await t.place(...stationSpot("apr-c"));
+    await t.page.waitForTimeout(400);
+    await t.page.getByRole("button", { name: L.index }).click();
+    await t.page.waitForTimeout(200);
+    await t.page.getByRole("button", { name: new RegExp(`${L.explore}: Aprendizaje 1:`) }).click();
+    await t.page.waitForTimeout(250);
+    const away = await t.page.locator("[role=dialog]").innerText();
+    check("AC-84: desde la lista, lejos de su estación, un aprendizaje por completar muestra el aviso y no abre la lectura", /ve a su estación/.test(away) && (await t.page.getByRole("tab").count()) === 0 && JSON.parse((await t.stored())[KEY]).entries["apr-a"].readSectionIds.length === 0, away.slice(0, 140));
+    await t.page.keyboard.press("Escape");
+    await t.page.waitForTimeout(250);
+    await t.page.keyboard.press("Escape");
+    await t.page.waitForTimeout(250);
+
+    // Recorrido completo con la lista: un aprendizaje sin completar se explora junto a su estación, así que Vanessa va a cada una
     for (let i = 1; i <= configJson.route.length; i++) {
-      await t.page.getByRole("button", { name: L.index }).click();
-      await t.page.waitForTimeout(200);
-      await t.page.getByRole("button", { name: new RegExp(`${L.explore}: Aprendizaje ${i}:`) }).click();
-      await t.page.waitForTimeout(250);
-      await t.page.click("text=Siguiente");
+      await t.exploreFromIndex(configJson.route[i - 1]);
       await t.page.waitForTimeout(150);
-      for (let s = 0; s < 3; s++) {
-        await t.page.click("text=Marcar sección como leída");
-        await t.page.waitForTimeout(80);
-        if (s < 2) await t.page.getByRole("tab").nth(s + 1).click();
-      }
-      await t.page.click("text=Recoger insignia y continuar");
+      await t.readAndClaim();
       await t.page.waitForTimeout(800); // la recompensa ignora «Cerrar» un instante (clics duplicados, Enter mantenido)
       await t.page.click("[role=dialog] >> text=Cerrar");
       await t.page.waitForTimeout(i === configJson.route.length ? 3800 : 500);
     }
     const stored = JSON.parse((await t.stored())[KEY]);
     const done = configJson.route.filter((id) => stored.entries[id]?.completedAt);
-    check("AC-11: el recorrido de seis aprendizajes se completa solo con la lista, en orden", done.length === 6, JSON.stringify(done));
-    check("AC-11: sin mover a Vanessa del punto inicial", (await t.scene()).pos.x === start.x && (await t.scene()).pos.y === start.y);
+    check("AC-11: el recorrido de seis aprendizajes se completa solo con la lista, en orden y junto a cada estación", done.length === 6, JSON.stringify(done));
     check("al terminar aparece la colección de cierre (como al hacerlo en el mapa)", (await t.page.getByRole("dialog", { name: L.completionTitle }).count()) === 1);
     await t.page.keyboard.press("Escape");
     await t.page.waitForTimeout(250);
@@ -450,7 +456,9 @@ try {
   // ---- Un solo «Cerrar» por ventana, sin recuadro en el foco y herramientas centradas (interfaz) ---------------------
   {
     const t = await open({ viewport: { width: 1280, height: 720 } });
-    const outline = await t.page.evaluate(() => { const b = document.querySelector(".cover .pixel-button"); b.focus(); const s = getComputedStyle(b); return { outline: s.outlineStyle, filter: s.filter }; });
+    await t.page.evaluate(() => document.activeElement?.blur());
+    for (let i = 0; i < 4 && !(await t.page.evaluate(() => document.activeElement?.classList.contains("pixel-button"))); i++) await t.page.keyboard.press("Tab"); // el anillo (aquí, un halo) solo sale con el teclado: el foco inicial de la portada no lo muestra
+    const outline = await t.page.evaluate(() => { const b = document.querySelector(".cover .pixel-button"); const s = getComputedStyle(b); return { outline: s.outlineStyle, filter: s.filter, focused: document.activeElement === b }; });
     check("la pantalla de bienvenida no dibuja un recuadro alrededor del botón verde (el foco es un halo)", outline.outline === "none" && /drop-shadow/.test(outline.filter), JSON.stringify(outline));
     await t.start();
     const closeButtons = () => t.page.locator("[role=dialog] button", { hasText: new RegExp(`^${L.close}$`) });

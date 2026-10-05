@@ -2,7 +2,7 @@
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import manifestJson from "../../public/assets/assets.json";
-import bitacoraJson from "../../public/config/bitacora.json";
+import bitacoraJson from "./fixtures/realConfig";
 import { BitacoraProvider } from "../app/BitacoraProvider";
 import { ProgressProvider } from "../app/ProgressProvider";
 import { ProgressStore } from "../app/progressStore";

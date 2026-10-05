@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest";
-import bitacoraJson from "../../public/config/bitacora.json";
+import bitacoraJson from "./fixtures/realConfig";
 import { releaseBlockers } from "../config/releaseBlockers";
 import type { BitacoraConfig } from "../config/types";
 import { claimBadge, isAdmissible, markSectionRead, summarize, unapprovedIds } from "../domain/progression";
 import { initialProgress } from "../domain/reconcileProgress";
 import { makeConfig } from "./fixtures/makeConfig";
+import { demoOf } from "./fixtures/demoConfig";
 
 const real = bitacoraJson as unknown as BitacoraConfig;
 const ready = (c: BitacoraConfig) => {
@@ -16,13 +17,22 @@ const ready = (c: BitacoraConfig) => {
 };
 
 describe("releaseBlockers (SPEC 10 y 16)", () => {
-  it("la configuración actual (demostración) tiene bloqueos y los enumera con su ruta", () => {
-    const paths = releaseBlockers(real).map((b) => b.path);
+  it("la configuración actual (final, textos aprobados) solo tiene pendientes las notas del editor y se enumeran con su ruta", () => {
+    expect(releaseBlockers(real).map((b) => b.path)).toEqual(["editorNotes"]);
+  });
+
+  it("la configuración en demostración (borradores) bloquea el modo, cada aprendizaje y las notas", () => {
+    const demo = demoOf(real);
+    const paths = releaseBlockers(demo).map((b) => b.path);
     expect(paths).toContain("mode");
     expect(paths).toContain("learnings.apr-a.editorialStatus");
-    expect(paths).toContain("project.finalReflection");
     expect(paths).toContain("editorNotes");
     expect(paths.filter((p) => p.endsWith("editorialStatus"))).toHaveLength(6);
+  });
+
+  it("la reflexión final vacía no bloquea la entrega: solo se muestra si la autora la escribe", () => {
+    const c = ready(makeConfig());
+    expect(releaseBlockers({ ...c, project: { ...c.project, finalReflection: [] } })).toEqual([]);
   });
 
   it("una entrega aprobada, final y sin notas no tiene bloqueos", () => {
@@ -37,7 +47,6 @@ describe("releaseBlockers (SPEC 10 y 16)", () => {
     expect(releaseBlockers(draft).map((b) => b.path)).toEqual(["learnings.apr-c.editorialStatus"]);
     expect(releaseBlockers({ ...c, route: [] }).map((b) => b.path)).toEqual(["route"]);
     expect(releaseBlockers({ ...c, editorNotes: "pendiente" }).map((b) => b.path)).toEqual(["editorNotes"]);
-    expect(releaseBlockers({ ...c, project: { ...c.project, finalReflection: [] } }).map((b) => b.path)).toEqual(["project.finalReflection"]);
   });
 
   it("un aprendizaje archivado en borrador NO bloquea: no forma parte de la entrega", () => {

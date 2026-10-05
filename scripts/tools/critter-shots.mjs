@@ -7,8 +7,8 @@ const out = process.argv[2];
 if (!out) throw new Error("Indica el directorio de salida");
 mkdirSync(out, { recursive: true });
 const { open } = await harness();
-const KEY = `bitacora:progress:v3:${configJson.contentSetId}:demo`;
-const state = (zone, pos) => ({ [KEY]: JSON.stringify({ schemaVersion: 3, contentSetId: configJson.contentSetId, mode: "demo", currentZoneId: zone, player: pos, checkpoints: {}, entries: {} }) });
+const KEY = `bitacora:progress:v3:${configJson.contentSetId}:${configJson.mode}`;
+const state = (zone, pos) => ({ [KEY]: JSON.stringify({ schemaVersion: 3, contentSetId: configJson.contentSetId, mode: configJson.mode, currentZoneId: zone, player: pos, checkpoints: {}, entries: {} }) });
 for (const [zone, m] of Object.entries(configJson.maps)) {
   const t = await open({ seed: state(zone, m.spawns[m.initialSpawnId]), viewport: { width: 1280, height: 720 } });
   await t.start();

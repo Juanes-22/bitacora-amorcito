@@ -4,9 +4,9 @@ import { configJson, harness, SPOT_A, stationSpot } from "./helpers.mjs";
 
 const { open, check, finish } = await harness();
 const L = configJson.ui.labels;
-const KEY = `bitacora:progress:v3:${configJson.contentSetId}:demo`;
+const KEY = `bitacora:progress:v3:${configJson.contentSetId}:${configJson.mode}`;
 const SAVED = JSON.stringify({
-  schemaVersion: 3, contentSetId: configJson.contentSetId, mode: "demo", currentZoneId: "zona-a", player: { x: 330, y: 990 }, checkpoints: {},
+  schemaVersion: 3, contentSetId: configJson.contentSetId, mode: configJson.mode, currentZoneId: "zona-a", player: { x: 330, y: 990 }, checkpoints: {},
   entries: Object.fromEntries(configJson.route.map((id, i) => [id, i === 0
     ? { contentRevision: 1, readSectionIds: ["learning", "reflection", "lived"], completedAt: "2026-09-30T10:00:00.000Z" }
     : { contentRevision: 1, readSectionIds: [] }])),
@@ -41,6 +41,7 @@ try {
   {
     const t = await open({ ...{ edit: (c) => { c.placements["apr-c"].decorationAssetId = "station.item.no-existe"; } }, ...failed, seed });
     await t.page.unroute("**/config/bitacora.json");
+    await t.page.unroute("**/config/maps.json");
     await t.page.getByRole("button", { name: "Reintentar" }).click();
     await t.page.waitForSelector(".cover");
     check("AC-20: «Reintentar» recarga la configuración corregida y llega a la portada con el avance intacto", (await t.page.getByText("Continuar recorrido").count()) === 1 && (await t.stored())[KEY] === SAVED);
@@ -49,7 +50,8 @@ try {
 
   // ---- Un asset que no carga: diagnóstico con el ID y la lista accesible sigue disponible ------------------
   {
-    const t = await open({ seed, editAssets: (m) => { m.assets["background.zone-01.terrain"].path = "backgrounds/zone-01/no-existe.png"; } });
+    // La lista accesible que se comprueba es la sencilla (el respaldo): la Bitácora de aprendizajes la prueba journal.mjs.
+    const t = await open({ seed, edit: (c) => { delete c.ui.journalPanel; }, editAssets: (m) => { m.assets["background.zone-01.terrain"].path = "backgrounds/zone-01/no-existe.png"; } });
     await t.start();
     const alertText = await t.page.locator(".asset-alert").innerText();
     check("AC-20: un path roto da un aviso con el ID del asset y la ruta resuelta", /background\.zone-01\.terrain/.test(alertText) && /no-existe\.png/.test(alertText), alertText.replace(/\n/g, " "));
@@ -79,10 +81,10 @@ try {
     await t.page.waitForTimeout(250);
     await t.page.keyboard.press("Enter");
     await t.page.waitForTimeout(300);
-    await t.page.click("text=Siguiente");
-    await t.page.click("text=Marcar sección como leída");
+    await t.skipIntro();
+    await t.markSection();
     await t.page.waitForTimeout(200);
-    check("AC-09: sigue funcionando en memoria (la sección queda marcada)", (await t.page.locator(".block-heading, .reading").count()) > 0 && /leída/i.test(await t.page.locator("[role=dialog]").innerText()));
+    check("AC-09: sigue funcionando en memoria (la sección queda marcada)", (await t.page.locator(".block-heading, .reading, .jp-article").count()) > 0 && /leída/i.test(await t.page.locator("[role=dialog]").innerText()));
     check("AC-09: sin excepciones sin capturar", t.errors.filter((e) => e.startsWith("pageerror")).length === 0, t.errors.join(" | "));
     await t.close();
   }
@@ -107,8 +109,8 @@ try {
     await t.page.waitForTimeout(250);
     await t.page.keyboard.press("Enter");
     await t.page.waitForTimeout(300);
-    await t.page.click("text=Siguiente");
-    await t.page.click("text=Marcar sección como leída");
+    await t.skipIntro();
+    await t.markSection();
     await t.page.waitForTimeout(300);
     check("AC-09: con la cuota agotada no hay excepciones y se avisa de que el avance no se guarda", t.errors.filter((e) => e.startsWith("pageerror")).length === 0 && /no se está guardando/i.test(await t.page.locator(".hud").innerText()), t.errors.join(" | "));
     await t.close();

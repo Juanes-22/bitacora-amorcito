@@ -1,4 +1,4 @@
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, renameSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, renameSync, utimesSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, relative } from "node:path";
 import { PNG } from "pngjs";
@@ -9,8 +9,8 @@ import { buildCandidate, jsonEqual } from "./lib/tiled/apply";
 import { buildTileset, catalogEntries, CLASS_ROLE, geometryOf, tileKey } from "./lib/tiled/catalog";
 import { findTiled, runTiled } from "./lib/tiled/cli";
 import { cellSizeFor, exportZone } from "./lib/tiled/export";
-import { defaultPaths, readJsonFile, tilesetLoader, type Paths } from "./lib/tiled/files";
-import { importMap, resolveProps, type ZoneImport } from "./lib/tiled/import";
+import { defaultPaths, readConfig, readJsonFile, tilesetLoader, type Paths } from "./lib/tiled/files";
+import { CRITTER_LIMITS, importMap, resolveProps, UNIFORM_LENIENCY, type ZoneImport } from "./lib/tiled/import";
 import { formatValue, replaceTopLevel } from "./lib/tiled/jsonStyle";
 import { renderFrame, resizeArea } from "./lib/tiled/preview";
 import { classDefaults, mergeProject, projectTypes } from "./lib/tiled/project";
@@ -19,10 +19,13 @@ import { tiledJson } from "./lib/tiled/tiledJson";
 import type { TiledMap, TiledObject, TiledObjectLayer, TiledProject, TiledTileset } from "./lib/tiled/types";
 import { classOf, decodeGid, encodeGid, propsOf } from "./lib/tiled/util";
 import { startWatch } from "./lib/tiled/watch";
+import { overlayMessage, setupTiledImport } from "./vite/tiledImport";
+import type { ViteDevServer } from "vite";
 
 const real = defaultPaths();
 const manifest = readJsonFile<AssetManifest>(real.manifestFile, "assets.json");
-const config = readJsonFile<BitacoraConfig>(real.configFile, "bitacora.json");
+/** La configuración real en un solo objeto (bitacora.json y maps.json unidos). */
+const config = readConfig(real);
 const project = readJsonFile<TiledProject>(real.projectFile, "proyecto");
 const tileset = readJsonFile<TiledTileset>(real.tilesetFile, "catálogo");
 const clone = <T>(v: T): T => structuredClone(v);
@@ -70,12 +73,15 @@ describe("migración sin cambios (ida y vuelta)", () => {
     expect(candidate!.managed).toEqual(Object.keys(config.maps));
   });
 
-  it("conserva obstáculos, ambiente, animales, spawns y portales (cantidades de esta revisión, sin ser límites)", () => {
+  it("conserva obstáculos, ambiente, animales, spawns y portales: la ida y vuelta devuelve las mismas cantidades que maps.json (que se edita en Tiled)", () => {
     const { candidate } = importAll(exportAll());
     const z = candidate!.config.maps;
-    expect([z["zona-a"].obstacles.length, z["zona-b"].obstacles.length]).toEqual([342, 245]);
-    expect([z["zona-a"].ambient.length, z["zona-b"].ambient.length]).toEqual([35, 36]);
-    expect([z["zona-a"].critters?.length, z["zona-b"].critters?.length]).toEqual([10, 7]);
+    for (const id of ["zona-a", "zona-b"]) {
+      const real = config.maps[id];
+      expect([z[id].obstacles.length, z[id].ambient.length, z[id].critters?.length], id).toEqual([real.obstacles.length, real.ambient.length, real.critters?.length]);
+      expect(Object.keys(z[id].portals), id).toEqual(Object.keys(real.portals));
+      expect(Object.keys(z[id].spawns), id).toEqual(Object.keys(real.spawns));
+    }
     expect(z["zona-a"].decorations).toEqual([]);
     expect(Object.keys(z["zona-a"].portals)).toEqual(["a-b"]);
     expect(z["zona-a"].obstacles).toEqual(config.maps["zona-a"].obstacles);
@@ -89,7 +95,7 @@ describe("migración sin cambios (ida y vuelta)", () => {
     expect(b.some((fx) => "scale" in fx && fx.scale === 1)).toBe(true); // el caso explícito existe en los datos
   });
 
-  it("los archivos .tmj versionados coinciden con bitacora.json (lo que comprueba tiled:check en el build)", () => {
+  it("los archivos .tmj versionados coinciden con maps.json (lo que comprueba tiled:check en el build)", () => {
     const r = runImport(real, { apply: false });
     expect(r.errors).toEqual([]);
     expect(r.ok).toBe(true);
@@ -400,7 +406,40 @@ describe("fallos que deben bloquear la importación", () => {
       layer.objects[i].gid = encodeGid(decodeGid(layer.objects[i].gid!).gid, true);
     }, /no admite reflejo horizontal/);
   });
-  it("escala no uniforme", () => fails((m) => (layerOf(m["zona-a"], "animales").objects[0].width! *= 1.3), /no es uniforme/));
+  it("escala claramente no uniforme (un estiramiento): se rechaza", () => fails((m) => (layerOf(m["zona-a"], "animales").objects[0].width! *= 1.3), /no es uniforme.*23 % de diferencia/));
+  it("una diferencia pequeña entre el ancho y el alto (arrastre sin Mayús) se acepta con un aviso y la escala media", () => {
+    const maps = exportAll();
+    const o = layerOf(maps["zona-a"], "animales").objects[0];
+    const [w, h] = [o.width as number, o.height as number];
+    o.width = w * 1.5 * 1.02;
+    o.height = h * 1.5;
+    const zones: ZoneImport[] = [];
+    const warnings: string[] = [];
+    for (const [zoneId, map] of Object.entries(maps)) {
+      const file = join(real.mapsDir, `${zoneId}.tmj`);
+      const r = importMap(file, map, { manifest, config, project, assetsDir: real.assetsDir, mapDir: real.mapsDir, loadTileset: tilesetLoader(file) });
+      expect(r.issues).toEqual([]);
+      warnings.push(...r.warnings.map((x) => x.message));
+      if (r.result) zones.push(r.result);
+    }
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0]).toMatch(/no era del todo uniforme.*se usó la media/);
+    const k = buildCandidate(config, zones).candidate!.config.maps["zona-a"].critters![0];
+    expect(k.scale).toBeCloseTo((config.maps["zona-a"].critters![0].scale ?? 1) * 1.5 * 1.01, 6);
+    expect(UNIFORM_LENIENCY).toBe(0.05);
+  });
+  it("un animal más grande que el máximo (4× su tamaño) se rechaza con un mensaje claro", () => {
+    fails((m) => {
+      const o = layerOf(m["zona-b"], "animales").objects.find((x) => prop(x, "critterType")?.value === "family") as TiledObject;
+      o.width = 241.49;
+      o.height = 241.49;
+    }, /mide 5\.03.* veces.*el máximo es 4.*≈ 192 × 192 px/);
+  });
+  it("los límites de los animales coinciden con los del esquema", () => {
+    const schema = JSON.parse(readFileSync(join(real.root, "public/config/maps.schema.json"), "utf8")) as { $defs: Record<string, { oneOf?: Array<{ properties: Record<string, { maximum?: number }> }> }> };
+    const text = JSON.stringify(schema);
+    for (const [k, v] of Object.entries(CRITTER_LIMITS)) expect(text, k).toContain(`"maximum":${v}`);
+  });
   it("redimensionar un letrero individualmente", () => fails((m) => (stationOf(m["zona-a"], "apr-a").width! *= 1.2), /gameplay\.signScale/));
   it("rotación libre", () => fails((m) => (layerOf(m["zona-a"], "ambiente").objects[0].rotation = 15), /rotación 15/));
   it("geometría de colisión no soportada (polígono y elipse no circular)", () => {
@@ -448,6 +487,7 @@ beforeAll(() => {
   const dir = mkdtempSync(join(tmpdir(), "tiled-pristine-"));
   const paths = pathsIn(dir);
   writeFileSync(paths.configFile, readFileSync(real.configFile));
+  writeFileSync(paths.mapsFile, readFileSync(real.mapsFile));
   mkdirSync(paths.tiledDir, { recursive: true });
   runGenerate(paths, { catalogOnly: false, force: false });
   pristine = { dir, paths };
@@ -464,6 +504,7 @@ function pathsIn(dir: string): Paths {
     backupsDir: join(tiledDir, "backups"),
     projectFile: join(tiledDir, "bitacora.tiled-project"),
     configFile: join(dir, "bitacora.json"),
+    mapsFile: join(dir, "maps.json"),
   };
 }
 let counter = 0;
@@ -492,54 +533,57 @@ describe("archivos: generar, importar y escribir", () => {
 
   it("importar sin cambios es idempotente: no escribe ni toca el archivo", () => {
     const { paths } = workspace();
-    const before = readFileSync(paths.configFile, "utf8");
+    const before = readFileSync(paths.mapsFile, "utf8");
     const r = runImport(paths, { apply: true });
     expect(r.errors).toEqual([]);
     expect(r.inSync).toBe(true);
     expect(r.written).toBe(false);
-    expect(readFileSync(paths.configFile, "utf8")).toBe(before);
+    expect(readFileSync(paths.mapsFile, "utf8")).toBe(before);
   }, 60000);
 
-  it("una edición válida se aplica con copia previa, solo cambia `maps`/`placements` y respeta el estilo del archivo", () => {
+  it("una edición válida se aplica con copia previa en maps.json, respeta su estilo y no toca bitacora.json", () => {
     const { paths } = workspace();
     const file = join(paths.mapsDir, "zona-a.tmj");
     const map = JSON.parse(readFileSync(file, "utf8")) as TiledMap;
     stationOf(map, "apr-b").x += 25;
     writeFileSync(file, tiledJson(map as never));
-    const before = readFileSync(paths.configFile, "utf8");
+    const before = readFileSync(paths.mapsFile, "utf8");
+    const contentBefore = readFileSync(paths.configFile);
     const r = runImport(paths, { apply: true });
     expect(r.errors).toEqual([]);
     expect(r.written).toBe(true);
     expect(r.changes).toEqual(["placements.apr-b: cambió position"]);
     expect(existsSync(r.backup as string)).toBe(true);
-    const after = readFileSync(paths.configFile, "utf8");
+    expect(r.backup as string).toMatch(/-maps\.json$/); // la copia es de maps.json
+    const after = readFileSync(paths.mapsFile, "utf8");
     const a = before.split("\n");
     const b = after.split("\n");
     expect(b).toHaveLength(a.length);
     const diff = a.map((l, i) => [l, b[i]]).filter(([x, y]) => x !== y);
     expect(diff.filter(([x]) => !x.includes('"scale": 1.0'))).toHaveLength(1); // solo la x de apr-b (y la normalización de 1.0)
-    const parsed = JSON.parse(after) as BitacoraConfig;
+    const parsed = JSON.parse(after) as { $schema: string; placements: BitacoraConfig["placements"] };
+    expect(parsed.$schema).toBe("./maps.schema.json");
     expect(parsed.placements["apr-b"].position.x).toBe(config.placements["apr-b"].position.x + 25);
-    expect(parsed.learnings).toEqual(config.learnings);
-    expect(parsed.configRevision).toBe(config.configRevision);
+    // El contenido (textos, ruta, insignias...) no se toca nunca: ni un byte.
+    expect(Buffer.compare(readFileSync(paths.configFile), contentBefore)).toBe(0);
     // Tras aplicar, el check queda en sincronía.
     expect(runImport(paths, { apply: false }).inSync).toBe(true);
   }, 60000);
 
-  it("un error no modifica bitacora.json; un JSON incompleto se informa", () => {
+  it("un error no modifica maps.json; un JSON incompleto se informa", () => {
     const { paths } = workspace();
     const file = join(paths.mapsDir, "zona-b.tmj");
-    const before = readFileSync(paths.configFile, "utf8");
+    const before = readFileSync(paths.mapsFile, "utf8");
     writeFileSync(file, readFileSync(file, "utf8").slice(0, 400));
     const r = runImport(paths, { apply: true });
     expect(r.ok).toBe(false);
     expect(r.errors.join("\n")).toMatch(/zona-b\.tmj no es JSON válido/);
-    expect(readFileSync(paths.configFile, "utf8")).toBe(before);
+    expect(readFileSync(paths.mapsFile, "utf8")).toBe(before);
   }, 60000);
 
   it("un tileset externo ausente bloquea la importación sin escribir nada", () => {
     const { paths } = workspace();
-    const before = readFileSync(paths.configFile, "utf8");
+    const before = readFileSync(paths.mapsFile, "utf8");
     writeFileSync(paths.tilesetFile, "{}");
     cpSync(paths.tilesetFile, `${paths.tilesetFile}.bak`);
     const map = JSON.parse(readFileSync(join(paths.mapsDir, "zona-a.tmj"), "utf8")) as TiledMap;
@@ -548,7 +592,7 @@ describe("archivos: generar, importar y escribir", () => {
     const r = runImport(paths, { apply: true });
     expect(r.ok).toBe(false);
     expect(r.errors.join("\n")).toMatch(/no se pudo leer el tileset «..\/tilesets\/no-existe.tsj»/);
-    expect(readFileSync(paths.configFile, "utf8")).toBe(before);
+    expect(readFileSync(paths.mapsFile, "utf8")).toBe(before);
   }, 60000);
 
   it("una zona nueva se añade solo con su mapa, sin un listado fijo en el código", () => {
@@ -562,7 +606,7 @@ describe("archivos: generar, importar y escribir", () => {
     expect(r.errors).toEqual([]);
     expect(r.zones).toEqual(["zona-a", "zona-b", "zona-c"]);
     expect(r.changes).toContain("zona-c: zona nueva");
-    const written = JSON.parse(readFileSync(paths.configFile, "utf8")) as BitacoraConfig;
+    const written = JSON.parse(readFileSync(paths.mapsFile, "utf8")) as BitacoraConfig;
     expect(Object.keys(written.maps)).toEqual(["zona-a", "zona-b", "zona-c"]);
     expect(written.maps["zona-c"].label).toBe(config.maps["zona-b"].label);
   }, 60000);
@@ -597,8 +641,101 @@ describe("archivos: generar, importar y escribir", () => {
     }
     expect(reports.some((r) => !r.ok)).toBe(true);
     expect(reports.at(-1)).toEqual({ ok: true, written: true });
-    expect((JSON.parse(readFileSync(paths.configFile, "utf8")) as BitacoraConfig).placements["apr-c"].position.y).toBe(config.placements["apr-c"].position.y + 10);
+    expect((JSON.parse(readFileSync(paths.mapsFile, "utf8")) as BitacoraConfig).placements["apr-c"].position.y).toBe(config.placements["apr-c"].position.y + 10);
   }, 90000);
+});
+
+// -- El importador automático de `npm run dev` (plugin de Vite) ---------------------------------------------------------------
+
+describe("importación automática en desarrollo (plugin de Vite)", () => {
+  /** Un servidor de Vite de mentira: solo lo que usa el plugin (registro, envío al navegador y conexiones nuevas). */
+  const fakeServer = () => {
+    const sent: Array<{ type: string; err?: { message: string; plugin: string } }> = [];
+    const connections: Array<() => void> = [];
+    const log: string[] = [];
+    const logger = { info: (m: string) => log.push(m), warn: (m: string) => log.push(m), error: (m: string) => log.push(m) };
+    const server = { config: { root: real.root, logger }, ws: { send: (p: (typeof sent)[number]) => sent.push(p), on: (e: string, cb: () => void) => e === "connection" && connections.push(cb) }, httpServer: null } as unknown as ViteDevServer;
+    return { server, sent, connections, log };
+  };
+  const until = async (cond: () => boolean, ms = 30000) => {
+    const end = Date.now() + ms;
+    while (!cond() && Date.now() < end) await new Promise((r) => setTimeout(r, 50));
+    expect(cond()).toBe(true);
+  };
+  const edit = (paths: Paths, change: (map: TiledMap) => void) => {
+    const file = join(paths.mapsDir, "zona-b.tmj");
+    const map = JSON.parse(readFileSync(file, "utf8")) as TiledMap;
+    change(map);
+    writeFileSync(file, tiledJson(map as never));
+  };
+  const family = (map: TiledMap) => layerOf(map, "animales").objects.find((o) => prop(o, "critterType")?.value === "family") as TiledObject;
+
+  it("importa al guardar, muestra el error sobre la página (también a quien se conecte después) y lo quita al corregirlo", async () => {
+    const { paths } = workspace();
+    const original = readFileSync(join(paths.mapsDir, "zona-b.tmj"), "utf8");
+    const { server, sent, connections } = fakeServer();
+    const stop = setupTiledImport(server, { paths, debounceMs: 80, settleMs: 40, pollMs: 300, startupCheck: false });
+    try {
+      // 1) Un reflejo accidental: error en pantalla y maps.json intacto.
+      const before = readFileSync(paths.mapsFile, "utf8");
+      edit(paths, (m) => (family(m).gid = encodeGid(decodeGid(family(m).gid as number).gid, true)));
+      await until(() => sent.some((s) => s.type === "error"));
+      const shown = sent.find((s) => s.type === "error")!.err!;
+      expect(shown.plugin).toBe("tiled:import");
+      expect(shown.message).toMatch(/1 error\(es\) y maps\.json NO se actualizó[\s\S]*una familia no admite reflejo[\s\S]*se importa solo/);
+      expect(readFileSync(paths.mapsFile, "utf8")).toBe(before);
+      const count = sent.length;
+      connections.forEach((cb) => cb()); // una pestaña nueva
+      expect(sent.length).toBe(count + 1);
+      expect(sent.at(-1)?.type).toBe("error");
+
+      // 2) Se vuelve al mapa original (sin cambios respecto de maps.json): el aviso se quita con una recarga.
+      writeFileSync(join(paths.mapsDir, "zona-b.tmj"), original);
+      await until(() => sent.some((s) => s.type === "full-reload"));
+      expect(readFileSync(paths.mapsFile, "utf8")).toBe(before);
+
+      // 3) Una edición válida se importa sola.
+      edit(paths, (m) => (stationOf(m, "apr-d").y += 6));
+      await until(() => (JSON.parse(readFileSync(paths.mapsFile, "utf8")) as BitacoraConfig).placements["apr-d"].position.y === config.placements["apr-d"].position.y + 6);
+      expect(sent.filter((s) => s.type === "error")).toHaveLength(2); // las dos veces del paso 1, ninguna más
+    } finally {
+      stop();
+    }
+  }, 120000);
+
+  it("al arrancar importa lo que se guardó con el servidor apagado (archivos de Tiled más nuevos que maps.json)", async () => {
+    const { paths } = workspace();
+    edit(paths, (m) => (stationOf(m, "apr-e").x += 9));
+    const old = new Date(Date.now() - 60_000);
+    utimesSync(paths.mapsFile, old, old);
+    const { server } = fakeServer();
+    const stop = setupTiledImport(server, { paths, debounceMs: 80, settleMs: 40, pollMs: 60000 });
+    try {
+      await until(() => (JSON.parse(readFileSync(paths.mapsFile, "utf8")) as BitacoraConfig).placements["apr-e"].position.x === config.placements["apr-e"].position.x + 9);
+    } finally {
+      stop();
+    }
+  }, 120000);
+
+  it("sin cambios pendientes no importa nada al arrancar", async () => {
+    const { paths } = workspace();
+    const before = readFileSync(paths.mapsFile, "utf8");
+    const { server, log } = fakeServer();
+    const stop = setupTiledImport(server, { paths, debounceMs: 80, settleMs: 40, pollMs: 60000 });
+    await new Promise((r) => setTimeout(r, 600));
+    stop();
+    expect(readFileSync(paths.mapsFile, "utf8")).toBe(before);
+    expect(log.join("\n")).not.toMatch(/actualizado|error/);
+  });
+
+  it("el aviso corta la lista de errores y manda a la terminal", () => {
+    const errors = Array.from({ length: 11 }, (_, i) => `error ${i + 1}`);
+    const text = overlayMessage({ ok: false, inSync: false, written: false, errors, warnings: [], changes: [], zones: [], info: [] });
+    expect(text).toContain("11 error(es)");
+    expect(text).toContain("✖ error 8");
+    expect(text).not.toContain("error 9");
+    expect(text).toContain("y 3 más (mira la terminal)");
+  });
 });
 
 // -- Catálogo, previews y utilidades ---------------------------------------------------------------------------------------
@@ -683,7 +820,7 @@ describe("utilidades", () => {
   });
 
   it("reescribe solo `maps` y `placements` y deja el resto del archivo byte a byte igual", () => {
-    const text = readFileSync(real.configFile, "utf8");
+    const text = readFileSync(real.mapsFile, "utf8");
     const out = replaceTopLevel(text, { placements: config.placements, maps: config.maps })!;
     const a = text.split("\n");
     const b = out.split("\n");
@@ -693,7 +830,7 @@ describe("utilidades", () => {
     moved.placements["apr-a"].position.x = 345;
     const edited = replaceTopLevel(text, { placements: moved.placements, maps: moved.maps })!;
     expect(JSON.parse(edited).placements["apr-a"].position.x).toBe(345);
-    expect(JSON.parse(edited).editorNotes).toBe(config.editorNotes);
+    expect(JSON.parse(edited).$schema).toBe("./maps.schema.json");
     expect(replaceTopLevel("{}", { maps: {} })).toBeNull();
   });
 

@@ -1,12 +1,12 @@
 // E2E de recorridos completos, variantes editoriales solo con JSON, modo final y reinicio (SPEC 4, 5, 10, 12, 13).
 // Uso: npm run test:e2e
-import { configJson, harness, SPOT_A, stationSpot } from "./helpers.mjs";
+import { configJson, harness, SPOT_A, stationSpot, startLabel } from "./helpers.mjs";
 
 const { open, check, finish, browser } = await harness();
 
-const KEY = (mode = "demo") => `bitacora:progress:v3:${configJson.contentSetId}:${mode}`;
+const KEY = (mode = configJson.mode) => `bitacora:progress:v3:${configJson.contentSetId}:${mode}`;
 const DONE = { contentRevision: 1, readSectionIds: ["learning", "reflection", "lived"], completedAt: "2026-09-30T10:00:00.000Z" };
-const saved = ({ entries = {}, zone = "zona-a", player = { x: 200, y: 1030 }, mode = "demo", route = configJson.route } = {}) => ({
+const saved = ({ entries = {}, zone = "zona-a", player = { x: 200, y: 1030 }, mode = configJson.mode, route = configJson.route } = {}) => ({
   [KEY(mode)]: JSON.stringify({
     schemaVersion: 3, contentSetId: configJson.contentSetId, mode, currentZoneId: zone, player, checkpoints: {},
     entries: Object.fromEntries(route.map((id) => [id, entries[id] ?? { contentRevision: 1, readSectionIds: [] }])),
@@ -36,11 +36,16 @@ async function goToStation(t, config, id) {
 
 /** Lectura completa de la estación abierta: apertura → tres secciones → recoger → cerrar la recompensa. */
 async function readAndClaim(t) {
-  await t.page.click("text=Siguiente");
-  await t.page.waitForTimeout(200);
+  // Con la Bitácora de aprendizajes se entra directo a la lectura y «Marcar como leído y continuar» pasa solo a la siguiente sección;
+  // con la lectura sencilla (el respaldo) hay una ventana de apertura y cada pestaña se marca por separado.
+  const journal = (await t.page.locator(".jp-dialog").count()) > 0;
+  if (!journal) {
+    await t.page.click("text=Siguiente");
+    await t.page.waitForTimeout(200);
+  }
   for (let i = 0; i < 3; i++) {
-    if (i > 0) await t.page.keyboard.press("ArrowRight");
-    await t.page.click("text=Marcar sección como leída");
+    if (!journal && i > 0) await t.page.keyboard.press("ArrowRight");
+    await t.page.click(journal ? "text=Marcar como leído y continuar" : "text=Marcar sección como leída");
     await t.page.waitForTimeout(60);
   }
   await t.page.click("text=Recoger insignia y continuar");
@@ -75,14 +80,15 @@ try {
       celebrations.push((await t.log()).filter((e) => e[0] === "app:celebrate").length);
       if (i < 5) {
         const h = await hud(t);
-        check(`J${2 + i} aprendizaje ${i + 1}: «${i + 1} de 6», ${(i + 1) * 100} / 600 XP y se celebra una vez`, h.includes(`${i + 1} de 6 aprendizajes`) && h.includes(`${(i + 1) * 100} / 600 XP`) && celebrations.at(-1) === 1 && intro.includes("Lee cada sección"), `${h} | celebraciones ${celebrations.at(-1)}`);
+        check(`J${2 + i} aprendizaje ${i + 1}: «${i + 1} de 6», ${(i + 1) * 100} / 600 XP y se celebra una vez`, h.includes(`${i + 1} de 6 aprendizajes`) && h.includes(`${(i + 1) * 100} / 600 XP`) && celebrations.at(-1) === 1 && intro.includes(configJson.learnings[id].title), `${h} | celebraciones ${celebrations.at(-1)}`);
       }
     }
     // el último: espera a que acabe la celebración y se abra el cierre
     await t.page.waitForSelector("[role=dialog]:has-text('¡Recorrido completo!')", { timeout: 6000 });
     const end = await t.page.locator("[role=dialog]").innerText();
     check("J7 al completar la ruta: «6 de 6 obtenidas · 600 / 600 XP · Nivel 6» y el cierre del recorrido", end.includes("6 de 6 obtenidas") && end.includes("600 / 600 XP · Nivel 6") && end.includes("¡Recorrido completo!"), end.replace(/\s+/g, " ").slice(0, 160));
-    check("J8 el cierre muestra las seis insignias obtenidas, la de Jerry y el espacio de la reflexión final (aviso, sin inventar)", (await t.page.locator(".bpk-card--earned").count()) === 6 && (await t.page.locator(".bpk-special .bpk-status--earned").count()) === 1 && end.includes("Reflexión final") && end.includes("La reflexión final de Vanessa se añadirá aquí cuando la escriba."), end.replace(/\s+/g, " ").slice(0, 200));
+    check("J8 el cierre muestra las seis insignias obtenidas y las dos especiales (Jerry y Rocky) como «Obtenida», sin título ni aviso de reflexión final (no hay texto de la autora)", (await t.page.locator(".bpk-card--earned").count()) === 6 && (await t.page.locator(".bpk-special .bpk-status--earned").count()) === 2 && !/reflexión final/i.test(end), end.replace(/\s+/g, " ").slice(0, 200));
+    check("J8a al terminar surge la insignia secreta de Rocky («Siempre en nuestro corazón») junto a la de Jerry", (await t.page.locator(".bpk-special").count()) === 2 && end.includes("Rocky") && end.includes("Siempre en nuestro corazón") && !end.includes("Siempre presente"), end.replace(/\s+/g, " ").slice(-260));
     await t.page.locator(".bpk-card").first().click();
     await t.page.waitForTimeout(300);
     const detail = await t.page.locator("[role=dialog]").innerText();
@@ -116,7 +122,7 @@ try {
     check("J15 confirmar reinicia: sin insignias, vuelve al inicio, estaciones reiniciadas y controles libres", (await hud(t)).includes("0 de 6 aprendizajes") && afterReset.zone === "zona-a" && Math.hypot(afterReset.pos.x - 200, afterReset.pos.y - 1030) < 1 && !afterReset.paused && Object.values(keptStored.entries).every((e) => !e.completedAt) && JSON.stringify((await t.stations()).map((s) => s.state)) === JSON.stringify(["available", "locked", "locked"]), JSON.stringify({ hud: await hud(t), afterReset }));
     await t.page.reload();
     await t.page.waitForSelector(".cover");
-    check("J16 tras reiniciar y recargar la portada vuelve a «Comenzar recorrido»", (await t.page.locator(".pixel-button").innerText()) === "Comenzar recorrido");
+    check("J16 tras reiniciar y recargar la portada vuelve a «Comenzar recorrido»", (await startLabel(t.page)) === "Comenzar recorrido");
     check("J17 sin errores de consola en todo el recorrido", t.errors.length === 0, t.errors.join(" | "));
     await t.close();
   }
@@ -199,7 +205,8 @@ try {
 
   // ---- M. Modo final: contenido sin aprobar, separación del progreso y recorrido aprobado (AC-13) ---------
   {
-    const t = await open({ edit: (c) => { c.mode = "final"; } });
+    // La configuración real ya está en final con los seis aprobados: aquí se prueba el contenido sin aprobar.
+    const t = await open({ edit: (c) => { c.mode = "final"; for (const id of c.route) c.learnings[id].editorialStatus = "draft"; } });
     check("M1 en final la portada identifica el recorrido «en preparación»", (await t.page.locator(".cover").innerText()).includes("Recorrido en preparación: faltan 6 por aprobar"));
     await t.start();
     const tags = await t.page.evaluate(() => [...window.__PHASER_GAME__.scene.getScene("ExplorationScene").world.stations.values()].map((s) => s.pendingTag?.visible === true));
@@ -210,11 +217,11 @@ try {
     check("M4 abrir un contenido sin aprobar solo muestra «Pendiente de revisión», sin pestañas ni lectura", msg.includes("Pendiente de revisión") && (await t.page.locator("[role=tab]").count()) === 0 && !msg.includes("Durante una exploración"));
     await t.close();
 
-    const approved = (c) => { c.mode = "final"; for (const id of c.route) c.learnings[id].editorialStatus = "ready"; };
-    const ok = await open({ edit: approved, seed: saved({ entries: { "apr-a": DONE }, mode: "demo" }) });
+    // La configuración real (final, aprobada) con un avance de demostración guardado: no lo hereda.
+    const ok = await open({ seed: saved({ entries: { "apr-a": DONE }, mode: "demo" }) });
     await ok.start();
     check("M5 con todo aprobado el modo final se recorre normalmente y NO hereda el progreso de demostración (0 de 6, sin «preparación»)", (await hud(ok)).includes("0 de 6 aprendizajes") && !(await hud(ok)).includes("preparación"));
-    await goToStation(ok, withEdit(approved), "apr-a");
+    await goToStation(ok, configJson, "apr-a");
     await readAndClaim(ok);
     const keys = Object.keys(await ok.stored());
     check("M6 en final el avance se guarda bajo su propia clave y el de demostración no se toca", keys.includes(KEY("final")) && JSON.parse((await ok.stored())[KEY("demo")]).entries["apr-a"].completedAt === DONE.completedAt && JSON.parse((await ok.stored())[KEY("final")]).entries["apr-a"].completedAt !== DONE.completedAt && !(await ok.page.locator(".cover__demo").count()));

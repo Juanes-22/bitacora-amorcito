@@ -1,5 +1,7 @@
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
+import { mergeConfig } from "../../../src/config/mapsFile";
+import type { BitacoraConfig, BitacoraContent, MapsFile } from "../../../src/config/types";
 import type { TiledMap, TiledProject, TiledTileset } from "./types";
 
 /** Rutas de la integración, todas derivadas de la raíz del repositorio (nada depende de una ruta personal). */
@@ -12,7 +14,10 @@ export interface Paths {
   previewsDir: string;
   backupsDir: string;
   projectFile: string;
+  /** `bitacora.json`: el contenido. Tiled no lo toca. */
   configFile: string;
+  /** `maps.json`: la geometría (`maps` y `placements`): lo único que escribe la importación. */
+  mapsFile: string;
   manifestFile: string;
   assetsDir: string;
 }
@@ -29,6 +34,7 @@ export function defaultPaths(root: string = process.cwd()): Paths {
     backupsDir: join(tiledDir, "backups"),
     projectFile: join(tiledDir, "bitacora.tiled-project"),
     configFile: join(root, "public/config/bitacora.json"),
+    mapsFile: join(root, "public/config/maps.json"),
     manifestFile: join(root, "public/assets/assets.json"),
     assetsDir: join(root, "public/assets"),
   };
@@ -48,6 +54,11 @@ export function readJsonFile<T>(file: string, what: string): T {
   } catch (e) {
     throw new FileError(`${what} no es JSON válido (${file}): ${(e as Error).message}`);
   }
+}
+
+/** La configuración en un solo objeto, leída de `bitacora.json` y `maps.json` (sin validar: eso lo hace `validateProject`). */
+export function readConfig(paths: Paths): BitacoraConfig {
+  return mergeConfig(readJsonFile<BitacoraContent>(paths.configFile, "bitacora.json"), readJsonFile<MapsFile>(paths.mapsFile, "maps.json"));
 }
 
 /** Escribe `text` en `file` sin dejar nunca un archivo a medias: archivo temporal en la misma carpeta y reemplazo atómico. */

@@ -3,7 +3,7 @@ import { act, cleanup, render, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import atlasJson from "../../public/assets/characters/avatar/vanessa-jerry-avatar-idle-happy.atlas.json";
 import manifestJson from "../../public/assets/assets.json";
-import bitacoraJson from "../../public/config/bitacora.json";
+import bitacoraJson from "./fixtures/realConfig";
 import { BitacoraProvider } from "../app/BitacoraProvider";
 import { ProgressStore } from "../app/progressStore";
 import { ProgressProvider } from "../app/ProgressProvider";

@@ -1,0 +1,95 @@
+{
+  "generator": "built-in image_gen",
+  "mode": "one tool call per new asset",
+  "processing": "Only lossless RGBA margin crops. No redrawing, recoloring or generated text. Shared assets copied byte for byte.",
+  "generations": [
+    {
+      "id": "learning-plants-seeds",
+      "category": "illustrations",
+      "prompt": "Use case: stylized-concept.\nAsset type: ONE transparent PNG learning-card vignette for a cozy pixel-art game journal.\nInput image: style and subject reference only; do not reproduce the whole interface.\nPrimary request: recreate the small plants-and-seeds illustration shown on the first card of the reference. A pale paper seed packet with a tiny sunflower drawing but NO lettering, a little green two-leaf sprout in brown soil, one bright yellow sunflower with a brown center, and a few tiny cream-white wildflowers. All form a single compact charming still life on a narrow short grass-and-soil base.\nStyle: crisp handcrafted 16-bit pixel art, visible square pixel clusters, brown stepped outlines, cream highlights, sage and jade green foliage, warm muted yellow. Match the reference's exact cozy game aesthetic; no photorealism, no smooth 3D.\nComposition: wide horizontal vignette, centered, full object visible, proportions approximately 3:2, generous fully transparent padding on every side. The soil base is part of the object, not a rectangular background. Consistent front/three-quarter view as in the reference.\nConstraints: actual transparent alpha background, no panel, no frame, no labels, no title, no text, no numbers, no border, no checkerboard drawn into art, no additional subjects. Ready to be extracted as a single PNG sprite.",
+      "reference": "references/index-reference.png",
+      "source": "source/generated/learning-plants-seeds.png",
+      "output": "public/assets/ui/journal-panel/illustrations/learning-plants-seeds.png"
+    },
+    {
+      "id": "learning-homemade-dough",
+      "category": "illustrations",
+      "prompt": "Use case: stylized-concept.\nAsset type: ONE transparent PNG learning-card vignette for a cozy pixel-art game journal.\nInput image: visual reference only, specifically the corresponding learning illustration; do not reproduce the interface.\nPrimary request: A small powder-blue ceramic mixing bowl with a wooden spoon resting in it, a small transparent water jar, a little bottle of oil, and two rounded lumps of homemade dough, one muted pink and one muted blue, arranged on a tiny folded cream cloth and short grass base. Recreate the homemade-plasticine vignette from the second card.\nStyle: handcrafted restrained 16-bit pixel art like the provided mockup. Visible square pixel clusters, simple warm brown stepped outlines, flat limited-color shading, cream highlights, desaturated sage/jade foliage, warm browns and pale gold. Cozy, precious, gentle colors, readable at 180px wide.\nComposition: one compact wide still-life vignette, front/three-quarter view matching the reference, centered, whole object visible, approximately 3:2 bounding proportions, generous transparent margins on ALL sides. No rectangle behind the object. Any tiny ground patch is irregular and crisp.\nTransparency: true alpha background, fully zero alpha outside the sprite, hard clean pixel edges. Absolutely NO halo, NO glow, NO blurry shading behind the object, NO soft shadow, NO black backdrop, NO vignette backdrop, NO checkerboard pattern.\nConstraints: single asset only. NO title, NO lettering, NO numbers, NO badge medal, NO card, NO panel, NO UI, NO frame, NO border. Do not add unrelated decorations.",
+      "reference": "references/index-reference.png",
+      "source": "source/generated/learning-homemade-dough.png",
+      "output": "public/assets/ui/journal-panel/illustrations/learning-homemade-dough.png"
+    },
+    {
+      "id": "learning-taxidermy-museum",
+      "category": "illustrations",
+      "prompt": "Use case: stylized-concept.\nAsset type: ONE transparent PNG learning-card vignette for a cozy pixel-art game journal.\nInput image: visual reference only, specifically the corresponding learning illustration; do not reproduce the interface.\nPrimary request: A small turtle specimen with a patterned olive-brown shell on a pale wooden museum pedestal; alongside it a blue butterfly displayed inside a small glass bell jar, plus a little sage foliage at the bottom. Recreate the museum vignette from the third card; benign friendly educational display.\nStyle: handcrafted restrained 16-bit pixel art like the provided mockup. Visible square pixel clusters, simple warm brown stepped outlines, flat limited-color shading, cream highlights, desaturated sage/jade foliage, warm browns and pale gold. Cozy, precious, gentle colors, readable at 180px wide.\nComposition: one compact wide still-life vignette, front/three-quarter view matching the reference, centered, whole object visible, approximately 3:2 bounding proportions, generous transparent margins on ALL sides. No rectangle behind the object. Any tiny ground patch is irregular and crisp.\nTransparency: true alpha background, fully zero alpha outside the sprite, hard clean pixel edges. Absolutely NO halo, NO glow, NO blurry shading behind the object, NO soft shadow, NO black backdrop, NO vignette backdrop, NO checkerboard pattern.\nConstraints: single asset only. NO title, NO lettering, NO numbers, NO badge medal, NO card, NO panel, NO UI, NO frame, NO border. Do not add unrelated decorations.",
+      "reference": "references/index-reference.png",
+      "source": "source/generated/learning-taxidermy-museum.png",
+      "output": "public/assets/ui/journal-panel/illustrations/learning-taxidermy-museum.png"
+    },
+    {
+      "id": "learning-penguin-adaptation",
+      "category": "illustrations",
+      "prompt": "Use case: stylized-concept.\nAsset type: ONE transparent PNG learning-card vignette for a cozy pixel-art game journal.\nInput image: visual reference only, specifically the corresponding learning illustration; do not reproduce the interface.\nPrimary request: One friendly adult penguin with a small fluffy grey penguin chick standing beside it on a little snow and pale-blue ice patch. Recreate the penguin vignette from the fourth card, with soft charcoal, cream and muted orange beaks.\nStyle: handcrafted restrained 16-bit pixel art like the provided mockup. Visible square pixel clusters, simple warm brown stepped outlines, flat limited-color shading, cream highlights, desaturated sage/jade foliage, warm browns and pale gold. Cozy, precious, gentle colors, readable at 180px wide.\nComposition: one compact wide still-life vignette, front/three-quarter view matching the reference, centered, whole object visible, approximately 3:2 bounding proportions, generous transparent margins on ALL sides. No rectangle behind the object. Any tiny ground patch is irregular and crisp.\nTransparency: true alpha background, fully zero alpha outside the sprite, hard clean pixel edges. Absolutely NO halo, NO glow, NO blurry shading behind the object, NO soft shadow, NO black backdrop, NO vignette backdrop, NO checkerboard pattern.\nConstraints: single asset only. NO title, NO lettering, NO numbers, NO badge medal, NO card, NO panel, NO UI, NO frame, NO border. Do not add unrelated decorations.",
+      "reference": "references/index-reference.png",
+      "source": "source/generated/learning-penguin-adaptation.png",
+      "output": "public/assets/ui/journal-panel/illustrations/learning-penguin-adaptation.png"
+    },
+    {
+      "id": "learning-earth-movements",
+      "category": "illustrations",
+      "prompt": "Use case: stylized-concept.\nAsset type: ONE transparent PNG learning-card vignette for a cozy pixel-art game journal.\nInput image: visual reference only, specifically the corresponding learning illustration; do not reproduce the interface.\nPrimary request: A blue and jade-green terrestrial globe on a warm wooden stand, a small brass telescope beside it pointing upward, and two tiny pale gold pixel glints. Recreate the astronomy vignette from the fifth card. It is a globe of Earth, no fantasy planets.\nStyle: handcrafted restrained 16-bit pixel art like the provided mockup. Visible square pixel clusters, simple warm brown stepped outlines, flat limited-color shading, cream highlights, desaturated sage/jade foliage, warm browns and pale gold. Cozy, precious, gentle colors, readable at 180px wide.\nComposition: one compact wide still-life vignette, front/three-quarter view matching the reference, centered, whole object visible, approximately 3:2 bounding proportions, generous transparent margins on ALL sides. No rectangle behind the object. Any tiny ground patch is irregular and crisp.\nTransparency: true alpha background, fully zero alpha outside the sprite, hard clean pixel edges. Absolutely NO halo, NO glow, NO blurry shading behind the object, NO soft shadow, NO black backdrop, NO vignette backdrop, NO checkerboard pattern.\nConstraints: single asset only. NO title, NO lettering, NO numbers, NO badge medal, NO card, NO panel, NO UI, NO frame, NO border. Do not add unrelated decorations.",
+      "reference": "references/index-reference.png",
+      "source": "source/generated/learning-earth-movements.png",
+      "output": "public/assets/ui/journal-panel/illustrations/learning-earth-movements.png"
+    },
+    {
+      "id": "learning-plants-origin",
+      "category": "illustrations",
+      "prompt": "Use case: stylized-concept.\nAsset type: ONE transparent PNG learning-card vignette for a cozy pixel-art game journal.\nInput image: visual reference only, specifically the corresponding learning illustration; do not reproduce the interface.\nPrimary request: A small leafy green palm-like sapling with a few broad fronds, alongside a cream botanical illustration card with small leaf drawings but no lettering; a few tiny cream wildflowers and a small grass-and-soil base. Recreate the botany vignette from the sixth card.\nStyle: handcrafted restrained 16-bit pixel art like the provided mockup. Visible square pixel clusters, simple warm brown stepped outlines, flat limited-color shading, cream highlights, desaturated sage/jade foliage, warm browns and pale gold. Cozy, precious, gentle colors, readable at 180px wide.\nComposition: one compact wide still-life vignette, front/three-quarter view matching the reference, centered, whole object visible, approximately 3:2 bounding proportions, generous transparent margins on ALL sides. No rectangle behind the object. Any tiny ground patch is irregular and crisp.\nTransparency: true alpha background, fully zero alpha outside the sprite, hard clean pixel edges. Absolutely NO halo, NO glow, NO blurry shading behind the object, NO soft shadow, NO black backdrop, NO vignette backdrop, NO checkerboard pattern.\nConstraints: single asset only. NO title, NO lettering, NO numbers, NO badge medal, NO card, NO panel, NO UI, NO frame, NO border. Do not add unrelated decorations.",
+      "reference": "references/index-reference.png",
+      "source": "source/generated/learning-plants-origin.png",
+      "output": "public/assets/ui/journal-panel/illustrations/learning-plants-origin.png"
+    },
+    {
+      "id": "journal-book-sprout",
+      "category": "icons",
+      "prompt": "Use case: stylized-concept.\nAsset type: ONE isolated transparent PNG UI decoration for a cozy pixel-art learning journal.\nInput image: stylistic reference only. Recreate the specified small decorative component, not the whole screen.\nPrimary request: A small open cream parchment journal with a warm brown binding and a tiny two-leaf jade-green sprout nestled at its upper-left edge. Match the little illustrated journal icon before the main heading in the reference. No writing on pages, just two subtle brown pixel lines per page.\nStyle: crisp 16-bit pixel art, simple visible square pixel clusters, warm brown stepped outlines, flat limited-color shading, cream, pale muted gold, jade green and muted blossom pink. Same restrained cozy aesthetic and pixel density as the reference, legible at 28–56px on the interface.\nComposition: exactly one centered complete asset, generous transparent margin on all four sides, no cropped edges.\nBackground: actual alpha transparency outside the asset. No backdrop, no vignette, no glow, no blurry shadow, no black background, no checkerboard drawn into image.\nConstraints: no surrounding card, no full panel, no other UI, no title, no lettering, no watermark. Treat the reference as style only.",
+      "reference": "references/index-reference.png",
+      "source": "source/generated/journal-book-sprout.png",
+      "output": "public/assets/ui/journal-panel/icons/journal-book-sprout.png"
+    },
+    {
+      "id": "zone-cherry-tree",
+      "category": "icons",
+      "prompt": "Use case: stylized-concept.\nAsset type: ONE isolated transparent PNG UI decoration for a cozy pixel-art learning journal.\nInput image: stylistic reference only. Recreate the specified small decorative component, not the whole screen.\nPrimary request: One tiny charming pink cherry-blossom tree with a warm brown trunk, soft muted pink canopy clusters and a small jade-green grass tuft underneath. This is the zone heading icon for Pradera del cerezo in the reference.\nStyle: crisp 16-bit pixel art, simple visible square pixel clusters, warm brown stepped outlines, flat limited-color shading, cream, pale muted gold, jade green and muted blossom pink. Same restrained cozy aesthetic and pixel density as the reference, legible at 28–56px on the interface.\nComposition: exactly one centered complete asset, generous transparent margin on all four sides, no cropped edges.\nBackground: actual alpha transparency outside the asset. No backdrop, no vignette, no glow, no blurry shadow, no black background, no checkerboard drawn into image.\nConstraints: no surrounding card, no full panel, no other UI, no title, no lettering, no watermark. Treat the reference as style only.",
+      "reference": "references/index-reference.png",
+      "source": "source/generated/zone-cherry-tree.png",
+      "output": "public/assets/ui/journal-panel/icons/zone-cherry-tree.png"
+    },
+    {
+      "id": "zone-white-flowers",
+      "category": "icons",
+      "prompt": "Use case: stylized-concept.\nAsset type: ONE isolated transparent PNG UI decoration for a cozy pixel-art learning journal.\nInput image: stylistic reference only. Recreate the specified small decorative component, not the whole screen.\nPrimary request: A tiny cluster of three cream-white flowers with warm golden centers and a few small jade-green leaves. Match the little flower icon beside Jardín del pabellón in the reference.\nStyle: crisp 16-bit pixel art, simple visible square pixel clusters, warm brown stepped outlines, flat limited-color shading, cream, pale muted gold, jade green and muted blossom pink. Same restrained cozy aesthetic and pixel density as the reference, legible at 28–56px on the interface.\nComposition: exactly one centered complete asset, generous transparent margin on all four sides, no cropped edges.\nBackground: actual alpha transparency outside the asset. No backdrop, no vignette, no glow, no blurry shadow, no black background, no checkerboard drawn into image.\nConstraints: no surrounding card, no full panel, no other UI, no title, no lettering, no watermark. Treat the reference as style only.",
+      "reference": "references/index-reference.png",
+      "source": "source/generated/zone-white-flowers.png",
+      "output": "public/assets/ui/journal-panel/icons/zone-white-flowers.png"
+    },
+    {
+      "id": "tab-reflection-bubble",
+      "category": "icons",
+      "prompt": "Use case: stylized-concept.\nAsset type: ONE isolated transparent PNG UI decoration for a cozy pixel-art learning journal.\nInput image: stylistic reference only. Recreate the specified small decorative component, not the whole screen.\nPrimary request: One small cream parchment speech bubble with a warm brown stepped pixel outline and three short muted jade-green dot marks inside it. This is the Reflexión reading tab icon. No words or lettering.\nStyle: crisp 16-bit pixel art, simple visible square pixel clusters, warm brown stepped outlines, flat limited-color shading, cream, pale muted gold, jade green and muted blossom pink. Same restrained cozy aesthetic and pixel density as the reference, legible at 28–56px on the interface.\nComposition: exactly one centered complete asset, generous transparent margin on all four sides, no cropped edges.\nBackground: actual alpha transparency outside the asset. No backdrop, no vignette, no glow, no blurry shadow, no black background, no checkerboard drawn into image.\nConstraints: no surrounding card, no full panel, no other UI, no title, no lettering, no watermark. Treat the reference as style only.",
+      "reference": "references/index-reference.png",
+      "source": "source/generated/tab-reflection-bubble.png",
+      "output": "public/assets/ui/journal-panel/icons/tab-reflection-bubble.png"
+    },
+    {
+      "id": "ribbon-next-blank",
+      "category": "labels",
+      "prompt": "Use case: stylized-concept.\nAsset type: ONE isolated transparent PNG UI decoration for a cozy pixel-art learning journal.\nInput image: stylistic reference only. Recreate the specified small decorative component, not the whole screen.\nPrimary request: One horizontal blank pale-gold ribbon banner for the upper right of a learning card, with a slim darker golden bottom edge, a short folded left corner and a small V-notched right tail. Front-facing, understated stepped pixel corners. Wide shape about 4:1. Empty center to overlay the word Siguiente in HTML. No letters, no text, no icons.\nStyle: crisp 16-bit pixel art, simple visible square pixel clusters, warm brown stepped outlines, flat limited-color shading, cream, pale muted gold, jade green and muted blossom pink. Same restrained cozy aesthetic and pixel density as the reference, legible at 28–56px on the interface.\nComposition: exactly one centered complete asset, generous transparent margin on all four sides, no cropped edges.\nBackground: actual alpha transparency outside the asset. No backdrop, no vignette, no glow, no blurry shadow, no black background, no checkerboard drawn into image.\nConstraints: no surrounding card, no full panel, no other UI, no title, no lettering, no watermark. Treat the reference as style only.",
+      "reference": "references/index-reference.png",
+      "source": "source/generated/ribbon-next-blank.png",
+      "output": "public/assets/ui/journal-panel/labels/ribbon-next-blank.png"
+    }
+  ]
+}

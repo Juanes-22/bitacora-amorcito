@@ -30,7 +30,8 @@
 .prs-divider { display: block; width: 42.5cqw; height: 2.308cqw; object-fit: fill; margin: 0 0 .481cqw; }
 .prs-name { margin: .192cqw 0 .288cqw; font-size: 2.981cqw; line-height: 1.3; font-weight: 700; }
 .prs-academic { margin: 0; padding: 0; list-style: none; font-size: 2.115cqw; line-height: 1.4; letter-spacing: .01cqw; }
-.prs-intro { position: relative; margin: 3.269cqw 0 0; font-family: var(--font-reading); font-size: 2.019cqw; line-height: 1.27; }
+/* El kit compone la frase y el texto de bienvenida en la misma sans-serif que el resto del panel (no en serifa). */
+.prs-intro { position: relative; margin: 3.269cqw 0 0; font-family: var(--font-ui); font-size: 2.019cqw; line-height: 1.27; }
 .prs-intro strong { display: block; padding-left: 4.615cqw; font-size: 2.212cqw; margin-bottom: .577cqw; line-height: 1.45; white-space: nowrap; }
 .prs-intro img { position: absolute; left: 0; top: -.577cqw; width: 3.558cqw; height: 3.75cqw; object-fit: contain; }
 .prs-intro p { margin: 0; }

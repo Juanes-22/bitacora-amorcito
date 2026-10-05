@@ -137,8 +137,10 @@
   .bpk-overlay { padding: 10px; }
   .bpk-dialog { max-height: calc(100dvh - 20px); padding: 6px; border-width: 15px; border-image-width: 15px; }
   .bpk-header { gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  /* El título ocupa el espacio que deja el botón de cerrar, que se queda en su fila arriba a la derecha. */
+  .bpk-header > :first-child { flex: 1 1 0; min-width: 0; }
   .bpk-header h1 { font-size: 25px; } .bpk-subtitle { font-size: 14px; }
-  .bpk-header .bpk-progress { order: 3; flex: 1 0 100%; margin-left: 0; }
+  .bpk-header .bpk-progress { order: 3; flex: 1 0 100%; margin-left: 0; flex-wrap: wrap; gap: 4px 10px; white-space: normal; text-align: center; padding: 2px 10px; }
   .bpk-header:not(.bpk-header--detail) .bpk-icon-button--close { margin-left: auto; }
   .bpk-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
   .bpk-card { min-height: 260px; padding-bottom: 36px; border-width: 9px; border-image-width: 9px; padding-left: 0; padding-right: 0; }

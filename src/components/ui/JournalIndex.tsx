@@ -49,7 +49,9 @@ export function JournalIndex({ onOpen, onClose }: Props) {
   // El foco inicial va a la acción que continúa el recorrido (el aprendizaje siguiente) o, si no hay, a la primera.
   useEffect(() => {
     const root = dialog.current;
-    (root?.querySelector<HTMLElement>("[data-autofocus]") ?? root?.querySelector<HTMLElement>("button"))?.focus();
+    // En el móvil todo el índice se desplaza junto: el foco inicial no debe saltar a mitad de la lista y esconder la cabecera.
+    const phone = typeof window.matchMedia === "function" && window.matchMedia("(max-width: 740px)").matches;
+    (root?.querySelector<HTMLElement>("[data-autofocus]") ?? root?.querySelector<HTMLElement>("button"))?.focus({ preventScroll: phone });
   }, []);
 
   const range = (ids: string[]) => {
@@ -61,7 +63,7 @@ export function JournalIndex({ onOpen, onClose }: Props) {
 
   return (
     <div className="jp-overlay">
-      <div ref={dialog} role="dialog" aria-modal="true" aria-labelledby={titleId} className="jp-dialog" style={vars} tabIndex={-1}>
+      <div ref={dialog} role="dialog" aria-modal="true" aria-labelledby={titleId} className="jp-dialog jp-dialog--index" style={vars} tabIndex={-1}>
         <button type="button" className="jp-close" aria-label={t.closePanel} onClick={onClose} />
         <header className="jp-header">
           {ownIcon("journal-book-sprout", "jp-heading-icon")}

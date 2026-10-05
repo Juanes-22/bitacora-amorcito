@@ -26,7 +26,7 @@ try {
     check(`FONT-1 (${name}): antes de «Comenzar» ya están cargadas Nunito y Gelasio (normal y cursiva), no se espera a que se usen`, loaded(before, "Nunito") && loaded(before, "Gelasio") && loaded(before, "Gelasio", "italic"), JSON.stringify(before));
     check(`FONT-2 (${name}): se descargan del propio sitio (tres archivos .woff2 del mismo origen, sin servidores externos)`, requests.length === 3 && requests.every((u) => new URL(u).origin === new URL(t.base).origin), JSON.stringify(requests));
     check(`FONT-3a (${name}): todo el texto de la portada usa una de las dos tipografías`, (await strays(t.page)).length === 0, JSON.stringify(await strays(t.page)));
-    check(`FONT-3 (${name}): la portada usa Nunito (interfaz) y Gelasio (texto de bienvenida)`, /Nunito/.test(await familyOf(t.page, ".prs-cover")) && /Gelasio/.test(await familyOf(t.page, ".prs-intro")), `${await familyOf(t.page, ".prs-cover")} | ${await familyOf(t.page, ".prs-intro")}`);
+    check(`FONT-3 (${name}): la portada usa Nunito también en la frase y el texto de bienvenida (el kit no usa serifa ahí)`, /^"?Nunito/.test(await familyOf(t.page, ".prs-cover")) && /^"?Nunito/.test(await familyOf(t.page, ".prs-intro")), `${await familyOf(t.page, ".prs-cover")} | ${await familyOf(t.page, ".prs-intro")}`);
     await t.start();
     await t.page.waitForTimeout(500);
     const fonts = await phaserFonts(t.page);

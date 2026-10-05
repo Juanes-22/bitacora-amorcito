@@ -36,6 +36,9 @@ export function createGame(parent: HTMLElement, input: Omit<GameDeps, "celebrate
     // El teclado escucha solo en el contenedor del mapa: sin foco no hay captura de flechas (SPEC 6.1).
     input: { keyboard: { target: parent } },
     physics: { default: "arcade", arcade: { gravity: { x: 0, y: 0 }, debug: false } },
+    // Pocas descargas a la vez y las imágenes como <img>: así compiten en igualdad con las de la interfaz (con XHR tienen prioridad
+    // alta y, en una conexión lenta de móvil, la cabecera y los botones se quedaban sin sus imágenes hasta el final de la carga).
+    loader: { maxParallelDownloads: 6, imageLoadType: "HTMLImageElement" },
     callbacks: { preBoot: (g) => g.registry.set(DEPS_KEY, deps) },
     scene: [ExplorationScene],
   });

@@ -46,14 +46,22 @@ export class Player {
     this.hasSheet = ensureSheet(scene, spec.assetId);
     this.sprite = scene.add.sprite(start.x, start.y, spec.assetId);
     this.sprite.setScale(spec.scale);
-    if (this.hasSheet && spec.idle && idle) {
-      const behavior = new IdleBehavior(scene, this.sprite, spec.idle, idle.assets, idle.reducedMotion, spec.scale);
-      if (behavior.available) this.idle = behavior;
-    }
+    if (idle) this.enableIdle(idle);
     if (spec.shadow) this.shadow = new GroundShadow(scene, this.sprite, spec.shadow);
     if (this.hasSheet) this.rest();
     else this.sprite.setOrigin(spec.origin.x, spec.origin.y); // sin frames: imagen estática con su origen
     this.syncSprite();
+  }
+
+  /**
+   * Activa el reposo animado cuando sus hojas están cargadas. Se llama al crear a Vanessa y otra vez si las hojas llegan después
+   * (carga por etapas: al principio se ve la pose de reposo de la hoja de caminar).
+   */
+  enableIdle(idle: { assets: AssetRegistry; reducedMotion: boolean }): void {
+    if (this.idle || !this.hasSheet || !this.spec.idle) return;
+    const behavior = new IdleBehavior(this.scene, this.sprite, this.spec.idle, idle.assets, idle.reducedMotion, this.spec.scale);
+    if (behavior.available) this.idle = behavior;
+    else behavior.destroy();
   }
 
   get body(): Phaser.Physics.Arcade.Body {

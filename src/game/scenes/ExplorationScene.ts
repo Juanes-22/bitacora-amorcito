@@ -13,7 +13,9 @@ import { InteractionSystem } from "../systems/InteractionSystem";
 import { TapNavigation } from "../systems/TapNavigation";
 import { playCelebration } from "../systems/Celebration";
 import { buildWorld, type World } from "../systems/WorldBuilder";
-import { zoneAssetIds } from "../systems/zoneAssets";
+import { findAnimation } from "../../assets/frameDefinitions";
+import { loadBatch } from "../systems/loadBatch";
+import { zoneAssetPlan, type ZoneAssetPlan } from "../systems/zoneAssets";
 
 export const EXPLORATION_SCENE = "ExplorationScene";
 
@@ -43,6 +45,12 @@ export class ExplorationScene extends Phaser.Scene {
   private failures: AssetFailure[] = [];
   private appliedVersion = -1;
   private wasMoving = false;
+  /** Cuántos fallos de carga ya se avisaron a la aplicación (los de las etapas posteriores se avisan al terminar cada una). */
+  private reportedFailures = 0;
+  /** La escena está creada y no se ha cerrado: las etapas de carga que terminan después no deben construir nada en una escena ya cerrada. */
+  private alive = false;
+  /** Todas las etapas de carga terminaron (esenciales, paisaje y extras). Lo usan las pruebas y la depuración. */
+  fullyLoaded = false;
 
   constructor() {
     super(EXPLORATION_SCENE);
@@ -55,21 +63,38 @@ export class ExplorationScene extends Phaser.Scene {
     if (initial) this.data0 = { zoneId: initial.zoneId, position: initial.position };
     this.zoneId = this.data0.zoneId ?? this.deps.config.gameplay.start.zoneId;
     this.failures = [];
+    this.reportedFailures = 0;
+    this.fullyLoaded = false;
+    this.alive = false;
     this.appliedVersion = -1;
     this.wasMoving = false;
   }
 
+  /**
+   * Primera etapa de la carga (SPEC 11.4): solo lo esencial para ver la zona y caminar. El paisaje vivo y los extras se piden
+   * después de crear la escena, sin bloquear; así el mapa aparece pronto también en un móvil con poca conexión.
+   */
   preload(): void {
-    const { config, assets } = this.deps;
+    const { config, assets, bridge } = this.deps;
     this.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, (file: Phaser.Loader.File) => {
       this.failures.push({ assetId: file.key, url: String(file.url) });
     });
-    for (const id of zoneAssetIds(config, this.zoneId)) {
+    let queued = 0;
+    for (const id of zoneAssetPlan(config, this.zoneId).essential) {
       if (this.textures.exists(id)) continue;
+      queued++;
       // Las hojas animadas se cargan con su atlas (regiones explícitas); el resto, como imagen.
       if (assets.isAtlas(id)) this.load.atlas(id, assets.url(id), assets.atlasUrl(id));
       else this.load.image(id, assets.url(id));
     }
+    if (queued === 0) return; // zona ya cargada (cambio de zona repetido): sin pantalla de carga
+    const zoneId = this.zoneId;
+    bridge.emit("game:load-progress", { zoneId, value: 0 });
+    this.load.on(Phaser.Loader.Events.PROGRESS, this.reportProgress, this);
+  }
+
+  private reportProgress(value: number): void {
+    this.deps.bridge.emit("game:load-progress", { zoneId: this.zoneId, value });
   }
 
   create(): void {
@@ -80,13 +105,13 @@ export class ExplorationScene extends Phaser.Scene {
     this.token = bridge.beginScene();
     // Un archivo que «carga» pero no se puede decodificar (p. ej. un servidor que devuelve la página de inicio en lugar de
     // un 404) no dispara FILE_LOAD_ERROR: se detecta por la textura que falta, con su ID y su ruta (SPEC 12.3, AC-20).
-    for (const id of zoneAssetIds(config, this.zoneId)) {
+    this.load.off(Phaser.Loader.Events.PROGRESS, this.reportProgress, this);
+    const plan = zoneAssetPlan(config, this.zoneId);
+    for (const id of plan.essential) {
       if (!this.textures.exists(id) && !this.failures.some((f) => f.assetId === id)) this.failures.push({ assetId: id, url: assets.url(id) });
     }
 
     this.world = buildWorld(this, config, assets, this.zoneId, reducedMotion);
-    this.ambient = buildAmbient(this, config, assets, this.zoneId, reducedMotion);
-    this.critters = buildCritters(this, config, assets, this.zoneId, reducedMotion);
     this.player = new Player(this, config.gameplay.player, start, { assets, reducedMotion });
     this.physics.world.setBounds(0, 0, zone.width, zone.height);
     this.physics.add.collider(this.player.feet, this.world.obstacles);
@@ -115,8 +140,16 @@ export class ExplorationScene extends Phaser.Scene {
         // Cada efecto se consume una sola vez (también ante emisiones duplicadas o comprobaciones de desarrollo).
         if (this.deps.celebrated.has(effectId) || !this.player) return;
         this.deps.celebrated.add(effectId);
-        playCelebration(this, this.deps.config, this.player, learningId, this.deps.reducedMotion);
-        this.world?.stations.get(learningId)?.playXpReward(); // la estrella de XP sale sobre la estación completada
+        // La insignia y la pose de celebración se cargan ahora si aún no llegaron (no ocupan memoria antes de tiempo).
+        const celebrate = this.deps.config.gameplay.player.animations.celebrate;
+        const needed = [this.deps.config.badges[this.deps.config.learnings[learningId]?.badgeId]?.assetId, celebrate ? findAnimation(celebrate)?.sheet.assetId : undefined].filter((id): id is string => !!id);
+        this.cleanups.push(
+          loadBatch(this, this.deps.assets, needed, () => {
+            if (!this.player || !this.alive) return;
+            playCelebration(this, this.deps.config, this.player, learningId, this.deps.reducedMotion);
+            this.world?.stations.get(learningId)?.playXpReward(); // la estrella de XP sale sobre la estación completada
+          }, 5000),
+        );
       }),
       bridge.on("app:zone-change", ({ zoneId, spawnId: target }) => {
         if (this.scene.isPaused()) this.scene.resume();
@@ -129,9 +162,46 @@ export class ExplorationScene extends Phaser.Scene {
 
     if (bridge.snapshot) this.applySnapshot(bridge.snapshot);
     if (this.failures.length) bridge.emit("game:asset-failures", { failures: this.failures, token: this.token });
+    this.reportedFailures = this.failures.length;
+    this.alive = true;
     bridge.emit("game:ready", { zoneId: this.zoneId, token: this.token, position: this.player.position });
     // Un bloqueo que ya estaba activo (lectura, transición) se respeta desde el primer fotograma.
     if (bridge.controlReasons.length) this.scene.pause();
+    this.loadInBackground(plan);
+  }
+
+  /**
+   * Etapas posteriores de la carga: primero el paisaje vivo (efectos y animales, que se crean en cuanto llegan) y después los extras
+   * (el reposo animado de Vanessa y Jerry y la pose de celebración). Los fallos se avisan al terminar cada etapa.
+   */
+  private loadInBackground(plan: ZoneAssetPlan): void {
+    const { config, assets, reducedMotion, bridge } = this.deps;
+    const token = this.token;
+    const report = (ids: string[]) => {
+      for (const id of ids) {
+        if (!this.textures.exists(id) && !this.failures.some((f) => f.assetId === id)) this.failures.push({ assetId: id, url: assets.url(id) });
+      }
+      if (this.failures.length > this.reportedFailures) {
+        this.reportedFailures = this.failures.length;
+        bridge.emit("game:asset-failures", { failures: [...this.failures], token });
+      }
+    };
+    this.cleanups.push(
+      loadBatch(this, assets, plan.scenery, () => {
+        if (!this.alive) return;
+        this.ambient = buildAmbient(this, config, assets, this.zoneId, reducedMotion);
+        this.critters = buildCritters(this, config, assets, this.zoneId, reducedMotion);
+        report(plan.scenery);
+        this.cleanups.push(
+          loadBatch(this, assets, plan.extras, () => {
+            if (!this.alive) return;
+            this.player?.enableIdle({ assets, reducedMotion });
+            report(plan.extras);
+            this.fullyLoaded = true;
+          }),
+        );
+      }),
+    );
   }
 
   update(_time: number, delta: number): void {
@@ -192,6 +262,7 @@ export class ExplorationScene extends Phaser.Scene {
   }
 
   private onShutdown(): void {
+    this.alive = false;
     if (this.player && this.wasMoving) {
       this.deps.bridge.emit("game:checkpoint", { zoneId: this.zoneId, position: this.player.position, token: this.token });
     }
@@ -214,5 +285,6 @@ export class ExplorationScene extends Phaser.Scene {
     this.player = undefined;
     this.world = undefined;
     this.load.off(Phaser.Loader.Events.FILE_LOAD_ERROR);
+    this.load.off(Phaser.Loader.Events.PROGRESS, this.reportProgress, this);
   }
 }

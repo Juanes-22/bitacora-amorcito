@@ -594,6 +594,7 @@
             "emptyRouteLabel": { "type": "string", "minLength": 1 },
             "levelTemplate": { "type": "string", "minLength": 1 },
             "mapLabel": { "type": "string", "minLength": 1 },
+            "loadingMap": { "type": "string", "minLength": 1 },
             "badges": { "type": "string", "minLength": 1 },
             "notEarned": { "type": "string", "minLength": 1 },
             "routeBadgeLocked": { "type": "string", "minLength": 1 },

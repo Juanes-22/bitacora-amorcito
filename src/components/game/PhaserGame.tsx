@@ -1,4 +1,4 @@
-import { useEffect, useRef, type Ref, type RefObject } from "react";
+import { useEffect, useRef, useState, type Ref, type RefObject } from "react";
 import type Phaser from "phaser";
 import type { AssetRegistry } from "../../config/assetRegistry";
 import type { BitacoraConfig, Point } from "../../config/types";
@@ -22,6 +22,17 @@ interface Props {
 export function PhaserGame({ config, assets, bridge, initial, inert, hostRef }: Props) {
   const initialRef = useRef(initial); // solo el primer arranque: no debe recrear el juego si cambia el progreso
   const containerRef = useRef<HTMLDivElement | null>(null);
+  // Avance de la carga de lo esencial de la zona (0..1); `null` cuando el mapa ya está listo.
+  const [loading, setLoading] = useState<number | null>(0);
+
+  useEffect(() => {
+    const offProgress = bridge.on("game:load-progress", ({ value }) => setLoading((prev) => (prev === null ? value : Math.max(prev, value))));
+    const offReady = bridge.on("game:ready", () => setLoading(null));
+    return () => {
+      offProgress();
+      offReady();
+    };
+  }, [bridge]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -37,18 +48,29 @@ export function PhaserGame({ config, assets, bridge, initial, inert, hostRef }: 
     };
   }, [config, assets, bridge]);
 
+  const label = config.ui.labels.loadingMap ?? "Cargando el mapa…";
   return (
-    <div
-      className="game-host"
-      ref={(el) => {
-        containerRef.current = el;
-        if (typeof hostRef === "function") hostRef(el);
-        else if (hostRef) (hostRef as RefObject<HTMLDivElement | null>).current = el;
-      }}
-      tabIndex={0}
-      role="region"
-      aria-label={config.ui.labels.mapLabel}
-      inert={inert}
-    />
+    <>
+      <div
+        className="game-host"
+        ref={(el) => {
+          containerRef.current = el;
+          if (typeof hostRef === "function") hostRef(el);
+          else if (hostRef) (hostRef as RefObject<HTMLDivElement | null>).current = el;
+        }}
+        tabIndex={0}
+        role="region"
+        aria-label={config.ui.labels.mapLabel}
+        inert={inert}
+      />
+      {loading !== null ? (
+        <div className="map-loading" role="status">
+          <p className="map-loading__text">{label}</p>
+          <div className="map-loading__bar" role="progressbar" aria-label={label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(loading * 100)}>
+            <div className="map-loading__fill" style={{ width: `${Math.round(loading * 100)}%` }} />
+          </div>
+        </div>
+      ) : null}
+    </>
   );
 }

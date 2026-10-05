@@ -26,6 +26,8 @@ export interface AppSnapshot {
  */
 export interface BridgeEvents {
   "game:ready": { zoneId: string; token: number; position: Point };
+  /** Avance (0..1) de la carga de lo esencial de una zona: la aplicación lo muestra hasta que llega `game:ready`. */
+  "game:load-progress": { zoneId: string; value: number };
   "game:nearby-changed": { target: NearbyTarget | null; token: number };
   "game:learning-open-request": { learningId: string; token: number; requestId: string };
   "game:portal-request": { portalId: string; fromZoneId: string; token: number; requestId: string };

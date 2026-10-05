@@ -332,6 +332,7 @@ try {
     // El aviso de recurso que falta cubre la portada: se pulsa «Comenzar» sin pasar por el aviso.
     await t.page.locator(".pixel-button").dispatchEvent("click");
     await t.page.waitForTimeout(700);
+    await t.page.waitForFunction(() => window.__PHASER_GAME__?.scene.getScene("ExplorationScene")?.fullyLoaded === true, null, { timeout: 20000 }); // las hojas de reposo llegan en la última etapa de carga
     await t.place(...SPOT_A);
     await t.page.waitForTimeout(400);
     await focusMap(t);

@@ -65,7 +65,12 @@ export async function harness() {
     await page.waitForTimeout(500);
     const api = {
       page, ctx, errors, base,
-      start: async () => { await page.click(".pixel-button"); await page.waitForTimeout(700); },
+      // Empieza y espera a que terminen todas las etapas de carga (esenciales, paisaje vivo y extras; ver SPEC 11.4).
+      start: async () => {
+        await page.click(".pixel-button");
+        await page.waitForTimeout(700);
+        await page.waitForFunction(() => window.__PHASER_GAME__?.scene.getScene("ExplorationScene")?.fullyLoaded === true, null, { timeout: 20000 }).catch(() => undefined);
+      },
       scene: () => page.evaluate(() => {
         const g = window.__PHASER_GAME__; const s = g.scene.getScene("ExplorationScene");
         return { pos: s.player.position, vel: [s.player.body.velocity.x, s.player.body.velocity.y], zone: s.zoneId, paused: g.scene.isPaused("ExplorationScene"), frame: s.player.sprite.frame.name };

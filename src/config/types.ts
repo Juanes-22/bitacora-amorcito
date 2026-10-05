@@ -192,6 +192,8 @@ export interface UiConfig {
     semester: string; teacher: string; sectionRead: string; sectionUnread: string; badgeEarned: string;
     remainingTemplate: string; rewardTitle: string; xpTemplate: string; levelTemplate: string;
     emptyRouteLabel: string; mapLabel: string;
+    /** Texto de la barra de carga del mapa (opcional; por defecto «Cargando el mapa…»). */
+    loadingMap?: string;
     badges: string; notEarned: string; routeBadgeLocked: string; earnedOnTemplate: string; badgeCountTemplate: string; completionTitle: string;
     finalReflectionTitle: string; finalReflectionPending: string; resetConfirmTitle: string; resetConfirmText: string;
     resetConfirm: string; cancel: string; preparationTemplate: string;

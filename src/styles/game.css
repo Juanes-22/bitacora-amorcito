@@ -44,6 +44,38 @@ body,
   image-rendering: crisp-edges;
 }
 
+/* Barra de carga del mapa: se ve mientras llega lo esencial de la zona (por encima del mapa, debajo de la interfaz). */
+.map-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.75rem;
+  padding: var(--gutter);
+  color: var(--cream);
+  text-align: center;
+  pointer-events: none;
+}
+.map-loading__text {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+.map-loading__bar {
+  width: min(16rem, 70vw);
+  height: 0.625rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgb(255 247 233 / 0.22);
+}
+.map-loading__fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--cream-warm);
+  transition: width 0.25s ease-out;
+}
+
 .status {
   position: absolute;
   inset: 0;
